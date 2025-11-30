@@ -197,7 +197,7 @@ fun LoginBody() {
                     containerColor = Color(0xFF648DDB)
                 )
             ) {
-                Text(
+                Text(   
                     text = "Continue",
                     color = White,
                     fontSize = 16.sp,
