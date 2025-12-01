@@ -1,5 +1,10 @@
 <resources>
+
     <string name="app_name">MedHome App</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="title_activity_health_records">HealthRecords</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_signup">SignupActivity</string>
+
 </resources>
