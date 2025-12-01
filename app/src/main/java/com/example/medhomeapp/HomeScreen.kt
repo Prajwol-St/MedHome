@@ -40,7 +40,6 @@ import com.example.medhomeapp.ui.theme.Blue10
 
 @Composable
 fun HomeScreen(){
-
     val context = LocalContext.current
     val activity = context as Activity
 
