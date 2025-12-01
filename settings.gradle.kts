@@ -19,6 +19,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MedHome"
+
+rootProject.name = "MedHome App"
+
 include(":app")
  

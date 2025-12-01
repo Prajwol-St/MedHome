@@ -1,4 +1,4 @@
-package com.example.medhome
+package com.example.medhomeapp
 
 import org.junit.Test
 
