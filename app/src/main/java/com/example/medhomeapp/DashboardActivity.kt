@@ -97,7 +97,7 @@ fun DashboardBody(){
                 ),
                 title = {Text("MedHome", style = TextStyle(
                     fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp
+                    fontSize = 27.sp
                 ))},
             )
         },
