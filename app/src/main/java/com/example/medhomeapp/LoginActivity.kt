@@ -116,8 +116,20 @@ fun LoginBody() {
 
             OutlinedTextField(
                 value = email,
-                onValueChange = {email = it},
+                onValueChange = {
+                    email = it
+                    emailError = ""
+                },
                 label = { Text("Email/Phone") },
+                isError = emailError.isNotEmpty(),
+                supportingText = {
+                    if (emailError.isNotEmpty())
+                        Text(
+                            text = emailError,
+                            color = Color.Red,
+                            fontSize = 12.sp
+                        )
+                },
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
