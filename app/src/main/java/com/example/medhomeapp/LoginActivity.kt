@@ -3,6 +3,7 @@ package com.example.medhomeapp
 import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -148,8 +149,22 @@ fun LoginBody() {
 
             OutlinedTextField(
                 value = password,
-                onValueChange = {password = it},
+                onValueChange = {
+                    password = it
+                    passwordError = ""
+                                },
                 label = { Text("Password") },
+                isError = passwordError.isNotEmpty(),
+                supportingText = {
+                    if (passwordError.isNotEmpty())
+                    {
+                        Text(
+                            text = passwordError,
+                            color = Color.Red,
+                            fontSize =  12.sp
+                        )
+                    }
+                },
                 trailingIcon = {
                     IconButton(
                         onClick = {
@@ -198,8 +213,29 @@ fun LoginBody() {
 
             Button(
                 onClick = {
-                    println("Email: $email")
-                    println("Password: $password")
+                    var isValid = true
+
+
+                    if (email.isEmpty()) {
+                        emailError = "Email is required"
+                        isValid = false
+                    }
+
+                    else if (!isValidEmail(email)) {
+                        emailError = "Invalid Email Format"
+                        isValid = false
+                    }
+
+
+                        if (isValid) {
+                            Toast.makeText(
+                                context,
+                                "Login Successfull!", //firebasecnnectionnotdoneyet
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -324,18 +360,18 @@ fun LoginBody() {
 
         }
     }
-    fun isValidEmail(email: String): Boolean{
-        return email.contains("@") &&
-                email.indexOf("@")>0 &&
-                email.indexOf("@") <email.length -1
-    }
-
-    fun isValidPassword(password: String): Boolean {
-        return password.length >= 6
-    }
 
 
 
+}
+fun isValidEmail(email: String): Boolean{
+    return email.contains("@") &&
+            email.indexOf("@")>0 &&
+            email.indexOf("@") <email.length -1
+}
+
+fun isValidPassword(password: String): Boolean {
+    return password.length >= 6
 }
 
 @Preview
