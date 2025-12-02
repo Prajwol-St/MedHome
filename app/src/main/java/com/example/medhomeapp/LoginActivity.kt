@@ -86,7 +86,7 @@ fun LoginBody() {
                     focusManager.clearFocus()
                 }
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             Text(
                 "Login",
@@ -183,6 +183,9 @@ fun LoginBody() {
                 onClick = {
                     println("Email: $email")
                     println("Password: $password")
+                    val intent = Intent(context, DashboardActivity::class.java)
+                    context.startActivity(intent)
+
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -194,7 +197,7 @@ fun LoginBody() {
                 )
             ) {
                 Text(   
-                    text = "Continue",
+                    text = "Login",
                     color = White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold

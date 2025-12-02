@@ -42,8 +42,7 @@ import com.example.medhomeapp.ui.theme.Blue10
 fun HomeScreen(){
     val context = LocalContext.current
     val activity = context as Activity
-
-        Column(
+    Column(
             modifier = Modifier
                 .fillMaxSize()
 
@@ -96,8 +95,8 @@ fun HomeScreen(){
                         })
                         .weight(.8f),
 
-                    R.drawable.bookingpast,
-                    "Past Booking"
+                    R.drawable.baseline_receipt_long_24,
+                    "Health Records"
 
                 )
                 Spacer(modifier = Modifier.width(15.dp))
@@ -124,8 +123,8 @@ fun HomeScreen(){
                 OptionCard(
                     Modifier
                         .weight(.8f),
-                    R.drawable.baseline_access_time_filled_24,
-                    "Medicine Reminders"
+                    R.drawable.bookingpast,
+                    "Past Booking"
                 )
             }
             Row(
