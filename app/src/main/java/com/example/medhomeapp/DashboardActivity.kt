@@ -82,7 +82,7 @@ fun DashboardBody(){
 
     var navList = listOf(
         NavItem("Home", R.drawable.baseline_home_24),
-        NavItem("Records", R.drawable.baseline_receipt_long_24),
+        NavItem("Reminder", R.drawable.baseline_access_time_filled_24),
         NavItem("Notifications", R.drawable.baseline_notifications_24),
         NavItem("Settings", R.drawable.baseline_settings_24),
     )
@@ -130,7 +130,7 @@ fun DashboardBody(){
         ){
             when(selectedItem){
                 0->HomeScreen()
-                1->RecordsScreen()
+                1->ReminderScreen()
                 2->NotificationScreen()
                 3->SettingsScreen()
             }
