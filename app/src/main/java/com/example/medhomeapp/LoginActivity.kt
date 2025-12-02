@@ -2,6 +2,7 @@ package com.example.medhomeapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -68,6 +69,10 @@ fun LoginBody() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+
+    var emailError by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
+
 
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
@@ -306,6 +311,15 @@ fun LoginBody() {
 
 
         }
+    }
+    fun isValidEmail(email: String): Boolean{
+        return email.contains("@") &&
+                email.indexOf("@")>0 &&
+                email.indexOf("@") <email.length -1
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        return password.length >= 6
     }
 
 
