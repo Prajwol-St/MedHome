@@ -1,6 +1,9 @@
 package com.example.medhomeapp
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.graphics.drawable.Icon
+import android.icu.util.Calendar
 import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,6 +16,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +50,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.ui.theme.MedHomeAppTheme
+import com.example.medhomeapp.ui.theme.PurpleGrey80
 
 class HealthRecords : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +84,19 @@ fun HealthRecordsBody(){
     var searchQuery by remember { mutableStateOf("") }
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var recordTitle by remember { mutableStateOf("") }
+    var recordDescription by remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(java.util.Calendar.MONTH)
+    val day = calendar.get(java.util.Calendar.DAY_OF_MONTH)
+    var selectedDate by remember { mutableStateOf("") }
+    val datepicker = DatePickerDialog(
+        context, { _, year, month, day ->
+            selectedDate = "$year/${month + 1}/$day"
+
+        }, year, month, day
+    )
 
     Scaffold(
         topBar = {
@@ -229,7 +249,56 @@ fun HealthRecordsBody(){
                         }
                     }
                     Spacer(modifier = Modifier.height(24.dp))
+                    Text("Title", fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = recordTitle,
+                        onValueChange = {recordTitle = it},
+                        placeholder = {Text("e.g., Annual Checkup")},
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Date", fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        enabled = false,
+                        value = selectedDate,
+                        onValueChange = {selectedDate =it},
+                        placeholder = {Text("DD/MM/YYYY")},
+                        modifier = Modifier.fillMaxWidth()
+                            .clickable{
+                                datepicker.show()
+                            },
+                        shape = RoundedCornerShape(12.dp),
+                        trailingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_edit_calendar_24),
+                                contentDescription = null
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text("Description", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = recordDescription,
+                        onValueChange = {recordDescription = it},
+                        placeholder = {Text("Add notes, symptoms, or details")},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp),
+                        shape = RoundedCornerShape(12.dp),
+
+
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
                 }
+
             }
         }
     }
