@@ -41,10 +41,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.ui.theme.Blue10
 
+import androidx.compose.foundation.clickable
+
+
 @Composable
 fun HomeScreen(){
-    val context = LocalContext.current
-    val activity = context as Activity
+
+
     val optionCategories = listOf(
         R.drawable.baseline_receipt_long_24,
         R.drawable.baseline_phone_in_talk_24,
@@ -67,6 +70,7 @@ fun HomeScreen(){
         "Health Packages",
 
     )
+
     Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -114,28 +118,39 @@ fun OptionGrid(
     optionCategories: List<Int>,
     optionTitle:List<String>
 ){
+    val context = LocalContext.current
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+
     ){
         items(optionCategories.size){index ->
             OptionCard(
                 image = optionCategories[index],
                 label = optionTitle[index],
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    when(index){
+                        0 -> {
+                            val intent = Intent(context, HealthRecords::class.java)
+                            context.startActivity(intent)
+                        }
+                    }
+                }
+
             )
         }
     }
 }
 @Composable
-fun OptionCard(modifier: Modifier, image: Int, label: String){
+fun OptionCard(modifier: Modifier, image: Int, label: String, onClick : () -> Unit ={}){
     Card(
         modifier = modifier
-
+            .clickable{onClick()}
             .height(140.dp),
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.cardElevation(6.dp)
