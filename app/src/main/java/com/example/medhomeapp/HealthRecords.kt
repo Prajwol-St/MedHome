@@ -5,10 +5,13 @@ import android.app.DatePickerDialog
 import android.graphics.drawable.Icon
 import android.icu.util.Calendar
 import android.media.Image
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -16,6 +19,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +34,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -49,6 +55,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -97,6 +104,15 @@ fun HealthRecordsBody(){
 
         }, year, month, day
     )
+    var selectedFileUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedFileName by remember { mutableStateOf<String?>(null) }
+
+    val filePickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {uri : Uri? ->
+        selectedFileUri = uri
+        selectedFileName = uri?.lastPathSegment
+    }
 
     Scaffold(
         topBar = {
@@ -172,11 +188,13 @@ fun HealthRecordsBody(){
                     .size(54.dp)
                     .background(Blue10),
 
+
             ){
                 FloatingActionButton(
                     onClick = { showBottomSheet = true},
                     containerColor = Color.Transparent,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    shape = CircleShape
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_add_24),
@@ -296,6 +314,92 @@ fun HealthRecordsBody(){
 
                     )
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    Text("Upload Medical Report", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .border(
+                                width = 2.dp,
+                                color = Color(0xFF4A90E2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable{
+                                filePickerLauncher.launch("*/*")
+                            }
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ){
+                        if (selectedFileName == null){
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ){
+                                Text("", fontSize = 48.sp)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text("Tap to upload", fontSize = 16.sp, color = Color.Gray)
+                                Text("PDF, JPG, PNG", fontSize = 12.sp, color = Color.LightGray)
+                            }
+                        }else{
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                Text(
+                                    text = selectedFileName ?: "",
+                                    fontSize = 14.sp,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                IconButton(onClick = {
+                                    selectedFileUri = null
+                                    selectedFileName = null
+                                }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_close_24),
+                                        contentDescription = null,
+                                        tint = Color.Gray
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Button(
+                        onClick = {
+                            showBottomSheet = false
+                            recordTitle = ""
+                            selectedDate = ""
+                            recordDescription = ""
+                            selectedFileUri = null
+                            selectedFileName = null
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = ButtonDefaults.ContentPadding
+                    )
+                    {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Blue10),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Text(
+                                text = "Save Record",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(32.dp))
 
                 }
 
