@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008690311260",
+    "project_id": "medhome-5accc",
+    "storage_bucket": "medhome-5accc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008690311260:android:d9174eff7f59d21831f699",
+        "android_client_info": {
+          "package_name": "com.example.medhomeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPDIXBV6ym1NlpQnjHcsMbY7LDf8feCpg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
