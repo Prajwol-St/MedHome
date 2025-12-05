@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.ui.theme.Blue10
 
 import androidx.compose.foundation.clickable
+import java.sql.Blob
 
 
 @Composable
@@ -137,6 +138,10 @@ fun OptionGrid(
                     when(index){
                         0 -> {
                             val intent = Intent(context, HealthRecords::class.java)
+                            context.startActivity(intent)
+                        }
+                        6 -> {
+                            val intent = Intent(context, BloodDonationActivity::class.java)
                             context.startActivity(intent)
                         }
                     }

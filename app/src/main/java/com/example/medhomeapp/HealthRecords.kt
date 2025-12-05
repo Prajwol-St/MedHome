@@ -339,9 +339,10 @@ fun HealthRecordsBody(){
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ){
                                 Text("", fontSize = 48.sp)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text("Tap to upload", fontSize = 16.sp, color = Color.Gray)
-                                Text("PDF, JPG, PNG", fontSize = 12.sp, color = Color.LightGray)
+//                                Spacer(modifier = Modifier.height(18.dp))
+                                Text("Tap to upload", fontSize = 16.sp, color = Color.Gray,
+                                    textAlign = TextAlign.Center)
+                                Text("(PDF, JPG, PNG)", fontSize = 14.sp, color = Color.LightGray)
                             }
                         }else{
                             Row(
@@ -381,7 +382,7 @@ fun HealthRecordsBody(){
                             .fillMaxWidth()
                             .height(56.dp),
                         colors = ButtonDefaults.buttonColors(Color.Transparent),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(15.dp),
                         contentPadding = ButtonDefaults.ContentPadding
                     )
                     {
