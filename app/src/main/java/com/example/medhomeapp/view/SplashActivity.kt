@@ -1,4 +1,4 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import android.app.Activity
 import android.content.Intent
@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -26,7 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.medhomeapp.ui.theme.MedHomeAppTheme
+import com.example.medhomeapp.R
 import kotlinx.coroutines.delay
 
 class SplashActivity : ComponentActivity() {
@@ -65,7 +64,7 @@ fun SplashBody(){
         ) {
 
             Image(
-                painter = painterResource(R.drawable.medhome),
+                painter = painterResource(R.drawable.baseline_visibility_24),
                         contentDescription = null,
                 modifier = Modifier.size(180.dp)
             )

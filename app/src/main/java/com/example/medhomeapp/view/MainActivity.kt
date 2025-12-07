@@ -1,4 +1,4 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

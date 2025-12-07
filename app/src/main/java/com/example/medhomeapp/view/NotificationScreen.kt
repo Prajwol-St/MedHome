@@ -1,6 +1,5 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
-import android.app.Notification
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
