@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MedHomeApp">
 
         <activity
-            android:name=".BloodDonationActivity"
+            android:name=".view.BloodDonationActivity"
             android:exported="false"
             android:label="@string/title_activity_blood_donation"
             android:theme="@style/Theme.MedHomeApp" />

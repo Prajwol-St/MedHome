@@ -1,17 +1,14 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.medhomeapp.ui.theme.MedHomeAppTheme
+import androidx.compose.ui.res.painterResource
+import com.example.medhomeapp.R
 
 class BloodDonationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +24,7 @@ class BloodDonationActivity : ComponentActivity() {
 @Composable
 fun BloodDonationBody(){
     Text("Blood Donation Screen")
+
 
 }
 
