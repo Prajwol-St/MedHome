@@ -1,6 +1,5 @@
 package com.example.medhomeapp.view
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,11 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
-
-import androidx.compose.foundation.clickable
-import com.example.medhomeapp.BloodDonationActivity
-import com.example.medhomeapp.HealthRecords
-import java.sql.Blob
 
 
 @Composable

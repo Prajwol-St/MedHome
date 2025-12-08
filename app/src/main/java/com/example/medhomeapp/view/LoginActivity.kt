@@ -51,7 +51,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
-import com.example.medhomeapp.DashboardActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.viewmodel.AuthViewModel
 

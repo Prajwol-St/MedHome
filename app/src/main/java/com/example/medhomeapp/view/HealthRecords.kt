@@ -1,10 +1,8 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.graphics.drawable.Icon
 import android.icu.util.Calendar
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -57,20 +55,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
-import com.example.medhomeapp.ui.theme.MedHomeAppTheme
-import com.example.medhomeapp.ui.theme.PurpleGrey80
 
 class HealthRecords : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +114,7 @@ fun HealthRecordsBody(){
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Blue10,
-                        titleContentColor = Color.White,
+                        titleContentColor = White,
                         navigationIconContentColor = White,
                         actionIconContentColor = White,
                     ),
@@ -146,7 +140,7 @@ fun HealthRecordsBody(){
                                     else R.drawable.baseline_search_24
                                 ),
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = White
                             )
                         }
                     }
@@ -172,10 +166,10 @@ fun HealthRecordsBody(){
                             .background(White),
                         shape = RoundedCornerShape(12.dp),
                         colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color.White,
+                            focusedIndicatorColor = White,
                             unfocusedIndicatorColor = Color.Gray,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedContainerColor = White,
+                            unfocusedContainerColor = White
 
                         ),
                     )
@@ -394,7 +388,7 @@ fun HealthRecordsBody(){
                         ){
                             Text(
                                 text = "Save Record",
-                                color = Color.White,
+                                color = White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
