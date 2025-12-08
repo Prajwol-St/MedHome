@@ -5,6 +5,7 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+
       <SelectionState runConfigName="LoginActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -20,7 +21,10 @@
       <SelectionState runConfigName="HealthRecords (1)">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="DashboardActivity (1)">
+      <SelectionState runConfigName="DashboardActivity (1)"/>
+
+      <SelectionState runConfigName="SignupActivity">
+
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

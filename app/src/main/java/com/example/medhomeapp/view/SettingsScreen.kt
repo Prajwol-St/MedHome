@@ -1,4 +1,4 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -9,13 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun ReminderScreen(){
+fun SettingsScreen(){
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(Color.Red)
     ){
-        Text("Records Screen")
+        Text("Settings Screen")
     }
 
 }

@@ -61,6 +61,10 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.ui.theme.Grey
 import com.example.medhomeapp.ui.theme.MedHomeAppTheme
+import com.example.medhomeapp.view.HomeScreen
+import com.example.medhomeapp.view.NotificationScreen
+import com.example.medhomeapp.view.ReminderScreen
+import com.example.medhomeapp.view.SettingsScreen
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,12 +98,12 @@ fun DashboardBody(){
                     containerColor = Blue10,
                     titleContentColor = Color.White,
 
-                ),
+                    ),
                 title = {Text(navList[selectedItem].title,
                     style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 27.sp
-                ))},
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 27.sp
+                    ))},
             )
         },
 
@@ -130,10 +134,10 @@ fun DashboardBody(){
                 .padding(padding)
         ){
             when(selectedItem){
-                0->HomeScreen()
-                1->ReminderScreen()
-                2->NotificationScreen()
-                3->SettingsScreen()
+                0-> HomeScreen()
+                1-> ReminderScreen()
+                2-> NotificationScreen()
+                3-> SettingsScreen()
             }
 
         }
