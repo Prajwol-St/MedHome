@@ -2,8 +2,6 @@ package com.example.medhomeapp.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -53,14 +51,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 
-
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             LoginBody()
-
         }
     }
 }
@@ -72,15 +68,10 @@ fun LoginBody() {
     var password by remember { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
 
-    var emailError by remember { mutableStateOf("") }
-    var passwordError by remember { mutableStateOf("") }
-
-
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-
-    Scaffold() { padding ->
+    Scaffold { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,10 +80,11 @@ fun LoginBody() {
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }
-                ){
+                ) {
                     focusManager.clearFocus()
                 }
         ) {
+
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
@@ -103,35 +95,23 @@ fun LoginBody() {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 24.dp)
+            )
 
-
-                )
             HorizontalDivider(
                 thickness = 1.dp,
-                color = Color(0xFF648DDB),
+                color = Color(0xFF648DDB)
             )
-            Spacer(modifier = Modifier.height(32.dp))
 
+            Spacer(modifier = Modifier.height(32.dp))
 
 
             OutlinedTextField(
                 value = email,
-                onValueChange = {
-                    email = it
-                    emailError = ""
-                },
+                onValueChange = { email = it },
                 label = { Text("Email/Phone") },
-                isError = emailError.isNotEmpty(),
-                supportingText = {
-                    if (emailError.isNotEmpty())
-                        Text(
-                            text = emailError,
-                            color = Color.Red,
-                            fontSize = 12.sp
-                        )
-                },
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
@@ -143,47 +123,32 @@ fun LoginBody() {
                     unfocusedContainerColor = White,
                     focusedLabelColor = Color(0xFF648DDB),
                     unfocusedLabelColor = Color.Gray
-
-                    )
+                )
             )
+
             Spacer(modifier = Modifier.height(20.dp))
+
 
             OutlinedTextField(
                 value = password,
-                onValueChange = {
-                    password = it
-                    passwordError = ""
-                                },
+                onValueChange = { password = it },
                 label = { Text("Password") },
-                isError = passwordError.isNotEmpty(),
-                supportingText = {
-                    if (passwordError.isNotEmpty())
-                    {
-                        Text(
-                            text = passwordError,
-                            color = Color.Red,
-                            fontSize =  12.sp
-                        )
-                    }
-                },
                 trailingIcon = {
                     IconButton(
-                        onClick = {
-                            passwordVisibility = !passwordVisibility
-                        }
+                        onClick = { passwordVisibility = !passwordVisibility }
                     ) {
                         Icon(
                             painter = if (passwordVisibility)
-                            painterResource(R.drawable.baseline_visibility_off_24)
+                                painterResource(R.drawable.baseline_visibility_off_24)
                             else
-                            painterResource(R.drawable.baseline_visibility_24),
+                                painterResource(R.drawable.baseline_visibility_24),
                             contentDescription = null
                         )
                     }
                 },
                 visualTransformation = if (passwordVisibility)
                     VisualTransformation.None
-                            else
+                else
                     PasswordVisualTransformation(),
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
@@ -198,6 +163,7 @@ fun LoginBody() {
                     unfocusedLabelColor = Color.Gray
                 )
             )
+
             Text(
                 text = "Forgot Password?",
                 color = Color(0xFF648DDB),
@@ -207,35 +173,13 @@ fun LoginBody() {
                     .padding(horizontal = 24.dp)
                     .padding(top = 6.dp),
                 textAlign = TextAlign.End
-
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
+
             Button(
                 onClick = {
-                    var isValid = true
-
-
-                    if (email.isEmpty()) {
-                        emailError = "Email is required"
-                        isValid = false
-                    }
-
-                    else if (!isValidEmail(email)) {
-                        emailError = "Invalid Email Format"
-                        isValid = false
-                    }
-
-
-                        if (isValid) {
-                            Toast.makeText(
-                                context,
-                                "Login Successfull!", //firebasecnnectionnotdoneyet
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                        }
 
                 },
                 modifier = Modifier
@@ -247,49 +191,49 @@ fun LoginBody() {
                     containerColor = Color(0xFF648DDB)
                 )
             ) {
-                Text(   
+                Text(
                     text = "Continue",
                     color = White,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
-                verticalAlignment =Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     thickness = 1.dp,
                     color = Color.LightGray
                 )
                 Text(
                     text = "or",
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp),
                     color = Color.Gray,
                     fontSize = 15.sp
                 )
                 HorizontalDivider(
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     thickness = 1.dp,
                     color = Color.LightGray
                 )
             }
+
             Spacer(modifier = Modifier.height(24.dp))
+
 
             OutlinedButton(
                 onClick = { },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp )
-                    .height(    50.dp),
+                    .padding(horizontal = 24.dp)
+                    .height(50.dp),
                 shape = RoundedCornerShape(15.dp),
                 border = BorderStroke(1.dp, Color.LightGray)
             ) {
@@ -304,11 +248,12 @@ fun LoginBody() {
                 Text(
                     text = "Login  with number",
                     color = Color.Black,
-                    fontSize =  16.sp,
+                    fontSize = 16.sp
                 )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
+
 
             OutlinedButton(
                 onClick = { },
@@ -324,7 +269,7 @@ fun LoginBody() {
                     contentDescription = "Google Logo",
                     modifier = Modifier
                         .size(24.dp)
-                        .padding(end = 8.dp ),
+                        .padding(end = 8.dp),
                     tint = Color.Unspecified
                 )
                 Text(
@@ -337,42 +282,27 @@ fun LoginBody() {
             Spacer(modifier = Modifier.height(24.dp))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Don't have an account?",
                     color = Color.Gray,
-                    fontSize = 14.sp,
+                    fontSize = 14.sp
                 )
                 Text(
                     text = "Sign Up",
-                    color = Color(0XFF648DDB),
+                    color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable{
+                    modifier = Modifier.clickable {
                         val intent = Intent(context, SignupActivity::class.java)
                         context.startActivity(intent)
                     }
                 )
             }
-
-
         }
     }
-
-
-
-}
-fun isValidEmail(email: String): Boolean{
-    return email.contains("@") &&
-            email.indexOf("@")>0 &&
-            email.indexOf("@") <email.length -1
-}
-
-fun isValidPassword(password: String): Boolean {
-    return password.length >= 6
 }
 
 @Preview

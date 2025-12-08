@@ -1,26 +1,37 @@
 {
   "project_info": {
-    "project_number": "1008690311260",
-    "project_id": "medhome-5accc",
-    "storage_bucket": "medhome-5accc.firebasestorage.app"
+    "project_number": "104380579026",
+    "firebase_url": "https://medhome-app-d83cf-default-rtdb.firebaseio.com",
+    "project_id": "medhome-app-d83cf",
+    "storage_bucket": "medhome-app-d83cf.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008690311260:android:d9174eff7f59d21831f699",
+        "mobilesdk_app_id": "1:104380579026:android:4dc595f1ee6822b599c10b",
         "android_client_info": {
           "package_name": "com.example.medhomeapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPDIXBV6ym1NlpQnjHcsMbY7LDf8feCpg"
+          "current_key": "AIzaSyBzABWqNTXhCzJkI2MgdCTzclik-ka6eIs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
