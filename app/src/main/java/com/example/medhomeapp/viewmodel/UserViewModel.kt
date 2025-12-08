@@ -8,13 +8,6 @@ class UserViewModel : ViewModel() {
 
     private val userRepo = UserRepoImpl()
 
-    fun login(email: String, password: String, callback: (Boolean, String, UserModel?) -> Unit) {
-        userRepo.login(email, password, callback)
-    }
-
-    fun register(email: String, password: String, callback: (Boolean, String, String?) -> Unit) {
-        userRepo.register(email, password, callback)
-    }
 
     fun addUserToDatabase(userId: String, user: UserModel, callback: (Boolean, String) -> Unit) {
         userRepo.addUserToDatabase(userId, user, callback)
