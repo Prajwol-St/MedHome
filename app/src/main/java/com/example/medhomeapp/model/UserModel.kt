@@ -2,6 +2,7 @@ package com.example.medhomeapp.model
 
 data class UserModel(
     val id: Int = 0,
+    val role: String = "patient",
     val name: String = "",
     val email: String = "",
     val passwordHash: String = "",
@@ -16,6 +17,7 @@ data class UserModel(
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,
+            "role" to role,
             "name" to name,
             "email" to email,
             "passwordHash" to passwordHash,
