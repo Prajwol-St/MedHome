@@ -1,4 +1,4 @@
-package com.example.medhomeapp
+package com.example.medhomeapp.view
 
 import android.app.Activity
 import android.content.Intent
@@ -21,8 +21,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,9 +37,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
 
 import androidx.compose.foundation.clickable
+import com.example.medhomeapp.BloodDonationActivity
+import com.example.medhomeapp.HealthRecords
 import java.sql.Blob
 
 

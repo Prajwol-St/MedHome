@@ -127,10 +127,10 @@ fun HealthRecordsBody(){
                     title = {Text("My Records")},
                     navigationIcon = {
                         IconButton(onClick ={activity.finish()}) {
-                          Icon(
-                              painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                              contentDescription = null
-                          )
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
+                                contentDescription = null
+                            )
                         }
                     },
                     actions = {
@@ -189,7 +189,7 @@ fun HealthRecordsBody(){
                     .background(Blue10),
 
 
-            ){
+                ){
                 FloatingActionButton(
                     onClick = { showBottomSheet = true},
                     containerColor = Color.Transparent,
@@ -312,7 +312,7 @@ fun HealthRecordsBody(){
                         shape = RoundedCornerShape(12.dp),
 
 
-                    )
+                        )
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text("Upload Medical Report", fontSize = 14.sp, fontWeight = FontWeight.Medium)
