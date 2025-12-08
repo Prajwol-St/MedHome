@@ -1,8 +1,12 @@
 package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.DoctorModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 interface DoctorRepo {
+
     fun addDoctor(
         doctor: DoctorModel,
         callback: (Boolean, String) -> Unit
