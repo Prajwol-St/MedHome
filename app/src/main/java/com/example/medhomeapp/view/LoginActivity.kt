@@ -2,6 +2,7 @@ package com.example.medhomeapp.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -49,20 +50,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import com.example.medhomeapp.R
+import com.example.medhomeapp.viewmodel.AuthViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+
         setContent {
-            LoginBody()
+            LoginBody(authViewModel)
         }
     }
 }
 
 @Composable
-fun LoginBody() {
+fun LoginBody(authViewModel: AuthViewModel) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -107,7 +113,6 @@ fun LoginBody() {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -127,7 +132,6 @@ fun LoginBody() {
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-
 
             OutlinedTextField(
                 value = password,
@@ -180,7 +184,27 @@ fun LoginBody() {
 
             Button(
                 onClick = {
+                    if (email.isEmpty()) {
+                        Toast.makeText(context, "Enter email", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+                    if (password.isEmpty()) {
+                        Toast.makeText(context, "Enter password", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
 
+                    authViewModel.login(email, password) { success, message, user ->
+                        if (success && user != null) {
+                            Toast.makeText(context, "Welcome ${user.name}!", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(context, DashboardActivity::class.java)
+                            context.startActivity(intent)
+                            (context as ComponentActivity).finish()
+                        } else {
+                            // If Firebase message exists, show it, else generic message
+                            val displayMessage = message ?: "Login failed. Please check your credentials."
+                            Toast.makeText(context, displayMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -201,6 +225,7 @@ fun LoginBody() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // ... rest of your UI unchanged (or/phone/google buttons + signup row)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -227,7 +252,6 @@ fun LoginBody() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-
             OutlinedButton(
                 onClick = { },
                 modifier = Modifier
@@ -253,7 +277,6 @@ fun LoginBody() {
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
 
             OutlinedButton(
                 onClick = { },
@@ -308,5 +331,5 @@ fun LoginBody() {
 @Preview
 @Composable
 fun PreviewLogin() {
-    LoginBody()
+    LoginBody(authViewModel = AuthViewModel())
 }
