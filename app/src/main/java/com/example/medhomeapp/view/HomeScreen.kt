@@ -1,6 +1,5 @@
 package com.example.medhomeapp.view
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -32,17 +33,41 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
 
+
 @Composable
 fun HomeScreen(){
-    val context = LocalContext.current
-    val activity = context as Activity
 
-        Column(
+
+    val optionCategories = listOf(
+        R.drawable.baseline_receipt_long_24,
+        R.drawable.baseline_phone_in_talk_24,
+        R.drawable.baseline_chat_24,
+        R.drawable.bookingpast,
+        R.drawable.baseline_edit_calendar_24,
+        R.drawable.baseline_directions_run_24,
+        R.drawable.baseline_bloodtype_24,
+        R.drawable.box,
+
+        )
+    val optionTitle = listOf(
+        "Health Records",
+        "Book Consultation",
+        "AI Health Assistant",
+        "Past Bookings",
+        "Appointments",
+        "Calories Calculator",
+        "Blood Donation",
+        "Health Packages",
+
+    )
+
+    Column(
             modifier = Modifier
                 .fillMaxSize()
 
@@ -52,6 +77,7 @@ fun HomeScreen(){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(Blue10)
                     .padding(horizontal = 19.dp, vertical = 8.dp)
 
             ){
@@ -68,117 +94,66 @@ fun HomeScreen(){
                 Column{
                     Text("Welcome", style = TextStyle(
                         fontSize = 22.sp,
-                        color = Color.Black,
+                        color = Color.White,
                         fontWeight = FontWeight.SemiBold
                     ))
                     Text("Username", style = TextStyle(
                         fontSize = 19.sp,
-                        color = Color.Black
+                        color = Color.White
                     ) )
 
                 }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 19.dp, vertical = 15.dp)
-            ){
-                OptionCard(
-                    Modifier
-                        .clickable(onClick = {
-                            val intent = Intent(
-                                context,
-                                HealthRecords::class.java
-
-                            )
-                            context.startActivity(intent)
-                        })
-                        .weight(.8f),
-
-                    R.drawable.bookingpast,
-                    "Past Booking"
-
-                )
-                Spacer(modifier = Modifier.width(15.dp))
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_phone_in_talk_24,
-                    "Book Consultation"
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 19.dp, vertical = 15.dp)
-            ){
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_chat_24,
-                    "AI Health Assistant"
-
-                )
-                Spacer(modifier = Modifier.width(15.dp))
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_access_time_filled_24,
-                    "Medicine Reminders"
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 19.dp, vertical = 15.dp)
-            ){
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_edit_calendar_24,
-                    "Appointments"
-
-                )
-                Spacer(modifier = Modifier.width(15.dp))
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_directions_run_24,
-                    "Calories Calculator"
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 19.dp, vertical = 15.dp)
-            ){
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.baseline_bloodtype_24,
-                    "Blood Donation"
-
-                )
-                Spacer(modifier = Modifier.width(15.dp))
-                OptionCard(
-                    Modifier
-                        .weight(.8f),
-                    R.drawable.box,
-                    "Health Packages"
-                )
-            }
-
+        Spacer(modifier = Modifier.height(14.dp))
+        OptionGrid(optionCategories,optionTitle)
         }
     }
 
 @Composable
-fun OptionCard(modifier: Modifier, image: Int, label: String){
+fun OptionGrid(
+    optionCategories: List<Int>,
+    optionTitle:List<String>
+){
+    val context = LocalContext.current
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+
+    ){
+        items(optionCategories.size){index ->
+            OptionCard(
+                image = optionCategories[index],
+                label = optionTitle[index],
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    when(index){
+                        0 -> {
+                            val intent = Intent(context, HealthRecords::class.java)
+                            context.startActivity(intent)
+                        }
+                        6 -> {
+                            val intent = Intent(context, BloodDonationActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    }
+                }
+
+            )
+        }
+    }
+}
+@Composable
+fun OptionCard(modifier: Modifier, image: Int, label: String, onClick : () -> Unit ={}){
     Card(
         modifier = modifier
-
-            .height(110.dp),
+            .clickable{onClick()}
+            .height(140.dp),
         shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(8.dp)
+        elevation = CardDefaults.cardElevation(6.dp)
     ){
         Column(
             modifier = Modifier
@@ -190,10 +165,12 @@ fun OptionCard(modifier: Modifier, image: Int, label: String){
                 painter = painterResource(image),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Blue10),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(50.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(label, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+            Spacer(modifier = Modifier.height(18.dp))
+            Text(label, fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center)
         }
 
     }

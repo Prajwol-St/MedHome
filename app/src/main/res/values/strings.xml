@@ -6,7 +6,11 @@
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_signup">SignupActivity</string>
+
+    <string name="title_activity_blood_donation">BloodDonationActivity</string>
+
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
+
 
 </resources>
