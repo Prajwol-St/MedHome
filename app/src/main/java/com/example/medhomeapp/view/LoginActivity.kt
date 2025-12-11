@@ -87,7 +87,7 @@ fun LoginBody(authViewModel: AuthViewModel) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-    // Configure Google Sign-In
+
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -99,7 +99,7 @@ fun LoginBody(authViewModel: AuthViewModel) {
         GoogleSignIn.getClient(context, gso)
     }
 
-    // Activity Result Launcher for Google Sign-In
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -222,7 +222,7 @@ fun LoginBody(authViewModel: AuthViewModel) {
                     .padding(horizontal = 24.dp)
                     .padding(top = 6.dp)
                     .clickable(enabled = !isLoading) {
-                        // Handle forgot password
+
                     },
                 textAlign = TextAlign.End
             )
