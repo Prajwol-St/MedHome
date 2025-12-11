@@ -11,6 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp">
+
+        <activity
+            android:name=".view.BloodDonationActivity"
+            android:exported="false"
+            android:label="@string/title_activity_blood_donation"
+            android:theme="@style/Theme.MedHomeApp" />
+        <!-- Your Activities -->
+
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false"
@@ -37,7 +45,9 @@
             android:name=".view.DashboardActivity"
             android:exported="true"
             android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.MedHomeApp" />
+
+            android:theme="@style/Theme.MedHomeApp" /> <!-- Imported Activities -->
+
         <activity
             android:name=".view.SignupActivity"
             android:exported="false"
@@ -47,7 +57,17 @@
             android:name=".view.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.MedHomeApp" />
+
+            android:theme="@style/Theme.MedHomeApp">
+
+            <!-- Set LoginActivity as LAUNCHER -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Keep MainActivity but REMOVE launcher to avoid duplicate -->
+
         <activity
             android:name=".view.MainActivity"
             android:exported="true"

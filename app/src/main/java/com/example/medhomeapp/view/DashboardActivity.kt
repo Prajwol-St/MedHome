@@ -47,14 +47,14 @@ fun DashboardBody(){
     val context = LocalContext.current
     val activity = context as Activity
 
-    data class NavItem(val label: String, val icon: Int)
+    data class NavItem(val label: String, val icon: Int, val title: String)
     var selectedItem by remember { mutableStateOf(0) }
 
     var navList = listOf(
-        NavItem("Home", R.drawable.baseline_home_24),
-        NavItem("Records", R.drawable.baseline_receipt_long_24),
-        NavItem("Notifications", R.drawable.baseline_notifications_24),
-        NavItem("Settings", R.drawable.baseline_settings_24),
+        NavItem("Home", R.drawable.baseline_home_24, "MedHome"),
+        NavItem("Reminder", R.drawable.baseline_access_time_filled_24,"My Reminders"),
+        NavItem("Notifications", R.drawable.baseline_notifications_24, "Notifications"),
+        NavItem("Settings", R.drawable.baseline_settings_24, "App Settings"),
     )
 
     Scaffold (
@@ -64,11 +64,12 @@ fun DashboardBody(){
                     containerColor = Blue10,
                     titleContentColor = White,
 
-                ),
-                title = {Text("MedHome", style = TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 27.sp
-                ))},
+                    ),
+                title = {Text(navList[selectedItem].title,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 27.sp
+                    ))},
             )
         },
 
@@ -100,7 +101,7 @@ fun DashboardBody(){
         ){
             when(selectedItem){
                 0-> HomeScreen()
-                1-> RecordsScreen()
+                1-> ReminderScreen()
                 2-> NotificationScreen()
                 3-> SettingsScreen()
             }
