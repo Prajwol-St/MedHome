@@ -249,11 +249,15 @@ fun SignupBody(authViewModel: AuthViewModel) {
                         // Register user
                         authViewModel.register(email.value, password.value) { success, message, uid ->
                             if (success && uid != null) {
-                                // Create user model
+
                                 val user = UserModel(
+                                    id = uid,
                                     name = name.value,
                                     email = email.value,
-                                    role = "patient"
+                                    role = "patient",
+                                    emailVerified = false,
+                                    createdAt = timestamp.toString(),
+                                    updatedAt = timestamp.toString()
                                 )
 
                                 // Save to database
