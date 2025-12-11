@@ -135,6 +135,10 @@ fun OptionGrid(
                             val intent = Intent(context, HealthRecords::class.java)
                             context.startActivity(intent)
                         }
+                        1 -> {
+                            val intent = Intent(context, BookConsultationActivity::class.java)
+                            context.startActivity(intent)
+                        }
                         6 -> {
                             val intent = Intent(context, BloodDonationActivity::class.java)
                             context.startActivity(intent)
