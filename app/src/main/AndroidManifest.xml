@@ -15,7 +15,13 @@
             android:name=".view.QrActivity"
             android:exported="false"
             android:label="@string/title_activity_qr"
-            android:theme="@style/Theme.MedHomeApp" />
+            android:theme="@style/Theme.MedHomeApp" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.BloodDonationActivity"
             android:exported="false"
