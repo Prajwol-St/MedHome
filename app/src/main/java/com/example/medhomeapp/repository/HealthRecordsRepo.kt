@@ -22,7 +22,7 @@ interface HealthRecordsRepo {
     )
     fun deleteHealthRecord(
         recordId: String,
-        fileUri: String,
+        fileUrl: String,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     )

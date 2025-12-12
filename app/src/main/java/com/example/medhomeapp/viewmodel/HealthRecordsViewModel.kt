@@ -11,10 +11,11 @@ import com.example.medhomeapp.repository.HealthRecordsRepoImpl
 
 class HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository : HealthRecordsRepo = HealthRecordsRepoImpl(application.applicationContext)
+    private val repository: HealthRecordsRepo =
+        HealthRecordsRepoImpl(application.applicationContext)
 
     private val _healthRecords = MutableLiveData<List<HealthRecordsModel>>()
-    val healthRecords: LiveData<List<HealthRecordsModel>> =_healthRecords
+    val healthRecords: LiveData<List<HealthRecordsModel>> = _healthRecords
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
@@ -28,20 +29,22 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
     init {
         loadHealthRecords()
     }
-    fun loadHealthRecords(){
-        _isLoading.value= true
+
+    fun loadHealthRecords() {
+        _isLoading.value = true
         repository.getHealthRecords(
-            onSuccess = {records ->
-                _healthRecords.value =records
+            onSuccess = { records ->
+                _healthRecords.value = records
                 _isLoading.value = false
             },
-            onError = {exception ->
+            onError = { exception ->
                 _errorMessage.value = exception.message
                 _isLoading.value = false
             }
         )
     }
-    fun addHealthRecord(record : HealthRecordsModel, fileUri: Uri?){
+
+    fun addHealthRecord(record: HealthRecordsModel, fileUri: Uri?) {
         _isLoading.value = true
         repository.addHealthRecord(
             record = record,
@@ -50,10 +53,45 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
                 _successMessage.value = "Record Added successfully"
                 _isLoading.value = false
             },
+            onError = { exception ->
+                _errorMessage.value = exception.message
+                _isLoading.value = false
+            }
+        )
+    }
+    fun updateHealthRecord(record: HealthRecordsModel, fileUri: Uri?) {
+        _isLoading.value = true
+        repository.updateHealthRecord(
+            record = record,
+            fileUri = fileUri,
+            onSuccess = {
+                _successMessage.value = "Record updated successfully"
+                _isLoading.value = false
+            },
+            onError = { exception ->
+                _errorMessage.value = exception.message
+                _isLoading.value = false
+            }
+        )
+    }
+    fun deleteHealthRecord(recordId : String, fileUrl: String){
+        _isLoading.value=true
+        repository.deleteHealthRecord(
+            recordId = recordId,
+            fileUrl = fileUrl,
+            onSuccess = {
+                _successMessage.value = "Record deleted successfully"
+                _isLoading.value = false
+            },
             onError = {exception ->
                 _errorMessage.value = exception.message
                 _isLoading.value = false
             }
         )
     }
+    fun clearMessages(){
+        _errorMessage.value = null
+        _successMessage.value = null
+    }
+
 }
