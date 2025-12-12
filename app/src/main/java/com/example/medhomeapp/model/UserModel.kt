@@ -1,7 +1,7 @@
 package com.example.medhomeapp.model
 
 data class UserModel(
-    val id: Int = 0,
+    val id: String = "",
     val role: String = "patient",
     val name: String = "",
     val email: String = "",
