@@ -5,11 +5,13 @@ import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -35,6 +37,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -47,7 +50,9 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -64,26 +69,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
+import com.example.medhomeapp.model.HealthRecordsModel
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
 
 class HealthRecords : ComponentActivity() {
+    private val viewModel: HealthRecordsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HealthRecordsBody()
+            HealthRecordsBody(viewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HealthRecordsBody(){
+fun HealthRecordsBody(viewModel: HealthRecordsViewModel){
     val context = LocalContext.current
     val activity = context as Activity
     var isSearching by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     var showBottomSheet by remember { mutableStateOf(false) }
+    var recordToDelete by remember { mutableStateOf<HealthRecordsModel?>(null) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var editingRecord by remember { mutableStateOf<HealthRecordsModel?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var recordTitle by remember { mutableStateOf("") }
     var recordDescription by remember { mutableStateOf("") }
@@ -106,6 +117,32 @@ fun HealthRecordsBody(){
     ) {uri : Uri? ->
         selectedFileUri = uri
         selectedFileName = uri?.lastPathSegment
+    }
+    val healthRecords by viewModel.healthRecords.observeAsState(emptyList())
+    val isLoading by viewModel.isLoading.observeAsState(false)
+    val errorMessage by viewModel.errorMessage.observeAsState()
+    val successMessage by viewModel.successMessage.observeAsState()
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearMessages()
+        }
+    }
+    LaunchedEffect(successMessage) {
+        successMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            viewModel.clearMessages()
+        }
+    }
+
+    val filteredRecords = if (searchQuery.isEmpty()){
+        healthRecords
+    }else{
+        healthRecords.filter {
+            it.title.contains(searchQuery, ignoreCase = true)||
+                    it.description.contains(searchQuery, ignoreCase = true)
+        }
     }
 
     Scaffold(
@@ -180,12 +217,20 @@ fun HealthRecordsBody(){
             Box(
                 modifier = Modifier
                     .size(54.dp)
-                    .background(Blue10),
+                    .background(Blue10, shape = CircleShape),
 
 
                 ){
                 FloatingActionButton(
-                    onClick = { showBottomSheet = true},
+                    onClick = {
+                        editingRecord = null
+                        recordTitle = ""
+                        recordDescription = ""
+                        selectedDate = ""
+                        selectedFileUri =  null
+                        selectedFileName = null
+                        showBottomSheet = true
+                    },
                     containerColor = Color.Transparent,
                     modifier = Modifier.fillMaxSize(),
                     shape = CircleShape
@@ -200,6 +245,16 @@ fun HealthRecordsBody(){
         }
 
     ){padding ->
+        if (isLoading){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ){
+                CircularProgressIndicator(color = Blue10)
+            }
+        }else if (filteredRecords.isEmpty()){
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -212,7 +267,7 @@ fun HealthRecordsBody(){
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth()
-                ){
+                ) {
                     Image(
                         painter = painterResource(R.drawable.medicalrecord),
                         contentDescription = null,
@@ -220,17 +275,23 @@ fun HealthRecordsBody(){
                         colorFilter = ColorFilter.tint(Color.LightGray)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    Text(text ="No Records Yet",
+                    Text(
+                        text = "No Records Yet",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Gray)
+                        color = Color.Gray
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Tap + to add your medical records",
-                        fontSize = 16.sp,
+                        text = if (searchQuery.isEmpty())
+                            "Tap + to add your medical records"
+                        else
+                            "Try a different search term",
+                            fontSize = 16.sp,
                         color = Color.Gray,
                         textAlign = TextAlign.Center
                     )
+                }
                 }
             }
         }
