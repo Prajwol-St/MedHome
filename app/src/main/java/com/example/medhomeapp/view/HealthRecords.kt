@@ -36,6 +36,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -290,8 +292,19 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel){
                             fontSize = 16.sp,
                         color = Color.Gray,
                         textAlign = TextAlign.Center
-                    )
+                        )
+                    }
                 }
+            }
+        }else{
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+            ){
+                items(filteredRecords.size){index ->
+                    HealthRecordCard()
                 }
             }
         }
@@ -458,6 +471,37 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel){
                     Spacer(modifier = Modifier.height(32.dp))
 
                 }
+
+            }
+        }
+    }
+}
+@Composable
+fun HealthRecordCard(
+    records: HealthRecords,
+    onEditClick: (HealthRecords) -> Unit,
+    onDeleteClick: (HealthRecords) -> Unit
+){
+    var showMenu by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(2.dp),
+        colors = CardDefaults.cardColors(containerColor = White)
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
 
             }
         }
