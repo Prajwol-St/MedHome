@@ -4,6 +4,7 @@ data class HealthRecordsModel(
     val id : String = "",
     val userId: String = "",
     val title: String = "",
+    val date : String = "",
     val description: String="",
     val fileUrl : String ="",
     val fileName: String ="",
