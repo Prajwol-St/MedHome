@@ -3,6 +3,7 @@ package com.example.medhomeapp.repository
 import android.net.Uri
 import com.example.medhomeapp.model.HealthRecordsModel
 import android.content.Context
+import com.example.medhomeapp.view.HealthRecords
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,14 +39,36 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val documentId = collectionRef().document().id
+
+        val filePath = fileUri?.let { saveFileLocally(it) }?: ""
+
+        val finalRecord = record.copy(
+            id = documentId,
+            userId = userId,
+            fileUrl = filePath,
+            fileName = File(filePath).name
+        )
+
+        collectionRef().document(documentId).set(finalRecord)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getHealthRecords(
         onSuccess: (List<HealthRecordsModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        collectionRef()
+            .orderBy("timestamp")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null){
+                    onError(error)
+                    return@addSnapshotListener
+                }
+                val records = snapshot?.toObjects(HealthRecordsModel::class.java)?:emptyList()
+                onSuccess(records)
+            }
     }
 
     override fun updateHealthRecord(
