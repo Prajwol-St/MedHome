@@ -77,7 +77,24 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        var updateRecord = record
+
+        if (fileUri != null){
+//            This deletes old file after update
+            if(record.fileUrl.isNotEmpty()){
+                File(record.fileUrl).delete()
+            }
+            //Saves the updated new file
+            val newPath = saveFileLocally(fileUri)
+            updateRecord = record.copy(
+                fileUrl = newPath,
+                fileName = File(newPath).name
+            )
+        }
+        collectionRef().document(record.id)
+            .set(updateRecord)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun deleteHealthRecord(
