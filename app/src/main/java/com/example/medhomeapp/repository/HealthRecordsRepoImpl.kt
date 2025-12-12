@@ -103,7 +103,13 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+       if (fileUri.isNotEmpty()){
+           File(fileUri).delete()
+       }
+        collectionRef().document(recordId)
+            .delete()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
 
