@@ -105,6 +105,19 @@ fun HomeScreen(){
                     ) )
 
                 }
+                val context = LocalContext.current
+
+                Image(
+                    painter = painterResource(id = R.drawable.baseline_qr_code_24),
+                    contentDescription = "QR Icon",
+                    modifier = Modifier
+                        .size(80.dp)              // change size as you like
+                        .clickable {
+                            context.startActivity(Intent(context, QrActivity::class.java))
+                        }
+                        .padding(16.dp)
+                )
+
             }
         Spacer(modifier = Modifier.height(14.dp))
         OptionGrid(optionCategories,optionTitle)
