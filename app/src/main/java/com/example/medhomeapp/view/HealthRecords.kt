@@ -3,6 +3,7 @@ package com.example.medhomeapp.view
 import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,8 +19,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -81,10 +84,13 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
     var searchQuery by remember { mutableStateOf("") }
     var showBottomSheet by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showDetailSheet by remember { mutableStateOf(false) }
     var recordToDelete by remember { mutableStateOf<HealthRecordsModel?>(null) }
     var editingRecord by remember { mutableStateOf<HealthRecordsModel?>(null) }
+    var selectedRecord by remember { mutableStateOf<HealthRecordsModel?>(null) }
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     var recordTitle by remember { mutableStateOf("") }
     var recordDescription by remember { mutableStateOf("") }
@@ -227,6 +233,10 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     items(filteredRecords.size) { index ->
                         HealthRecordCard(
                             record = filteredRecords[index],
+                            onCardClick = {
+                                selectedRecord = it
+                                showDetailSheet = true
+                            },
                             onEditClick = {
                                 editingRecord = it
                                 recordTitle = it.title
@@ -247,6 +257,191 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
+        // Detail Bottom Sheet
+        if (showDetailSheet && selectedRecord != null) {
+            ModalBottomSheet(
+                onDismissRequest = { showDetailSheet = false },
+                sheetState = detailSheetState
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Record Details",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Row {
+                            IconButton(onClick = {
+                                selectedRecord?.let { record ->
+                                    editingRecord = record
+                                    recordTitle = record.title
+                                    recordDescription = record.description
+                                    selectedDate = record.date
+                                    selectedFileName = record.fileName.takeIf { it.isNotEmpty() }
+                                    selectedFileUri = null
+                                    showDetailSheet = false
+                                    showBottomSheet = true
+                                }
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_edit_24),
+                                    contentDescription = "Edit",
+                                    tint = Blue10
+                                )
+                            }
+                            IconButton(onClick = {
+                                selectedRecord?.let { record ->
+                                    recordToDelete = record
+                                    showDetailSheet = false
+                                    showDeleteDialog = true
+                                }
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_delete_24),
+                                    contentDescription = "Delete",
+                                    tint = Color.Red
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(20.dp))
+
+                    // Title Section
+                    Text(
+                        text = "Title",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = selectedRecord?.title ?: "",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Date Section
+                    Text(
+                        text = "Date",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text = selectedRecord?.date ?: "",
+                        fontSize = 16.sp
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Description Section
+                    if (selectedRecord?.description?.isNotEmpty() == true) {
+                        Text(
+                            text = "Description",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Gray
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = selectedRecord?.description ?: "",
+                            fontSize = 16.sp,
+                            lineHeight = 24.sp
+                        )
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+                    // Attached File Section
+                    if (selectedRecord?.fileName?.isNotEmpty() == true &&
+                        selectedRecord?.fileUrl?.isNotEmpty() == true) {
+                        Text(
+                            text = "Attached File",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Gray
+                        )
+                        Spacer(Modifier.height(8.dp))
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedRecord?.fileUrl?.let { url ->
+                                        try {
+                                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                                setDataAndType(Uri.parse(url), "*/*")
+                                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                            }
+                                            context.startActivity(intent)
+                                        } catch (e: Exception) {
+                                            Toast.makeText(
+                                                context,
+                                                "Unable to open file",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                                },
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color(0xFFE3F2FD)
+                            )
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.outline_attach_file_24),
+                                    contentDescription = null,
+                                    tint = Blue10,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                                Spacer(Modifier.width(12.dp))
+                                Column(modifier = Modifier.weight(1f)) {
+                                    Text(
+                                        text = selectedRecord?.fileName ?: "",
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(
+                                        text = "Tap to open",
+                                        fontSize = 12.sp,
+                                        color = Color.Gray
+                                    )
+                                }
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_arrow_forward_ios_24),
+                                    contentDescription = null,
+                                    tint = Blue10,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(16.dp))
+                    }
+
+                    Spacer(Modifier.height(20.dp))
+                }
+            }
+        }
+
+        // Add/Edit Bottom Sheet
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
@@ -370,13 +565,16 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 @Composable
 fun HealthRecordCard(
     record: HealthRecordsModel,
+    onCardClick: (HealthRecordsModel) -> Unit,
     onEditClick: (HealthRecordsModel) -> Unit,
     onDeleteClick: (HealthRecordsModel) -> Unit
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onCardClick(record) },
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -413,7 +611,12 @@ fun HealthRecordCard(
             Text(record.date, fontSize = 12.sp, color = Color.Gray)
             if (record.description.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
-                Text(record.description, fontSize = 14.sp)
+                Text(
+                    record.description,
+                    fontSize = 14.sp,
+                    maxLines = 2,
+                    color = Color.DarkGray
+                )
             }
             if (record.fileName.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
