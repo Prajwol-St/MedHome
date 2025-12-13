@@ -11,8 +11,7 @@ import com.example.medhomeapp.repository.HealthRecordsRepoImpl
 
 class HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository: HealthRecordsRepo =
-        HealthRecordsRepoImpl(application.applicationContext)
+    private val repository: HealthRecordsRepo = HealthRecordsRepoImpl(application.applicationContext)
 
     private val _healthRecords = MutableLiveData<List<HealthRecordsModel>>()
     val healthRecords: LiveData<List<HealthRecordsModel>> = _healthRecords
@@ -27,10 +26,11 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
     val successMessage: LiveData<String?> = _successMessage
 
     init {
-        loadHealthRecords()
+        observeHealthRecords()
     }
 
-    fun loadHealthRecords() {
+    // Persistent listener to Realtime Database
+    private fun observeHealthRecords() {
         _isLoading.value = true
         repository.getHealthRecords(
             onSuccess = { records ->
@@ -50,7 +50,7 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
             record = record,
             fileUri = fileUri,
             onSuccess = {
-                _successMessage.value = "Record Added successfully"
+                _successMessage.value = "Record added successfully"
                 _isLoading.value = false
             },
             onError = { exception ->
@@ -59,6 +59,7 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
             }
         )
     }
+
     fun updateHealthRecord(record: HealthRecordsModel, fileUri: Uri?) {
         _isLoading.value = true
         repository.updateHealthRecord(
@@ -74,8 +75,9 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
             }
         )
     }
-    fun deleteHealthRecord(recordId : String, fileUrl: String){
-        _isLoading.value=true
+
+    fun deleteHealthRecord(recordId: String, fileUrl: String) {
+        _isLoading.value = true
         repository.deleteHealthRecord(
             recordId = recordId,
             fileUrl = fileUrl,
@@ -83,15 +85,15 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
                 _successMessage.value = "Record deleted successfully"
                 _isLoading.value = false
             },
-            onError = {exception ->
+            onError = { exception ->
                 _errorMessage.value = exception.message
                 _isLoading.value = false
             }
         )
     }
-    fun clearMessages(){
+
+    fun clearMessages() {
         _errorMessage.value = null
         _successMessage.value = null
     }
-
 }

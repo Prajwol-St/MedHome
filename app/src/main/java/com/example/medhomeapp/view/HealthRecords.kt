@@ -1,9 +1,10 @@
 package com.example.medhomeapp.view
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.icu.util.Calendar
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -12,76 +13,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthRecordsModel
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
-import android.Manifest
-import android.os.Build
-
+import java.util.*
 
 class HealthRecords : ComponentActivity() {
 
@@ -89,8 +43,7 @@ class HealthRecords : ComponentActivity() {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        if (!allGranted) {
+        if (!permissions.values.all { it }) {
             Toast.makeText(this, "Permissions needed to upload files", Toast.LENGTH_LONG).show()
         }
     }
@@ -103,6 +56,7 @@ class HealthRecords : ComponentActivity() {
             HealthRecordsBody(viewModel)
         }
     }
+
     private fun requestStoragePermissions() {
         val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arrayOf(
@@ -117,11 +71,9 @@ class HealthRecords : ComponentActivity() {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
-
     val context = LocalContext.current
     val activity = context as Activity
 
@@ -143,9 +95,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
     val calendar = Calendar.getInstance()
     val datepicker = DatePickerDialog(
         context,
-        { _, year, month, day ->
-            selectedDate = "$day/${month + 1}/$year"
-        },
+        { _, year, month, day -> selectedDate = "$day/${month + 1}/$year" },
         calendar.get(Calendar.YEAR),
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
@@ -177,50 +127,45 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         }
     }
 
-    val filteredRecords =
-        if (searchQuery.isEmpty()) healthRecords
-        else healthRecords.filter {
-            it.title.contains(searchQuery, ignoreCase = true) ||
-                    it.description.contains(searchQuery, ignoreCase = true)
-        }
+    val filteredRecords = if (searchQuery.isEmpty()) healthRecords
+    else healthRecords.filter {
+        it.title.contains(searchQuery, ignoreCase = true) ||
+                it.description.contains(searchQuery, ignoreCase = true)
+    }
 
     Scaffold(
         topBar = {
-            Column {
-                CenterAlignedTopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Blue10,
-                        titleContentColor = White
-                    ),
-                    title = { Text("My Records") },
-                    navigationIcon = {
-                        IconButton(onClick = { activity.finish() }) {
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                                contentDescription = null,
-                                tint = White
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                isSearching = !isSearching
-                                if (!isSearching) searchQuery = ""
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(
-                                    if (isSearching) R.drawable.baseline_close_24
-                                    else R.drawable.baseline_search_24
-                                ),
-                                contentDescription = null,
-                                tint = White
-                            )
-                        }
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Blue10,
+                    titleContentColor = Color.White
+                ),
+                title = { Text("My Records") },
+                navigationIcon = {
+                    IconButton(onClick = { activity.finish() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     }
-                )
-            }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        isSearching = !isSearching
+                        if (!isSearching) searchQuery = ""
+                    }) {
+                        Icon(
+                            painter = painterResource(
+                                if (isSearching) R.drawable.baseline_close_24
+                                else R.drawable.baseline_search_24
+                            ),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -239,23 +184,23 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_add_24),
                     contentDescription = null,
-                    tint = White
+                    tint = Color.White
                 )
             }
         }
     ) { padding ->
-
         if (isLoading) {
             Box(Modifier.fillMaxSize(), Alignment.Center) {
                 CircularProgressIndicator(color = Blue10)
             }
         } else if (filteredRecords.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("No Records Found", color = Color.Gray)
             }
         } else {
-            LazyColumn(modifier = Modifier.padding(16.dp)
-                .padding(padding)) {
+            LazyColumn(
+                modifier = Modifier.padding(16.dp).padding(padding)
+            ) {
                 items(filteredRecords.size) { index ->
                     HealthRecordCard(
                         record = filteredRecords[index],
@@ -284,13 +229,11 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                 sheetState = sheetState
             ) {
                 Column(Modifier.padding(16.dp)) {
-
                     Text(
                         text = if (editingRecord == null) "Add Medical Record" else "Edit Medical Record",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
-
                     Spacer(Modifier.height(12.dp))
 
                     OutlinedTextField(
@@ -306,9 +249,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         value = selectedDate,
                         onValueChange = {},
                         label = { Text("Date") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { datepicker.show() },
+                        modifier = Modifier.fillMaxWidth().clickable { datepicker.show() },
                         enabled = false
                     )
 
@@ -318,9 +259,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         value = recordDescription,
                         onValueChange = { recordDescription = it },
                         label = { Text("Description") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp)
+                        modifier = Modifier.fillMaxWidth().height(120.dp)
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -334,11 +273,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (selectedFileName == null) {
-                            Text("Tap to upload file", color = Color.Gray)
-                        } else {
-                            Text(selectedFileName ?: "")
-                        }
+                        Text(selectedFileName ?: "Tap to upload file", color = Color.Gray)
                     }
 
                     Spacer(Modifier.height(20.dp))
@@ -346,7 +281,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     Button(
                         onClick = {
                             if (recordTitle.isNotEmpty() && selectedDate.isNotEmpty()) {
-
                                 val record = HealthRecordsModel(
                                     id = editingRecord?.id ?: "",
                                     userId = editingRecord?.userId ?: "",
@@ -372,7 +306,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     ) {
                         Text(
                             text = if (editingRecord == null) "Save Record" else "Update Record",
-                            color = White,
+                            color = Color.White,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -388,10 +322,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                 confirmButton = {
                     TextButton(onClick = {
                         recordToDelete?.let {
-                            viewModel.deleteHealthRecord(
-                                recordId = it.id,
-                                fileUrl = it.fileUrl
-                            )
+                            viewModel.deleteHealthRecord(it.id, it.fileUrl)
                         }
                         showDeleteDialog = false
                         recordToDelete = null
@@ -406,7 +337,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     }) {
                         Text("Cancel")
                     }
-                },
+                }
             )
         }
     }
@@ -425,21 +356,13 @@ fun HealthRecordCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
-
         Column(Modifier.padding(16.dp)) {
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-                Text(
-                    text = record.title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
+                Text(record.title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Box {
                     IconButton(onClick = { showMenu = true }) {
                         Icon(
@@ -447,38 +370,27 @@ fun HealthRecordCard(
                             contentDescription = null
                         )
                     }
-
                     DropdownMenu(
                         expanded = showMenu,
                         onDismissRequest = { showMenu = false }
                     ) {
                         DropdownMenuItem(
                             text = { Text("Edit") },
-                            onClick = {
-                                showMenu = false
-                                onEditClick(record)
-                            }
+                            onClick = { showMenu = false; onEditClick(record) }
                         )
                         DropdownMenuItem(
                             text = { Text("Delete", color = Color.Red) },
-                            onClick = {
-                                showMenu = false
-                                onDeleteClick(record)
-                            }
+                            onClick = { showMenu = false; onDeleteClick(record) }
                         )
                     }
                 }
             }
-
             Spacer(Modifier.height(6.dp))
-
-            Text(text = record.date, fontSize = 12.sp, color = Color.Gray)
-
+            Text(record.date, fontSize = 12.sp, color = Color.Gray)
             if (record.description.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
-                Text(text = record.description, fontSize = 14.sp)
+                Text(record.description, fontSize = 14.sp)
             }
-
             if (record.fileName.isNotEmpty()) {
                 Spacer(Modifier.height(12.dp))
                 Row(
