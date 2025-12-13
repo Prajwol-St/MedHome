@@ -87,7 +87,6 @@ fun LoginBody(authViewModel: AuthViewModel) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -98,7 +97,6 @@ fun LoginBody(authViewModel: AuthViewModel) {
     val googleSignInClient = remember {
         GoogleSignIn.getClient(context, gso)
     }
-
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -115,20 +113,17 @@ fun LoginBody(authViewModel: AuthViewModel) {
                         val user = authTask.result?.user
                         val userId = user?.uid ?: ""
 
-                        // Check if user exists in database
                         authViewModel.checkIfUserExists(userId) { exists, userModel ->
                             isLoading = false
 
                             if (exists && userModel != null) {
-                                // User exists - log them in
                                 Toast.makeText(context, "Welcome back ${userModel.name}!", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(context, DashboardActivity::class.java)
                                 context.startActivity(intent)
                                 (context as ComponentActivity).finish()
                             } else {
-                                // New user - redirect to signup
                                 Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(context, SignupActivity::class.java)
+                                val intent = Intent(context, SignupDetailsActivity::class.java)
                                 intent.putExtra("googleUid", userId)
                                 intent.putExtra("googleEmail", user?.email ?: "")
                                 intent.putExtra("googleName", user?.displayName ?: "")
@@ -242,7 +237,6 @@ fun LoginBody(authViewModel: AuthViewModel) {
                     .clickable(enabled = !isLoading) {
                         val intent = Intent(context, ForgotPasswordActivity::class.java)
                         context.startActivity(intent)
-
                     },
                 textAlign = TextAlign.End
             )
@@ -363,7 +357,7 @@ fun LoginBody(authViewModel: AuthViewModel) {
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable(enabled = !isLoading) {
-                        val intent = Intent(context, SignupActivity::class.java)
+                        val intent = Intent(context, SignupInitialActivity::class.java)
                         context.startActivity(intent)
                     }
                 )
