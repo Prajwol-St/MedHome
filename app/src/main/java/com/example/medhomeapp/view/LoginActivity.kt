@@ -222,6 +222,8 @@ fun LoginBody(authViewModel: AuthViewModel) {
                     .padding(horizontal = 24.dp)
                     .padding(top = 6.dp)
                     .clickable(enabled = !isLoading) {
+                        val intent = Intent(context, ForgotPasswordActivity::class.java)
+                        context.startActivity(intent)
 
                     },
                 textAlign = TextAlign.End
@@ -350,10 +352,4 @@ fun LoginBody(authViewModel: AuthViewModel) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewLogin() {
-    LoginBody(authViewModel = AuthViewModel())
 }

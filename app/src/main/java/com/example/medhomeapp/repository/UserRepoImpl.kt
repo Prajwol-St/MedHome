@@ -167,5 +167,4 @@ class UserRepoImpl: UserRepo {
                 }
             }
     }
-    }
-
+}

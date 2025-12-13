@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medhomeapp.R
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 class SplashActivity : ComponentActivity() {
@@ -35,6 +34,7 @@ class SplashActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SplashBody()
+
         }
     }
 }
@@ -47,23 +47,13 @@ fun SplashBody(){
 
     LaunchedEffect(Unit) {
         delay(2000)
-
-        // CHECK IF USER IS LOGGED IN
-        val currentUser = FirebaseAuth.getInstance().currentUser
-
-        val intent = if (currentUser != null) {
-            // User is logged in → Go to Dashboard
-            Intent(context, DashboardActivity::class.java)
-        } else {
-            // User not logged in → Go to Login
-            Intent(context, LoginActivity::class.java)
-        }
-
+        val intent = Intent(
+            context, LoginActivity::class.java
+        )
         context.startActivity(intent)
         activity.finish()
     }
-
-    Scaffold { padding ->
+    Scaffold() {padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,9 +71,11 @@ fun SplashBody(){
             Spacer(modifier = Modifier.size(50.dp))
 
             CircularProgressIndicator()
+
         }
     }
 }
+
 
 @Preview
 @Composable
