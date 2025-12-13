@@ -11,20 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp">
-
+        <activity
+            android:name=".view.SignupDetailsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_signup_details"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
+            android:name=".view.SignupInitialActivity"
+            android:exported="false"
+            android:label="@string/title_activity_signup_initial"
+            android:theme="@style/Theme.MedHomeApp" />
         <activity
             android:name=".view.BloodDonationActivity"
             android:exported="false"
             android:label="@string/title_activity_blood_donation"
             android:theme="@style/Theme.MedHomeApp" />
-
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false"
             android:label="@string/title_activity_forgot_password"
             android:theme="@style/Theme.MedHomeApp" />
-
-
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
@@ -32,35 +38,25 @@
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.HealthRecords"
             android:exported="false"
             android:label="@string/title_activity_health_records"
             android:theme="@style/Theme.MedHomeApp" />
-
         <activity
             android:name=".view.DashboardActivity"
             android:exported="false"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.MedHomeApp" />
-
-        <activity
-            android:name=".view.SignupActivity"
-            android:exported="false"
-            android:label="@string/title_activity_signup"
-            android:theme="@style/Theme.MedHomeApp" />
-
-
         <activity
             android:name=".view.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.MedHomeApp" />
-
         <activity
             android:name=".view.MainActivity"
             android:exported="false"
