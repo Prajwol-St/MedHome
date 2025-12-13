@@ -16,6 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,8 +39,6 @@ class QrActivity : ComponentActivity() {
 @Composable
 fun QrScreen() {
     val uid = FirebaseAuth.getInstance().currentUser?.uid ?: "NO_UID"
-
-    // Generate QR from UID
     val qrBitmap: Bitmap = generateQrBitmap(uid, 600)
 
     Column(
@@ -47,18 +49,34 @@ fun QrScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(text = "Your QR Code")
+        Text(
+            text = "Your Medical QR",
+            style = MaterialTheme.typography.headlineSmall
+        )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Image(
-            bitmap = qrBitmap.asImageBitmap(),
-            contentDescription = "QR Code",
-            modifier = Modifier.size(250.dp)
+        Text(
+            text = "Show this QR to staff for quick access",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(text = "UID:\n$uid")
+        Card(
+            elevation = CardDefaults.cardElevation(8.dp),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Image(
+                bitmap = qrBitmap.asImageBitmap(),
+                contentDescription = "QR Code",
+                modifier = Modifier
+                    .size(260.dp)
+                    .padding(16.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
