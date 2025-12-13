@@ -28,12 +28,10 @@ class AuthViewModel: ViewModel() {
         address: String,
         callback: (Boolean, String) -> Unit
     ) {
-
         userRepo.register(email, password) { success, message, uid ->
             Log.d("AuthViewModel", "Register called - success: $success, message: $message, uid: $uid")
 
             if (success && uid != null) {
-
                 val timestamp = System.currentTimeMillis().toString()
 
                 val userModel = UserModel(
@@ -53,7 +51,6 @@ class AuthViewModel: ViewModel() {
                     address = address
                 )
 
-
                 userRepo.addUserToDatabase(uid, userModel) { dbSuccess, dbMessage ->
                     callback(dbSuccess, dbMessage)
                 }
@@ -68,5 +65,14 @@ class AuthViewModel: ViewModel() {
         callback: (Boolean, String) -> Unit
     ) {
         userRepo.forgetPassword(email, callback)
+    }
+
+    fun checkIfUserExists(
+        userId: String,
+        callback: (Boolean, UserModel?) -> Unit
+    ) {
+        userRepo.getUserById(userId) { success, message, user ->
+            callback(success, user)
+        }
     }
 }
