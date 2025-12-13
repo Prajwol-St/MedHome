@@ -45,7 +45,7 @@ class DashboardActivity : ComponentActivity() {
 @Composable
 fun DashboardBody(){
     val context = LocalContext.current
-    val activity = context as Activity
+
 
     data class NavItem(val label: String, val icon: Int, val title: String)
     var selectedItem by remember { mutableStateOf(0) }
