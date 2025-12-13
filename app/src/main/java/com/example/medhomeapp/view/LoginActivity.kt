@@ -111,15 +111,33 @@ fun LoginBody(authViewModel: AuthViewModel) {
             isLoading = true
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
-                    isLoading = false
                     if (authTask.isSuccessful) {
                         val user = authTask.result?.user
-                        Toast.makeText(context, "Welcome ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                        val userId = user?.uid ?: ""
 
-                        val intent = Intent(context, DashboardActivity::class.java)
-                        context.startActivity(intent)
-                        (context as ComponentActivity).finish()
+                        // Check if user exists in database
+                        authViewModel.checkIfUserExists(userId) { exists, userModel ->
+                            isLoading = false
+
+                            if (exists && userModel != null) {
+                                // User exists - log them in
+                                Toast.makeText(context, "Welcome back ${userModel.name}!", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(context, DashboardActivity::class.java)
+                                context.startActivity(intent)
+                                (context as ComponentActivity).finish()
+                            } else {
+                                // New user - redirect to signup
+                                Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(context, SignupActivity::class.java)
+                                intent.putExtra("googleUid", userId)
+                                intent.putExtra("googleEmail", user?.email ?: "")
+                                intent.putExtra("googleName", user?.displayName ?: "")
+                                context.startActivity(intent)
+                                (context as ComponentActivity).finish()
+                            }
+                        }
                     } else {
+                        isLoading = false
                         Toast.makeText(context, "Google Sign-In Failed: ${authTask.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -353,4 +371,3 @@ fun LoginBody(authViewModel: AuthViewModel) {
         }
     }
 }
-
