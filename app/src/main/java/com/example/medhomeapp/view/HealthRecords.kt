@@ -44,7 +44,7 @@ class HealthRecords : ComponentActivity() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         if (!permissions.values.all { it }) {
-            Toast.makeText(this, "Permissions needed to upload files", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Permissions needed to upload files", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -140,7 +140,26 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     containerColor = Blue10,
                     titleContentColor = Color.White
                 ),
-                title = { Text("My Records") },
+                title = {
+                    if (isSearching) {
+                        OutlinedTextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            placeholder = { Text("Search records...", color = Color.White.copy(alpha = 0.7f)) },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = Color.White,
+                                unfocusedTextColor = Color.White,
+                                cursorColor = Color.White,
+                                focusedBorderColor = Color.White,
+                                unfocusedBorderColor = Color.White.copy(alpha = 0.5f)
+                            ),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    } else {
+                        Text("My Records")
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { activity.finish() }) {
                         Icon(
@@ -189,36 +208,41 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
     ) { padding ->
-        if (isLoading) {
-            Box(Modifier.fillMaxSize(), Alignment.Center) {
-                CircularProgressIndicator(color = Blue10)
-            }
-        } else if (filteredRecords.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No Records Found", color = Color.Gray)
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.padding(16.dp).padding(padding)
-            ) {
-                items(filteredRecords.size) { index ->
-                    HealthRecordCard(
-                        record = filteredRecords[index],
-                        onEditClick = {
-                            editingRecord = it
-                            recordTitle = it.title
-                            recordDescription = it.description
-                            selectedDate = it.date
-                            selectedFileName = it.fileName.takeIf { n -> n.isNotEmpty() }
-                            selectedFileUri = null
-                            showBottomSheet = true
-                        },
-                        onDeleteClick = {
-                            recordToDelete = it
-                            showDeleteDialog = true
-                        }
+        Column(modifier = Modifier.padding(padding)) {
+            if (isLoading) {
+                Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    CircularProgressIndicator(color = Blue10)
+                }
+            } else if (filteredRecords.isEmpty()) {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        if (searchQuery.isEmpty()) "No Records Found" else "No matching records",
+                        color = Color.Gray
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    items(filteredRecords.size) { index ->
+                        HealthRecordCard(
+                            record = filteredRecords[index],
+                            onEditClick = {
+                                editingRecord = it
+                                recordTitle = it.title
+                                recordDescription = it.description
+                                selectedDate = it.date
+                                selectedFileName = it.fileName.takeIf { n -> n.isNotEmpty() }
+                                selectedFileUri = null
+                                showBottomSheet = true
+                            },
+                            onDeleteClick = {
+                                recordToDelete = it
+                                showDeleteDialog = true
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
                 }
             }
         }
