@@ -12,6 +12,9 @@ data class UserModel(
     val emailVerified: Boolean = false,
     val createdAt: String = "",
     val updatedAt: String = "",
+    val bloodGroup: String = "",
+    val emergencyContact: String = "",
+    val address: String = "",
 )
 {
     fun toMap(): Map<String, Any?> {
@@ -26,7 +29,10 @@ data class UserModel(
             "age" to age,
             "emailVerified" to emailVerified,
             "createdAt" to createdAt,
-            "updatedAt" to updatedAt
+            "updatedAt" to updatedAt,
+            "bloodGroup" to bloodGroup,
+            "emergencyContact" to emergencyContact,
+            "address" to address
         )
     }
 }

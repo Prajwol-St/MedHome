@@ -2,18 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Add these permissions BEFORE <application> tag -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- For Android 13+ (API 33+) -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-
-    <!-- For Android 12 and below -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,24 +13,18 @@
         android:theme="@style/Theme.MedHomeApp">
 
         <activity
-            android:name=".view.BookConsultationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_book_consultation"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <activity
             android:name=".view.BloodDonationActivity"
             android:exported="false"
             android:label="@string/title_activity_blood_donation"
             android:theme="@style/Theme.MedHomeApp" />
+        <!-- Your Activities -->
 
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false"
             android:label="@string/title_activity_forgot_password"
             android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- Splash Activity as THE ONLY launcher -->
+        <!-- Splash Activity as launcher -->
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
@@ -50,38 +32,45 @@
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
+        </activity> <!-- Other Activities -->
         <activity
             android:name=".view.HealthRecords"
             android:exported="false"
             android:label="@string/title_activity_health_records"
             android:theme="@style/Theme.MedHomeApp" />
-
         <activity
             android:name=".view.DashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.MedHomeApp" />
+
+            android:theme="@style/Theme.MedHomeApp" /> <!-- Imported Activities -->
 
         <activity
             android:name=".view.SignupActivity"
             android:exported="false"
             android:label="@string/title_activity_signup"
             android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- LoginActivity - REMOVED duplicate launcher intent-filter -->
         <activity
             android:name=".view.LoginActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_login"
-            android:theme="@style/Theme.MedHomeApp" />
+
+            android:theme="@style/Theme.MedHomeApp">
+
+            <!-- Set LoginActivity as LAUNCHER -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Keep MainActivity but REMOVE launcher to avoid duplicate -->
 
         <activity
             android:name=".view.MainActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
     </application>

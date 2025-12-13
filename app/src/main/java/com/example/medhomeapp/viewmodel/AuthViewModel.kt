@@ -19,20 +19,48 @@ class AuthViewModel: ViewModel() {
     fun register(
         email: String,
         password: String,
-        callback: (Boolean, String, String?) -> Unit
-    ) {
-        userRepo.register(email, password) { success, message, uid ->
-            Log.d("AuthViewModel", "Register called - success: $success, message: $message, uid: $uid")
-            callback(success, message, uid)
-        }
-    }
-
-    fun addUserToDatabase(
-        userId: String,
-        model: UserModel,
+        name: String,
+        contact: String,
+        gender: String,
+        age: Int,
+        bloodGroup: String,
+        emergencyContact: String,
+        address: String,
         callback: (Boolean, String) -> Unit
     ) {
-        userRepo.addUserToDatabase(userId, model, callback)
+
+        userRepo.register(email, password) { success, message, uid ->
+            Log.d("AuthViewModel", "Register called - success: $success, message: $message, uid: $uid")
+
+            if (success && uid != null) {
+
+                val timestamp = System.currentTimeMillis().toString()
+
+                val userModel = UserModel(
+                    id = uid,
+                    role = "patient",
+                    name = name,
+                    email = email,
+                    passwordHash = password,
+                    contact = contact,
+                    gender = gender,
+                    age = age,
+                    emailVerified = false,
+                    createdAt = timestamp,
+                    updatedAt = timestamp,
+                    bloodGroup = bloodGroup,
+                    emergencyContact = emergencyContact,
+                    address = address
+                )
+
+
+                userRepo.addUserToDatabase(uid, userModel) { dbSuccess, dbMessage ->
+                    callback(dbSuccess, dbMessage)
+                }
+            } else {
+                callback(false, message)
+            }
+        }
     }
 
     fun forgotPassword(
