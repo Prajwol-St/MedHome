@@ -8,6 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -50,8 +51,10 @@ fun ScannerScreen() {
     }
 }
 
+@OptIn(ExperimentalGetImage::class)
 @Composable
 fun CameraPreview(onResult: (String) -> Unit) {
+    var isScanned by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
 
@@ -94,6 +97,12 @@ fun CameraPreview(onResult: (String) -> Unit) {
                     .build()
 
                 analysis.setAnalyzer(cameraExecutor) { imageProxy ->
+
+                    if (isScanned) {
+                        imageProxy.close()
+                        return@setAnalyzer
+                    }
+
                     val mediaImage = imageProxy.image ?: run {
                         imageProxy.close()
                         return@setAnalyzer
@@ -107,6 +116,7 @@ fun CameraPreview(onResult: (String) -> Unit) {
                     scanner.process(image)
                         .addOnSuccessListener { barcodes ->
                             barcodes.firstOrNull()?.rawValue?.let { value ->
+                                isScanned = true   // 🔒 STOP further scans
                                 onResult(value)
                             }
                         }
@@ -114,7 +124,6 @@ fun CameraPreview(onResult: (String) -> Unit) {
                             imageProxy.close()
                         }
                 }
-
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     (context as? ComponentActivity)
@@ -130,4 +139,9 @@ fun CameraPreview(onResult: (String) -> Unit) {
         },
         modifier = Modifier.fillMaxSize()
     )
+    DisposableEffect(Unit) {
+        onDispose {
+            cameraExecutor.shutdown()
+        }
+    }
 }
