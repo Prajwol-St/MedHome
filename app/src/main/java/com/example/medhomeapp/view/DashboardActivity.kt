@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
@@ -53,6 +55,7 @@ fun DashboardBody(){
     var navList = listOf(
         NavItem("Home", R.drawable.baseline_home_24, "MedHome"),
         NavItem("Reminder", R.drawable.baseline_access_time_filled_24,"My Reminders"),
+        NavItem("Scan", R.drawable.baseline_qr_code_scanner_24, "Scan QR"),
         NavItem("Notifications", R.drawable.baseline_notifications_24, "Notifications"),
         NavItem("Settings", R.drawable.baseline_settings_24, "App Settings"),
     )
@@ -76,12 +79,28 @@ fun DashboardBody(){
         bottomBar = {
             NavigationBar {
                 navList.forEachIndexed { index, item ->
+
+                    val isQrButton = item.label == "Scan"
+
                     NavigationBarItem(
-                        icon ={
-                            Icon(
-                                painter = painterResource(item.icon),
-                                contentDescription = null
-                            )
+                        icon = {
+                            if (isQrButton) {
+                                Box(modifier = Modifier.padding(top = 4.dp)) {
+                                    Icon(
+                                        painter = painterResource(item.icon),
+                                        contentDescription = "Scan QR",
+                                        modifier = Modifier
+                                            .padding(6.dp)
+                                            .size(40.dp),
+                                        tint = androidx.compose.ui.graphics.Color.Unspecified // transparent icon
+                                    )
+                                }
+                            } else {
+                                Icon(
+                                    painter = painterResource(item.icon),
+                                    contentDescription = item.label
+                                )
+                            }
                         },
                         label = {Text(item.label)},
                         onClick = {
@@ -102,8 +121,9 @@ fun DashboardBody(){
             when(selectedItem){
                 0-> HomeScreen()
                 1-> ReminderScreen()
-                2-> NotificationScreen()
-                3-> SettingsScreen()
+                2-> ScannerScreen()
+                3-> NotificationScreen()
+                4-> SettingsScreen()
             }
 
         }
