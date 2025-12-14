@@ -21,7 +21,6 @@ firebaseFirestore = "26.0.2"
 runtimeLivedata = "1.10.0"
 zxingAndroidEmbedded = "4.3.0"
 playServicesMlkitBarcodeScanning = "18.3.1"
->>>>>>> b3a5d22222b851efb451530190e0065239eb5cee
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,9 +41,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
-<<<<<<< HEAD
 androidx-compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
-=======
 firebase-bom = { module = "com.google.firebase:firebase-bom", version = "33.1.2" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "camera" }
@@ -53,7 +50,6 @@ camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "
 play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 
->>>>>>> b3a5d22222b851efb451530190e0065239eb5cee
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
