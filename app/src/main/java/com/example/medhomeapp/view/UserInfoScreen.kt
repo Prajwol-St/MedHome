@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
+
 @Composable
 fun UserInfoScreen(uid: String) {
 
@@ -91,7 +92,7 @@ fun UserInfoScreen(uid: String) {
             InfoRow("Email", u.email)
             InfoRow("Contact", u.contact)
             InfoRow("Gender", u.gender)
-            InfoRow("Age", u.age.toString())
+            InfoRow("Age", u.dateOfBirth.toString())
         }
 
         /* ---------- ADMIN / STAFF ONLY ---------- */
