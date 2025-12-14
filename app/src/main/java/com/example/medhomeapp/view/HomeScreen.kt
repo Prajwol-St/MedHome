@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -66,7 +69,7 @@ fun HomeScreen(){
         "Health Packages",
 
     )
-
+    val context = LocalContext.current
     Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -74,36 +77,64 @@ fun HomeScreen(){
                 .background(White)
         ){
 
-            Row(
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Blue10)
+                .padding(horizontal = 19.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // LEFT → Profile Image
+            Image(
+                painter = painterResource(R.drawable.baseline_person_24),
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Blue10)
-                    .padding(horizontal = 19.dp, vertical = 8.dp)
+                    .size(42.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
 
-            ){
-                Image(
-                    painter = painterResource(R.drawable.baseline_person_24),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(29.dp)
-                        .width(29.dp)
-                        .clip(shape = CircleShape),
-                    contentScale = ContentScale.Crop
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // CENTER → Texts
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    "Welcome",
+                    fontSize = 22.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Column{
-                    Text("Welcome", style = TextStyle(
-                        fontSize = 22.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.SemiBold
-                    ))
-                    Text("Username", style = TextStyle(
-                        fontSize = 19.sp,
-                        color = Color.White
-                    ) )
-
-                }
+                Text(
+                    "Username",
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
             }
+
+            // RIGHT → Transparent QR Icon
+            val context = LocalContext.current
+
+            Image(
+                painter = painterResource(id = R.drawable.baseline_qr_code_24),
+                contentDescription = "QR Icon",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        context.startActivity(Intent(context, QrActivity::class.java))
+                    },
+                colorFilter = ColorFilter.tint(Color.White) // transparent look
+            )
+        }
+
+// 🔹 Restore missing components
+        Spacer(modifier = Modifier.height(14.dp))
+
+        OptionGrid(optionCategories, optionTitle)
+
+
         Spacer(modifier = Modifier.height(14.dp))
         OptionGrid(optionCategories,optionTitle)
         }
@@ -133,6 +164,10 @@ fun OptionGrid(
                     when(index){
                         0 -> {
                             val intent = Intent(context, HealthRecords::class.java)
+                            context.startActivity(intent)
+                        }
+                        1 -> {
+                            val intent = Intent(context, BookConsultationActivity::class.java)
                             context.startActivity(intent)
                         }
                         6 -> {

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "104380579026-j85ur4pjvu6b2aje5rnktvse7dmu3hg4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.medhomeapp",
+            "certificate_hash": "0f5865f539c6a2bc3f782d260af65113c972a2b6"
+          }
+        },
+        {
           "client_id": "104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com",
           "client_type": 3
         }

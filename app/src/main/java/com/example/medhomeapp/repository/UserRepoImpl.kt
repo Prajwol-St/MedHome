@@ -13,7 +13,6 @@ class UserRepoImpl: UserRepo {
 
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
     val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-
     val ref: DatabaseReference = database.getReference( "User")
 
 
@@ -167,5 +166,4 @@ class UserRepoImpl: UserRepo {
                 }
             }
     }
-    }
-
+}
