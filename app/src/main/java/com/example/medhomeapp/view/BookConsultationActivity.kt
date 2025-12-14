@@ -21,23 +21,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
 
-class BloodDonationActivity : ComponentActivity() {
+class BookConsultationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BloodDonationBody()
-
-            }
+            BookConsultationBody()
         }
     }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BloodDonationBody() {
+fun BookConsultationBody(){
     val context = LocalContext.current
     val activity = context as Activity
 
@@ -51,7 +52,7 @@ fun BloodDonationBody() {
                         navigationIconContentColor = White,
                         actionIconContentColor = White,
                     ),
-                    title = { Text("Blood Donation") },
+                    title = { Text("Book Consultation") },
                     navigationIcon = {
                         IconButton(onClick = { activity.finish() }) {
                             Icon(
@@ -75,9 +76,3 @@ fun BloodDonationBody() {
 
     }
 }
-
-
-
-
-
-

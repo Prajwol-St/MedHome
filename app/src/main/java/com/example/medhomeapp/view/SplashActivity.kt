@@ -65,7 +65,7 @@ fun SplashBody(){
 
             Image(
                 painter = painterResource(R.drawable.baseline_visibility_24),
-                        contentDescription = null,
+                contentDescription = null,
                 modifier = Modifier.size(180.dp)
             )
             Spacer(modifier = Modifier.size(50.dp))
