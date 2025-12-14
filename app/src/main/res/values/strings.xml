@@ -12,6 +12,8 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_book_consultation">BookConsultationActivity</string>
+    <string name="title_activity_signup_initial">SignupInitialActivity</string>
+    <string name="title_activity_signup_details">SignupDetailsActivity</string>
 
 
 </resources>
