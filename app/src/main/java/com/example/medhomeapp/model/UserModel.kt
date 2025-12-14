@@ -1,3 +1,4 @@
+
 package com.example.medhomeapp.model
 
 data class UserModel(
@@ -8,7 +9,7 @@ data class UserModel(
     val passwordHash: String = "",
     val contact: String = "",
     val gender: String = "",
-    val age: Int = 0,
+    val dateOfBirth: String = "",
     val emailVerified: Boolean = false,
     val createdAt: String = "",
     val updatedAt: String = "",
@@ -26,7 +27,7 @@ data class UserModel(
             "passwordHash" to passwordHash,
             "contact" to contact,
             "gender" to gender,
-            "age" to age,
+            "dateOfBirth" to dateOfBirth,
             "emailVerified" to emailVerified,
             "createdAt" to createdAt,
             "updatedAt" to updatedAt,
