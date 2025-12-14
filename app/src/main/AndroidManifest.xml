@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,68 +17,71 @@
 
         <!-- ✅ SPLASH ACTIVITY (ONLY LAUNCHER) -->
         <activity
-            android:name=".view.SignupDetailsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_signup_details"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.SignupInitialActivity"
-            android:exported="false"
-            android:label="@string/title_activity_signup_initial"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.BloodDonationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_blood_donation"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.ForgotPasswordActivity"
-            android:exported="false"
-            android:label="@string/title_activity_forgot_password"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
             android:name=".view.SplashActivity"
             android:exported="true"
+            android:label="@string/title_activity_splash"
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- ✅ LOGIN ACTIVITY -->
+        <!-- LOGIN -->
         <activity
             android:name=".view.LoginActivity"
             android:exported="true"
+            android:label="@string/title_activity_login"
             android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- ✅ SIGNUP ACTIVITY -->
-
-
-        <!-- ✅ DASHBOARD ACTIVITY -->
-        <activity
-            android:name=".view.HealthRecords"
-            android:exported="false"
-            android:label="@string/title_activity_health_records"
-            android:theme="@style/Theme.MedHomeApp" />
+        <!-- DASHBOARD -->
         <activity
             android:name=".view.DashboardActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.MedHomeApp" />
 
+        <!-- SIGNUP -->
+        <activity
+            android:name=".view.SignupInitialActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- ✅ FORGOT PASSWORD -->
+        <activity
+            android:name=".view.SignupDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
+        <!-- QR -->
+        <activity
+            android:name=".view.QrActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- ✅ HEALTH RECORDS -->
+        <activity
+            android:name=".view.QrScannerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
+        <!-- FORGOT PASSWORD -->
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- ✅ BLOOD DONATION -->
+        <!-- HEALTH RECORDS -->
+        <activity
+            android:name=".view.HealthRecords"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
+        <!-- BLOOD DONATION -->
+        <activity
+            android:name=".view.BloodDonationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- (Optional) MAIN ACTIVITY IF USED -->
+        <!-- MAIN (optional) -->
         <activity
             android:name=".view.MainActivity"
             android:exported="false"

@@ -23,15 +23,18 @@ class AuthViewModel : ViewModel() {
         contact: String,
         gender: String,
         dateOfBirth: String,
+        age: Int,
         bloodGroup: String,
         emergencyContact: String,
         address: String,
         callback: (Boolean, String) -> Unit
     ) {
+
         userRepo.register(email, password) { success, message, uid ->
             Log.d("AuthViewModel", "Register called - success: $success, message: $message, uid: $uid")
 
             if (success && uid != null) {
+
                 val timestamp = System.currentTimeMillis().toString()
 
                 val userModel = UserModel(
@@ -50,6 +53,7 @@ class AuthViewModel : ViewModel() {
                     emergencyContact = emergencyContact,
                     address = address
                 )
+
 
                 userRepo.addUserToDatabase(uid, userModel) { dbSuccess, dbMessage ->
                     callback(dbSuccess, dbMessage)
@@ -103,4 +107,5 @@ class AuthViewModel : ViewModel() {
             callback(phoneExists)
         }
     }
+
 }
