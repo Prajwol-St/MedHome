@@ -56,7 +56,7 @@ fun DashboardBody(){
         NavItem("Home", R.drawable.baseline_home_24, "MedHome"),
         NavItem("Reminder", R.drawable.baseline_access_time_filled_24,"My Reminders"),
         NavItem("Scan", R.drawable.baseline_qr_code_scanner_24, "Scan QR"),
-        NavItem("Notifications", R.drawable.baseline_notifications_24, "Notifications"),
+        NavItem("Notify", R.drawable.baseline_notifications_24, "Notifications"),
         NavItem("Settings", R.drawable.baseline_settings_24, "App Settings"),
     )
 
@@ -98,6 +98,7 @@ fun DashboardBody(){
                             } else {
                                 Icon(
                                     painter = painterResource(item.icon),
+
                                     contentDescription = item.label
                                 )
                             }
