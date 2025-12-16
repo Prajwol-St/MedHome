@@ -8,7 +8,6 @@ class UserViewModel : ViewModel() {
 
     private val userRepo = UserRepoImpl()
 
-
     fun addUserToDatabase(userId: String, user: UserModel, callback: (Boolean, String) -> Unit) {
         userRepo.addUserToDatabase(userId, user, callback)
     }
@@ -31,5 +30,13 @@ class UserViewModel : ViewModel() {
 
     fun deleteUser(userId: String, callback: (Boolean, String) -> Unit) {
         userRepo.deleteAccount(userId, callback)
+    }
+
+    fun logout() {
+        userRepo.logout()
+    }
+
+    fun deleteAuthAccount(callback: (Boolean, String) -> Unit) {
+        userRepo.deleteAuthUser(callback)
     }
 }
