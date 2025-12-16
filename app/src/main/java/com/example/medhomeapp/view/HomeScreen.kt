@@ -42,6 +42,11 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
 
+import com.example.medhomeapp.view.ui.theme.CyanEnd
+import com.example.medhomeapp.view.ui.theme.OceanTeal
+import com.example.medhomeapp.view.ui.theme.SoftSkyStart
+import com.example.medhomeapp.view.ui.theme.TealStart
+
 
 @Composable
 fun HomeScreen(){
@@ -92,6 +97,7 @@ fun HomeScreen(){
                 modifier = Modifier
                     .size(42.dp)
                     .clip(CircleShape),
+                colorFilter = ColorFilter.tint(Color.White),
                 contentScale = ContentScale.Crop
             )
 
