@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,6 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.view.ui.theme.CyanEnd
+import com.example.medhomeapp.view.ui.theme.OceanTeal
+import com.example.medhomeapp.view.ui.theme.SoftMintEnd
+import com.example.medhomeapp.view.ui.theme.SoftSkyStart
+import com.example.medhomeapp.view.ui.theme.TealStart
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +81,7 @@ fun DashboardBody(){
                     ))},
             )
         },
+
 
         bottomBar = {
             NavigationBar {
