@@ -21,6 +21,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -46,6 +50,40 @@ class BloodDonationActivity : ComponentActivity() {
 fun BloodDonationBody() {
     val context = LocalContext.current
     val activity = context as Activity
+    var currentScreen by remember { mutableStateOf("main") }
+
+    when (currentScreen) {
+        "main" -> {
+            MainDonationScreen(
+                activity = activity,
+                onPostRequestClick = { currentScreen = "post_request" },
+                onJoinDonorClick = { currentScreen = "join_donor" }
+            )
+        }
+
+        "post_request" -> {
+            PostBloodRequestScreen(
+                onBackClick = { currentScreen = "main" }
+            )
+        }
+
+        "join_donor" -> {
+            JoinDonorListScreen(
+                onBackClick = { currentScreen = "main" }
+            )
+        }
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainDonationScreen(
+    activity : Activity,
+    onPostRequestClick: () -> Unit,
+    onJoinDonorClick: () -> Unit
+){
+    val bloodGroups = listOf("All","A+","A-","B+","B-","0+","O-","AB+","AB-")
+    var selectedGroup by remember { mutableStateOf("All") }
+
 
     Scaffold(
         topBar = {
