@@ -16,6 +16,9 @@
     <string name="title_activity_signup_details">SignupDetailsActivity</string>
     <string name="title_activity_qr">QrActivity</string>
     <string name="title_activity_qr_scanner">QrScannerActivity</string>
+    <string name="title_activity_change_password_screen">ChangePasswordScreen</string>
+    <string name="title_activity_notification_settings_screen">NotificationSettingsScreen</string>
+    <string name="title_activity_edit_profile_screen">EditProfileScreen</string>
 
 
 </resources>
