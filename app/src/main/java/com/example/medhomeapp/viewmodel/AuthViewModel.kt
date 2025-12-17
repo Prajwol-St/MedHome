@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class AuthViewModel : ViewModel() {
 
@@ -30,9 +32,9 @@ class AuthViewModel : ViewModel() {
         callback: (Boolean, String) -> Unit
     ) {
         userRepo.register(email, password) { success, message, uid ->
-            Log.d("AuthViewModel", "Register called - success: $success, message: $message, uid: $uid")
             if (success && uid != null) {
                 val timestamp = System.currentTimeMillis().toString()
+
                 val userModel = UserModel(
                     id = uid,
                     role = "patient",
@@ -49,6 +51,7 @@ class AuthViewModel : ViewModel() {
                     emergencyContact = emergencyContact,
                     address = address
                 )
+
                 userRepo.addUserToDatabase(uid, userModel) { dbSuccess, dbMessage ->
                     callback(dbSuccess, dbMessage)
                 }
@@ -62,15 +65,9 @@ class AuthViewModel : ViewModel() {
         userRepo.forgetPassword(email, callback)
     }
 
-    fun checkIfUserExists(userId: String, callback: (Boolean, UserModel?) -> Unit) {
-        userRepo.getUserById(userId) { success, _, user ->
-            callback(success, user)
-        }
-    }
-
     fun checkEmailExists(email: String, callback: (Boolean) -> Unit) {
         userRepo.getAllUsers { success, _, users ->
-            callback(success && users.any { it.email.equals(email, ignoreCase = true) })
+            callback(success && users.any { it.email.equals(email, true) })
         }
     }
 
@@ -79,4 +76,39 @@ class AuthViewModel : ViewModel() {
             callback(success && users.any { it.contact == phone })
         }
     }
+
+    fun firebaseSignInWithGoogle(
+        idToken: String,
+        callback: (Boolean, String?) -> Unit
+    ) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+
+        FirebaseAuth.getInstance()
+            .signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, FirebaseAuth.getInstance().currentUser?.uid)
+                } else {
+                    callback(false, task.exception?.message)
+                }
+            }
+    }
+
+    fun checkIfUserExists(
+        userId: String,
+        callback: (Boolean, UserModel?) -> Unit
+    ) {
+        userRepo.getUserById(userId) { success, _, user ->
+            callback(success && user != null, user)
+        }
+
+    }
+    fun getCurrentUserId(): String? {
+        return FirebaseAuth.getInstance().currentUser?.uid
+    }
+
+    fun logout() {
+        FirebaseAuth.getInstance().signOut()
+    }
 }
+
