@@ -19,16 +19,22 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.viewmodel.UserViewModel
 
-
 @Composable
 fun SettingsScreen(
     userViewModel: UserViewModel,
     userId: String,
-    onLogoutSuccess: () -> Unit
+    onLogoutSuccess: () -> Unit,
+    onNavigateToEditProfile: () -> Unit,
+    onNavigateToChangePassword: () -> Unit,
+    onNavigateToNotificationSettings: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showLanguageDialog by remember { mutableStateOf(false) }
+    var showAboutDialog by remember { mutableStateOf(false) }
+
+    var selectedLanguage by remember { mutableStateOf("English") }
 
     Column(
         modifier = Modifier
@@ -36,7 +42,6 @@ fun SettingsScreen(
             .background(Color.White)
             .verticalScroll(scrollState)
     ) {
-
         Spacer(modifier = Modifier.height(24.dp))
         SectionHeader(title = "Account")
 
@@ -44,14 +49,14 @@ fun SettingsScreen(
             icon = R.drawable.baseline_person_24,
             title = "Edit Profile",
             subtitle = "Update your personal information",
-            onClick = {}
+            onClick = onNavigateToEditProfile
         )
 
         SettingsItem(
             icon = R.drawable.baseline_lock_24,
             title = "Change Password",
             subtitle = "Update your password",
-            onClick = {}
+            onClick = onNavigateToChangePassword
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -61,14 +66,14 @@ fun SettingsScreen(
             icon = R.drawable.baseline_notifications_24,
             title = "Notifications",
             subtitle = "Manage notification settings",
-            onClick = {}
+            onClick = onNavigateToNotificationSettings
         )
 
         SettingsItem(
             icon = R.drawable.baseline_language_24,
             title = "Language",
-            subtitle = "English",
-            onClick = {}
+            subtitle = selectedLanguage,
+            onClick = { showLanguageDialog = true }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -78,28 +83,28 @@ fun SettingsScreen(
             icon = R.drawable.baseline_warning_24,
             title = "Help Center",
             subtitle = "Get help and support",
-            onClick = {}
+            onClick = { /* TODO: Navigate to Help Center */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_privacy_tip_24,
             title = "Privacy Policy",
             subtitle = "Read our privacy policy",
-            onClick = {}
+            onClick = { /* TODO: Open WebView */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_menu_book_24,
             title = "Terms of Service",
             subtitle = "Read our terms",
-            onClick = {}
+            onClick = { /* TODO: Open WebView */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_info_24,
             title = "About",
             subtitle = "Version 1.0.0",
-            onClick = {}
+            onClick = { showAboutDialog = true }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -124,34 +129,31 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(80.dp))
     }
 
+    // Logout Dialog
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
             title = { Text("Logout") },
             text = { Text("Are you sure you want to logout?") },
             confirmButton = {
-                Text(
-                    text = "Logout",
-                    color = Color.Red,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            userViewModel.logout()
-                            onLogoutSuccess()
-                        }
-                )
+                TextButton(
+                    onClick = {
+                        userViewModel.logout()
+                        onLogoutSuccess()
+                    }
+                ) {
+                    Text("Logout", color = Color.Red)
+                }
             },
             dismissButton = {
-                Text(
-                    text = "Cancel",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable { showLogoutDialog = false }
-                )
+                TextButton(onClick = { showLogoutDialog = false }) {
+                    Text("Cancel")
+                }
             }
         )
     }
 
+    // Delete Account Dialog
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
@@ -160,32 +162,88 @@ fun SettingsScreen(
                 Text("This action is permanent. Your account and all data will be deleted.")
             },
             confirmButton = {
-                Text(
-                    text = "Delete",
-                    color = Color.Red,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            userViewModel.deleteUser(userId) { dbSuccess: Boolean, _ ->
-                                if (dbSuccess) {
-                                    userViewModel.deleteAuthAccount { authSuccess: Boolean, _ ->
-                                        if (authSuccess) {
-                                            userViewModel.logout()
-                                            onLogoutSuccess()
-                                        }
+                TextButton(
+                    onClick = {
+                        userViewModel.deleteUser(userId) { dbSuccess, _ ->
+                            if (dbSuccess) {
+                                userViewModel.deleteAuthAccount { authSuccess, _ ->
+                                    if (authSuccess) {
+                                        userViewModel.logout()
+                                        onLogoutSuccess()
                                     }
                                 }
                             }
                         }
-                )
+                    }
+                ) {
+                    Text("Delete", color = Color.Red)
+                }
             },
             dismissButton = {
-                Text(
-                    text = "Cancel",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable { showDeleteDialog = false }
-                )
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
+    // Language Selection Dialog
+    if (showLanguageDialog) {
+        AlertDialog(
+            onDismissRequest = { showLanguageDialog = false },
+            title = { Text("Select Language") },
+            text = {
+                Column {
+                    listOf("English", "Nepali", "Hindi").forEach { language ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedLanguage = language
+                                    showLanguageDialog = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = selectedLanguage == language,
+                                onClick = {
+                                    selectedLanguage = language
+                                    showLanguageDialog = false
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(language)
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showLanguageDialog = false }) {
+                    Text("Close")
+                }
+            }
+        )
+    }
+
+    // About Dialog
+    if (showAboutDialog) {
+        AlertDialog(
+            onDismissRequest = { showAboutDialog = false },
+            title = { Text("About MedHome") },
+            text = {
+                Column {
+                    Text("Version: 1.0.0")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("MedHome is your personal health companion.")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text("© 2024 MedHome. All rights reserved.")
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showAboutDialog = false }) {
+                    Text("Close")
+                }
             }
         )
     }
@@ -229,7 +287,6 @@ fun SettingsItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = title,
