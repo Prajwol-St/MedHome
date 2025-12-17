@@ -455,8 +455,8 @@ fun PostBloodRequestScreen(onBackClick: () -> Unit) {
                         placeholder = { Text("Select blood group needed") },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor(),
+                            .fillMaxWidth(),
+
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Blue10
                         )
