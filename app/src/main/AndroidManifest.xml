@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -15,11 +18,10 @@
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
 
-        <!-- ✅ SPLASH ACTIVITY (ONLY LAUNCHER) -->
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_splash"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,64 +29,112 @@
             </intent-filter>
         </activity>
 
-        <!-- LOGIN -->
         <activity
             android:name=".view.LoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_login"
+            android:exported="false"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- DASHBOARD -->
-        <activity
-            android:name=".view.DashboardActivity"
-            android:exported="true"
-            android:label="@string/title_activity_dashboard"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- SIGNUP -->
         <activity
             android:name=".view.SignupInitialActivity"
             android:exported="false"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
 
         <activity
             android:name=".view.SignupDetailsActivity"
             android:exported="false"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
 
-        <!-- QR -->
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.DashboardActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.HomeScreen"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.SettingsActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.EditProfileActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.ChangePasswordActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.NotificationSettingsActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.UserInfoScreen"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <!-- =============================================== -->
+        <!-- HEALTH FEATURES -->
+        <!-- =============================================== -->
+        <activity
+            android:name=".view.HealthRecords"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.BloodDonationActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <activity
+            android:name=".view.BookConsultationActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MedHomeApp" />
+
+        <!-- =============================================== -->
+        <!-- QR CODE ACTIVITIES -->
+        <!-- =============================================== -->
         <activity
             android:name=".view.QrActivity"
             android:exported="false"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
 
         <activity
             android:name=".view.QrScannerActivity"
             android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- FORGOT PASSWORD -->
-        <activity
-            android:name=".view.ForgotPasswordActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- HEALTH RECORDS -->
-        <activity
-            android:name=".view.HealthRecords"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- BLOOD DONATION -->
-        <activity
-            android:name=".view.BloodDonationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- MAIN (optional) -->
-        <activity
-            android:name=".view.MainActivity"
-            android:exported="false"
+            android:label="@string/app_name"
             android:theme="@style/Theme.MedHomeApp" />
 
     </application>
