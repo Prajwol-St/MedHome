@@ -1,21 +1,20 @@
 package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.UserModel
-import javax.security.auth.callback.Callback
 
 interface UserRepo {
 
-    fun login (
+    fun login(
         email: String,
         password: String,
-        callback: (Boolean, String, UserModel?) -> Unit
+        callback: (Boolean, String) -> Unit
     )
+
     fun register(
         email: String,
         password: String,
-        callback: (Boolean, String, String?) -> Unit // userId
+        callback: (Boolean, String, String) -> Unit
     )
-
 
     fun addUserToDatabase(
         userId: String,
@@ -23,23 +22,19 @@ interface UserRepo {
         callback: (Boolean, String) -> Unit
     )
 
-
     fun forgetPassword(
         email: String,
         callback: (Boolean, String) -> Unit
     )
 
-
-    fun getUserById(
+    fun getUserByID(
         userId: String,
         callback: (Boolean, String, UserModel?) -> Unit
     )
 
-
-    fun getAllUsers(
+    fun getAllUser(
         callback: (Boolean, String, List<UserModel>) -> Unit
     )
-
 
     fun editProfile(
         userId: String,
@@ -47,16 +42,8 @@ interface UserRepo {
         callback: (Boolean, String) -> Unit
     )
 
-
     fun deleteAccount(
         userId: String,
         callback: (Boolean, String) -> Unit
     )
-
-    fun logout()
-
-    fun deleteAuthUser(
-        callback: (Boolean, String) -> Unit)
-
-
 }
