@@ -1,5 +1,11 @@
 package com.example.medhomeapp.view
 
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,24 +17,36 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
+import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.viewmodel.UserViewModel
 
+class SettingsActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
+        setContent {
+            SettingsScreen()
+        }
+    }
+}
+
 @Composable
-fun SettingsScreen(
-    userViewModel: UserViewModel,
-    userId: String,
-    onLogoutSuccess: () -> Unit,
-    onNavigateToEditProfile: () -> Unit,
-    onNavigateToChangePassword: () -> Unit,
-    onNavigateToNotificationSettings: () -> Unit
-) {
+fun SettingsScreen() {
+    val context = LocalContext.current
+    val viewModel = remember { UserViewModel(UserRepoImpl()) }
     val scrollState = rememberScrollState()
+
+    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = sharedPrefs.getString("user_id", null)
+
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -49,14 +67,20 @@ fun SettingsScreen(
             icon = R.drawable.baseline_person_24,
             title = "Edit Profile",
             subtitle = "Update your personal information",
-            onClick = onNavigateToEditProfile
+            onClick = {
+                val intent = Intent(context, EditProfileActivity::class.java)
+                context.startActivity(intent)
+            }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_lock_24,
             title = "Change Password",
             subtitle = "Update your password",
-            onClick = onNavigateToChangePassword
+            onClick = {
+                val intent = Intent(context, ChangePasswordActivity::class.java)
+                context.startActivity(intent)
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -66,7 +90,10 @@ fun SettingsScreen(
             icon = R.drawable.baseline_notifications_24,
             title = "Notifications",
             subtitle = "Manage notification settings",
-            onClick = onNavigateToNotificationSettings
+            onClick = {
+                val intent = Intent(context, NotificationSettingsActivity::class.java)
+                context.startActivity(intent)
+            }
         )
 
         SettingsItem(
@@ -138,8 +165,12 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        userViewModel.logout()
-                        onLogoutSuccess()
+                        viewModel.logout()
+                        sharedPrefs.edit().clear().apply()
+                        val intent = Intent(context, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        context.startActivity(intent)
+                        context.finish()
                     }
                 ) {
                     Text("Logout", color = Color.Red)
@@ -164,13 +195,15 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        userViewModel.deleteUser(userId) { dbSuccess, _ ->
-                            if (dbSuccess) {
-                                userViewModel.deleteAuthAccount { authSuccess, _ ->
-                                    if (authSuccess) {
-                                        userViewModel.logout()
-                                        onLogoutSuccess()
-                                    }
+                        if (userId != null) {
+                            viewModel.deleteAccount(userId) { success, message ->
+                                if (success) {
+                                    viewModel.logout()
+                                    sharedPrefs.edit().clear().apply()
+                                    val intent = Intent(context, LoginActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    context.startActivity(intent)
+                                    context.finish()
                                 }
                             }
                         }
