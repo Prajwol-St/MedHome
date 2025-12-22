@@ -1,8 +1,9 @@
 package com.example.medhomeapp.view
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -12,32 +13,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -45,33 +27,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import com.example.medhomeapp.R
-import com.example.medhomeapp.viewmodel.AuthViewModel
+import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.launch
 
 class SignupInitialActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-
         setContent {
-            SignupInitialBody(authViewModel)
+            SignupInitialBody()
         }
     }
 }
 
 @Composable
-fun SignupInitialBody(authViewModel: AuthViewModel) {
-
+fun SignupInitialBody() {
     val context = LocalContext.current
-    val email = remember { mutableStateOf("") }
+    val viewModel = remember { UserViewModel(UserRepoImpl()) }
+
+    var email by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var isGoogleLoading by remember { mutableStateOf(false) }
 
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -90,34 +74,61 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
             val account = task.getResult(ApiException::class.java)
-            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            val idToken = account?.idToken
 
+            if (idToken.isNullOrEmpty()) {
+                Toast.makeText(context, "Google Sign-In failed: no ID token", Toast.LENGTH_SHORT).show()
+                isGoogleLoading = false
+                return@rememberLauncherForActivityResult
+            }
+
+            isGoogleLoading = true
+
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
-                        val user = authTask.result?.user
-                        val userId = user?.uid ?: ""
+                        val userId = FirebaseAuth.getInstance().currentUser?.uid
+                        if (userId != null) {
+                            viewModel.getUserByID(userId)
 
-                        authViewModel.checkIfUserExists(userId) { exists, userModel ->
-                            if (exists && userModel != null) {
-                                Toast.makeText(context, "Welcome back ${userModel.name}!", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(context, DashboardActivity::class.java)
-                                context.startActivity(intent)
-                                (context as ComponentActivity).finish()
-                            } else {
-                                val intent = Intent(context, SignupDetailsActivity::class.java)
-                                intent.putExtra("googleUid", userId)
-                                intent.putExtra("googleEmail", user?.email ?: "")
-                                intent.putExtra("googleName", user?.displayName ?: "")
-                                context.startActivity(intent)
+                            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
+                                kotlinx.coroutines.delay(1000)
+                                isGoogleLoading = false
+
+                                val user = viewModel.currentUser.value
+                                if (user != null) {
+                                    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+                                    sharedPrefs.edit().putString("user_id", userId).apply()
+
+                                    Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(context, DashboardActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    context.startActivity(intent)
+                                    context.finish()
+                                } else {
+                                    Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(context, SignupDetailsActivity::class.java)
+                                    intent.putExtra("email", account.email ?: "")
+                                    intent.putExtra("googleUid", userId)
+                                    intent.putExtra("googleName", account.displayName ?: "")
+                                    context.startActivity(intent)
+                                    context.finish()
+                                }
                             }
+                        } else {
+                            isGoogleLoading = false
+                            Toast.makeText(context, "Failed to get user ID", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Google Sign-In Failed: ${authTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                        isGoogleLoading = false
+                        Toast.makeText(context, "Firebase Sign-In failed", Toast.LENGTH_SHORT).show()
                     }
                 }
+
         } catch (e: ApiException) {
-            Toast.makeText(context, "Google Sign-In Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            isGoogleLoading = false
+            Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -125,7 +136,7 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
+                .background(Color.White)
                 .padding(padding)
         ) {
 
@@ -139,35 +150,18 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp
                 ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
             )
 
-            HorizontalDivider(
-                thickness = 1.dp,
-                color = Color(0xFF648DDB)
-            )
+            HorizontalDivider(thickness = 1.dp, color = Color(0xFF648DDB))
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Text(
-                text = "Enter your email to get started",
-                style = TextStyle(
-                    color = Color.Gray,
-                    fontSize = 16.sp
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Email") },
+                enabled = !isLoading && !isGoogleLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
@@ -175,8 +169,8 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color(0xFF648DDB),
                     unfocusedIndicatorColor = Color(0xFF648DDB),
-                    focusedContainerColor = White,
-                    unfocusedContainerColor = White,
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
                     focusedLabelColor = Color(0xFF648DDB),
                     unfocusedLabelColor = Color.Gray
                 )
@@ -186,33 +180,41 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
 
             Button(
                 onClick = {
-                    Log.d("SignupInitial", "Button clicked with email: ${email.value}")
-                    if (email.value.isEmpty()) {
+                    if (email.isBlank()) {
                         Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
-                    } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Log.d("SignupInitial", "Navigating to SignupDetailsActivity")
-                        val intent = Intent(context, SignupDetailsActivity::class.java)
-                        intent.putExtra("email", email.value)
-                        context.startActivity(intent)
+                        return@Button
                     }
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    val intent = Intent(context, SignupDetailsActivity::class.java)
+                    intent.putExtra("email", email)
+                    context.startActivity(intent)
                 },
+                enabled = !isLoading && !isGoogleLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
                     .height(50.dp),
                 shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF648DDB)
-                )
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF648DDB))
             ) {
-                Text(
-                    text = "Continue",
-                    color = White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        "Continue",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -237,9 +239,9 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
 
             OutlinedButton(
                 onClick = {
-                    val signInIntent = googleSignInClient.signInIntent
-                    launcher.launch(signInIntent)
+                    launcher.launch(googleSignInClient.signInIntent)
                 },
+                enabled = !isLoading && !isGoogleLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -247,14 +249,22 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
                 shape = RoundedCornerShape(15.dp),
                 border = BorderStroke(1.dp, Color.LightGray)
             ) {
-                Icon(
-                    painter = painterResource(R.drawable.google),
-                    contentDescription = "Google Logo",
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "Sign Up With Google", color = Color.Black, fontSize = 16.sp)
+                if (isGoogleLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color(0xFF648DDB),
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.google),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Unspecified
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Sign Up With Google", color = Color.Black, fontSize = 16.sp)
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -264,22 +274,25 @@ fun SignupInitialBody(authViewModel: AuthViewModel) {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Already have an account? ",
+                    "Already have an account? ",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
-
                 Text(
-                    text = "Login",
+                    "Login",
                     color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable {
+                    modifier = Modifier.clickable(enabled = !isLoading && !isGoogleLoading) {
                         val intent = Intent(context, LoginActivity::class.java)
                         context.startActivity(intent)
+                        (context as ComponentActivity).finish()
                     }
                 )
             }
         }
     }
+}
+
+private fun Context.finish() {
 }

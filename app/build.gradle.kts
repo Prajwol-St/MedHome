@@ -45,12 +45,12 @@ android {
 
 dependencies {
 
-    /* Core */
+    // = CORE
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    /* Compose */
+    //  COMPOSE
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -58,37 +58,43 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime.livedata)
 
-    /* Lifecycle */
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    //  REQUIRED FOR ICONS
+    implementation("androidx.compose.material:material-icons-extended")
 
-    /* Firebase (ONLY ONE BOM) */
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
+    //  LIFECYCLE
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
 
-    /* Google Auth */
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    //  FIREBASE
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
-    /* CameraX */
+    //  GOOGLE AUTH
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
+
+    //  CAMERAX
     implementation(libs.camera.camera2)
     implementation(libs.camera.lifecycle)
     implementation(libs.camera.view)
 
-    /* QR + ML Kit */
+    //  BARCODE
     implementation(libs.zxing.android.embedded)
     implementation(libs.play.services.mlkit.barcode.scanning)
+
+    //  UTIL
     implementation(libs.guava)
 
-    /* Tests */
+    //  TESTING
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
+    //  DEBUG
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
