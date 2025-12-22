@@ -7,55 +7,41 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.tasks.await
 
-class UserRepoImpl: UserRepo {
+class UserRepoImpl : UserRepo {
 
-
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    val ref: DatabaseReference = database.getReference( "User")
-
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val ref: DatabaseReference = database.getReference("User")
 
     override fun login(
         email: String,
         password: String,
-        callback: (Boolean, String, UserModel?) -> Unit
+        callback: (Boolean, String) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val userId = auth.currentUser?.uid
-                    if (userId != null) {
-                        // Fetch user data after successful login
-                        getUserById(userId) { success, message, user ->
-                            if (success) {
-                                callback(true, "Login success", user)
-                            } else {
-                                callback(true, "Login success but couldn't fetch user data", null)
-                            }
-                        }
-                    } else {
-                        callback(true, "Login success", null)
-                    }
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Login successful")
                 } else {
-                    callback(false, "${it.exception?.message}", null)
+                    callback(false, task.exception?.message ?: "Login failed")
                 }
             }
-
     }
 
     override fun register(
         email: String,
         password: String,
-        callback: (Boolean, String, String?) -> Unit
+        callback: (Boolean, String, String) -> Unit
     ) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val uid = auth.currentUser?.uid ?: ""
-                    callback(true, "Registration success", uid)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = auth.currentUser?.uid ?: ""
+                    callback(true, "Registration successful", userId)
                 } else {
-                    callback(false, "${it.exception?.message}", "")
+                    callback(false, task.exception?.message ?: "Registration failed", "")
                 }
             }
     }
@@ -66,11 +52,11 @@ class UserRepoImpl: UserRepo {
         callback: (Boolean, String) -> Unit
     ) {
         ref.child(userId).setValue(model)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    callback(true, "User data saved")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "User added to database successfully")
                 } else {
-                    callback(false, "${it.exception?.message}")
+                    callback(false, task.exception?.message ?: "Failed to add user to database")
                 }
             }
     }
@@ -80,61 +66,61 @@ class UserRepoImpl: UserRepo {
         callback: (Boolean, String) -> Unit
     ) {
         auth.sendPasswordResetEmail(email)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    callback(true, "Reset link sent to $email")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Password reset email sent to $email")
                 } else {
-                    callback(false, "${it.exception?.message}")
+                    callback(false, task.exception?.message ?: "Failed to send reset email")
                 }
             }
     }
 
-    override fun getUserById(
+    // FIXED: Using .get() for one-time read instead of addValueEventListener
+    override fun getUserByID(
         userId: String,
         callback: (Boolean, String, UserModel?) -> Unit
     ) {
-        ref.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                if (!snapshot.exists()) {
-                    callback(false, "User not found", null)
-                    return
+        ref.child(userId).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val user = snapshot.getValue(UserModel::class.java)
+                    if (user != null) {
+                        callback(true, "User fetched successfully", user)
+                    } else {
+                        callback(false, "Failed to parse user data", null)
+                    }
+                } else {
+                    callback(false, "User not found in database", null)
                 }
-
-                val user = snapshot.getValue(UserModel::class.java)
-                callback(true, "User fetched", user)
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                callback(false, error.message, null)
+            .addOnFailureListener { exception ->
+                callback(false, exception.message ?: "Failed to fetch user", null)
             }
-        })
     }
 
-    override fun getAllUsers(callback: (Boolean, String, List<UserModel>) -> Unit) {
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+    override fun getAllUser(
+        callback: (Boolean, String, List<UserModel>) -> Unit
+    ) {
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
-                if (!snapshot.exists()) {
-                    callback(true, "No users found", emptyList())
-                    return
+                if (snapshot.exists()) {
+                    val allUsers = mutableListOf<UserModel>()
+                    for (data in snapshot.children) {
+                        val user = data.getValue(UserModel::class.java)
+                        if (user != null) {
+                            allUsers.add(user)
+                        }
+                    }
+                    callback(true, "Users fetched successfully", allUsers)
+                } else {
+                    callback(false, "No users found", emptyList())
                 }
-
-                val allUsers = mutableListOf<UserModel>()
-
-                for (data in snapshot.children) {
-                    val user = data.getValue(UserModel::class.java)
-                    if (user != null) allUsers.add(user)
-                }
-
-                callback(true, "Users fetched", allUsers)
             }
 
             override fun onCancelled(error: DatabaseError) {
                 callback(false, error.message, emptyList())
             }
         })
-
     }
 
     override fun editProfile(
@@ -142,13 +128,12 @@ class UserRepoImpl: UserRepo {
         model: UserModel,
         callback: (Boolean, String) -> Unit
     ) {
-        ref.child(userId)
-            .updateChildren(model.toMap())
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    callback(true, "Profile updated")
+        ref.child(userId).updateChildren(model.toMap())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Profile updated successfully")
                 } else {
-                    callback(false, "${it.exception?.message}")
+                    callback(false, task.exception?.message ?: "Failed to update profile")
                 }
             }
     }
@@ -158,11 +143,11 @@ class UserRepoImpl: UserRepo {
         callback: (Boolean, String) -> Unit
     ) {
         ref.child(userId).removeValue()
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    callback(true, "Account deleted")
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Account deleted successfully")
                 } else {
-                    callback(false, "${it.exception?.message}")
+                    callback(false, task.exception?.message ?: "Failed to delete account")
                 }
             }
     }
