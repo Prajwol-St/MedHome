@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,6 +34,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.view.ui.theme.CyanEnd
+import com.example.medhomeapp.view.ui.theme.OceanTeal
+import com.example.medhomeapp.view.ui.theme.SoftMintEnd
+import com.example.medhomeapp.view.ui.theme.SoftSkyStart
+import com.example.medhomeapp.view.ui.theme.TealStart
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +62,7 @@ fun DashboardBody(){
         NavItem("Home", R.drawable.baseline_home_24, "MedHome"),
         NavItem("Reminder", R.drawable.baseline_access_time_filled_24,"My Reminders"),
         NavItem("Scan", R.drawable.baseline_qr_code_scanner_24, "Scan QR"),
-        NavItem("Notifications", R.drawable.baseline_notifications_24, "Notifications"),
+        NavItem("Notify", R.drawable.baseline_notifications_24, "Notifications"),
         NavItem("Settings", R.drawable.baseline_settings_24, "App Settings"),
     )
 
@@ -75,6 +81,7 @@ fun DashboardBody(){
                     ))},
             )
         },
+
 
         bottomBar = {
             NavigationBar {
@@ -98,6 +105,7 @@ fun DashboardBody(){
                             } else {
                                 Icon(
                                     painter = painterResource(item.icon),
+
                                     contentDescription = item.label
                                 )
                             }
