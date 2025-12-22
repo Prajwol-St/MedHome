@@ -14,7 +14,8 @@ import kotlinx.coroutines.tasks.await
 
 
 @Composable
-fun UserInfoScreen(uid: String) {
+fun UserInfoScreen(uid: String, viewerRole: String) {
+
 
     var user by remember { mutableStateOf<UserModel?>(null) }
     var loading by remember { mutableStateOf(true) }
@@ -54,13 +55,15 @@ fun UserInfoScreen(uid: String) {
 
     val u = user!!
 
+    val canViewSensitiveInfo = viewerRole == "admin" || viewerRole == "staff"
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
 
-        /* ---------- HEADER CARD ---------- */
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -78,10 +81,12 @@ fun UserInfoScreen(uid: String) {
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                AssistChip(
-                    onClick = {},
-                    label = { Text(u.role.uppercase()) }
-                )
+                if (canViewSensitiveInfo) {
+                    AssistChip(
+                        onClick = {},
+                        label = { Text(u.role.uppercase()) }
+                    )
+                }
             }
         }
 
