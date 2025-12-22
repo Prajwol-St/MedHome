@@ -1,6 +1,7 @@
 <resources>
 
-    <string name="app_name">MedHome App</string>
+    <string name="app_name">MedHome</string>
+
     <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="title_activity_health_records">HealthRecords</string>
 
@@ -14,8 +15,22 @@
     <string name="title_activity_book_consultation">BookConsultationActivity</string>
     <string name="title_activity_signup_initial">SignupInitialActivity</string>
     <string name="title_activity_signup_details">SignupDetailsActivity</string>
+
     <string name="title_activity_qr">QrActivity</string>
     <string name="title_activity_qr_scanner">QrScannerActivity</string>
 
+    <string name="title_activity_change_password_screen">ChangePasswordScreen</string>
+    <string name="title_activity_notification_settings_screen">NotificationSettingsScreen</string>
+    <string name="title_activity_edit_profile_screen">EditProfileScreen</string>
+
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
+    <string name="title_activity_notification_settings">NotificationSettingsActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+
+    //googlesignin
+    <string name="default_web_client_id">
+        104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com
+    </string>
 
 </resources>
