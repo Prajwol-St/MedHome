@@ -13,4 +13,21 @@ data class BloodRequestModel(
     val userId: String = "",
     val timestamp: Long = System.currentTimeMillis(),
     val status: String = "active"
-)
+){
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "id" to id,
+            "userId" to userId,
+            "patientName" to patientName,
+            "bloodGroup" to bloodGroup,
+            "hospital" to hospital,
+            "location" to location,
+            "unitsNeeded" to unitsNeeded,
+            "contactNumber" to contactNumber,
+            "urgency" to urgency,
+            "additionalNotes" to additionalNotes,
+            "timestamp" to timestamp,
+            "status" to status
+        )
+    }
+}
