@@ -1,7 +1,5 @@
 package com.example.medhomeapp.view
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -56,6 +54,7 @@ fun SignupInitialBody() {
     var email by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var isGoogleLoading by remember { mutableStateOf(false) }
+    var showExistingAccountDialog by remember { mutableStateOf(false) }
 
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -84,12 +83,14 @@ fun SignupInitialBody() {
 
             isGoogleLoading = true
 
+            // Sign in to Firebase with Google
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
+                            // Check if user profile exists in DB
                             viewModel.getUserByID(userId)
 
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
@@ -98,22 +99,16 @@ fun SignupInitialBody() {
 
                                 val user = viewModel.currentUser.value
                                 if (user != null) {
-                                    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-                                    sharedPrefs.edit().putString("user_id", userId).apply()
-
-                                    Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(context, DashboardActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    context.startActivity(intent)
-                                    context.finish()
+                                    // User already exists - show dialog
+                                    showExistingAccountDialog = true
                                 } else {
-                                    Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
+                                    // New user - go to complete profile
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
                                     intent.putExtra("email", account.email ?: "")
                                     intent.putExtra("googleUid", userId)
                                     intent.putExtra("googleName", account.displayName ?: "")
                                     context.startActivity(intent)
-                                    context.finish()
+                                    (context as ComponentActivity).finish()
                                 }
                             }
                         } else {
@@ -130,6 +125,28 @@ fun SignupInitialBody() {
             isGoogleLoading = false
             Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Existing Account Dialog
+    if (showExistingAccountDialog) {
+        AlertDialog(
+            onDismissRequest = { },
+            title = { Text("Account Already Exists") },
+            text = { Text("This account is already registered. Please go back to login.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showExistingAccountDialog = false
+                        val intent = Intent(context, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        context.startActivity(intent)
+                        (context as ComponentActivity).finish()
+                    }
+                ) {
+                    Text("Go to Login")
+                }
+            }
+        )
     }
 
     Scaffold { padding ->
@@ -189,9 +206,35 @@ fun SignupInitialBody() {
                         return@Button
                     }
 
-                    val intent = Intent(context, SignupDetailsActivity::class.java)
-                    intent.putExtra("email", email)
-                    context.startActivity(intent)
+                    isLoading = true
+
+                    // Check if email already exists in Firebase Auth
+                    FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+                        .addOnCompleteListener { task ->
+                            isLoading = false
+                            if (task.isSuccessful) {
+                                val signInMethods = task.result?.signInMethods
+                                if (!signInMethods.isNullOrEmpty()) {
+                                    // Email already registered
+                                    Toast.makeText(
+                                        context,
+                                        "This email is already registered. Please login instead.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    // Email not registered, proceed to signup details
+                                    val intent = Intent(context, SignupDetailsActivity::class.java)
+                                    intent.putExtra("email", email)
+                                    context.startActivity(intent)
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Failed to check email: ${task.exception?.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                 },
                 enabled = !isLoading && !isGoogleLoading,
                 modifier = Modifier
@@ -292,7 +335,4 @@ fun SignupInitialBody() {
             }
         }
     }
-}
-
-private fun Context.finish() {
 }
