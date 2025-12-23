@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.R
-import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.viewmodel.UserViewModel
 
@@ -57,11 +56,9 @@ fun EditProfileScreen() {
     var emergencyContact by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
 
-
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
     }
-
 
     LaunchedEffect(currentUser) {
         currentUser?.let {
