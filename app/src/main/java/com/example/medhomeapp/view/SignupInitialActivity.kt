@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,11 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.viewmodel.UserViewModel
@@ -35,7 +36,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
-class SignupInitialActivity : ComponentActivity() {
+class SignupInitialActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -83,14 +84,12 @@ fun SignupInitialBody() {
 
             isGoogleLoading = true
 
-            // Sign in to Firebase with Google
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
-                            // Check if user profile exists in DB
                             viewModel.getUserByID(userId)
 
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
@@ -99,16 +98,14 @@ fun SignupInitialBody() {
 
                                 val user = viewModel.currentUser.value
                                 if (user != null) {
-                                    // User already exists - show dialog
                                     showExistingAccountDialog = true
                                 } else {
-                                    // New user - go to complete profile
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
                                     intent.putExtra("email", account.email ?: "")
                                     intent.putExtra("googleUid", userId)
                                     intent.putExtra("googleName", account.displayName ?: "")
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 }
                             }
                         } else {
@@ -127,7 +124,6 @@ fun SignupInitialBody() {
         }
     }
 
-    // Existing Account Dialog
     if (showExistingAccountDialog) {
         AlertDialog(
             onDismissRequest = { },
@@ -140,7 +136,7 @@ fun SignupInitialBody() {
                         val intent = Intent(context, LoginActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         context.startActivity(intent)
-                        (context as ComponentActivity).finish()
+                        (context as BaseActivity).finish()
                     }
                 ) {
                     Text("Go to Login")
@@ -160,7 +156,7 @@ fun SignupInitialBody() {
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
-                text = "Sign Up",
+                text = stringResource(R.string.sign_up),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     color = Color(0xFF648DDB),
@@ -177,7 +173,7 @@ fun SignupInitialBody() {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 enabled = !isLoading && !isGoogleLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -208,21 +204,18 @@ fun SignupInitialBody() {
 
                     isLoading = true
 
-                    // Check if email already exists in Firebase Auth
                     FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
                         .addOnCompleteListener { task ->
                             isLoading = false
                             if (task.isSuccessful) {
                                 val signInMethods = task.result?.signInMethods
                                 if (!signInMethods.isNullOrEmpty()) {
-                                    // Email already registered
                                     Toast.makeText(
                                         context,
                                         "This email is already registered. Please login instead.",
                                         Toast.LENGTH_LONG
                                     ).show()
                                 } else {
-                                    // Email not registered, proceed to signup details
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
                                     intent.putExtra("email", email)
                                     context.startActivity(intent)
@@ -252,7 +245,7 @@ fun SignupInitialBody() {
                     )
                 } else {
                     Text(
-                        "Continue",
+                        stringResource(R.string.continue_button),
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         fontSize = 16.sp
@@ -270,7 +263,7 @@ fun SignupInitialBody() {
             ) {
                 HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
                 Text(
-                    text = "or",
+                    text = stringResource(R.string.or),
                     modifier = Modifier.padding(horizontal = 16.dp),
                     color = Color.Gray,
                     fontSize = 15.sp
@@ -306,7 +299,7 @@ fun SignupInitialBody() {
                         tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Sign Up With Google", color = Color.Black, fontSize = 16.sp)
+                    Text(stringResource(R.string.sign_up_with_google), color = Color.Black, fontSize = 16.sp)
                 }
             }
 
@@ -317,19 +310,19 @@ fun SignupInitialBody() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    "Already have an account? ",
+                    stringResource(R.string.already_have_account) + " ",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
                 Text(
-                    "Login",
+                    stringResource(R.string.login),
                     color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable(enabled = !isLoading && !isGoogleLoading) {
                         val intent = Intent(context, LoginActivity::class.java)
                         context.startActivity(intent)
-                        (context as ComponentActivity).finish()
+                        (context as BaseActivity).finish()
                     }
                 )
             }
