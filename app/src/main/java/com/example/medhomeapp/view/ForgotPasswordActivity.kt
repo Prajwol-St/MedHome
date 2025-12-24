@@ -20,11 +20,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.utils.AuthState
 import com.example.medhomeapp.viewmodel.UserViewModel
 
-class ForgotPasswordActivity : ComponentActivity() {
+class ForgotPasswordActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
