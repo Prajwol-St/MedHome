@@ -4,7 +4,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -80,17 +80,14 @@ fun SignupDetailsBody(
     val authState by viewModel.authState
     val isLoading = authState is AuthState.Loading
 
-    // Handle auth state
     LaunchedEffect(authState) {
         when (val state = authState) {
             is AuthState.Success -> {
                 Toast.makeText(context, "Account created successfully!", Toast.LENGTH_SHORT).show()
 
-                // Save session
-                val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+                val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
                 sharedPrefs.edit().putString("user_id", state.userId).apply()
 
-                // Go to dashboard
                 val intent = Intent(context, DashboardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 context.startActivity(intent)
@@ -119,7 +116,7 @@ fun SignupDetailsBody(
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
-                text = "Complete Your Profile",
+                text = stringResource(R.string.complete_your_profile),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     color = Color(0xFF648DDB),
@@ -138,7 +135,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Full Name") },
+                label = { Text(stringResource(R.string.full_name)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -159,7 +156,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = email,
                 onValueChange = { },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 enabled = false,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,7 +175,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = contact,
                 onValueChange = { contact = it },
-                label = { Text("Contact Number") },
+                label = { Text(stringResource(R.string.contact_number)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -199,7 +196,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = gender,
                 onValueChange = { gender = it },
-                label = { Text("Gender (Male/Female/Other)") },
+                label = { Text(stringResource(R.string.gender)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -220,7 +217,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = dateOfBirth,
                 onValueChange = { dateOfBirth = it },
-                label = { Text("Date of Birth (YYYY/MM/DD)") },
+                label = { Text(stringResource(R.string.date_of_birth)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -241,7 +238,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = bloodGroup,
                 onValueChange = { bloodGroup = it },
-                label = { Text("Blood Group (A+, B-, O+, etc.)") },
+                label = { Text(stringResource(R.string.blood_group)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -262,7 +259,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = emergencyContact,
                 onValueChange = { emergencyContact = it },
-                label = { Text("Emergency Contact") },
+                label = { Text(stringResource(R.string.emergency_contact)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -283,7 +280,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = address,
                 onValueChange = { address = it },
-                label = { Text("Address") },
+                label = { Text(stringResource(R.string.address)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -301,11 +298,10 @@ fun SignupDetailsBody(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Password fields (required for all signups)
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.password)) },
                 enabled = !isLoading,
                 trailingIcon = {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -341,7 +337,7 @@ fun SignupDetailsBody(
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("Confirm Password") },
+                label = { Text(stringResource(R.string.confirm_password)) },
                 enabled = !isLoading,
                 trailingIcon = {
                     IconButton(onClick = {
@@ -376,7 +372,6 @@ fun SignupDetailsBody(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Terms and Conditions Checkbox
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -393,7 +388,7 @@ fun SignupDetailsBody(
                     )
                 )
                 Text(
-                    text = "I agree to the Terms & Conditions",
+                    text = stringResource(R.string.agree_terms),
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
@@ -403,7 +398,6 @@ fun SignupDetailsBody(
 
             Button(
                 onClick = {
-                    // Validation
                     when {
                         name.isBlank() -> Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show()
                         contact.isBlank() -> Toast.makeText(context, "Please enter contact number", Toast.LENGTH_SHORT).show()
@@ -418,7 +412,6 @@ fun SignupDetailsBody(
                         password != confirmPassword -> Toast.makeText(context, "Passwords don't match", Toast.LENGTH_SHORT).show()
                         !termsAccepted -> Toast.makeText(context, "Please accept Terms & Conditions", Toast.LENGTH_SHORT).show()
                         else -> {
-                            // Create user model
                             val userModel = UserModel(
                                 name = name,
                                 email = email,
@@ -432,7 +425,6 @@ fun SignupDetailsBody(
                             )
 
                             if (isGoogleSignup && googleUid != null) {
-                                // For Google signup: User already in Auth, just add to DB
                                 val repo = UserRepoImpl()
                                 repo.addUserToDatabase(googleUid, userModel.copy(
                                     id = googleUid,
@@ -440,14 +432,12 @@ fun SignupDetailsBody(
                                     updatedAt = System.currentTimeMillis().toString()
                                 )) { success, message ->
                                     if (success) {
-                                        // Link password to Google account
                                         val currentUser = FirebaseAuth.getInstance().currentUser
                                         currentUser?.updatePassword(password)
 
-                                        // Navigate to dashboard
                                         Toast.makeText(context, "Profile created successfully!", Toast.LENGTH_SHORT).show()
 
-                                        val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+                                        val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
                                         sharedPrefs.edit().putString("user_id", googleUid).apply()
 
                                         val intent = Intent(context, DashboardActivity::class.java)
@@ -459,7 +449,6 @@ fun SignupDetailsBody(
                                     }
                                 }
                             } else {
-                                // Regular signup: Create Auth + DB together
                                 viewModel.register(email, password, userModel)
                             }
                         }
@@ -481,7 +470,7 @@ fun SignupDetailsBody(
                     )
                 } else {
                     Text(
-                        text = if (isGoogleSignup) "Complete Profile" else "Sign Up",
+                        text = if (isGoogleSignup) "Complete Profile" else stringResource(R.string.sign_up),
                         color = White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -496,13 +485,13 @@ fun SignupDetailsBody(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Already have an account? ",
+                    text = stringResource(R.string.already_have_account) + " ",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
 
                 Text(
-                    text = "Login",
+                    text = stringResource(R.string.login),
                     color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
@@ -510,7 +499,7 @@ fun SignupDetailsBody(
                         val intent = Intent(context, LoginActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         context.startActivity(intent)
-                        (context as ComponentActivity).finish()
+                        (context as BaseActivity).finish()
                     }
                 )
             }
