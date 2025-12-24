@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -24,15 +23,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.viewmodel.UserViewModel
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,7 +51,7 @@ fun SettingsScreen() {
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
     val scrollState = rememberScrollState()
 
-    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
     val userId = sharedPrefs.getString("user_id", null)
 
     val currentUser by viewModel.currentUser
@@ -63,7 +65,13 @@ fun SettingsScreen() {
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
 
-    var selectedLanguage by remember { mutableStateOf("English") }
+    // Get current language
+    val currentLanguage = LanguageManager.getLanguage(context)
+    val selectedLanguage = if (currentLanguage == LanguageManager.ENGLISH) {
+        stringResource(R.string.english)
+    } else {
+        stringResource(R.string.nepali)
+    }
 
     Column(
         modifier = Modifier
@@ -78,15 +86,15 @@ fun SettingsScreen() {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { (context as ComponentActivity).finish() }) {
+            IconButton(onClick = { (context as BaseActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = Color(0xFF648DDB)
                 )
             }
             Text(
-                text = "Settings",
+                text = stringResource(R.string.settings),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF648DDB)
@@ -110,7 +118,6 @@ fun SettingsScreen() {
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Profile Image Placeholder
                 Box(
                     modifier = Modifier
                         .size(80.dp)
@@ -121,7 +128,7 @@ fun SettingsScreen() {
                 ) {
                     Icon(
                         Icons.Default.Person,
-                        contentDescription = "Profile Picture",
+                        contentDescription = stringResource(R.string.profile),
                         modifier = Modifier.size(48.dp),
                         tint = Color(0xFF648DDB)
                     )
@@ -131,7 +138,7 @@ fun SettingsScreen() {
 
                 Column {
                     Text(
-                        text = currentUser?.name ?: "Loading...",
+                        text = currentUser?.name ?: stringResource(R.string.loading),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -148,7 +155,7 @@ fun SettingsScreen() {
                         shape = RoundedCornerShape(4.dp)
                     ) {
                         Text(
-                            text = currentUser?.role?.uppercase() ?: "PATIENT",
+                            text = currentUser?.role?.uppercase() ?: stringResource(R.string.patient),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF648DDB),
@@ -160,12 +167,12 @@ fun SettingsScreen() {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        SectionHeader(title = "Account")
+        SectionHeader(title = stringResource(R.string.account))
 
         SettingsItem(
             icon = R.drawable.baseline_person_24,
-            title = "Edit Profile",
-            subtitle = "Update your personal information",
+            title = stringResource(R.string.edit_profile),
+            subtitle = stringResource(R.string.update_personal_info),
             onClick = {
                 val intent = Intent(context, EditProfileActivity::class.java)
                 context.startActivity(intent)
@@ -174,8 +181,8 @@ fun SettingsScreen() {
 
         SettingsItem(
             icon = R.drawable.baseline_lock_24,
-            title = "Change Password",
-            subtitle = "Update your password",
+            title = stringResource(R.string.change_password),
+            subtitle = stringResource(R.string.update_password),
             onClick = {
                 val intent = Intent(context, ChangePasswordActivity::class.java)
                 context.startActivity(intent)
@@ -183,12 +190,12 @@ fun SettingsScreen() {
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        SectionHeader(title = "Preferences")
+        SectionHeader(title = stringResource(R.string.preferences))
 
         SettingsItem(
             icon = R.drawable.baseline_notifications_24,
-            title = "Notifications",
-            subtitle = "Manage notification settings",
+            title = stringResource(R.string.notifications),
+            subtitle = stringResource(R.string.manage_notifications),
             onClick = {
                 val intent = Intent(context, NotificationSettingsActivity::class.java)
                 context.startActivity(intent)
@@ -197,57 +204,57 @@ fun SettingsScreen() {
 
         SettingsItem(
             icon = R.drawable.baseline_language_24,
-            title = "Language",
+            title = stringResource(R.string.language),
             subtitle = selectedLanguage,
             onClick = { showLanguageDialog = true }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        SectionHeader(title = "Help & Support")
+        SectionHeader(title = stringResource(R.string.help_and_support))
 
         SettingsItem(
             icon = R.drawable.baseline_warning_24,
-            title = "Help Center",
-            subtitle = "Get help and support",
-            onClick = { /* TODO: Navigate to Help Center */ }
+            title = stringResource(R.string.help_center),
+            subtitle = stringResource(R.string.get_help),
+            onClick = { /* TODO */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_privacy_tip_24,
-            title = "Privacy Policy",
-            subtitle = "Read our privacy policy",
-            onClick = { /* TODO: Open WebView */ }
+            title = stringResource(R.string.privacy_policy),
+            subtitle = stringResource(R.string.read_privacy),
+            onClick = { /* TODO */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_menu_book_24,
-            title = "Terms of Service",
-            subtitle = "Read our terms",
-            onClick = { /* TODO: Open WebView */ }
+            title = stringResource(R.string.terms_of_service),
+            subtitle = stringResource(R.string.read_terms),
+            onClick = { /* TODO */ }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_info_24,
-            title = "About",
-            subtitle = "Version 1.0.0",
+            title = stringResource(R.string.about),
+            subtitle = stringResource(R.string.version),
             onClick = { showAboutDialog = true }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        SectionHeader(title = "Danger Zone")
+        SectionHeader(title = stringResource(R.string.danger_zone))
 
         SettingsItem(
             icon = R.drawable.baseline_logout_24,
-            title = "Logout",
-            subtitle = "Sign out of your account",
+            title = stringResource(R.string.logout),
+            subtitle = stringResource(R.string.sign_out),
             titleColor = Color(0xFFE53935),
             onClick = { showLogoutDialog = true }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_delete_24,
-            title = "Delete Account",
-            subtitle = "Permanently delete your account",
+            title = stringResource(R.string.delete_account),
+            subtitle = stringResource(R.string.permanently_delete),
             titleColor = Color(0xFFE53935),
             onClick = { showDeleteDialog = true }
         )
@@ -259,8 +266,8 @@ fun SettingsScreen() {
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Logout") },
-            text = { Text("Are you sure you want to logout?") },
+            title = { Text(stringResource(R.string.logout)) },
+            text = { Text(stringResource(R.string.logout_confirmation)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -272,12 +279,12 @@ fun SettingsScreen() {
                         context.finish()
                     }
                 ) {
-                    Text("Logout", color = Color.Red)
+                    Text(stringResource(R.string.logout), color = Color.Red)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -287,10 +294,8 @@ fun SettingsScreen() {
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Account") },
-            text = {
-                Text("This action is permanent. Your account and all data will be deleted.")
-            },
+            title = { Text(stringResource(R.string.delete_account)) },
+            text = { Text(stringResource(R.string.delete_confirmation)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -308,51 +313,76 @@ fun SettingsScreen() {
                         }
                     }
                 ) {
-                    Text("Delete", color = Color.Red)
+                    Text(stringResource(R.string.delete), color = Color.Red)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
     }
 
-    // Language Selection Dialog
+    // Language Selection Dialog - THE IMPORTANT PART!
     if (showLanguageDialog) {
         AlertDialog(
             onDismissRequest = { showLanguageDialog = false },
-            title = { Text("Select Language") },
+            title = { Text(stringResource(R.string.select_language)) },
             text = {
                 Column {
-                    listOf("English", "Nepali", "Hindi").forEach { language ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    selectedLanguage = language
-                                    showLanguageDialog = false
-                                }
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = selectedLanguage == language,
-                                onClick = {
-                                    selectedLanguage = language
-                                    showLanguageDialog = false
-                                }
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(language)
-                        }
+                    // English Option
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                LanguageManager.setLanguage(context, LanguageManager.ENGLISH)
+                                (context as BaseActivity).recreate()
+                                showLanguageDialog = false
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = currentLanguage == LanguageManager.ENGLISH,
+                            onClick = {
+                                LanguageManager.setLanguage(context, LanguageManager.ENGLISH)
+                                (context as BaseActivity).recreate()
+                                showLanguageDialog = false
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.english))
+                    }
+
+                    // Nepali Option
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                LanguageManager.setLanguage(context, LanguageManager.NEPALI)
+                                (context as BaseActivity).recreate()
+                                showLanguageDialog = false
+                            }
+                            .padding(vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = currentLanguage == LanguageManager.NEPALI,
+                            onClick = {
+                                LanguageManager.setLanguage(context, LanguageManager.NEPALI)
+                                (context as BaseActivity).recreate()
+                                showLanguageDialog = false
+                            }
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.nepali))
                     }
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text("Close")
+                    Text(stringResource(R.string.close))
                 }
             }
         )
@@ -362,19 +392,19 @@ fun SettingsScreen() {
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
-            title = { Text("About MedHome") },
+            title = { Text(stringResource(R.string.about_medhome)) },
             text = {
                 Column {
-                    Text("Version: 1.0.0")
+                    Text(stringResource(R.string.about_version))
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("MedHome is your personal health companion.")
+                    Text(stringResource(R.string.about_description))
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("© 2024 MedHome. All rights reserved.")
+                    Text(stringResource(R.string.about_copyright))
                 }
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text("Close")
+                    Text(stringResource(R.string.close))
                 }
             }
         )
