@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,6 +31,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.utils.AuthState
@@ -42,7 +43,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,7 +60,6 @@ fun LoginBody() {
     val focusManager = LocalFocusManager.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    // SharedPreferences for Remember Me
     val sharedPrefs = context.getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
     val savedEmail = sharedPrefs.getString("saved_email", "") ?: ""
     val rememberMeChecked = sharedPrefs.getBoolean("remember_me", false)
@@ -73,7 +73,6 @@ fun LoginBody() {
     val authState by viewModel.authState
     val currentUser by viewModel.currentUser
     val isLoading = authState is AuthState.Loading || isGoogleLoading
-
 
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -108,10 +107,8 @@ fun LoginBody() {
                     if (authTask.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
-                            // Check if user exists in DB
                             viewModel.getUserByID(userId)
 
-                            // Wait for DB fetch
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
                                 kotlinx.coroutines.delay(1000)
                                 isGoogleLoading = false
@@ -124,7 +121,7 @@ fun LoginBody() {
                                     val intent = Intent(context, DashboardActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 } else {
                                     Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
@@ -132,7 +129,7 @@ fun LoginBody() {
                                     intent.putExtra("googleUid", userId)
                                     intent.putExtra("googleName", account.displayName ?: "")
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 }
                             }
                         } else {
@@ -173,7 +170,7 @@ fun LoginBody() {
                     val intent = Intent(context, DashboardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.startActivity(intent)
-                    (context as ComponentActivity).finish()
+                    (context as BaseActivity).finish()
                 }
                 viewModel.resetAuthState()
             }
@@ -200,7 +197,7 @@ fun LoginBody() {
         ) {
             Spacer(modifier = Modifier.height(50.dp))
             Text(
-                "Login",
+                stringResource(R.string.login),
                 style = TextStyle(
                     textAlign = TextAlign.Center,
                     color = Color(0xFF648DDB),
@@ -218,7 +215,7 @@ fun LoginBody() {
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 enabled = !isLoading,
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
@@ -239,7 +236,7 @@ fun LoginBody() {
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Password") },
+                label = { Text(stringResource(R.string.password)) },
                 enabled = !isLoading,
                 trailingIcon = {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -283,10 +280,10 @@ fun LoginBody() {
                         checkmarkColor = White
                     )
                 )
-                Text(text = "Remember me", color = Color.Gray, fontSize = 14.sp)
+                Text(text = stringResource(R.string.remember_me), color = Color.Gray, fontSize = 14.sp)
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "Forgot Password?",
+                    text = stringResource(R.string.forgot_password),
                     color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
@@ -331,7 +328,7 @@ fun LoginBody() {
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text(text = "Login", color = White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.login), color = White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -344,7 +341,7 @@ fun LoginBody() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
-                Text(text = "or", modifier = Modifier.padding(horizontal = 16.dp), color = Color.Gray, fontSize = 15.sp)
+                Text(text = stringResource(R.string.or), modifier = Modifier.padding(horizontal = 16.dp), color = Color.Gray, fontSize = 15.sp)
                 HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
             }
 
@@ -376,7 +373,7 @@ fun LoginBody() {
                         tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = "Login With Google", color = Color.Black, fontSize = 16.sp)
+                    Text(text = stringResource(R.string.login_with_google), color = Color.Black, fontSize = 16.sp)
                 }
             }
 
@@ -388,9 +385,9 @@ fun LoginBody() {
                     .padding(horizontal = 24.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = "Don't have an account? ", color = Color.Gray, fontSize = 14.sp)
+                Text(text = stringResource(R.string.dont_have_account) + " ", color = Color.Gray, fontSize = 14.sp)
                 Text(
-                    text = "Sign Up",
+                    text = stringResource(R.string.sign_up),
                     color = Color(0xFF648DDB),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
