@@ -81,5 +81,21 @@ interface BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     )
+    fun searchBloodRequestByLocation(
+        location: String,
+        onSuccess: (List<BloodRequestModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun getUrgentBloodRequests(
+        onSuccess: (List<BloodRequestModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun getAvailableDonorsByLocation(
+        location: String,
+        onSuccess: (List<DonorModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getCurrentUserId(): String?
 
 }
