@@ -25,7 +25,7 @@ interface BloodDonationRepo {
     )
     fun getBloodRequestById(
         requestId: String,
-        onSuccess: (BloodRequestModel) -> Unit,
+        onSuccess: (BloodRequestModel?) -> Unit,
         onError: (Exception) -> Unit
     )
     fun updateBloodRequest(
