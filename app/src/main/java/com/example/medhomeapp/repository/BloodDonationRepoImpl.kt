@@ -3,7 +3,10 @@ package com.example.medhomeapp.repository
 import com.example.medhomeapp.model.BloodRequestModel
 import com.example.medhomeapp.model.DonorModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class BloodDonationRepoImpl : BloodDonationRepo {
 
@@ -16,14 +19,43 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val requestId = bloodRequestRef.push().key ?: return
+        onError(Exception("Failed to generate ID"))
+        val userId = getCurrentUserId() ?: return onError(Exception("User not authenticated"))
+
+        val requestWithId = bloodRequest.copy(
+            id = requestId,
+            userId = userId,
+            timestamp = System.currentTimeMillis(),
+            status = "active"
+        )
+
+        bloodRequestRef.child(requestId).setValue(requestWithId.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getAllBloodRequests(
         onSuccess: (List<BloodRequestModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        bloodRequestRef.orderByChild("timestamp")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val requests = mutableListOf<BloodRequestModel>()
+                    for (childSnapshot in snapshot.children){
+                        childSnapshot.getValue(BloodRequestModel::class.java)?.let {
+                            requests.add(it)
+                        }
+                    }
+                    onSuccess(requests.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
     }
 
     override fun getBloodRequestByGroup(
