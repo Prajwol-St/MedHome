@@ -13,7 +13,7 @@ data class BloodRequestModel(
     val userId: String = "",
     val timestamp: Long = System.currentTimeMillis(),
     val status: String = "active"
-){
+) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,
@@ -30,4 +30,11 @@ data class BloodRequestModel(
             "status" to status
         )
     }
+    fun isUrgent(): Boolean = urgency == "Urgent"
+
+    fun isActive(): Boolean = status == "active"
+
+    fun isFulfilled(): Boolean = status == "fulfilled"
+
+    fun isCancelled(): Boolean = status == "cancelled"
 }
