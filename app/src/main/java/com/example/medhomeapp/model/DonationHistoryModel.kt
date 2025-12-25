@@ -11,4 +11,19 @@ data class DonationHistoryModel(
     val unitsGiven: String = "",
     val donationDate: Long = System.currentTimeMillis(),
     val notes: String =""
-)
+){
+    fun toMap(): Map<String, Any?>{
+        return mapOf(
+            "id" to id,
+            "donorId" to donorId,
+            "donorName" to donorName,
+            "bloodGroup" to bloodGroup,
+            "recipientName" to recipientName,
+            "hospital" to hospital,
+            "location" to location,
+            "unitsGiven" to unitsGiven,
+            "donationDate" to donationDate,
+            "notes" to notes
+        )
+    }
+}
