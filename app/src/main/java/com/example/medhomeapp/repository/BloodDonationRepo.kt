@@ -63,5 +63,23 @@ interface BloodDonationRepo {
         onSuccess: (List<DonorModel>) -> Unit,
         onError: (Exception) -> Unit
     )
+    fun updateDonorAvailability(
+        userId: String,
+        isAvailable: Boolean,
+        isEmergencyAvailable: Boolean,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun updateLastDonationDate(
+        userId: String,
+        donationDate: Long,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun deleteDonorProfile(
+        userId: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
 
 }
