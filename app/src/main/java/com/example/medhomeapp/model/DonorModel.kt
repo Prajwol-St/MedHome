@@ -45,4 +45,15 @@ data class DonorModel(
         val daysUntil = 90 - daysSince
         return if (daysUntil < 0) 0 else daysUntil
     }
+
+    fun isActiveDonor(): Boolean = isAvailable || isEmergencyAvailable
+
+    fun getAvailabilityStatus(): String {
+        return when {
+            isAvailable && isEmergencyAvailable -> "Available for all donations"
+            isAvailable -> "Available for regular donations"
+            isEmergencyAvailable -> "Available for Emergencies only"
+            else -> "Not Available"
+        }
+    }
 }
