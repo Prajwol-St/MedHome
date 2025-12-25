@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -26,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,7 +51,7 @@ fun DashboardBody() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
     val userId = sharedPrefs.getString("user_id", null)
 
     val currentUser by viewModel.currentUser
@@ -72,10 +72,10 @@ fun DashboardBody() {
                 title = {
                     Text(
                         when (selectedTab) {
-                            0 -> "MedHome"
-                            1 -> "My Reminders"
-                            2 -> "Scan QR"
-                            else -> "App Settings"
+                            0 -> stringResource(R.string.medhome)
+                            1 -> stringResource(R.string.reminder)
+                            2 -> stringResource(R.string.scan)
+                            else -> stringResource(R.string.settings)
                         },
                         fontWeight = FontWeight.Bold,
                         fontSize = 27.sp
@@ -88,14 +88,14 @@ fun DashboardBody() {
                 NavigationBarItem(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    icon = { Icon(painterResource(R.drawable.baseline_home_24), "Home") },
-                    label = { Text("Home") }
+                    icon = { Icon(painterResource(R.drawable.baseline_home_24), stringResource(R.string.home)) },
+                    label = { Text(stringResource(R.string.home)) }
                 )
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), "Reminder") },
-                    label = { Text("Reminder") }
+                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
+                    label = { Text(stringResource(R.string.reminder)) }
                 )
                 NavigationBarItem(
                     selected = selectedTab == 2,
@@ -104,19 +104,19 @@ fun DashboardBody() {
                         Box(modifier = Modifier.padding(top = 4.dp)) {
                             Icon(
                                 painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                "Scan",
+                                stringResource(R.string.scan),
                                 modifier = Modifier.size(40.dp).padding(6.dp),
                                 tint = androidx.compose.ui.graphics.Color.Unspecified
                             )
                         }
                     },
-                    label = { Text("Scan") }
+                    label = { Text(stringResource(R.string.scan)) }
                 )
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
-                    icon = { Icon(painterResource(R.drawable.baseline_settings_24), "Settings") },
-                    label = { Text("Settings") }
+                    icon = { Icon(painterResource(R.drawable.baseline_settings_24), stringResource(R.string.settings)) },
+                    label = { Text(stringResource(R.string.settings)) }
                 )
             }
         }
@@ -161,7 +161,6 @@ fun HomeScreenContent(userName: String) {
             .background(Color(0xFFF5F5F5))
             .verticalScroll(scrollState)
     ) {
-        // Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -187,7 +186,7 @@ fun HomeScreenContent(userName: String) {
                     ) {
                         Icon(
                             Icons.Default.Person,
-                            contentDescription = "Profile",
+                            contentDescription = stringResource(R.string.profile),
                             modifier = Modifier.size(36.dp),
                             tint = Color.White
                         )
@@ -197,7 +196,7 @@ fun HomeScreenContent(userName: String) {
 
                     Column {
                         Text(
-                            text = "Welcome",
+                            text = stringResource(R.string.welcome),
                             fontSize = 16.sp,
                             color = Color.White.copy(alpha = 0.9f)
                         )
@@ -228,7 +227,6 @@ fun HomeScreenContent(userName: String) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Features Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(16.dp),
@@ -238,7 +236,7 @@ fun HomeScreenContent(userName: String) {
         ) {
             item {
                 FeatureCard(
-                    title = "Health Records",
+                    title = stringResource(R.string.health_records),
                     icon = Icons.Default.Description,
                     onClick = {
                         val intent = Intent(context, HealthRecords::class.java)
@@ -248,7 +246,7 @@ fun HomeScreenContent(userName: String) {
             }
             item {
                 FeatureCard(
-                    title = "Book Consultation",
+                    title = stringResource(R.string.book_consultation),
                     icon = Icons.Default.VideoCall,
                     onClick = {
                         val intent = Intent(context, BookConsultationActivity::class.java)
@@ -258,35 +256,35 @@ fun HomeScreenContent(userName: String) {
             }
             item {
                 FeatureCard(
-                    title = "AI Health Assistant",
+                    title = stringResource(R.string.ai_health_assistant),
                     icon = Icons.Default.Chat,
                     onClick = { }
                 )
             }
             item {
                 FeatureCard(
-                    title = "Past Bookings",
+                    title = stringResource(R.string.past_bookings),
                     icon = Icons.Default.Event,
                     onClick = { }
                 )
             }
             item {
                 FeatureCard(
-                    title = "Appointments",
+                    title = stringResource(R.string.appointments),
                     icon = Icons.Default.CalendarMonth,
                     onClick = { }
                 )
             }
             item {
                 FeatureCard(
-                    title = "Calories Calculator",
+                    title = stringResource(R.string.calories_calculator),
                     icon = Icons.Default.FitnessCenter,
                     onClick = { }
                 )
             }
             item {
                 FeatureCard(
-                    title = "Blood Donation",
+                    title = stringResource(R.string.blood_donation),
                     icon = Icons.Default.Favorite,
                     onClick = {
                         val intent = Intent(context, BloodDonationActivity::class.java)
@@ -296,7 +294,7 @@ fun HomeScreenContent(userName: String) {
             }
             item {
                 FeatureCard(
-                    title = "Health Packages",
+                    title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
                     onClick = { }
                 )
