@@ -16,6 +16,7 @@ interface BloodDonationRepo {
     fun getBloodRequestByGroup(
         bloodGroup: String,
         onSuccess: (List<BloodRequestModel>) -> Unit,
+        onError: (Exception) -> Unit
     )
     fun getBloodRequestsByUserId(
         userId: String,

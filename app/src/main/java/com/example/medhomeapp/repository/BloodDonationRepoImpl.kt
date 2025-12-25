@@ -51,18 +51,38 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                     onSuccess(requests.sortedByDescending { it.timestamp })
                 }
 
-                override fun onCancelled(p0: DatabaseError) {
-                    TODO("Not yet implemented")
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
                 }
-
             })
     }
 
     override fun getBloodRequestByGroup(
         bloodGroup: String,
-        onSuccess: (List<BloodRequestModel>) -> Unit
+        onSuccess: (List<BloodRequestModel>) -> Unit,
+        onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        if (bloodGroup == "All"){
+            getAllBloodRequests(onSuccess, onError)
+            return
+        }
+        bloodRequestRef.orderByChild("bloodGroup").equalTo(bloodGroup)
+            .addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val requests = mutableListOf<BloodRequestModel>()
+                    for (childSnapshot in snapshot.children){
+                        childSnapshot.getValue(BloodRequestModel::class.java)?.let {
+                            requests.add(it)
+                        }
+                    }
+                    onSuccess(requests.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                   onError(error.toException())
+                }
+
+            })
     }
 
     override fun getBloodRequestsByUserId(
