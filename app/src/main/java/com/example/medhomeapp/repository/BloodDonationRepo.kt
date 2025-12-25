@@ -1,6 +1,7 @@
 package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.BloodRequestModel
+import com.example.medhomeapp.model.DonorModel
 
 interface BloodDonationRepo {
     fun postBloodRequest(
@@ -41,6 +42,25 @@ interface BloodDonationRepo {
     fun deleteBloodRequest(
         requestId: String,
         onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun createOrUpdateDonorProfile(
+        donorProfile: DonorModel,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun getDonorProfile(
+        userId: String,
+        onSuccess: (DonorModel?) -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun getAllDonors(
+        onSuccess: (List<DonorModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+    fun getDonorsByBloodGroup(
+        bloodGroup: String,
+        onSuccess: (List<DonorModel>) -> Unit,
         onError: (Exception) -> Unit
     )
 
