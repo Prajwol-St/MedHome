@@ -2,8 +2,15 @@ package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.BloodRequestModel
 import com.example.medhomeapp.model.DonorModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class BloodDonationRepoImpl : BloodDonationRepo {
+
+    private val database = FirebaseDatabase.getInstance()
+    private val bloodRequestRef = database.getReference("bloodRequests")
+    private val donorsRef = database.getReference("donors")
+    private val auth = FirebaseAuth.getInstance()
     override fun postBloodRequest(
         bloodRequest: BloodRequestModel,
         onSuccess: () -> Unit,
@@ -150,6 +157,6 @@ class BloodDonationRepoImpl : BloodDonationRepo {
     }
 
     override fun getCurrentUserId(): String? {
-        TODO("Not yet implemented")
+        return auth.currentUser?.uid
     }
 }
