@@ -31,4 +31,20 @@ class BloodDonationViewModel(
     val donors: StateFlow<List<DonorModel>> = _donors.asStateFlow()
 
     fun getCurrentUserId(): String? = repository.getCurrentUserId()
+
+    fun postBloodRequest(
+        patientName: String,
+        bloodGroup: String,
+        unitsNeeded: String,
+        hospital: String,
+        location: String,
+        contactNumber: String,
+        urgencyLevel: String,
+        additionalNotes: String
+    ){
+        if (bloodGroup.isEmpty() || unitsNeeded.isEmpty() || hospital.isEmpty() ||
+                location.isEmpty() || contactNumber.isEmpty() || urgencyLevel.isEmpty())
+            _error.value = "Please fill all required fields"
+        return
+    }
 }
