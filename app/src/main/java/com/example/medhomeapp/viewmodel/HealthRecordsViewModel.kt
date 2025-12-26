@@ -29,7 +29,6 @@ class HealthRecordsViewModel(application: Application): AndroidViewModel(applica
         observeHealthRecords()
     }
 
-    // Persistent listener to Realtime Database
     private fun observeHealthRecords() {
         _isLoading.value = true
         repository.getHealthRecords(
