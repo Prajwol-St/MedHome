@@ -1,6 +1,6 @@
 package com.example.medhomeapp.view
 
-import android.content.Context.MODE_PRIVATE
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -50,16 +50,46 @@ fun DashboardBody() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val sharedPrefs = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
     val userId = sharedPrefs.getString("user_id", null)
 
     val currentUser by viewModel.currentUser
 
+    // Initialize userType from SharedPreferences
+    var userType by remember {
+        mutableStateOf(
+            sharedPrefs.getString("user_type", "patient")?.lowercase()?.trim()?.takeIf { it.isNotEmpty() } ?: "patient"
+        )
+    }
+
+    // Load user data immediately when userId is available
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
     }
 
+    // Update userType when currentUser changes - prioritize database role
+    LaunchedEffect(currentUser) {
+        currentUser?.let { user ->
+            val roleFromDb = user.role.lowercase().trim()
+            if (roleFromDb.isNotEmpty() && roleFromDb != userType) {
+                userType = roleFromDb
+                sharedPrefs.edit().putString("user_type", roleFromDb).apply()
+            }
+        }
+    }
+
     var selectedTab by remember { mutableStateOf(0) }
+
+    // Check role from both SharedPreferences and currentUser, case-insensitive
+    val roleFromUser = currentUser?.role?.lowercase()?.trim() ?: ""
+    val isDoctor = userType == "doctor" || roleFromUser == "doctor"
+
+    // Reset selectedTab if doctor and tab 2 is selected (Scan QR - not available for doctors)
+    LaunchedEffect(isDoctor) {
+        if (isDoctor && selectedTab == 2) {
+            selectedTab = 0
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -71,9 +101,9 @@ fun DashboardBody() {
                 title = {
                     Text(
                         when (selectedTab) {
-                            0 -> "MedHome"
-                            1 -> "My Reminders"
-                            2 -> "Scan QR"
+                            0 -> if (isDoctor) "MedHome - Doctor" else "MedHome"
+                            1 -> if (isDoctor) "My Schedule" else "My Reminders"
+                            2 -> if (!isDoctor) "Scan QR" else "Home"
                             else -> "App Settings"
                         },
                         fontWeight = FontWeight.Bold,
@@ -93,24 +123,34 @@ fun DashboardBody() {
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), "Reminder") },
-                    label = { Text("Reminder") }
-                )
-                NavigationBarItem(
-                    selected = selectedTab == 2,
-                    onClick = { selectedTab = 2 },
                     icon = {
-                        Box(modifier = Modifier.padding(top = 4.dp)) {
-                            Icon(
-                                painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                "Scan",
-                                modifier = Modifier.size(40.dp).padding(6.dp),
-                                tint = androidx.compose.ui.graphics.Color.Unspecified
-                            )
-                        }
+                        Icon(
+                            painterResource(R.drawable.baseline_access_time_filled_24),
+                            if (isDoctor) "Schedule" else "Reminder"
+                        )
                     },
-                    label = { Text("Scan") }
+                    label = { Text(if (isDoctor) "Schedule" else "Reminder") }
                 )
+
+                // Only show Scan QR for patients
+                if (!isDoctor) {
+                    NavigationBarItem(
+                        selected = selectedTab == 2,
+                        onClick = { selectedTab = 2 },
+                        icon = {
+                            Box(modifier = Modifier.padding(top = 4.dp)) {
+                                Icon(
+                                    painterResource(R.drawable.baseline_qr_code_scanner_24),
+                                    "Scan",
+                                    modifier = Modifier.size(40.dp).padding(6.dp),
+                                    tint = androidx.compose.ui.graphics.Color.Unspecified
+                                )
+                            }
+                        },
+                        label = { Text("Scan") }
+                    )
+                }
+
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
@@ -126,15 +166,29 @@ fun DashboardBody() {
                 .padding(padding)
         ) {
             when (selectedTab) {
-                0 -> HomeScreenContent(currentUser?.name ?: "User")
-                1 -> ReminderScreen()
-                2 -> {
-                    LaunchedEffect(Unit) {
-                        val intent = Intent(context, QrScannerActivity::class.java)
-                        context.startActivity(intent)
-                        selectedTab = 0
+                0 -> {
+                    if (isDoctor) {
+                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                    } else {
+                        HomeScreenContent(currentUser?.name ?: "User")
                     }
-                    HomeScreenContent(currentUser?.name ?: "User")
+                }
+                1 -> {
+                    if (isDoctor) {
+                        DoctorScheduleScreen()
+                    } else {
+                        ReminderScreen()
+                    }
+                }
+                2 -> {
+                    if (!isDoctor) {
+                        LaunchedEffect(Unit) {
+                            val intent = Intent(context, QrScannerActivity::class.java)
+                            context.startActivity(intent)
+                            selectedTab = 0
+                        }
+                        HomeScreenContent(currentUser?.name ?: "User")
+                    }
                 }
                 3 -> {
                     LaunchedEffect(Unit) {
@@ -142,13 +196,18 @@ fun DashboardBody() {
                         context.startActivity(intent)
                         selectedTab = 0
                     }
-                    HomeScreenContent(currentUser?.name ?: "User")
+                    if (isDoctor) {
+                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                    } else {
+                        HomeScreenContent(currentUser?.name ?: "User")
+                    }
                 }
             }
         }
     }
 }
 
+// Patient Home Screen (Original)
 @Composable
 fun HomeScreenContent(userName: String) {
     val context = LocalContext.current
@@ -303,6 +362,7 @@ fun HomeScreenContent(userName: String) {
         }
     }
 }
+
 
 @Composable
 fun FeatureCard(
