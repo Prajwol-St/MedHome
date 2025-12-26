@@ -41,10 +41,42 @@ class BloodDonationViewModel(
         contactNumber: String,
         urgencyLevel: String,
         additionalNotes: String
-    ){
+    ) {
         if (bloodGroup.isEmpty() || unitsNeeded.isEmpty() || hospital.isEmpty() ||
-                location.isEmpty() || contactNumber.isEmpty() || urgencyLevel.isEmpty())
+            location.isEmpty() || contactNumber.isEmpty() || urgencyLevel.isEmpty()
+        ) {
             _error.value = "Please fill all required fields"
-        return
+            return
+        }
+        _isLoading.value = true
+        val bloodRequest = BloodRequestModel(
+            patientName = patientName.ifEmpty { "Anonymous" },
+            bloodGroup = bloodGroup,
+            unitsNeeded = unitsNeeded,
+            hospital = hospital,
+            location = location,
+            contactNumber = contactNumber,
+            urgency = urgencyLevel,
+            additionalNotes = additionalNotes
+        )
+
+        repository.postBloodRequest(
+            bloodRequest = bloodRequest,
+            onSuccess = {
+                _isLoading.value = false
+                _successMessage.value = "Blood request posted successfully"
+                _error.value = null
+
+                getAllBloodRequests()
+            },
+            onError = {exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to post blood request"
+            }
+        )
+    }
+
+    fun getAllBloodRequests(){
+
     }
 }
