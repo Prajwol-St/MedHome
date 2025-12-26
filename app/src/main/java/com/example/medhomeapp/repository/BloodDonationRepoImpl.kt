@@ -254,7 +254,14 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val updates = mapOf(
+            "isAvailable" to isAvailable,
+            "isEmergencyAvailable" to isEmergencyAvailable
+        )
+
+        donorsRef.child(userId).updateChildren(updates)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun updateLastDonationDate(
@@ -263,7 +270,9 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        donorsRef.child(userId).child("lastDonationDate").setValue(donationDate)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun deleteDonorProfile(
@@ -271,7 +280,9 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        donorsRef.child(userId).removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun searchBloodRequestByLocation(
