@@ -227,7 +227,24 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: (List<DonorModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        donorsRef.orderByChild("bloodGroup").equalTo(bloodGroup)
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val donors = mutableListOf<DonorModel>()
+                    for (childSnapshot in snapshot.children){
+                        childSnapshot.getValue(DonorModel::class.java)?.let {
+                            if (it.isAvailable){
+                                donors.add(it)
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+
+            })
     }
 
     override fun updateDonorAvailability(
