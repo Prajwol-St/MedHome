@@ -257,7 +257,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-        // Detail Bottom Sheet
+
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
@@ -315,7 +315,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(20.dp))
 
-                    // Title Section
+
                     Text(
                         text = "Title",
                         fontSize = 14.sp,
@@ -331,7 +331,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(16.dp))
 
-                    // Date Section
+
                     Text(
                         text = "Date",
                         fontSize = 14.sp,
@@ -346,7 +346,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(16.dp))
 
-                    // Description Section
+
                     if (selectedRecord?.description?.isNotEmpty() == true) {
                         Text(
                             text = "Description",
@@ -363,7 +363,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         Spacer(Modifier.height(16.dp))
                     }
 
-                    // Attached File Section
+
                     if (selectedRecord?.fileName?.isNotEmpty() == true &&
                         selectedRecord?.fileUrl?.isNotEmpty() == true) {
                         Text(
@@ -441,7 +441,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-        // Add/Edit Bottom Sheet
+
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
