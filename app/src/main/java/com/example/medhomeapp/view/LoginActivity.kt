@@ -118,7 +118,10 @@ fun LoginBody() {
 
                                 val user = viewModel.currentUser.value
                                 if (user != null) {
-                                    sharedPrefs.edit().putString("user_id", userId).apply()
+                                    sharedPrefs.edit()
+                                        .putString("user_id", userId)
+                                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                                        .apply()
                                     Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
 
                                     val intent = Intent(context, DashboardActivity::class.java)
@@ -155,7 +158,10 @@ fun LoginBody() {
         when (val state = authState) {
             is AuthState.Success -> {
                 currentUser?.let { user ->
-                    sharedPrefs.edit().putString("user_id", user.id).apply()
+                    sharedPrefs.edit()
+                        .putString("user_id", user.id)
+                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                        .apply()
 
                     if (rememberMe) {
                         sharedPrefs.edit()
