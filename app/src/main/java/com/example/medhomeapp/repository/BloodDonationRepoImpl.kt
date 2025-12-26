@@ -133,7 +133,13 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val updateRequest = bloodRequest.copy(
+            id = requestId,
+            timestamp = System.currentTimeMillis()
+        )
+        bloodRequestRef.child(requestId).setValue(updateRequest.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun updateBloodRequestStaus(
@@ -142,7 +148,9 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+       bloodRequestRef.child(requestId).child("statys").setValue((status))
+           .addOnSuccessListener { onSuccess() }
+           .addOnFailureListener { onError(it) }
     }
 
     override fun deleteBloodRequest(
