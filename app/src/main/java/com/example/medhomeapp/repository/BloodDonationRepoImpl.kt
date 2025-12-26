@@ -158,7 +158,9 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        bloodRequestRef.child(requestId).removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun createOrUpdateDonorProfile(
@@ -166,7 +168,17 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val userId = getCurrentUserId() ?: return onError(Exception("User not authenticated"))
+
+        val profileWithId = donorProfile.copy(
+            id = userId,
+            userId = userId,
+            timestamp = System.currentTimeMillis()
+        )
+
+        donorsRef.child(userId).setValue(profileWithId.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getDonorProfile(
