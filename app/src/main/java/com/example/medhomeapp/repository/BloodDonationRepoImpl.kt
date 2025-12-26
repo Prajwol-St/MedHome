@@ -186,14 +186,40 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: (DonorModel?) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        donorsRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val profile = snapshot.getValue(DonorModel::class.java)
+                onSuccess(profile)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError(error.toException())
+            }
+
+        })
     }
 
     override fun getAllDonors(
         onSuccess: (List<DonorModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        donorsRef.orderByChild("timestamp")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val donors = mutableListOf<DonorModel>()
+                    for (childSnapshot in snapshot.children){
+                        childSnapshot.getValue(DonorModel::class.java)?.let{
+                            donors.add(it)
+                        }
+                    }
+                    onSuccess(donors.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+
+            })
     }
 
     override fun getDonorsByBloodGroup(
