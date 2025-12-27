@@ -314,4 +314,27 @@ class BloodDonationViewModel(
         _donors.value = compatibleDonors
     }
 
+    fun clearError(){
+        _error.value = null
+    }
+
+    fun clearSuccessMessage(){
+        _successMessage.value = null
+    }
+
+    fun clearAllState(){
+        _bloodRequests.value = emptyList()
+        _donorModel.value = null
+        _donors.value = emptyList()
+        _error.value = null
+        _successMessage.value = null
+        _isLoading.value = false
+    }
+
+    fun refreshAllData(){
+        getAllBloodRequests()
+        loadDonorProfile()
+        getAllDonors()
+    }
+
 }
