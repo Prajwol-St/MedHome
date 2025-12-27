@@ -194,7 +194,6 @@ fun HomeScreenContent(userName: String) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        // Welcome Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -266,8 +265,6 @@ fun HomeScreenContent(userName: String) {
                 }
             }
         }
-
-        // Section Title
         Text(
             text = "Services",
             fontSize = 18.sp,
@@ -275,8 +272,6 @@ fun HomeScreenContent(userName: String) {
             color = TextDark,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
-
-        // Features Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
