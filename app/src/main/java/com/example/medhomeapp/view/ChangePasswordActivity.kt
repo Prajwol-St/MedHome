@@ -69,7 +69,6 @@ fun ChangePasswordScreen() {
                 focusManager.clearFocus()
             }
     ) {
-        // Top Section
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +97,6 @@ fun ChangePasswordScreen() {
             }
         }
 
-        // White Card Container
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,7 +133,6 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Current Password
                 Text(
                     text = "Current Password",
                     style = TextStyle(
@@ -179,7 +176,6 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // New Password
                 Text(
                     text = "New Password",
                     style = TextStyle(
@@ -223,7 +219,6 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Confirm Password
                 Text(
                     text = "Confirm New Password",
                     style = TextStyle(
@@ -267,7 +262,6 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Change Password Button
                 Button(
                     onClick = {
                         when {
@@ -356,8 +350,6 @@ fun ChangePasswordScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Info Card
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.1f)),
