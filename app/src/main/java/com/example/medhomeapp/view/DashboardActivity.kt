@@ -32,7 +32,11 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
-import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
@@ -64,9 +68,9 @@ fun DashboardBody() {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
+                    containerColor = SageGreen,
                     titleContentColor = Color.White
                 ),
                 title = {
@@ -78,45 +82,74 @@ fun DashboardBody() {
                             else -> stringResource(R.string.settings)
                         },
                         fontWeight = FontWeight.Bold,
-                        fontSize = 27.sp
+                        fontSize = 22.sp
                     )
                 }
             )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = Color.White,
+                tonalElevation = 8.dp
+            ) {
                 NavigationBarItem(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
                     icon = { Icon(painterResource(R.drawable.baseline_home_24), stringResource(R.string.home)) },
-                    label = { Text(stringResource(R.string.home)) }
+                    label = { Text(stringResource(R.string.home), fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
                 )
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text(stringResource(R.string.reminder)) }
+                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
                 )
                 NavigationBarItem(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
                     icon = {
-                        Box(modifier = Modifier.padding(top = 4.dp)) {
-                            Icon(
-                                painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                stringResource(R.string.scan),
-                                modifier = Modifier.size(40.dp).padding(6.dp),
-                                tint = androidx.compose.ui.graphics.Color.Unspecified
-                            )
-                        }
+                        Icon(
+                            painterResource(R.drawable.baseline_qr_code_scanner_24),
+                            stringResource(R.string.scan),
+                            modifier = Modifier.size(28.dp),
+                            tint = if (selectedTab == 2) SageGreen else TextGray
+                        )
                     },
-                    label = { Text(stringResource(R.string.scan)) }
+                    label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
                 )
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
                     icon = { Icon(painterResource(R.drawable.baseline_settings_24), stringResource(R.string.settings)) },
-                    label = { Text(stringResource(R.string.settings)) }
+                    label = { Text(stringResource(R.string.settings), fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
                 )
             }
         }
@@ -158,16 +191,17 @@ fun HomeScreenContent(userName: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
+        // Welcome Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Blue10),
-            elevation = CardDefaults.cardElevation(4.dp),
-            shape = RoundedCornerShape(12.dp)
+                .padding(20.dp),
+            colors = CardDefaults.cardColors(containerColor = SageGreen),
+            elevation = CardDefaults.cardElevation(6.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -176,33 +210,37 @@ fun HomeScreenContent(userName: String) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
+                ) {
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
+                            .size(56.dp)
                             .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.3f)),
+                            .background(Color.White.copy(alpha = 0.25f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = stringResource(R.string.profile),
-                            modifier = Modifier.size(36.dp),
+                            modifier = Modifier.size(32.dp),
                             tint = Color.White
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(14.dp))
 
                     Column {
                         Text(
                             text = stringResource(R.string.welcome),
-                            fontSize = 16.sp,
-                            color = Color.White.copy(alpha = 0.9f)
+                            fontSize = 13.sp,
+                            color = Color.White.copy(alpha = 0.9f),
+                            fontWeight = FontWeight.Normal
                         )
                         Text(
                             text = userName,
-                            fontSize = 24.sp,
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
@@ -213,31 +251,44 @@ fun HomeScreenContent(userName: String) {
                     onClick = {
                         val intent = Intent(context, QrActivity::class.java)
                         context.startActivity(intent)
-                    }
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.White.copy(alpha = 0.2f))
                 ) {
                     Icon(
                         Icons.Default.QrCode,
                         contentDescription = "QR Code",
-                        modifier = Modifier.size(32.dp),
+                        modifier = Modifier.size(26.dp),
                         tint = Color.White
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        // Section Title
+        Text(
+            text = "Services",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = TextDark,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+        )
 
+        // Features Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(800.dp)
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier.height(700.dp)
         ) {
             item {
                 FeatureCard(
                     title = stringResource(R.string.health_records),
                     icon = Icons.Default.Description,
+                    color = Color(0xFF6B8E4E),
                     onClick = {
                         val intent = Intent(context, HealthRecords::class.java)
                         context.startActivity(intent)
@@ -248,6 +299,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.book_consultation),
                     icon = Icons.Default.VideoCall,
+                    color = Color(0xFF87A96B),
                     onClick = {
                         val intent = Intent(context, BookConsultationActivity::class.java)
                         context.startActivity(intent)
@@ -258,6 +310,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.ai_health_assistant),
                     icon = Icons.Default.Chat,
+                    color = Color(0xFF6B8E4E),
                     onClick = { }
                 )
             }
@@ -265,6 +318,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.past_bookings),
                     icon = Icons.Default.Event,
+                    color = Color(0xFF87A96B),
                     onClick = { }
                 )
             }
@@ -272,6 +326,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.appointments),
                     icon = Icons.Default.CalendarMonth,
+                    color = Color(0xFF6B8E4E),
                     onClick = { }
                 )
             }
@@ -279,6 +334,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.calories_calculator),
                     icon = Icons.Default.FitnessCenter,
+                    color = Color(0xFF87A96B),
                     onClick = { }
                 )
             }
@@ -286,6 +342,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.blood_donation),
                     icon = Icons.Default.Favorite,
+                    color = Color(0xFF6B8E4E),
                     onClick = {
                         val intent = Intent(context, BloodDonationActivity::class.java)
                         context.startActivity(intent)
@@ -296,10 +353,13 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
+                    color = Color(0xFF87A96B),
                     onClick = { }
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -307,37 +367,46 @@ fun HomeScreenContent(userName: String) {
 fun FeatureCard(
     title: String,
     icon: ImageVector,
+    color: Color,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
+            .height(130.dp)
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(12.dp)
+        elevation = CardDefaults.cardElevation(3.dp),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                icon,
-                contentDescription = title,
-                modifier = Modifier.size(48.dp),
-                tint = Blue10
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color.copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = title,
+                    modifier = Modifier.size(26.dp),
+                    tint = color
+                )
+            }
+
             Text(
                 title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextDark,
+                lineHeight = 16.sp
             )
         }
     }
