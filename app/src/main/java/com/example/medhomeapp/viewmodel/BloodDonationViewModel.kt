@@ -90,4 +90,34 @@ class BloodDonationViewModel(
             }
         )
     }
+
+    fun getBloodRequestsByGroup(bloodGroup: String){
+        _isLoading.value = true
+        repository.getBloodRequestByGroup(
+            bloodGroup = bloodGroup,
+            onSuccess = {requests ->
+                _bloodRequests.value = requests
+                _isLoading.value = false
+                _error.value = null
+            },
+            onError = {exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to load blood requests"
+            }
+        )
+    }
+
+    fun updateBloodRequestStatus(requestId: String, status: String){
+        repository.updateBloodRequestStaus(
+            requestId = requestId,
+            status - status,
+            onSuccess = {
+                _successMessage.value = "Status updated successfully"
+                getAllBloodRequests()
+            },
+            onError = {exception ->
+                _error.value = exception.message ?: "Failed to update status"
+            }
+        )
+    }
 }
