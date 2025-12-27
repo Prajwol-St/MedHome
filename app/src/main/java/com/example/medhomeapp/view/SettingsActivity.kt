@@ -31,6 +31,11 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.viewmodel.UserViewModel
 
@@ -65,7 +70,6 @@ fun SettingsScreen() {
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
 
-    // Get current language
     val currentLanguage = LanguageManager.getLanguage(context)
     val selectedLanguage = if (currentLanguage == LanguageManager.ENGLISH) {
         stringResource(R.string.english)
@@ -76,13 +80,13 @@ fun SettingsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        // Back Button Header
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(SageGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -90,47 +94,46 @@ fun SettingsScreen() {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
                     contentDescription = stringResource(R.string.back),
-                    tint = Color(0xFF648DDB)
+                    tint = Color.White
                 )
             }
             Text(
                 text = stringResource(R.string.settings),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF648DDB)
+                color = Color.White
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Profile Info Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
-            elevation = CardDefaults.cardElevation(2.dp),
-            shape = RoundedCornerShape(12.dp)
+                .padding(horizontal = 20.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            elevation = CardDefaults.cardElevation(3.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(80.dp)
+                        .size(70.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF648DDB).copy(alpha = 0.1f))
-                        .border(2.dp, Color(0xFF648DDB), CircleShape),
+                        .background(SageGreen.copy(alpha = 0.15f))
+                        .border(2.dp, SageGreen.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.Person,
                         contentDescription = stringResource(R.string.profile),
-                        modifier = Modifier.size(48.dp),
-                        tint = Color(0xFF648DDB)
+                        modifier = Modifier.size(40.dp),
+                        tint = SageGreen
                     )
                 }
 
@@ -139,27 +142,27 @@ fun SettingsScreen() {
                 Column {
                     Text(
                         text = currentUser?.name ?: stringResource(R.string.loading),
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = TextDark
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = currentUser?.email ?: "",
-                        fontSize = 14.sp,
-                        color = Color.Gray
+                        fontSize = 13.sp,
+                        color = TextGray
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF648DDB).copy(alpha = 0.1f)),
-                        shape = RoundedCornerShape(4.dp)
+                        colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.15f)),
+                        shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = currentUser?.role?.uppercase() ?: stringResource(R.string.patient),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF648DDB),
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = SageGreen,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
                     }
                 }
@@ -216,21 +219,24 @@ fun SettingsScreen() {
             icon = R.drawable.baseline_warning_24,
             title = stringResource(R.string.help_center),
             subtitle = stringResource(R.string.get_help),
-            onClick = { /* TODO */ }
+            onClick = { val intent = Intent(context, HelpCenterActivity::class.java)
+                context.startActivity(intent)}
         )
 
         SettingsItem(
             icon = R.drawable.baseline_privacy_tip_24,
             title = stringResource(R.string.privacy_policy),
             subtitle = stringResource(R.string.read_privacy),
-            onClick = { /* TODO */ }
+            onClick = { val intent = Intent(context, PrivacyPolicyActivity::class.java)
+                context.startActivity(intent) }
         )
 
         SettingsItem(
             icon = R.drawable.baseline_menu_book_24,
             title = stringResource(R.string.terms_of_service),
             subtitle = stringResource(R.string.read_terms),
-            onClick = { /* TODO */ }
+            onClick = { val intent = Intent(context, TermsOfServiceActivity::class.java)
+                context.startActivity(intent) }
         )
 
         SettingsItem(
@@ -247,7 +253,8 @@ fun SettingsScreen() {
             icon = R.drawable.baseline_logout_24,
             title = stringResource(R.string.logout),
             subtitle = stringResource(R.string.sign_out),
-            titleColor = Color(0xFFE53935),
+            titleColor = Color(0xFFD32F2F),
+            iconTint = Color(0xFFD32F2F),
             onClick = { showLogoutDialog = true }
         )
 
@@ -255,18 +262,18 @@ fun SettingsScreen() {
             icon = R.drawable.baseline_delete_24,
             title = stringResource(R.string.delete_account),
             subtitle = stringResource(R.string.permanently_delete),
-            titleColor = Color(0xFFE53935),
+            titleColor = Color(0xFFD32F2F),
+            iconTint = Color(0xFFD32F2F),
             onClick = { showDeleteDialog = true }
         )
 
         Spacer(modifier = Modifier.height(80.dp))
     }
 
-    // Logout Dialog
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text(stringResource(R.string.logout)) },
+            title = { Text(stringResource(R.string.logout), fontWeight = FontWeight.Bold) },
             text = { Text(stringResource(R.string.logout_confirmation)) },
             confirmButton = {
                 TextButton(
@@ -279,22 +286,22 @@ fun SettingsScreen() {
                         context.finish()
                     }
                 ) {
-                    Text(stringResource(R.string.logout), color = Color.Red)
+                    Text(stringResource(R.string.logout), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(R.string.cancel), color = TextGray)
                 }
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
     }
 
-    // Delete Account Dialog
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text(stringResource(R.string.delete_account)) },
+            title = { Text(stringResource(R.string.delete_account), fontWeight = FontWeight.Bold) },
             text = { Text(stringResource(R.string.delete_confirmation)) },
             confirmButton = {
                 TextButton(
@@ -313,25 +320,24 @@ fun SettingsScreen() {
                         }
                     }
                 ) {
-                    Text(stringResource(R.string.delete), color = Color.Red)
+                    Text(stringResource(R.string.delete), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text(stringResource(R.string.cancel))
+                    Text(stringResource(R.string.cancel), color = TextGray)
                 }
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
     }
 
-    // Language Selection Dialog - THE IMPORTANT PART!
     if (showLanguageDialog) {
         AlertDialog(
             onDismissRequest = { showLanguageDialog = false },
-            title = { Text(stringResource(R.string.select_language)) },
+            title = { Text(stringResource(R.string.select_language), fontWeight = FontWeight.Bold) },
             text = {
                 Column {
-                    // English Option
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -349,13 +355,13 @@ fun SettingsScreen() {
                                 LanguageManager.setLanguage(context, LanguageManager.ENGLISH)
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
-                            }
+                            },
+                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.english))
                     }
 
-                    // Nepali Option
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -373,7 +379,8 @@ fun SettingsScreen() {
                                 LanguageManager.setLanguage(context, LanguageManager.NEPALI)
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
-                            }
+                            },
+                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.nepali))
@@ -382,17 +389,17 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text(stringResource(R.string.close))
+                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
                 }
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
     }
 
-    // About Dialog
     if (showAboutDialog) {
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
-            title = { Text(stringResource(R.string.about_medhome)) },
+            title = { Text(stringResource(R.string.about_medhome), fontWeight = FontWeight.Bold) },
             text = {
                 Column {
                     Text(stringResource(R.string.about_version))
@@ -404,9 +411,10 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text(stringResource(R.string.close))
+                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
                 }
-            }
+            },
+            shape = RoundedCornerShape(16.dp)
         )
     }
 }
@@ -416,13 +424,13 @@ fun SectionHeader(title: String) {
     Text(
         text = title,
         style = TextStyle(
-            color = Color(0xFF648DDB),
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp
+            color = TextDark,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 20.dp, vertical = 8.dp)
     )
 }
 
@@ -431,16 +439,17 @@ fun SettingsItem(
     icon: Int,
     title: String,
     subtitle: String,
-    titleColor: Color = Color.Black,
+    titleColor: Color = TextDark,
+    iconTint: Color = SageGreen,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 6.dp)
+            .padding(horizontal = 20.dp, vertical = 4.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -449,32 +458,40 @@ fun SettingsItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = title,
-                tint = Color(0xFF648DDB),
-                modifier = Modifier.size(24.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(iconTint.copy(alpha = 0.12f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = title,
+                    tint = iconTint,
+                    modifier = Modifier.size(22.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(14.dp))
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = TextStyle(
                         color = titleColor,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp
                     )
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
                     text = subtitle,
                     style = TextStyle(
-                        color = Color.Gray,
-                        fontSize = 13.sp
+                        color = TextGray,
+                        fontSize = 12.sp
                     )
                 )
             }
@@ -482,8 +499,8 @@ fun SettingsItem(
             Icon(
                 painter = painterResource(id = R.drawable.baseline_arrow_right_24),
                 contentDescription = "Navigate",
-                tint = Color.Gray,
-                modifier = Modifier.size(20.dp)
+                tint = TextGray.copy(alpha = 0.5f),
+                modifier = Modifier.size(18.dp)
             )
         }
     }
