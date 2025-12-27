@@ -49,7 +49,7 @@ fun TermsOfServiceScreen() {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        // Top Bar
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
