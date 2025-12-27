@@ -946,4 +946,443 @@ fun MyRequestsTab(
     }
 }
 
+@Composable
+fun DonorProfileTab(
+    viewModel: BloodDonationViewModel,
+    padding: PaddingValues
+){
+    val donorProfile by viewModel.donorProfile.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadDonorProfile()
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .background(Color(0xFFFFF5F5))
+            .padding(16.dp)
+    ) {
+        if (isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = Blue10)
+                }
+            }
+        }
+
+        if (donorProfile == null && !isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.outline_person_add_24),
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            text = "Not registered as a donor",
+                            color = Color.Gray,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Join the donor list to help save lives",
+                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+        donorProfile?.let { profile ->
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        // Header with blood group
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Donor Profile",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2D3436)
+                            )
+                            Surface(
+                                color = Blue10,
+                                shape = CircleShape,
+                                modifier = Modifier.size(60.dp)
+                            ) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    Text(
+                                        text = profile.bloodGroup,
+                                        color = Color.White,
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
+                        Divider()
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text(
+                                    text = "Availability Status",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color.Gray
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Surface(
+                                        color = if (profile.isAvailable) Color(0xFF4CAF50) else Color(0xFFE0E0E0),
+                                        shape = CircleShape,
+                                        modifier = Modifier.size(12.dp)
+                                    ) {}
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = if (profile.isAvailable) "Available" else "Not Available",
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = if (profile.isAvailable) Color(0xFF4CAF50) else Color.Gray
+                                    )
+                                }
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Emergency Available",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = if (profile.isEmergencyAvailable) "Yes" else "No",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2D3436)
+                            )
+                        }
+                        if (profile.location.isNotEmpty()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Location",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color.Gray
+                                )
+                                Text(
+                                    text = profile.location,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF2D3436),
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.End
+                                )
+                            }
+                        }
+                        if (profile.contactNumber.isNotEmpty()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Contact Number",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color.Gray
+                                )
+                                Text(
+                                    text = profile.contactNumber,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF2D3436)
+                                )
+                            }
+                        }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Total Donations",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = "${profile.totalDonations}",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2D3436)
+                            )
+                        }
+                        if (profile.lastDonationDate > 0) {
+                            Divider()
+                            Column {
+                                Text(
+                                    text = "Last Donation",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color.Gray
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = getTimeAgo(profile.lastDonationDate),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF2D3436)
+                                )
+                                val daysUntilNext = profile.daysUntilNextDonation()
+                                if (daysUntilNext > 0) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Card(
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color(0xFFFFF8E1)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(12.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Info,
+                                                contentDescription = null,
+                                                tint = Color(0xFFF57C00),
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Text(
+                                                text = "You can donate again in $daysUntilNext days",
+                                                fontSize = 13.sp,
+                                                color = Color(0xFFF57C00),
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                } else if (profile.canDonate()) {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Card(
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color(0xFFE8F5E9)
+                                        ),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.padding(12.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Check,
+                                                contentDescription = null,
+                                                tint = Color(0xFF388E3C),
+                                                modifier = Modifier.size(20.dp)
+                                            )
+                                            Text(
+                                                text = "You are eligible to donate now!",
+                                                fontSize = 13.sp,
+                                                color = Color(0xFF388E3C),
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Divider()
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Registered",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp,
+                                color = Color.Gray
+                            )
+                            Text(
+                                text = getTimeAgo(profile.timestamp),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2D3436)
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Blue10),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                            tint = Color.White,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "Thank you for being a donor!",
+                            color = Color.White,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Your generosity can save lives",
+                            color = Color.White.copy(alpha = 0.9f),
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+
+                        if (profile.totalDonations > 0) {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Divider(color = Color.White.copy(alpha = 0.3f))
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = "${profile.totalDonations}",
+                                        color = Color.White,
+                                        fontSize = 28.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "Donations",
+                                        color = Color.White.copy(alpha = 0.8f),
+                                        fontSize = 12.sp
+                                    )
+                                }
+
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = "${profile.totalDonations * 3}",
+                                        color = Color.White,
+                                        fontSize = 28.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = "Lives Saved",
+                                        color = Color.White.copy(alpha = 0.8f),
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(2.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = "Donation Guidelines",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2D3436)
+                        )
+
+                        DonationGuideline(
+                            icon = Icons.Default.DateRange,
+                            text = "Wait 90 days between donations"
+                        )
+
+                        DonationGuideline(
+                            icon = Icons.Default.Favorite,
+                            text = "Stay healthy and hydrated"
+                        )
+
+                        DonationGuideline(
+                            icon = Icons.Default.Info,
+                            text = "Each donation can save up to 3 lives"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 
