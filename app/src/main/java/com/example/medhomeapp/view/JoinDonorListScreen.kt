@@ -247,9 +247,128 @@ fun JoinDonorListScreen(
                             }
                         }
                     }
-
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isEmergencyAvailable) Color(0xFFFFEBEE) else Color(
+                                0xFFF5F5F5
+                            )
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                        ) {
+                            Checkbox(
+                                checked = isEmergencyAvailable,
+                                onCheckedChange = { isEmergencyAvailable = it },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = Blue10
+                                ),
+                                enabled = !isLoading
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Available for Emergency Calls",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color(0xFF2D3436)
+                                )
+                                Text(
+                                    text = "You can be contacted for urgent cases",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    }
                 }
             }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(2.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Donation Requirements",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2D3436)
+                    )
+
+                    Divider()
+
+                    RequirementItem(
+                        requirement = "Age between 18-65 years"
+                    )
+
+                    RequirementItem(
+                        requirement = "Weight at least 50 kg (110 lbs)"
+                    )
+
+                    RequirementItem(
+                        requirement = "Good general health condition"
+                    )
+
+                    RequirementItem(
+                        requirement = "Wait 90 days between donations"
+                    )
+
+                    RequirementItem(
+                        requirement = "No recent illness or surgery"
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Blue10.copy(alpha = 0.1f)),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Why Donate Blood?",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Blue10
+                    )
+
+                    Text(
+                        text = "• Save up to 3 lives with each donation",
+                        fontSize = 14.sp,
+                        color = Color(0xFF2D3436)
+                    )
+
+                    Text(
+                        text = "• Free health screening before donation",
+                        fontSize = 14.sp,
+                        color = Color(0xFF2D3436)
+                    )
+
+                    Text(
+                        text = "• Helps maintain healthy blood flow",
+                        fontSize = 14.sp,
+                        color = Color(0xFF2D3436)
+                    )
+
+                    Text(
+                        text = "• Join a life-saving community",
+                        fontSize = 14.sp,
+                        color = Color(0xFF2D3436)
+                    )
+                }
+            }
+
+
         }
     }
 }
