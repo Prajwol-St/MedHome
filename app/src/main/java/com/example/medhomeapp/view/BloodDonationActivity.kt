@@ -1384,5 +1384,38 @@ fun DonorProfileTab(
         }
     }
 }
+@Composable
+fun DonationGuideline(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    text: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Surface(
+            color = Blue10.copy(alpha = 0.1f),
+            shape = CircleShape,
+            modifier = Modifier.size(40.dp)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = Blue10,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            color = Color(0xFF2D3436)
+        )
+    }
+}
 
 
