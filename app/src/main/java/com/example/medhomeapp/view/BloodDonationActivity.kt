@@ -801,6 +801,7 @@ fun PostBloodRequestScreen(
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     viewModel: BloodDonationViewModel,
@@ -877,5 +878,72 @@ fun MyRequestsTab(
     LaunchedEffect(Unit) {
         viewModel.getAllBloodRequests()
     }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .background(Color(0xFFFFF5F5))
+            .padding(16.dp)
+    ){
+        if (isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = Blue10)
+                }
+            }
+        }
+        if (userRequests.isEmpty() && !isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            text = "No blood requests yet",
+                            color = Color.Gray,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "Your posted blood requests will appear here",
+                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+        items(userRequests.size) { index ->
+            BloodRequestCard(
+                request = userRequests[index],
+                onCardClick = { onRequestClick(userRequests[index]) },
+                onContactClick = { }
+            )
+
+            if (index < userRequests.size - 1) {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+    }
 }
+
 
