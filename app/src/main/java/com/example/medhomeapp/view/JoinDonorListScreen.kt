@@ -110,6 +110,35 @@ fun JoinDonorListScreen(
                 }
             }
 
+            if (error != null) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFFFFEBEE)
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = error ?: "",
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(onClick = { viewModel.clearError() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                                tint = Color(0xFFD32F2F)
+                            )
+                        }
+                    }
+                }
+            }
+
 
         }
     }
