@@ -9,7 +9,7 @@ open class BaseActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Language will be applied automatically
+        // this will help Language  applied automatically
     }
 
     override fun attachBaseContext(newBase: Context) {
