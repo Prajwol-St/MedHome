@@ -295,4 +295,23 @@ class BloodDonationViewModel(
         _bloodRequests.value = urgentRequests
     }
 
+    fun getCompatibleDonors(bloodGroup: String) {
+        val compatibleGroups = when (bloodGroup) {
+            "A+" -> listOf("A+", "A-", "O+", "O-")
+            "A-" -> listOf("A-", "O-")
+            "B+" -> listOf("B+", "B-", "O+", "O-")
+            "B-" -> listOf("B-", "O-")
+            "AB+" -> listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+            "AB-" -> listOf("A-", "B-", "AB-", "O-")
+            "O+" -> listOf("O+", "O-")
+            "O-" -> listOf("O-")
+            else -> emptyList()
+        }
+
+        val compatibleDonors = _donors.value.filter {
+            it.bloodGroup in compatibleGroups && it.isAvailable
+        }
+        _donors.value = compatibleDonors
+    }
+
 }
