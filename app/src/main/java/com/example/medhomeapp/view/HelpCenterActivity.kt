@@ -56,7 +56,6 @@ fun HelpCenterScreen() {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        // Top Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,8 +79,6 @@ fun HelpCenterScreen() {
         }
 
         Spacer(modifier = Modifier.height(20.dp))
-
-        // Contact Support Section
         Text(
             text = "Contact Support",
             style = TextStyle(
@@ -132,7 +129,6 @@ fun HelpCenterScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // FAQ Section
         Text(
             text = "Frequently Asked Questions",
             style = TextStyle(
