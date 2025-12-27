@@ -188,5 +188,44 @@ class BloodDonationViewModel(
         )
     }
 
+    fun getAllDonors(){
+        repository.getAllDonors(
+            onSuccess = {donorList ->
+                _donors.value = donorList
+            },
+            onError = {exception ->
+                _error.value = exception.message ?: "Failed to load donors"
+            }
+        )
+    }
+
+    fun getDonorsByBloodGroup(bloodGroup: String) {
+        repository.getDonorsByBloodGroup(
+            bloodGroup = bloodGroup,
+            onSuccess = { donorsList ->
+                _donors.value = donorsList
+            },
+            onError = { exception ->
+                _error.value = exception.message ?: "Failed to load donors"
+            }
+        )
+    }
+
+    fun updateDonorAvailability(isAvailable: Boolean, isEmergencyAvailable: Boolean) {
+        val userId = getCurrentUserId() ?: return
+        repository.updateDonorAvailability(
+            userId = userId,
+            isAvailable = isAvailable,
+            isEmergencyAvailable = isEmergencyAvailable,
+            onSuccess = {
+                _successMessage.value = "Availability updated successfully"
+                // Reload the profile after updating
+                loadDonorProfile()
+            },
+            onError = { exception ->
+                _error.value = exception.message ?: "Failed to update availability"
+            }
+        )
+    }
 
 }
