@@ -801,4 +801,15 @@ fun PostBloodRequestScreen(
         }
     }
 }
+@Composable
+fun HistoryScreen(
+    viewModel: BloodDonationViewModel,
+    onBackClick: () -> Unit,
+    onRequestClick: (BloodRequestModel) -> Unit
+){
+    var selectedTab by remember { mutableStateOf(0) }
+    val tabs = listOf("My Requests", "Donor Profile")
+
+
+}
 
