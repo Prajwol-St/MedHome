@@ -199,12 +199,10 @@ fun ChangePasswordScreen() {
                         val email = user?.email
 
                         if (user != null && email != null) {
-                            // Re-authenticate user
                             val credential = EmailAuthProvider.getCredential(email, currentPassword)
                             user.reauthenticate(credential)
                                 .addOnCompleteListener { reauth ->
                                     if (reauth.isSuccessful) {
-                                        // Update password
                                         user.updatePassword(newPassword)
                                             .addOnCompleteListener { update ->
                                                 isLoading = false
