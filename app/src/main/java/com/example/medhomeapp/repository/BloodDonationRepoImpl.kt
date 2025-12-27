@@ -14,14 +14,22 @@ class BloodDonationRepoImpl : BloodDonationRepo {
     private val bloodRequestRef = database.getReference("bloodRequests")
     private val donorsRef = database.getReference("donors")
     private val auth = FirebaseAuth.getInstance()
+
     override fun postBloodRequest(
         bloodRequest: BloodRequestModel,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val requestId = bloodRequestRef.push().key ?: return
-        onError(Exception("Failed to generate ID"))
-        val userId = getCurrentUserId() ?: return onError(Exception("User not authenticated"))
+        val requestId = bloodRequestRef.push().key
+        if (requestId == null) {
+            onError(Exception("Failed to generate ID"))
+            return
+        }
+        val userId = getCurrentUserId()
+        if (userId == null) {
+            onError(Exception("User not authenticated"))
+            return
+        }
 
         val requestWithId = bloodRequest.copy(
             id = requestId,
@@ -45,7 +53,10 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                     val requests = mutableListOf<BloodRequestModel>()
                     for (childSnapshot in snapshot.children){
                         childSnapshot.getValue(BloodRequestModel::class.java)?.let {
-                            requests.add(it)
+                            // Only add active requests for main screen
+                            if (it.status == "active") {
+                                requests.add(it)
+                            }
                         }
                     }
                     onSuccess(requests.sortedByDescending { it.timestamp })
@@ -72,14 +83,17 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                     val requests = mutableListOf<BloodRequestModel>()
                     for (childSnapshot in snapshot.children){
                         childSnapshot.getValue(BloodRequestModel::class.java)?.let {
-                            requests.add(it)
+                            // Only add active requests for main screen
+                            if (it.status == "active") {
+                                requests.add(it)
+                            }
                         }
                     }
                     onSuccess(requests.sortedByDescending { it.timestamp })
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                   onError(error.toException())
+                    onError(error.toException())
                 }
 
             })
@@ -96,6 +110,7 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                     val requests = mutableListOf<BloodRequestModel>()
                     for (childSnapshot in snapshot.children){
                         childSnapshot.getValue(BloodRequestModel::class.java)?.let {
+                            // Include ALL statuses (active, fulfilled, cancelled) for user's history
                             requests.add(it)
                         }
                     }
@@ -148,9 +163,9 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-       bloodRequestRef.child(requestId).child("statys").setValue((status))
-           .addOnSuccessListener { onSuccess() }
-           .addOnFailureListener { onError(it) }
+        bloodRequestRef.child(requestId).child("status").setValue(status)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun deleteBloodRequest(
@@ -168,7 +183,11 @@ class BloodDonationRepoImpl : BloodDonationRepo {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        val userId = getCurrentUserId() ?: return onError(Exception("User not authenticated"))
+        val userId = getCurrentUserId()
+        if (userId == null) {
+            onError(Exception("User not authenticated"))
+            return
+        }
 
         val profileWithId = donorProfile.copy(
             id = userId,
@@ -238,6 +257,7 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                             }
                         }
                     }
+                    onSuccess(donors.sortedByDescending { it.timestamp })
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -356,7 +376,7 @@ class BloodDonationRepoImpl : BloodDonationRepo {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                   onError(error.toException())
+                    onError(error.toException())
                 }
 
             })

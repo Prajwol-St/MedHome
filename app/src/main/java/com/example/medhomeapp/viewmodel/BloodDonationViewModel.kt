@@ -236,11 +236,12 @@ class BloodDonationViewModel(
         }
 
         _isLoading.value = true
-        repository.getAllBloodRequests(
+        repository.getBloodRequestsByUserId(
+            userId =userId,
             onSuccess = { requests ->
                 // Filter requests by current user
                 val userRequests = requests.filter { it.userId == userId }
-                _bloodRequests.value = userRequests
+                _bloodRequests.value = requests
                 _isLoading.value = false
                 _error.value = null
             },
