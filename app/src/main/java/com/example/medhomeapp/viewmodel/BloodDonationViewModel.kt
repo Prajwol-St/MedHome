@@ -110,7 +110,7 @@ class BloodDonationViewModel(
     fun updateBloodRequestStatus(requestId: String, status: String){
         repository.updateBloodRequestStaus(
             requestId = requestId,
-            status - status,
+            status = status,
             onSuccess = {
                 _successMessage.value = "Status updated successfully"
                 getAllBloodRequests()
@@ -119,5 +119,63 @@ class BloodDonationViewModel(
                 _error.value = exception.message ?: "Failed to update status"
             }
         )
+    }
+
+    fun deleteBloodRequest(requestId: String){
+        _isLoading.value = true
+        repository.deleteBloodRequest(
+            requestId = requestId,
+            onSuccess = {
+                _isLoading.value = false
+                _successMessage.value = "Blood request deleted successfully"
+                getAllBloodRequests()
+            },
+            onError = {exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to delete blood request"
+            }
+        )
+    }
+
+    fun createOrUpdateDonorProfile(
+        userName: String,
+        bloodGroup: String,
+        isAvailable: Boolean,
+        isEmergencyAvailable: Boolean,
+        contactNumber: String,
+        location: String
+    ){
+        if (bloodGroup.isEmpty()){
+            _error.value = "Please select your blood group"
+            return
+        }
+
+        _isLoading.value = true
+        val donorProfile = DonorModel(
+            userName = userName,
+            bloodGroup = bloodGroup,
+            isAvailable = isAvailable,
+            isEmergencyAvailable = isEmergencyAvailable,
+            contactNumber = contactNumber,
+            location = location
+        )
+
+        repository.createOrUpdateDonorProfile(
+            donorProfile = donorProfile,
+            onSuccess = {
+                _isLoading.value = false
+                _successMessage.value = "Donor profile saved successfully"
+                _error.value = null
+                loadDonorProfile()
+            },
+            onError = {exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to save donor profile"
+            }
+        )
+    }
+
+    fun loadDonorProfile(){
+
     }
 }
