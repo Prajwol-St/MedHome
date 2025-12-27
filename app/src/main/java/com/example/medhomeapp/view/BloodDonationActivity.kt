@@ -810,6 +810,53 @@ fun HistoryScreen(
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("My Requests", "Donor Profile")
 
-
+    Scaffold(
+        topBar = {
+            Column {
+                CenterAlignedTopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Blue10,
+                        titleContentColor = Color.White,
+                        navigationIconContentColor = Color.White
+                    ),
+                    title = { Text("History", fontWeight = FontWeight.Bold) },
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                )
+                TabRow(
+                    selectedTabIndex = selectedTab,
+                    containerColor = Blue10,
+                    contentColor = Color.White
+                ) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = { Text(title, fontWeight = FontWeight.Medium) }
+                        )
+                    }
+                }
+            }
+        }
+    ){padding ->
+        when(selectedTab){
+            0 -> MyRequestsTab(
+                viewModel = viewModel,
+                padding = padding,
+                onRequestClick = onRequestClick
+            )
+            1 -> DonorProfileTab(
+                viewModel = viewModel,
+                padding = padding
+            )
+        }
+    }
 }
 
