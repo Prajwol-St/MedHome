@@ -176,6 +176,17 @@ class BloodDonationViewModel(
     }
 
     fun loadDonorProfile(){
-
+        val userId = getCurrentUserId() ?: return
+        repository.getDonorProfile(
+            userId = userId,
+            onSuccess = {profile ->
+                _donorModel.value = profile
+            },
+            onError = {exception ->
+                _error.value = exception.message ?: "Failed to load donor profile"
+            }
+        )
     }
+
+
 }
