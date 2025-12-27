@@ -94,7 +94,6 @@ fun EditProfileScreen() {
                 focusManager.clearFocus()
             }
     ) {
-        // Top Section
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,7 +122,6 @@ fun EditProfileScreen() {
             }
         }
 
-        // White Card Container
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -151,7 +149,6 @@ fun EditProfileScreen() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Full Name
                 Text(
                     text = "Full Name",
                     style = TextStyle(
@@ -183,7 +180,6 @@ fun EditProfileScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Contact Number
                 Text(
                     text = "Contact Number",
                     style = TextStyle(
@@ -214,7 +210,6 @@ fun EditProfileScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Gender
                 Text(
                     text = "Gender",
                     style = TextStyle(
@@ -244,8 +239,6 @@ fun EditProfileScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Date of Birth
                 Text(
                     text = "Date of Birth",
                     style = TextStyle(
@@ -275,8 +268,6 @@ fun EditProfileScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                // Blood Group
                 Text(
                     text = "Blood Group",
                     style = TextStyle(
@@ -317,8 +308,6 @@ fun EditProfileScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-
-                // Emergency Contact Number
                 Text(
                     text = "Emergency Contact Number",
                     style = TextStyle(
@@ -349,7 +338,6 @@ fun EditProfileScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Address
                 Text(
                     text = "Address",
                     style = TextStyle(
@@ -383,7 +371,6 @@ fun EditProfileScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Save Button
                 Button(
                     onClick = {
                         if (name.isBlank()) {
