@@ -47,7 +47,7 @@ fun UserInfoScreen(uid: String) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("❌ User not found", style = MaterialTheme.typography.bodyLarge)
+            Text(" User not found", style = MaterialTheme.typography.bodyLarge)
         }
         return
     }
@@ -60,7 +60,6 @@ fun UserInfoScreen(uid: String) {
             .padding(16.dp)
     ) {
 
-        /* ---------- HEADER CARD ---------- */
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -87,7 +86,6 @@ fun UserInfoScreen(uid: String) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        /* ---------- BASIC INFO ---------- */
         InfoCard(title = "Basic Information") {
             InfoRow("Email", u.email)
             InfoRow("Contact", u.contact)
@@ -95,7 +93,6 @@ fun UserInfoScreen(uid: String) {
             InfoRow("Age", u.dateOfBirth.toString())
         }
 
-        /* ---------- ADMIN / STAFF ONLY ---------- */
         if (u.role == "admin" || u.role == "staff") {
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -111,7 +108,7 @@ fun UserInfoScreen(uid: String) {
         } else {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "🔒 Sensitive information hidden",
+                text = " Sensitive information hidden",
                 color = MaterialTheme.colorScheme.error
             )
         }
