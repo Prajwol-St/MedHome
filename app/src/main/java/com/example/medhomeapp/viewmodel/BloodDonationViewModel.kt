@@ -228,4 +228,71 @@ class BloodDonationViewModel(
         )
     }
 
+    fun getUserBloodRequests() {
+        val userId = getCurrentUserId()
+        if (userId == null) {
+            _error.value = "User not authenticated"
+            return
+        }
+
+        _isLoading.value = true
+        repository.getAllBloodRequests(
+            onSuccess = { requests ->
+                // Filter requests by current user
+                val userRequests = requests.filter { it.userId == userId }
+                _bloodRequests.value = userRequests
+                _isLoading.value = false
+                _error.value = null
+            },
+            onError = { exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to load your blood requests"
+            }
+        )
+    }
+
+    fun updateLastDonationDate(donationDate: Long) {
+        val userId = getCurrentUserId() ?: return
+        val currentProfile = _donorModel.value ?: return
+
+        val updatedProfile = currentProfile.copy(lastDonationDate = donationDate)
+
+        repository.createOrUpdateDonorProfile(
+            donorProfile = updatedProfile,
+            onSuccess = {
+                _successMessage.value = "Donation date updated successfully"
+                loadDonorProfile()
+            },
+            onError = { exception ->
+                _error.value = exception.message ?: "Failed to update donation date"
+            }
+        )
+    }
+
+    fun markRequestAsFulfilled(requestId: String) {
+        updateBloodRequestStatus(requestId, "fulfilled")
+    }
+
+    fun cancelBloodRequest(requestId: String) {
+        updateBloodRequestStatus(requestId, "cancelled")
+    }
+
+    fun reactivateBloodRequest(requestId: String) {
+        updateBloodRequestStatus(requestId, "active")
+    }
+
+    fun searchBloodRequestsByLocation(location: String) {
+        val filteredRequests = _bloodRequests.value.filter {
+            it.location.contains(location, ignoreCase = true) && it.status == "active"
+        }
+        _bloodRequests.value = filteredRequests
+    }
+
+    fun getUrgentBloodRequests() {
+        val urgentRequests = _bloodRequests.value.filter {
+            it.urgency == "Urgent" && it.status == "active"
+        }
+        _bloodRequests.value = urgentRequests
+    }
+
 }
