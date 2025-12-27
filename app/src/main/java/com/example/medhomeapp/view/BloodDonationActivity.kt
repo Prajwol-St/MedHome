@@ -523,6 +523,7 @@ class BloodDonationViewModelFactory(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostBloodRequestScreen(
     viewModel: BloodDonationViewModel,
@@ -531,5 +532,62 @@ fun PostBloodRequestScreen(
     onBackClick: () -> Unit,
     onSuccess: () -> Unit
 ){
+    var patientName by remember { mutableStateOf(bloodRequest?.patientName ?: "") }
+    var bloodGroup by remember { mutableStateOf(bloodRequest?.bloodGroup ?: "") }
+    var unitsNeeded by remember { mutableStateOf(bloodRequest?.unitsNeeded ?: "1") }
+    var hospital by remember { mutableStateOf(bloodRequest?.hospital ?: "") }
+    var location by remember { mutableStateOf(bloodRequest?.location ?: "") }
+    var contactNumber by remember { mutableStateOf(bloodRequest?.contactNumber ?: "") }
+    var urgencyLevel by remember { mutableStateOf(bloodRequest?.urgency ?: "") }
+    var additionalNotes by remember { mutableStateOf(bloodRequest?.additionalNotes ?: "") }
 
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+    val successMessage by viewModel.successMessage.collectAsState()
+
+    LaunchedEffect(successMessage) {
+        if (successMessage != null) {
+            onSuccess()
+            viewModel.clearSuccessMessage()
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Blue10,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White,
+                ),
+                title = {
+                    Text(
+                        if (isEditMode) "Edit Blood Request" else "Post Blood Request",
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
+                }
+            )
+        }
+    ){padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(Color(0xFFFFF5F5))
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ){
+
+        }
+    }
 }
+
