@@ -139,7 +139,117 @@ fun JoinDonorListScreen(
                 }
             }
 
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(2.dp),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Donor Information",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2D3436)
+                    )
 
+                    Divider()
+                    Text("Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                    var expanded by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = !expanded && !isLoading }
+                    ) {
+                        OutlinedTextField(
+                            value = bloodGroup,
+                            onValueChange = {},
+                            readOnly = true,
+                            placeholder = { Text("Select your blood group") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Blue10
+                            ),
+                            enabled = !isLoading
+                        )
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            listOf(
+                                "A+",
+                                "A-",
+                                "B+",
+                                "B-",
+                                "O+",
+                                "O-",
+                                "AB+",
+                                "AB-"
+                            ).forEach { group ->
+                                DropdownMenuItem(
+                                    text = { Text(group) },
+                                    onClick = {
+                                        bloodGroup = group
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    Divider()
+
+                    Text(
+                        text = "Availability",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2D3436)
+                    )
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (isAvailable) Color(0xFFE8F5E9) else Color(
+                                0xFFF5F5F5
+                            )
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp)
+                        ) {
+                            Checkbox(
+                                checked = isAvailable,
+                                onCheckedChange = { isAvailable = it },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = Blue10
+                                ),
+                                enabled = !isLoading
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "Currently Available to Donate",
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = Color(0xFF2D3436)
+                                )
+                                Text(
+                                    text = "You can be contacted for regular donations",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                        }
+                    }
+
+                }
+            }
         }
     }
 }
