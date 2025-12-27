@@ -586,7 +586,218 @@ fun PostBloodRequestScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ){
+            if (error != null) {
+                item {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFEBEE)
+                        )
+                    ) {
+                        Text(
+                            text = error ?: "",
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+            }
 
+            item {
+                Text("Patient Name", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = patientName,
+                    onValueChange = { patientName = it },
+                    placeholder = { Text("Enter patient name or leave anonymous") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10,
+                        focusedLabelColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Text("Required Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                var expanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded && !isLoading }
+                ) {
+                    OutlinedTextField(
+                        value = bloodGroup,
+                        onValueChange = {},
+                        readOnly = true,
+                        placeholder = { Text("Select blood group needed") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Blue10
+                        ),
+                        enabled = !isLoading
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-").forEach { group ->
+                            DropdownMenuItem(
+                                text = { Text(group) },
+                                onClick = {
+                                    bloodGroup = group
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                Text("Units Needed *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = unitsNeeded,
+                    onValueChange = { unitsNeeded = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Text("Hospital *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = hospital,
+                    onValueChange = { hospital = it },
+                    placeholder = { Text("e.g. City General Hospital") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Text("Location *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = location,
+                    onValueChange = { location = it },
+                    placeholder = { Text("Satdobato,Lalitpur") },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Text("Contact Number *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = contactNumber,
+                    onValueChange = { contactNumber = it },
+                    placeholder = { Text("+977 XXXXX XXXXX") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Text("Urgency Level *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                var urgencyExpanded by remember { mutableStateOf(false) }
+                ExposedDropdownMenuBox(
+                    expanded = urgencyExpanded,
+                    onExpandedChange = { urgencyExpanded = !urgencyExpanded && !isLoading }
+                ) {
+                    OutlinedTextField(
+                        value = urgencyLevel,
+                        onValueChange = {},
+                        readOnly = true,
+                        placeholder = { Text("Select urgency") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(urgencyExpanded) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Blue10
+                        ),
+                        enabled = !isLoading
+                    )
+                    ExposedDropdownMenu(
+                        expanded = urgencyExpanded,
+                        onDismissRequest = { urgencyExpanded = false }
+                    ) {
+                        listOf("Urgent", "Within 24 hours", "Within a week").forEach { level ->
+                            DropdownMenuItem(
+                                text = { Text(level) },
+                                onClick = {
+                                    urgencyLevel = level
+                                    urgencyExpanded = false
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            item {
+                Text("Additional Notes", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                OutlinedTextField(
+                    value = additionalNotes,
+                    onValueChange = { additionalNotes = it },
+                    placeholder = { Text("Any additional information...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp),
+                    maxLines = 5,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Blue10
+                    ),
+                    enabled = !isLoading
+                )
+            }
+            item {
+                Button(
+                    onClick = {
+                        viewModel.postBloodRequest(
+                            patientName = patientName,
+                            bloodGroup = bloodGroup,
+                            unitsNeeded = unitsNeeded,
+                            hospital = hospital,
+                            location = location,
+                            contactNumber = contactNumber,
+                            urgencyLevel = urgencyLevel,
+                            additionalNotes = additionalNotes
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue10
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    enabled = !isLoading
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text(
+                            if (isEditMode) "Update Blood Request" else "Post Blood Request",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }
