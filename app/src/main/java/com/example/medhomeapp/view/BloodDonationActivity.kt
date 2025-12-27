@@ -860,3 +860,22 @@ fun HistoryScreen(
     }
 }
 
+@Composable
+fun MyRequestsTab(
+    viewModel: BloodDonationViewModel,
+    padding: PaddingValues,
+    onRequestClick: (BloodRequestModel) -> Unit
+){
+    val bloodRequests by viewModel.bloodRequests.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val currentUserId = viewModel.getCurrentUserId()
+
+    val userRequests = remember(bloodRequests, currentUserId) {
+        bloodRequests.filter { it.userId == currentUserId }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getAllBloodRequests()
+    }
+}
+
