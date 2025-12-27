@@ -10,7 +10,10 @@ data class DonorModel(
     val contactNumber: String ="",
     val location: String = "",
     val lastDonationDate: Long = 0L,
-    val timestamp: Long =  System.currentTimeMillis()
+    val totalDonations: Int = 0,
+    val timestamp: Long =  System.currentTimeMillis(),
+    val email: String = ""
+
 ){
     fun toMap(): Map<String, Any?>{
         return mapOf(
@@ -23,7 +26,9 @@ data class DonorModel(
             "contactNumber" to contactNumber,
             "location" to location,
             "lastDonationDate" to lastDonationDate,
-            "timestamp" to timestamp
+            "timestamp" to timestamp,
+            "totalDonations" to totalDonations,
+            "email" to email
         )
     }
 
