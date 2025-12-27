@@ -414,3 +414,21 @@ fun JoinDonorListScreen(
         }
     }
 }
+@Composable
+fun RequirementItem(requirement: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Surface(
+            color = Blue10,
+            shape = RoundedCornerShape(4.dp),
+            modifier = Modifier.size(8.dp)
+        ) {}
+        Text(
+            text = requirement,
+            fontSize = 14.sp,
+            color = Color(0xFF2D3436)
+        )
+    }
+}
