@@ -367,7 +367,49 @@ fun JoinDonorListScreen(
                     )
                 }
             }
+            Button(
+                onClick = {
+                    viewModel.createOrUpdateDonorProfile(
+                        userName = "", // Get from user profile
+                        bloodGroup = bloodGroup,
+                        isAvailable = isAvailable,
+                        isEmergencyAvailable = isEmergencyAvailable,
+                        contactNumber = "", // Get from user profile
+                        location = "" // Get from user profile
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue10
+                ),
+                shape = RoundedCornerShape(12.dp),
+                enabled = !isLoading && bloodGroup.isNotEmpty()
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Text(
+                        text = if (donorProfile != null) "Update Donor Profile" else "Save & Join Donor List",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
 
+            Text(
+                text = "By joining, you agree to share your blood group and availability status with those seeking blood donors. Your contact information will only be visible when someone needs your blood type.",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
         }
     }
