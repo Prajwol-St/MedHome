@@ -41,7 +41,7 @@ fun SplashBody() {
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        delay(2000) // 2 second splash
+        delay(2000)
 
 
         val sharedPrefs = context.getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
