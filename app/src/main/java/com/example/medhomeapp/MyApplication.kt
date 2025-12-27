@@ -8,7 +8,7 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Apply saved language when app starts
+        //this applies saved language when app starts
         val languageCode = LanguageManager.getLanguage(this)
         LanguageManager.setLanguage(this, languageCode)
     }
