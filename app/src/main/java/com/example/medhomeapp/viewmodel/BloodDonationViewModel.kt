@@ -77,6 +77,17 @@ class BloodDonationViewModel(
     }
 
     fun getAllBloodRequests(){
-
+        _isLoading.value = true
+        repository.getAllBloodRequests(
+            onSuccess = {requests ->
+                _bloodRequests.value = requests
+                _isLoading.value = false
+                _error.value = null
+            },
+            onError = {exception ->
+                _isLoading.value = false
+                _error.value = exception.message ?: "Failed to load blood requests"
+            }
+        )
     }
 }
