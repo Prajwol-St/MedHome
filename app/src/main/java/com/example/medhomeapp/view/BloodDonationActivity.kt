@@ -876,7 +876,7 @@ fun MyRequestsTab(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getAllBloodRequests()
+        viewModel.getUserBloodRequests()
     }
 
     LazyColumn(
