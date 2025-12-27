@@ -98,7 +98,7 @@ fun BloodRequestDetailsScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Error message
+
             if (error != null) {
                 item {
                     Card(
@@ -130,7 +130,7 @@ fun BloodRequestDetailsScreen(
                 }
             }
 
-            // Success message
+
             if (successMessage != null && !successMessage!!.contains("deleted")) {
                 item {
                     Card(
@@ -162,7 +162,7 @@ fun BloodRequestDetailsScreen(
                 }
             }
 
-            // Main Details Card
+
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
@@ -174,7 +174,7 @@ fun BloodRequestDetailsScreen(
                         modifier = Modifier.padding(20.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Blood Group Badge
+
                         Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
@@ -198,7 +198,7 @@ fun BloodRequestDetailsScreen(
                             }
                         }
 
-                        // Urgency Badge
+
                         Surface(
                             color = when (request.urgency) {
                                 "Urgent" -> Color(0xFFFFEBEE)
@@ -241,7 +241,7 @@ fun BloodRequestDetailsScreen(
 
                         Divider()
 
-                        // Patient Information Section
+
                         Text(
                             text = "Patient Information",
                             fontSize = 16.sp,
@@ -261,7 +261,7 @@ fun BloodRequestDetailsScreen(
 
                         Divider()
 
-                        // Hospital Information Section
+
                         Text(
                             text = "Hospital Information",
                             fontSize = 16.sp,
@@ -283,7 +283,7 @@ fun BloodRequestDetailsScreen(
 
                         Divider()
 
-                        // Contact Information Section
+
                         Text(
                             text = "Contact Information",
                             fontSize = 16.sp,
@@ -299,7 +299,7 @@ fun BloodRequestDetailsScreen(
 
                         Divider()
 
-                        // Status Information Section
+
                         Text(
                             text = "Status Information",
                             fontSize = 16.sp,
@@ -353,7 +353,7 @@ fun BloodRequestDetailsScreen(
                             value = getTimeAgo(request.timestamp)
                         )
 
-                        // Additional Notes Section
+
                         if (request.additionalNotes.isNotEmpty()) {
                             Divider()
                             Column(
@@ -384,7 +384,7 @@ fun BloodRequestDetailsScreen(
                 }
             }
 
-            // Action Buttons
+
             if (isOwner) {
                 item {
                     Card(
@@ -488,15 +488,11 @@ fun BloodRequestDetailsScreen(
                     }
                 }
             } else {
-                // Contact Button for non-owners
+
                 item {
                     Button(
                         onClick = {
-                            // TODO: Implement call functionality
-                            // val intent = Intent(Intent.ACTION_DIAL).apply {
-                            //     data = Uri.parse("tel:${request.contactNumber}")
-                            // }
-                            // context.startActivity(intent)
+
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -523,7 +519,7 @@ fun BloodRequestDetailsScreen(
         }
     }
 
-    // Delete Confirmation Dialog
+
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
@@ -570,7 +566,7 @@ fun BloodRequestDetailsScreen(
         )
     }
 
-    // Mark as Fulfilled Dialog
+
     if (showStatusDialog) {
         AlertDialog(
             onDismissRequest = { showStatusDialog = false },
