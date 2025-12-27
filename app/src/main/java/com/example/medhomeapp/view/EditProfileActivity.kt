@@ -7,6 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,13 +19,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class EditProfileActivity : BaseActivity() {
@@ -40,6 +49,7 @@ class EditProfileActivity : BaseActivity() {
 @Composable
 fun EditProfileScreen() {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
     val scrollState = rememberScrollState()
 
@@ -73,223 +83,368 @@ fun EditProfileScreen() {
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .verticalScroll(scrollState)
+            .background(SageGreen)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
     ) {
-        Row(
+        // Top Section
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(top = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            IconButton(onClick = { (context as ComponentActivity).finish() }) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
-                    tint = Color(0xFF648DDB)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = { (context as ComponentActivity).finish() }) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_arrow_back_24),
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+                Text(
+                    text = "Edit Profile",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
-            Text(
-                text = "Edit Profile",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF648DDB)
-            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Full Name") },
-            enabled = !isLoading,
+        // White Card Container
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                .align(Alignment.BottomCenter)
+                .fillMaxHeight(0.88f),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+            colors = CardDefaults.cardColors(containerColor = BackgroundCream),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = 28.dp)
+                    .padding(top = 32.dp, bottom = 32.dp)
+            ) {
+                Text(
+                    text = "Personal Information",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedTextField(
-            value = contact,
-            onValueChange = { contact = it },
-            label = { Text("Contact Number") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                // Full Name
+                Text(
+                    text = "Full Name",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    placeholder = { Text("Enter your full name", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
 
-        OutlinedTextField(
-            value = gender,
-            onValueChange = { gender = it },
-            label = { Text("Gender") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+                // Contact Number
+                Text(
+                    text = "Contact Number",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
-        OutlinedTextField(
-            value = dateOfBirth,
-            onValueChange = { dateOfBirth = it },
-            label = { Text("Date of Birth") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                OutlinedTextField(
+                    value = contact,
+                    onValueChange = { contact = it },
+                    placeholder = { Text("10-digit phone number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = bloodGroup,
-            onValueChange = { bloodGroup = it },
-            label = { Text("Blood Group") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                // Gender
+                Text(
+                    text = "Gender",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = gender,
+                    onValueChange = { gender = it },
+                    placeholder = { Text("Male/Female/Other", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
 
-        OutlinedTextField(
-            value = emergencyContact,
-            onValueChange = { emergencyContact = it },
-            label = { Text("Emergency Contact") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+                // Date of Birth
+                Text(
+                    text = "Date of Birth",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
-        OutlinedTextField(
-            value = address,
-            onValueChange = { address = it },
-            label = { Text("Address") },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color(0xFF648DDB),
-                unfocusedIndicatorColor = Color(0xFF648DDB),
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            )
-        )
+                OutlinedTextField(
+                    value = dateOfBirth,
+                    onValueChange = { dateOfBirth = it },
+                    placeholder = { Text("DD/MM/YYYY", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
 
-        Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                if (name.isBlank()) {
-                    Toast.makeText(context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
-                    return@Button
-                }
+                // Blood Group
+                Text(
+                    text = "Blood Group",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
 
-                isLoading = true
+                OutlinedTextField(
+                    value = bloodGroup,
+                    onValueChange = { bloodGroup = it },
+                    placeholder = { Text("A+, B+, O+, etc.", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
 
-                val updatedUser = currentUser?.copy(
-                    name = name,
-                    contact = contact,
-                    gender = gender,
-                    dateOfBirth = dateOfBirth,
-                    bloodGroup = bloodGroup,
-                    emergencyContact = emergencyContact,
-                    address = address
-                ) ?: return@Button
+                Spacer(modifier = Modifier.height(24.dp))
 
-                if (userId != null) {
-                    viewModel.editProfile(userId, updatedUser) { success, message ->
-                        isLoading = false
-                        if (success) {
-                            Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                            (context as ComponentActivity).finish()
-                        } else {
-                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                Text(
+                    text = "Emergency Contact",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Emergency Contact Number
+                Text(
+                    text = "Emergency Contact Number",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+
+                OutlinedTextField(
+                    value = emergencyContact,
+                    onValueChange = { emergencyContact = it },
+                    placeholder = { Text("10-digit number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Address
+                Text(
+                    text = "Address",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+
+                OutlinedTextField(
+                    value = address,
+                    onValueChange = { address = it },
+                    placeholder = { Text("Enter your address", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    enabled = !isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    maxLines = 3,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Save Button
+                Button(
+                    onClick = {
+                        if (name.isBlank()) {
+                            Toast.makeText(context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                            return@Button
                         }
+
+                        isLoading = true
+
+                        val updatedUser = currentUser?.copy(
+                            name = name,
+                            contact = contact,
+                            gender = gender,
+                            dateOfBirth = dateOfBirth,
+                            bloodGroup = bloodGroup,
+                            emergencyContact = emergencyContact,
+                            address = address
+                        ) ?: return@Button
+
+                        if (userId != null) {
+                            viewModel.editProfile(userId, updatedUser) { success, message ->
+                                isLoading = false
+                                if (success) {
+                                    Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                                    (context as ComponentActivity).finish()
+                                } else {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    },
+                    enabled = !isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = TextDark,
+                        disabledContainerColor = TextDark.copy(alpha = 0.6f)
+                    )
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            "Save Changes",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
                     }
                 }
-            },
-            enabled = !isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF648DDB))
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    color = Color.White,
-                    strokeWidth = 2.dp
-                )
-            } else {
-                Text(
-                    "Save Changes",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
-
-        Spacer(modifier = Modifier.height(80.dp))
     }
 }
