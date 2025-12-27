@@ -24,46 +24,102 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.R
+import com.example.medhomeapp.model.BloodRequestModel
+import com.example.medhomeapp.model.DonorModel
+import com.example.medhomeapp.repository.BloodDonationRepo
+import com.example.medhomeapp.repository.BloodDonationRepoImpl
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.viewmodel.BloodDonationViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class BloodDonationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BloodDonationBody()
+            val repository = BloodDonationRepoImpl()
+            val viewModel: BloodDonationViewModel = viewModel(
+                factory = BloodDonationViewModelFactory(repository)
+            )
+            BloodDonationBody(viewModel = viewModel)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BloodDonationBody() {
+fun BloodDonationBody(viewModel: BloodDonationViewModel) {
     val context = LocalContext.current
     val activity = context as Activity
     var currentScreen by remember { mutableStateOf("main") }
+    var selectedRequest by remember { mutableStateOf<BloodRequestModel?>(null) }
+    var isEditMode by remember { mutableStateOf(false) }
 
     when (currentScreen) {
         "main" -> {
             MainDonationScreen(
                 activity = activity,
-                onPostRequestClick = { currentScreen = "post_request" },
-                onJoinDonorClick = { currentScreen = "join_donor" }
+                viewModel = viewModel,
+                onPostRequestClick = {
+                    isEditMode = false
+                    selectedRequest = null
+                    currentScreen = "post_request"
+                },
+                onJoinDonorClick = { currentScreen = "join_donor" },
+                onHistoryClick = { currentScreen = "history" },
+                onRequestClick = { request ->
+                    selectedRequest = request
+                    currentScreen = "details"
+                }
             )
         }
 
         "post_request" -> {
             PostBloodRequestScreen(
-                onBackClick = { currentScreen = "main" }
+                viewModel = viewModel,
+                bloodRequest = if (isEditMode) selectedRequest else null,
+                isEditMode = isEditMode,
+                onBackClick = { currentScreen = "main" },
+                onSuccess = { currentScreen = "main" }
             )
         }
 
         "join_donor" -> {
             JoinDonorListScreen(
+                viewModel = viewModel,
                 onBackClick = { currentScreen = "main" }
+            )
+        }
+
+        "history" -> {
+            HistoryScreen(
+                viewModel = viewModel,
+                onBackClick = { currentScreen = "main" },
+                onRequestClick = { request ->
+                    selectedRequest = request
+                    currentScreen = "details"
+                }
+            )
+        }
+
+        "details" -> {
+            BloodRequestDetailsScreen(
+                request = selectedRequest,
+                viewModel = viewModel,
+                onBackClick = { currentScreen = "main" },
+                onEditClick = {
+                    isEditMode = true
+                    currentScreen = "post_request"
+                },
+                onDeleteSuccess = { currentScreen = "main" }
             )
         }
     }
@@ -73,37 +129,29 @@ fun BloodDonationBody() {
 @Composable
 fun MainDonationScreen(
     activity: Activity,
+    viewModel: BloodDonationViewModel,
     onPostRequestClick: () -> Unit,
-    onJoinDonorClick: () -> Unit
+    onJoinDonorClick: () -> Unit,
+    onHistoryClick: () -> Unit,
+    onRequestClick: (BloodRequestModel) -> Unit
 ) {
     val bloodGroups = listOf("All", "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
     var selectedGroup by remember { mutableStateOf("All") }
 
-    val sampleRequests = remember {
-        listOf(
-            BloodRequestUI(
-                id = "1",
-                patientName = "John Doe",
-                bloodGroup = "B+",
-                hospital = "City Hospital",
-                location = "Kathnandu",
-                unitsNeeded = "1",
-                timeAgo = "8 days ago",
-                urgency = "Urgent",
-                contactNumber = "9876543210"
-            ),
-            BloodRequestUI(
-                id = "2",
-                patientName = "Jane ",
-                bloodGroup = "A+",
-                hospital = "General Hospital",
-                location = "Bhaktapur",
-                unitsNeeded = "1",
-                timeAgo = "22 hr ago",
-                urgency = "Within 24 hours",
-                contactNumber = "9876543211"
-            )
-        )
+    val bloodRequests by viewModel.bloodRequests.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val error by viewModel.error.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getAllBloodRequests()
+    }
+
+    LaunchedEffect(selectedGroup) {
+        if (selectedGroup == "All") {
+            viewModel.getAllBloodRequests()
+        } else {
+            viewModel.getBloodRequestsByGroup(selectedGroup)
+        }
     }
 
     Scaffold(
@@ -127,7 +175,7 @@ fun MainDonationScreen(
                 },
                 actions = {
                     Button(
-                        onClick = { },
+                        onClick = onHistoryClick,
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.White,
                             containerColor = Color.White.copy(alpha = 0.1f)
@@ -180,7 +228,6 @@ fun MainDonationScreen(
                 .padding(padding)
                 .background(Color(0xFFFFF5F5))
         ) {
-
             item {
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
@@ -203,7 +250,6 @@ fun MainDonationScreen(
                 }
             }
 
-
             item {
                 Text(
                     text = "Nearby Blood Requests",
@@ -218,22 +264,70 @@ fun MainDonationScreen(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
+            if (isLoading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Blue10)
+                    }
+                }
+            }
 
-            items(sampleRequests.size) { index ->
+            if (error != null) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFEBEE)
+                        )
+                    ) {
+                        Text(
+                            text = error ?: "An error occurred",
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
+            }
+
+            if (bloodRequests.isEmpty() && !isLoading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No blood requests available",
+                            color = Color.Gray,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+
+            items(bloodRequests.size) { index ->
                 Box(modifier = Modifier.padding(horizontal = 16.dp)) {
                     BloodRequestCard(
-                        request = sampleRequests[index],
+                        request = bloodRequests[index],
+                        onCardClick = { onRequestClick(bloodRequests[index]) },
                         onContactClick = { request ->
-
+                            // Handle contact click
                         }
                     )
                 }
 
-                if (index < sampleRequests.size - 1) {
+                if (index < bloodRequests.size - 1) {
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             }
-
 
             item {
                 Spacer(modifier = Modifier.height(80.dp))
@@ -244,13 +338,18 @@ fun MainDonationScreen(
 
 @Composable
 fun BloodRequestCard(
-    request: BloodRequestUI,
-    onContactClick: (BloodRequestUI) -> Unit
+    request: BloodRequestModel,
+    onCardClick: () -> Unit,
+    onContactClick: (BloodRequestModel) -> Unit
 ) {
+    val timeAgo = remember(request.timestamp) {
+        getTimeAgo(request.timestamp)
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {  },
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(2.dp)
@@ -265,7 +364,7 @@ fun BloodRequestCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = request.patientName,
+                        text = request.patientName.ifEmpty { "Anonymous" },
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF2D3436)
@@ -301,7 +400,6 @@ fun BloodRequestCard(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -343,7 +441,6 @@ fun BloodRequestCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -352,7 +449,6 @@ fun BloodRequestCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(modifier = Modifier.width(4.dp))
                     Icon(
                         painter = painterResource(R.drawable.baseline_access_time_filled_24),
                         contentDescription = null,
@@ -361,7 +457,7 @@ fun BloodRequestCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = request.timeAgo,
+                        text = timeAgo,
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -386,359 +482,54 @@ fun BloodRequestCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PostBloodRequestScreen(onBackClick: () -> Unit) {
-    var patientName by remember { mutableStateOf("") }
-    var bloodGroup by remember { mutableStateOf("") }
-    var unitsNeeded by remember { mutableStateOf("1") }
-    var hospital by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
-    var contactNumber by remember { mutableStateOf("") }
-    var urgencyLevel by remember { mutableStateOf("") }
-    var additionalNotes by remember { mutableStateOf("") }
+fun getTimeAgo(timestamp: Long): String {
+    val now = System.currentTimeMillis()
+    val diff = now - timestamp
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White,
-                ),
-                title = { Text("Post Blood Request", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        }
-    ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .background(Color(0xFFFFF5F5))
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item {
-                Text("Patient Name", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = patientName,
-                    onValueChange = { patientName = it },
-                    placeholder = { Text("Enter patient name or leave anonymous") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10,
-                        focusedLabelColor = Blue10
-                    )
-                )
-            }
+    val seconds = diff / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+    val weeks = days / 7
+    val months = days / 30
+    val years = days / 365
 
-            item {
-                Text("Required Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                var expanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = { expanded = !expanded }
-                ) {
-                    OutlinedTextField(
-                        value = bloodGroup,
-                        onValueChange = {},
-                        readOnly = true,
-                        placeholder = { Text("Select blood group needed") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Blue10
-                        )
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-").forEach { group ->
-                            DropdownMenuItem(
-                                text = { Text(group) },
-                                onClick = {
-                                    bloodGroup = group
-                                    expanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            item {
-                Text("Units Needed *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = unitsNeeded,
-                    onValueChange = { unitsNeeded = it },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10
-                    )
-                )
-            }
-
-            item {
-                Text("Hospital *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = hospital,
-                    onValueChange = { hospital = it },
-                    placeholder = { Text("e.g. City General Hospital") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10
-                    )
-                )
-            }
-
-            item {
-                Text("Location *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = location,
-                    onValueChange = { location = it },
-                    placeholder = { Text("Satdobato,Lalitpur") },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10
-                    )
-                )
-            }
-
-            item {
-                Text("Contact Number *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = contactNumber,
-                    onValueChange = { contactNumber = it },
-                    placeholder = { Text("+977 XXXXX XXXXX") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10
-                    )
-                )
-            }
-
-            item {
-                Text("Urgency Level *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                var urgencyExpanded by remember { mutableStateOf(false) }
-                ExposedDropdownMenuBox(
-                    expanded = urgencyExpanded,
-                    onExpandedChange = { urgencyExpanded = !urgencyExpanded }
-                ) {
-                    OutlinedTextField(
-                        value = urgencyLevel,
-                        onValueChange = {},
-                        readOnly = true,
-                        placeholder = { Text("Select urgency") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(urgencyExpanded) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .menuAnchor(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Blue10
-                        )
-                    )
-                    ExposedDropdownMenu(
-                        expanded = urgencyExpanded,
-                        onDismissRequest = { urgencyExpanded = false }
-                    ) {
-                        listOf("Urgent", "Within 24 hours", "Within a week").forEach { level ->
-                            DropdownMenuItem(
-                                text = { Text(level) },
-                                onClick = {
-                                    urgencyLevel = level
-                                    urgencyExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            item {
-                Text("Additional Notes", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                OutlinedTextField(
-                    value = additionalNotes,
-                    onValueChange = { additionalNotes = it },
-                    placeholder = { Text("Any additional information...") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp),
-                    maxLines = 5,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Blue10
-                    )
-                )
-            }
-
-            item {
-                Button(
-                    onClick = {  },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue10
-                    ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text("Post Blood Request", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-        }
+    return when {
+        years > 0 -> "$years year${if (years > 1) "s" else ""} ago"
+        months > 0 -> "$months month${if (months > 1) "s" else ""} ago"
+        weeks > 0 -> "$weeks week${if (weeks > 1) "s" else ""} ago"
+        days > 0 -> "$days day${if (days > 1) "s" else ""} ago"
+        hours > 0 -> "$hours hr${if (hours > 1) "s" else ""} ago"
+        minutes > 0 -> "$minutes min${if (minutes > 1) "s" else ""} ago"
+        else -> "Just now"
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun JoinDonorListScreen(onBackClick: () -> Unit) {
-    var bloodGroup by remember { mutableStateOf("") }
-    var isAvailable by remember { mutableStateOf(false) }
-    var isEmergencyAvailable by remember { mutableStateOf(false) }
+fun getFormattedDate(timestamp: Long): String {
+    val sdf = SimpleDateFormat("MMM dd, yyyy hh:mm a", Locale.getDefault())
+    return sdf.format(Date(timestamp))
+}
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
-                    titleContentColor = Color.White,
-                    navigationIconContentColor = Color.White,
-                ),
-                title = { Text("Join Donor List", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
+
+class BloodDonationViewModelFactory(
+    private val repository: BloodDonationRepo
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(BloodDonationViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return BloodDonationViewModel(repository) as T
         }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .background(Color(0xFFFFF5F5))
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(2.dp),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    Text("Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
-                    var expanded by remember { mutableStateOf(false) }
-                    ExposedDropdownMenuBox(
-                        expanded = expanded,
-                        onExpandedChange = { expanded = !expanded }
-                    ) {
-                        OutlinedTextField(
-                            value = bloodGroup,
-                            onValueChange = {},
-                            readOnly = true,
-                            placeholder = { Text("Select your blood group") },
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor(),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Blue10
-                            )
-                        )
-                        ExposedDropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-").forEach { group ->
-                                DropdownMenuItem(
-                                    text = { Text(group) },
-                                    onClick = {
-                                        bloodGroup = group
-                                        expanded = false
-                                    }
-                                )
-                            }
-                        }
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Checkbox(
-                            checked = isAvailable,
-                            onCheckedChange = { isAvailable = it },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Blue10
-                            )
-                        )
-                        Text("I am currently available to donate")
-                    }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Checkbox(
-                            checked = isEmergencyAvailable,
-                            onCheckedChange = { isEmergencyAvailable = it },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = Blue10
-                            )
-                        )
-                        Text("Available for emergency calls")
-                    }
-
-                    Button(
-                        onClick = {  },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Blue10
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text("Save & Join Donor List", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-// Data class for UI
-data class BloodRequestUI(
-    val id: String,
-    val patientName: String,
-    val bloodGroup: String,
-    val hospital: String,
-    val location: String,
-    val unitsNeeded: String,
-    val timeAgo: String,
-    val urgency: String,
-    val contactNumber: String
-)
+@Composable
+fun PostBloodRequestScreen(
+    viewModel: BloodDonationViewModel,
+    bloodRequest: BloodRequestModel?,
+    isEditMode: Boolean,
+    onBackClick: () -> Unit,
+    onSuccess: () -> Unit
+){
+
+}
