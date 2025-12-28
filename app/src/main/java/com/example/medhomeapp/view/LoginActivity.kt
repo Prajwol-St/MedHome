@@ -221,6 +221,7 @@ fun LoginBody() {
                 )
             )
         }
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -256,6 +257,7 @@ fun LoginBody() {
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
+
                 Text(
                     text = "Username",
                     style = TextStyle(
@@ -286,7 +288,6 @@ fun LoginBody() {
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-
                 Text(
                     text = "Password",
                     style = TextStyle(
@@ -328,12 +329,33 @@ fun LoginBody() {
                     )
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(modifier = Modifier.height(5.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = rememberMe,
+                            onCheckedChange = { rememberMe = it },
+                            enabled = !isLoading,
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = SageGreen,
+                                checkmarkColor = Color.White,
+                                uncheckedColor = LightSage
+                            )
+                        )
+                        Text(
+                            text = "Remember me",
+                            style = TextStyle(
+                                color = TextDark,
+                                fontSize = 13.sp
+                            )
+                        )
+                    }
                     Text(
                         text = "Forgot password?",
                         style = TextStyle(
@@ -348,33 +370,7 @@ fun LoginBody() {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = rememberMe,
-                        onCheckedChange = { rememberMe = it },
-                        enabled = !isLoading,
-                        colors = CheckboxDefaults.colors(
-                            checkedColor = SageGreen,
-                            checkmarkColor = Color.White,
-                            uncheckedColor = LightSage
-                        )
-                    )
-                    Text(
-                        text = "Remember me",
-                        style = TextStyle(
-                            color = TextDark,
-                            fontSize = 14.sp
-                        )
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
+                Spacer(modifier = Modifier.height(28.dp))
                 Button(
                     onClick = {
                         if (email.isBlank()) {
@@ -410,7 +406,7 @@ fun LoginBody() {
                         )
                     } else {
                         Text(
-                            text = "Login",
+                            text = "Sign up",
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -421,7 +417,6 @@ fun LoginBody() {
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
