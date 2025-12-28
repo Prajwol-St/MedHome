@@ -34,13 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthRecordsModel
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
 import java.util.*
 
-class HealthRecords : ComponentActivity() {
+class HealthRecords : BaseActivity() {
 
     private val viewModel: HealthRecordsViewModel by viewModels()
     private val permissionLauncher = registerForActivityResult(
@@ -257,7 +258,10 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c470254bdb27f8d47dc093b484192372a5fdeace
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
@@ -362,8 +366,11 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         )
                         Spacer(Modifier.height(16.dp))
                     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> c470254bdb27f8d47dc093b484192372a5fdeace
                     if (selectedRecord?.fileName?.isNotEmpty() == true &&
                         selectedRecord?.fileUrl?.isNotEmpty() == true) {
                         Text(

@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -19,14 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -35,7 +42,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
-class SignupInitialActivity : ComponentActivity() {
+class SignupInitialActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,6 +56,7 @@ class SignupInitialActivity : ComponentActivity() {
 @Composable
 fun SignupInitialBody() {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
     var email by remember { mutableStateOf("") }
@@ -83,14 +91,12 @@ fun SignupInitialBody() {
 
             isGoogleLoading = true
 
-            // Sign in to Firebase with Google
             val credential = GoogleAuthProvider.getCredential(idToken, null)
             FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener { authTask ->
                     if (authTask.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
-                            // Check if user profile exists in DB
                             viewModel.getUserByID(userId)
 
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
@@ -99,16 +105,14 @@ fun SignupInitialBody() {
 
                                 val user = viewModel.currentUser.value
                                 if (user != null) {
-                                    // User already exists - show dialog
                                     showExistingAccountDialog = true
                                 } else {
-                                    // New user - go to complete profile
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
                                     intent.putExtra("email", account.email ?: "")
                                     intent.putExtra("googleUid", userId)
                                     intent.putExtra("googleName", account.displayName ?: "")
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 }
                             }
                         } else {
@@ -127,7 +131,6 @@ fun SignupInitialBody() {
         }
     }
 
-    // Existing Account Dialog
     if (showExistingAccountDialog) {
         AlertDialog(
             onDismissRequest = { },
@@ -140,7 +143,7 @@ fun SignupInitialBody() {
                         val intent = Intent(context, LoginActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         context.startActivity(intent)
-                        (context as ComponentActivity).finish()
+                        (context as BaseActivity).finish()
                     }
                 ) {
                     Text("Go to Login")
@@ -149,189 +152,266 @@ fun SignupInitialBody() {
         )
     }
 
-    Scaffold { padding ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SageGreen)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(padding)
+                .fillMaxWidth()
+                .padding(top = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Spacer(modifier = Modifier.height(50.dp))
-
             Text(
-                text = "Sign Up",
+                text = "MedHome",
                 style = TextStyle(
-                    textAlign = TextAlign.Center,
-                    color = Color(0xFF648DDB),
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                ),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-            )
-
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFF648DDB))
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                enabled = !isLoading && !isGoogleLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(15.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color(0xFF648DDB),
-                    unfocusedIndicatorColor = Color(0xFF648DDB),
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedLabelColor = Color(0xFF648DDB),
-                    unfocusedLabelColor = Color.Gray
+                    fontSize = 32.sp,
+                    letterSpacing = 1.sp
                 )
             )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = {
-                    if (email.isBlank()) {
-                        Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
-                        return@Button
-                    }
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                        return@Button
-                    }
-
-                    isLoading = true
-
-                    // Check if email already exists in Firebase Auth
-                    FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
-                        .addOnCompleteListener { task ->
-                            isLoading = false
-                            if (task.isSuccessful) {
-                                val signInMethods = task.result?.signInMethods
-                                if (!signInMethods.isNullOrEmpty()) {
-                                    // Email already registered
-                                    Toast.makeText(
-                                        context,
-                                        "This email is already registered. Please login instead.",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                } else {
-                                    // Email not registered, proceed to signup details
-                                    val intent = Intent(context, SignupDetailsActivity::class.java)
-                                    intent.putExtra("email", email)
-                                    context.startActivity(intent)
-                                }
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Failed to check email: ${task.exception?.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                },
-                enabled = !isLoading && !isGoogleLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF648DDB))
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White,
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Text(
-                        "Continue",
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
-                Text(
-                    text = "or",
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    color = Color.Gray,
-                    fontSize = 15.sp
-                )
-                HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            OutlinedButton(
-                onClick = {
-                    launcher.launch(googleSignInClient.signInIntent)
-                },
-                enabled = !isLoading && !isGoogleLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(15.dp),
-                border = BorderStroke(1.dp, Color.LightGray)
-            ) {
-                if (isGoogleLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color(0xFF648DDB),
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(R.drawable.google),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Unspecified
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Sign Up With Google", color = Color.Black, fontSize = 16.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    "Already have an account? ",
-                    color = Color.Gray,
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Your health, our priority",
+                style = TextStyle(
+                    color = Color.White.copy(alpha = 0.9f),
                     fontSize = 14.sp
                 )
+            )
+        }
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .fillMaxHeight(0.75f),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+            colors = CardDefaults.cardColors(containerColor = BackgroundCream),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 28.dp)
+                    .padding(top = 40.dp, bottom = 24.dp)
+            ) {
                 Text(
-                    "Login",
-                    color = Color(0xFF648DDB),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable(enabled = !isLoading && !isGoogleLoading) {
-                        val intent = Intent(context, LoginActivity::class.java)
-                        context.startActivity(intent)
-                        (context as ComponentActivity).finish()
-                    }
+                    text = "Create Account",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp
+                    )
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Sign up to get started with your health journey.",
+                    style = TextStyle(
+                        color = TextGray,
+                        fontSize = 14.sp
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    text = "Email",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = { Text("Enter your email", color = TextGray.copy(alpha = 0.6f)) },
+                    enabled = !isLoading && !isGoogleLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Button(
+                    onClick = {
+                        if (email.isBlank()) {
+                            Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+
+                        isLoading = true
+
+                        FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
+                            .addOnCompleteListener { task ->
+                                isLoading = false
+                                if (task.isSuccessful) {
+                                    val signInMethods = task.result?.signInMethods
+                                    if (!signInMethods.isNullOrEmpty()) {
+                                        Toast.makeText(
+                                            context,
+                                            "This email is already registered. Please login instead.",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        val intent = Intent(context, SignupDetailsActivity::class.java)
+                                        intent.putExtra("email", email)
+                                        context.startActivity(intent)
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to check email: ${task.exception?.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                    },
+                    enabled = !isLoading && !isGoogleLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = TextDark,
+                        disabledContainerColor = TextDark.copy(alpha = 0.6f)
+                    )
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "Continue",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 1.dp,
+                        color = LightSage
+                    )
+                    Text(
+                        text = "Or",
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = TextStyle(
+                            color = TextGray,
+                            fontSize = 14.sp
+                        )
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 1.dp,
+                        color = LightSage
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                OutlinedButton(
+                    onClick = {
+                        launcher.launch(googleSignInClient.signInIntent)
+                    },
+                    enabled = !isLoading && !isGoogleLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(1.5.dp, LightSage),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    if (isGoogleLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = SageGreen,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(R.drawable.google),
+                            contentDescription = "Google Logo",
+                            modifier = Modifier.size(22.dp),
+                            tint = Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Continue with Google",
+                            style = TextStyle(
+                                color = TextDark,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Already have an account? ",
+                        style = TextStyle(
+                            color = TextGray,
+                            fontSize = 14.sp
+                        )
+                    )
+                    Text(
+                        text = "Login",
+                        style = TextStyle(
+                            color = SageGreen,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.clickable(enabled = !isLoading && !isGoogleLoading) {
+                            val intent = Intent(context, LoginActivity::class.java)
+                            context.startActivity(intent)
+                            (context as BaseActivity).finish()
+                        }
+                    )
+                }
             }
         }
     }
