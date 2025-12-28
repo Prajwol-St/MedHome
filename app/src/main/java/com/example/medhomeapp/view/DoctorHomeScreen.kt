@@ -38,7 +38,6 @@ fun DoctorHomeScreen(doctorName: String) {
             .background(Color(0xFFF5F5F5))
             .verticalScroll(scrollState)
     ) {
-        // Doctor Welcome Card (without QR code)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
