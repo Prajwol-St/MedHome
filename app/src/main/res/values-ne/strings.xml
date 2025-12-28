@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">मेडहोम</string>
+
+    <!-- Authentication -->
+    <string name="login">लगइन</string>
+    <string name="sign_up">साइनअप</string>
+    <string name="email">इमेल</string>
+    <string name="password">पासवर्ड</string>
+    <string name="confirm_password">पासवर्ड पुष्टि गर्नुहोस्</string>
+    <string name="remember_me">मलाई सम्झनुहोस्</string>
+    <string name="forgot_password">पासवर्ड बिर्सनुभयो?</string>
+    <string name="login_with_google">गुगलसँग लगइन गर्नुहोस्</string>
+    <string name="sign_up_with_google">गुगलसँग साइनअप गर्नुहोस्</string>
+    <string name="dont_have_account">खाता छैन?</string>
+    <string name="already_have_account">पहिले नै खाता छ?</string>
+    <string name="continue_button">जारी राख्नुहोस्</string>
+    <string name="or">वा</string>
+
+    <!-- Sign Up Form -->
+    <string name="complete_your_profile">आफ्नो प्रोफाइल पूरा गर्नुहोस्</string>
+    <string name="full_name">पूरा नाम</string>
+    <string name="contact_number">सम्पर्क नम्बर</string>
+    <string name="gender">लिङ्ग (पुरुष/महिला/अन्य)</string>
+    <string name="date_of_birth">जन्म मिति (YYYY/MM/DD)</string>
+    <string name="blood_group">रगत समूह (A+, B-, O+, आदि)</string>
+    <string name="emergency_contact">आपतकालीन सम्पर्क</string>
+    <string name="address">ठेगाना</string>
+    <string name="agree_terms">म नियम र सर्तहरूमा सहमत छु</string>
+
+    <!-- Home Screen -->
+    <string name="welcome">स्वागत छ</string>
+    <string name="medhome">मेडहोम</string>
+    <string name="health_records">स्वास्थ्य रेकर्ड</string>
+    <string name="book_consultation">परामर्श बुक गर्नुहोस्</string>
+    <string name="ai_health_assistant">AI स्वास्थ्य सहायक</string>
+    <string name="past_bookings">विगतका बुकिङहरू</string>
+    <string name="appointments">भेटघाटहरू</string>
+    <string name="calories_calculator">क्यालोरी गणना</string>
+    <string name="blood_donation">रक्तदान</string>
+    <string name="health_packages">स्वास्थ्य प्याकेजहरू</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">होम</string>
+    <string name="reminder">रिमाइन्डर</string>
+    <string name="scan">स्क्यान</string>
+    <string name="settings">सेटिङ्हरू</string>
+
+    <!-- Settings Screen -->
+    <string name="account">खाता</string>
+    <string name="edit_profile">प्रोफाइल सम्पादन गर्नुहोस्</string>
+    <string name="update_personal_info">आफ्नो व्यक्तिगत जानकारी अपडेट गर्नुहोस्</string>
+    <string name="change_password">पासवर्ड परिवर्तन गर्नुहोस्</string>
+    <string name="update_password">आफ्नो पासवर्ड अपडेट गर्नुहोस्</string>
+
+    <string name="preferences">प्राथमिकताहरू</string>
+    <string name="notifications">सूचनाहरू</string>
+    <string name="manage_notifications">सूचना सेटिङ्हरू व्यवस्थित गर्नुहोस्</string>
+    <string name="language">भाषा</string>
+    <string name="english">अंग्रेजी</string>
+    <string name="nepali">नेपाली</string>
+    <string name="select_language">भाषा चयन गर्नुहोस्</string>
+
+    <string name="help_and_support">मद्दत र समर्थन</string>
+    <string name="help_center">मद्दत केन्द्र</string>
+    <string name="get_help">मद्दत र समर्थन प्राप्त गर्नुहोस्</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="read_privacy">हाम्रो गोपनीयता नीति पढ्नुहोस्</string>
+    <string name="terms_of_service">सेवाका सर्तहरू</string>
+    <string name="read_terms">हाम्रा सर्तहरू पढ्नुहोस्</string>
+    <string name="about">बारेमा</string>
+    <string name="version">संस्करण १.०.०</string>
+
+    <string name="danger_zone">खतरा क्षेत्र</string>
+    <string name="logout">लगआउट</string>
+    <string name="sign_out">आफ्नो खाताबाट साइन आउट गर्नुहोस्</string>
+    <string name="delete_account">खाता मेटाउनुहोस्</string>
+    <string name="permanently_delete">आफ्नो खाता स्थायी रूपमा मेटाउनुहोस्</string>
+
+    <!-- Dialogs -->
+    <string name="logout_confirmation">के तपाईं लगआउट गर्न निश्चित हुनुहुन्छ?</string>
+    <string name="delete_confirmation">यो कार्य स्थायी छ। तपाईंको खाता र सबै डेटा मेटिनेछ।</string>
+    <string name="cancel">रद्द गर्नुहोस्</string>
+    <string name="close">बन्द गर्नुहोस्</string>
+    <string name="delete">मेटाउनुहोस्</string>
+
+    <!-- About Dialog -->
+    <string name="about_medhome">मेडहोम बारे</string>
+    <string name="about_version">संस्करण: १.०.०</string>
+    <string name="about_description">मेडहोम तपाईंको व्यक्तिगत स्वास्थ्य साथी हो।</string>
+    <string name="about_copyright">© २०२४ मेडहोम। सर्वाधिकार सुरक्षित।</string>
+
+    <!-- Roles -->
+    <string name="patient">बिरामी</string>
+    <string name="doctor">डाक्टर</string>
+    <string name="admin">व्यवस्थापक</string>
+
+    <!-- Common -->
+    <string name="back">पछाडि</string>
+    <string name="loading">लोड हुँदैछ...</string>
+    <string name="profile">प्रोफाइल</string>
+
+    <!-- Google Sign In -->
+    <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
+    <!-- Activity Titles -->
+    <string name="title_activity_dashboard">ड्यासबोर्ड</string>
+    <string name="title_activity_health_records">स्वास्थ्य रेकर्ड</string>
+    <string name="title_activity_login">लगइन</string>
+    <string name="title_activity_signup">साइनअप</string>
+    <string name="title_activity_blood_donation">रक्तदान</string>
+    <string name="title_activity_splash">स्प्लास</string>
+    <string name="title_activity_forgot_password">पासवर्ड बिर्सनुभयो</string>
+    <string name="title_activity_book_consultation">परामर्श बुक गर्नुहोस्</string>
+    <string name="title_activity_signup_initial">साइनअप सुरु</string>
+    <string name="title_activity_signup_details">साइनअप विवरण</string>
+    <string name="title_activity_qr">QR</string>
+    <string name="title_activity_qr_scanner">QR स्क्यानर</string>
+    <string name="title_activity_change_password_screen">पासवर्ड परिवर्तन गर्नुहोस्</string>
+    <string name="title_activity_notification_settings_screen">सूचना सेटिङ्हरू</string>
+    <string name="title_activity_edit_profile_screen">प्रोफाइल सम्पादन गर्नुहोस्</string>
+    <string name="title_activity_edit_profile">प्रोफाइल सम्पादन</string>
+    <string name="title_activity_notification_settings">सूचना सेटिङ्हरू</string>
+    <string name="title_activity_settings">सेटिङ्हरू</string>
+    <string name="title_activity_change_password">पासवर्ड परिवर्तन</string>
+</resources>
