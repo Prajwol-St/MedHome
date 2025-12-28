@@ -9,7 +9,7 @@ import com.example.medhomeapp.model.HealthRecordsModel
 import com.example.medhomeapp.repository.HealthRecordsRepo
 import com.example.medhomeapp.repository.HealthRecordsRepoImpl
 
-class HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
+class  HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
 
     private val repository: HealthRecordsRepo = HealthRecordsRepoImpl(application.applicationContext)
 

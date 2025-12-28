@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.BloodRequestModel
 import com.example.medhomeapp.model.DonorModel
@@ -40,7 +41,7 @@ import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BloodDonationActivity : ComponentActivity() {
+class BloodDonationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
