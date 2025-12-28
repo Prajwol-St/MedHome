@@ -15,7 +15,7 @@ fun ReminderScreen(){
             .fillMaxSize()
             .background(Color.LightGray)
     ){
-        Text("Records Screen")
+        Text("Reminders Screen")
     }
 
 }
