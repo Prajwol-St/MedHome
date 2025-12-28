@@ -12,23 +12,18 @@ import com.google.firebase.auth.FirebaseAuth
 
 class UserViewModel(private val repo: UserRepo) : ViewModel() {
 
-    // Auth State
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
 
-    // Current User
     private val _currentUser = mutableStateOf<UserModel?>(null)
     val currentUser: State<UserModel?> = _currentUser
 
-    // All Users
     private val _allUsers = mutableStateOf<UiState<List<UserModel>>>(UiState.Idle)
     val allUsers: State<UiState<List<UserModel>>> = _allUsers
 
-    // Loading for operations
     private val _loading = mutableStateOf(false)
     val loading: State<Boolean> = _loading
 
-    // Check if user is logged in
     fun checkAuthStatus(): Boolean {
         return FirebaseAuth.getInstance().currentUser != null
     }
@@ -37,7 +32,7 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
         return FirebaseAuth.getInstance().currentUser?.uid
     }
 
-    // LOGIN - FIXED: Only proceed after both Auth + DB read succeed
+
     fun login(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) {
             _authState.value = AuthState.Error("Email and password cannot be empty")
@@ -46,18 +41,15 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
 
         _authState.value = AuthState.Loading
 
-        // Step 1: Auth login
         repo.login(email, password) { success, message ->
             if (success) {
                 val userId = getCurrentUserId()
                 if (userId != null) {
-                    // Step 2: Check if user exists in DB
                     repo.getUserByID(userId) { dbSuccess, dbMessage, user ->
                         if (dbSuccess && user != null) {
                             _currentUser.value = user
                             _authState.value = AuthState.Success("Login successful", userId)
                         } else {
-                            // User exists in Auth but not in DB - critical error
                             _authState.value = AuthState.Error("User profile not found. Please contact support.")
                         }
                     }
@@ -70,7 +62,6 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
         }
     }
 
-    // REGISTER - FIXED: Only succeed after BOTH Auth + DB write complete
     fun register(email: String, password: String, userModel: UserModel) {
         if (email.isBlank() || password.isBlank()) {
             _authState.value = AuthState.Error("Email and password cannot be empty")
@@ -84,7 +75,6 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
 
         _authState.value = AuthState.Loading
 
-        // Step 1: Create auth user
         repo.register(email, password) { authSuccess, authMessage, userId ->
             if (authSuccess && userId.isNotEmpty()) {
                 val updatedModel = userModel.copy(
@@ -94,13 +84,11 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
                     updatedAt = System.currentTimeMillis().toString()
                 )
 
-                // Step 2: Add to database - CRITICAL STEP
                 repo.addUserToDatabase(userId, updatedModel) { dbSuccess, dbMessage ->
                     if (dbSuccess) {
                         _currentUser.value = updatedModel
                         _authState.value = AuthState.Success("Registration successful", userId)
                     } else {
-                        // DB write failed - delete auth user to prevent ghost accounts
                         FirebaseAuth.getInstance().currentUser?.delete()
                         _authState.value = AuthState.Error("Failed to create profile: $dbMessage")
                     }
@@ -111,7 +99,6 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
         }
     }
 
-    // FORGET PASSWORD
     fun forgetPassword(email: String) {
         if (email.isBlank()) {
             _authState.value = AuthState.Error("Email cannot be empty")
