@@ -19,7 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.model.BloodRequestModel
-import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +55,7 @@ fun BloodRequestDetailsScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
+                    containerColor = SageGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White
@@ -180,7 +181,7 @@ fun BloodRequestDetailsScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Surface(
-                                color = Blue10,
+                                color = SageGreen,
                                 shape = CircleShape,
                                 modifier = Modifier.size(80.dp)
                             ) {
@@ -246,7 +247,7 @@ fun BloodRequestDetailsScreen(
                             text = "Patient Information",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Blue10
+                            color = SageGreen
                         )
 
                         DetailRow(
@@ -266,7 +267,7 @@ fun BloodRequestDetailsScreen(
                             text = "Hospital Information",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Blue10
+                            color = SageGreen
                         )
 
                         DetailRowWithIcon(
@@ -288,7 +289,7 @@ fun BloodRequestDetailsScreen(
                             text = "Contact Information",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Blue10
+                            color = SageGreen
                         )
 
                         DetailRowWithIcon(
@@ -304,7 +305,7 @@ fun BloodRequestDetailsScreen(
                             text = "Status Information",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Blue10
+                            color = SageGreen
                         )
 
                         Row(
@@ -363,7 +364,7 @@ fun BloodRequestDetailsScreen(
                                     text = "Additional Notes",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Blue10
+                                    color = SageGreen
                                 )
                                 Card(
                                     colors = CardDefaults.cardColors(
@@ -445,7 +446,7 @@ fun BloodRequestDetailsScreen(
                                     },
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Blue10
+                                        containerColor = SageGreen
                                     ),
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
@@ -498,7 +499,7 @@ fun BloodRequestDetailsScreen(
                             .fillMaxWidth()
                             .height(56.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Blue10
+                            containerColor = SageGreen
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -658,7 +659,7 @@ fun DetailRowWithIcon(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Blue10,
+                tint = SageGreen,
                 modifier = Modifier.size(20.dp)
             )
             Text(

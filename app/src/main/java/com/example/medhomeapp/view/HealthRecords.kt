@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthRecordsModel
-import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
 import java.util.*
 
@@ -144,7 +144,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
+                    containerColor = SageGreen,
                     titleContentColor = Color.White
                 ),
                 title = {
@@ -204,7 +204,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     selectedFileName = null
                     showBottomSheet = true
                 },
-                containerColor = Blue10,
+                containerColor = SageGreen,
                 shape = CircleShape
             ) {
                 Icon(
@@ -218,7 +218,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         Column(modifier = Modifier.padding(padding)) {
             if (isLoading) {
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
-                    CircularProgressIndicator(color = Blue10)
+                    CircularProgressIndicator(color = SageGreen)
                 }
             } else if (filteredRecords.isEmpty()) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -295,7 +295,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 Icon(
                                     painter = painterResource(R.drawable.baseline_edit_24),
                                     contentDescription = "Edit",
-                                    tint = Blue10
+                                    tint = SageGreen
                                 )
                             }
                             IconButton(onClick = {
@@ -408,7 +408,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 Icon(
                                     painter = painterResource(R.drawable.outline_attach_file_24),
                                     contentDescription = null,
-                                    tint = Blue10,
+                                    tint = SageGreen,
                                     modifier = Modifier.size(32.dp)
                                 )
                                 Spacer(Modifier.width(12.dp))
@@ -428,7 +428,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 Icon(
                                     painter = painterResource(R.drawable.baseline_arrow_forward_ios_24),
                                     contentDescription = null,
-                                    tint = Blue10,
+                                    tint = SageGreen,
                                     modifier = Modifier.size(20.dp)
                                 )
                             }
@@ -521,7 +521,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(Blue10)
+                        colors = ButtonDefaults.buttonColors(SageGreen)
                     ) {
                         Text(
                             text = if (editingRecord == null) "Save Record" else "Update Record",
