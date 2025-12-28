@@ -42,7 +42,6 @@ class SplashActivity : BaseActivity() {
 fun SplashBody() {
     val context = LocalContext.current
 
-    // Animation states
     val infiniteTransition = rememberInfiniteTransition(label = "pulse")
     val scale by infiniteTransition.animateFloat(
         initialValue = 0.95f,
@@ -66,11 +65,17 @@ fun SplashBody() {
         delay(2000)
 
         val sharedPrefs = context.getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
+        val languageSelected = sharedPrefs.getBoolean("language_selected", false)
         val userId = sharedPrefs.getString("user_id", null)
 
-        val intent = if (userId != null) {
+        val intent = if (!languageSelected) {
+
+            Intent(context, LanguageSelectionActivity::class.java)
+        } else if (userId != null) {
+
             Intent(context, DashboardActivity::class.java)
         } else {
+
             Intent(context, LoginActivity::class.java)
         }
 
