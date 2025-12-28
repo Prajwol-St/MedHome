@@ -230,7 +230,6 @@ fun DoctorAvailabilityScreen() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Add Slot Button
                     Button(
                         onClick = {
                             timeSlots.add(
