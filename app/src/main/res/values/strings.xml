@@ -123,21 +123,14 @@
     <string name="title_activity_notification_settings">NotificationSettingsActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_activity_change_password">ChangePasswordActivity</string>
-
-<<<<<<< HEAD
-    //googlesignin
-    <string name="default_web_client_id">
-        104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com
-    </string>
     <string name="title_activity_doctor_availability">DoctorAvailabilityActivity</string>
-
-=======
-    <!-- Google Sign In -->
-    <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
     <string name="title_activity_help_center">HelpCenterActivity</string>
     <string name="title_activity_privacy_policy">PrivacyPolicyActivity</string>
     <string name="title_activity_terms_of_service">TermsOfServiceActivity</string>
     <string name="title_activity_view_profile">ViewProfileActivity</string>
     <string name="title_activity_language_selection">LanguageSelectionActivity</string>
->>>>>>> c470254bdb27f8d47dc093b484192372a5fdeace
+
+    <!-- Google Sign In -->
+    <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
 </resources>
