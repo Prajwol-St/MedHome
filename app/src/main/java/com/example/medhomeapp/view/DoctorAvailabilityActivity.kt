@@ -173,7 +173,6 @@ fun DoctorAvailabilityScreen() {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // Start Time
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 "Start Time",
@@ -201,7 +200,6 @@ fun DoctorAvailabilityScreen() {
 
                         Spacer(modifier = Modifier.width(16.dp))
 
-                        // End Time
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 "End Time",
