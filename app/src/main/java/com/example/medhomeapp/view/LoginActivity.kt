@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,19 +19,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.DeepSage
+import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.AuthState
 import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -42,7 +47,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -59,7 +64,6 @@ fun LoginBody() {
     val focusManager = LocalFocusManager.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    // SharedPreferences for Remember Me
     val sharedPrefs = context.getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
     val savedEmail = sharedPrefs.getString("saved_email", "") ?: ""
     val rememberMeChecked = sharedPrefs.getBoolean("remember_me", false)
@@ -73,7 +77,6 @@ fun LoginBody() {
     val authState by viewModel.authState
     val currentUser by viewModel.currentUser
     val isLoading = authState is AuthState.Loading || isGoogleLoading
-
 
     val gso = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -108,23 +111,24 @@ fun LoginBody() {
                     if (authTask.isSuccessful) {
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
-                            // Check if user exists in DB
                             viewModel.getUserByID(userId)
 
-                            // Wait for DB fetch
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
                                 kotlinx.coroutines.delay(1000)
                                 isGoogleLoading = false
 
                                 val user = viewModel.currentUser.value
                                 if (user != null) {
-                                    sharedPrefs.edit().putString("user_id", userId).apply()
+                                    sharedPrefs.edit()
+                                        .putString("user_id", userId)
+                                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                                        .apply()
                                     Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
 
                                     val intent = Intent(context, DashboardActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 } else {
                                     Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
@@ -132,7 +136,7 @@ fun LoginBody() {
                                     intent.putExtra("googleUid", userId)
                                     intent.putExtra("googleName", account.displayName ?: "")
                                     context.startActivity(intent)
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 }
                             }
                         } else {
@@ -155,7 +159,10 @@ fun LoginBody() {
         when (val state = authState) {
             is AuthState.Success -> {
                 currentUser?.let { user ->
-                    sharedPrefs.edit().putString("user_id", user.id).apply()
+                    sharedPrefs.edit()
+                        .putString("user_id", user.id)
+                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                        .apply()
 
                     if (rememberMe) {
                         sharedPrefs.edit()
@@ -173,7 +180,7 @@ fun LoginBody() {
                     val intent = Intent(context, DashboardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.startActivity(intent)
-                    (context as ComponentActivity).finish()
+                    (context as BaseActivity).finish()
                 }
                 viewModel.resetAuthState()
             }
@@ -185,220 +192,327 @@ fun LoginBody() {
         }
     }
 
-    Scaffold { padding ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SageGreen)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                focusManager.clearFocus()
+            }
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .background(White)
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {
-                    focusManager.clearFocus()
-                }
+                .fillMaxWidth()
+                .padding(top = 60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
             Text(
-                "Login",
+                text = "MedHome",
                 style = TextStyle(
-                    textAlign = TextAlign.Center,
-                    color = Color(0xFF648DDB),
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-            )
-
-            HorizontalDivider(thickness = 1.dp, color = Color(0xFF648DDB))
-            Spacer(modifier = Modifier.height(32.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                enabled = !isLoading,
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(15.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color(0xFF648DDB),
-                    unfocusedIndicatorColor = Color(0xFF648DDB),
-                    focusedContainerColor = White,
-                    unfocusedContainerColor = White,
-                    focusedLabelColor = Color(0xFF648DDB),
-                    unfocusedLabelColor = Color.Gray
+                    fontSize = 32.sp,
+                    letterSpacing = 1.sp
                 )
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Your health, our priority",
+                style = TextStyle(
+                    color = Color.White.copy(alpha = 0.9f),
+                    fontSize = 14.sp
+                )
+            )
+        }
 
-            Spacer(modifier = Modifier.height(20.dp))
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .fillMaxHeight(0.75f),
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
+            colors = CardDefaults.cardColors(containerColor = BackgroundCream),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 28.dp)
+                    .padding(top = 40.dp, bottom = 24.dp)
+            ) {
+                Text(
+                    text = "Sign in",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp
+                    )
+                )
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                enabled = !isLoading,
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                        Icon(
-                            painter = if (passwordVisibility)
-                                painterResource(R.drawable.baseline_visibility_off_24)
-                            else painterResource(R.drawable.baseline_visibility_24),
-                            contentDescription = null
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Welcome! Please enter your details.",
+                    style = TextStyle(
+                        color = TextGray,
+                        fontSize = 14.sp
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Text(
+                    text = "Username",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    placeholder = { Text("Enter your email", color = TextGray.copy(alpha = 0.6f)) },
+                    enabled = !isLoading,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Password",
+                    style = TextStyle(
+                        color = TextDark,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    ),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    placeholder = { Text("Enter your password", color = TextGray.copy(alpha = 0.6f)) },
+                    enabled = !isLoading,
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                painter = if (passwordVisibility)
+                                    painterResource(R.drawable.baseline_visibility_off_24)
+                                else painterResource(R.drawable.baseline_visibility_24),
+                                contentDescription = null,
+                                tint = TextGray
+                            )
+                        }
+                    },
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
+                        focusedIndicatorColor = SageGreen,
+                        unfocusedIndicatorColor = LightSage,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = rememberMe,
+                            onCheckedChange = { rememberMe = it },
+                            enabled = !isLoading,
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = SageGreen,
+                                checkmarkColor = Color.White,
+                                uncheckedColor = LightSage
+                            )
+                        )
+                        Text(
+                            text = "Remember me",
+                            style = TextStyle(
+                                color = TextDark,
+                                fontSize = 13.sp
+                            )
                         )
                     }
-                },
-                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-                shape = RoundedCornerShape(15.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color(0xFF648DDB),
-                    unfocusedIndicatorColor = Color(0xFF648DDB),
-                    focusedContainerColor = White,
-                    unfocusedContainerColor = White,
-                    focusedLabelColor = Color(0xFF648DDB),
-                    unfocusedLabelColor = Color.Gray
-                )
-            )
+                    Text(
+                        text = "Forgot password?",
+                        style = TextStyle(
+                            color = SageGreen,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                        modifier = Modifier.clickable(enabled = !isLoading) {
+                            val intent = Intent(context, ForgotPasswordActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    )
+                }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(28.dp))
+                Button(
+                    onClick = {
+                        if (email.isBlank()) {
+                            Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        if (password.isBlank()) {
+                            Toast.makeText(context, "Please enter your password", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = rememberMe,
-                    onCheckedChange = { rememberMe = it },
+                        viewModel.login(email, password)
+                    },
                     enabled = !isLoading,
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = Color(0xFF648DDB),
-                        checkmarkColor = White
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = TextDark,
+                        disabledContainerColor = TextDark.copy(alpha = 0.6f)
                     )
-                )
-                Text(text = "Remember me", color = Color.Gray, fontSize = 14.sp)
+                ) {
+                    if (authState is AuthState.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text(
+                            text = "Sign up",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 1.dp,
+                        color = LightSage
+                    )
+                    Text(
+                        text = "Or",
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = TextStyle(
+                            color = TextGray,
+                            fontSize = 14.sp
+                        )
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        thickness = 1.dp,
+                        color = LightSage
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+                OutlinedButton(
+                    onClick = {
+                        launcher.launch(googleSignInClient.signInIntent)
+                    },
+                    enabled = !isLoading,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(1.5.dp, LightSage),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    if (isGoogleLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = SageGreen,
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(R.drawable.google),
+                            contentDescription = "Google Logo",
+                            modifier = Modifier.size(22.dp),
+                            tint = Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = "Continue with Google",
+                            style = TextStyle(
+                                color = TextDark,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "Forgot Password?",
-                    color = Color(0xFF648DDB),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.clickable(enabled = !isLoading) {
-                        val intent = Intent(context, ForgotPasswordActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Button(
-                onClick = {
-                    if (email.isBlank()) {
-                        Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
-                        return@Button
-                    }
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                        return@Button
-                    }
-                    if (password.isBlank()) {
-                        Toast.makeText(context, "Please enter your password", Toast.LENGTH_SHORT).show()
-                        return@Button
-                    }
-
-                    viewModel.login(email, password)
-                },
-                enabled = !isLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(15.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF648DDB))
-            ) {
-                if (authState is AuthState.Loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = White,
-                        strokeWidth = 2.dp
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Don't have an account? ",
+                        style = TextStyle(
+                            color = TextGray,
+                            fontSize = 14.sp
+                        )
                     )
-                } else {
-                    Text(text = "Login", color = White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "Register",
+                        style = TextStyle(
+                            color = SageGreen,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.clickable(enabled = !isLoading) {
+                            val intent = Intent(context, SignupInitialActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    )
                 }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
-                Text(text = "or", modifier = Modifier.padding(horizontal = 16.dp), color = Color.Gray, fontSize = 15.sp)
-                HorizontalDivider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color.LightGray)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            OutlinedButton(
-                onClick = {
-                    launcher.launch(googleSignInClient.signInIntent)
-                },
-                enabled = !isLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(50.dp),
-                shape = RoundedCornerShape(15.dp),
-                border = BorderStroke(1.dp, Color.LightGray)
-            ) {
-                if (isGoogleLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color(0xFF648DDB),
-                        strokeWidth = 2.dp
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(R.drawable.google),
-                        contentDescription = "Google Logo",
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Unspecified
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = "Login With Google", color = Color.Black, fontSize = 16.sp)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Don't have an account? ", color = Color.Gray, fontSize = 14.sp)
-                Text(
-                    text = "Sign Up",
-                    color = Color(0xFF648DDB),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable(enabled = !isLoading) {
-                        val intent = Intent(context, SignupInitialActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
             }
         }
     }
