@@ -265,6 +265,8 @@ fun HomeScreenContent(userName: String) {
                 }
             }
         }
+
+
         Text(
             text = "Services",
             fontSize = 18.sp,
@@ -272,6 +274,8 @@ fun HomeScreenContent(userName: String) {
             color = TextDark,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
+
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
