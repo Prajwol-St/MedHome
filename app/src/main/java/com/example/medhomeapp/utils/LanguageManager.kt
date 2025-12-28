@@ -14,20 +14,20 @@ object LanguageManager {
     const val ENGLISH = "en"
     const val NEPALI = "ne"
 
-    // Save selected language to SharedPreferences
+
     fun setLanguage(context: Context, languageCode: String) {
         val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_LANGUAGE, languageCode).apply()
         updateResources(context, languageCode)
     }
 
-    // Get saved language (default: English)
+
     fun getLanguage(context: Context): String {
         val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         return prefs.getString(KEY_LANGUAGE, ENGLISH) ?: ENGLISH
     }
 
-    // Update app resources with selected language
+
     private fun updateResources(context: Context, languageCode: String) {
         val locale = Locale(languageCode)
         Locale.setDefault(locale)
@@ -44,7 +44,7 @@ object LanguageManager {
         }
     }
 
-    // Apply language to context (for activities)
+
     fun applyLanguage(context: Context): Context {
         val languageCode = getLanguage(context)
         val locale = Locale(languageCode)
