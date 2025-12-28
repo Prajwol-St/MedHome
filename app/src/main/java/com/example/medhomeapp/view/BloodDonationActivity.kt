@@ -37,6 +37,7 @@ import com.example.medhomeapp.model.DonorModel
 import com.example.medhomeapp.repository.BloodDonationRepo
 import com.example.medhomeapp.repository.BloodDonationRepoImpl
 import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -159,7 +160,7 @@ fun MainDonationScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
+                    containerColor = SageGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White,
@@ -178,7 +179,7 @@ fun MainDonationScreen(
                     Button(
                         onClick = onHistoryClick,
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White,
+                            contentColor = SageGreen,
                             containerColor = Color.White.copy(alpha = 0.1f)
                         ),
                         shape = RoundedCornerShape(8.dp),

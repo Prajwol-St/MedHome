@@ -106,7 +106,6 @@ fun DashboardBody() {
                     titleContentColor = Color.White
                 ),
                 title = {
-                    // Fixed: Removed duplicate when statement
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.medhome)
