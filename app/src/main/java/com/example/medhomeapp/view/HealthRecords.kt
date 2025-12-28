@@ -258,10 +258,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> c470254bdb27f8d47dc093b484192372a5fdeace
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
@@ -366,11 +363,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         )
                         Spacer(Modifier.height(16.dp))
                     }
-<<<<<<< HEAD
 
-
-=======
->>>>>>> c470254bdb27f8d47dc093b484192372a5fdeace
                     if (selectedRecord?.fileName?.isNotEmpty() == true &&
                         selectedRecord?.fileUrl?.isNotEmpty() == true) {
                         Text(
