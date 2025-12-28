@@ -18,6 +18,16 @@
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.LanguageSelectionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_language_selection"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
+            android:name=".view.ViewProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_view_profile"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
             android:name=".view.TermsOfServiceActivity"
             android:exported="false"
             android:label="@string/title_activity_terms_of_service"
