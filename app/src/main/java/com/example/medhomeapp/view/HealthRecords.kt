@@ -34,13 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthRecordsModel
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
 import java.util.*
 
-class HealthRecords : ComponentActivity() {
+class HealthRecords : BaseActivity() {
 
     private val viewModel: HealthRecordsViewModel by viewModels()
     private val permissionLauncher = registerForActivityResult(
@@ -257,7 +258,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-        // Detail Bottom Sheet
+
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
@@ -315,7 +316,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(20.dp))
 
-                    // Title Section
+
                     Text(
                         text = "Title",
                         fontSize = 14.sp,
@@ -331,7 +332,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(16.dp))
 
-                    // Date Section
+
                     Text(
                         text = "Date",
                         fontSize = 14.sp,
@@ -346,7 +347,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(16.dp))
 
-                    // Description Section
+
                     if (selectedRecord?.description?.isNotEmpty() == true) {
                         Text(
                             text = "Description",
@@ -363,7 +364,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         Spacer(Modifier.height(16.dp))
                     }
 
-                    // Attached File Section
                     if (selectedRecord?.fileName?.isNotEmpty() == true &&
                         selectedRecord?.fileUrl?.isNotEmpty() == true) {
                         Text(
@@ -441,7 +441,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-        // Add/Edit Bottom Sheet
+
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
