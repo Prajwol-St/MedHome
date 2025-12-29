@@ -1,13 +1,12 @@
 package com.example.medhomeapp.model
 
-import com.google.type.Date
-
 data class AppointmentModel(
     val id: String = "",
     val patientId: String = "",
     val doctorId: String = "",
     val date: String = "",
     val time: String = "",
+    val appointmentId: String,
 ){
     fun toMap(): Map<String, Any?> {
         return mapOf(
