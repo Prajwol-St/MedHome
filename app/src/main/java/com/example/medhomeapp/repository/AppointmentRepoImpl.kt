@@ -1,16 +1,18 @@
 package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.AppointmentModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class AppointmentRepoImpl {
+class AppointmentRepoImpl : AppointmentRepo {
 
+    private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
     private val appointmentsRef = database.getReference("appointments")
 
     /* ---------------- ADD APPOINTMENT ---------------- */
 
-    fun addAppointment(
+    override fun addAppointment(
         appointment: AppointmentModel,
         callback: (Boolean, String) -> Unit
     ) {
@@ -35,7 +37,7 @@ class AppointmentRepoImpl {
 
 
 
-    fun updateAppointment(
+    override fun updateAppointment(
         appointmentId: String,
         appointment: AppointmentModel,
         callback: (Boolean, String) -> Unit
@@ -52,7 +54,7 @@ class AppointmentRepoImpl {
 
     /* ---------------- DELETE APPOINTMENT ---------------- */
 
-    fun deleteAppointment(
+    override fun deleteAppointment(
         appointmentId: String,
         callback: (Boolean, String) -> Unit
     ) {
@@ -68,7 +70,7 @@ class AppointmentRepoImpl {
 
     /* ---------------- GET BY PATIENT ID ---------------- */
 
-    fun getAppointmentsByPatientId(
+    override fun getAppointmentsByPatientId(
         patientId: String,
         callback: (Boolean, String, List<AppointmentModel>) -> Unit
     ) {
@@ -93,7 +95,7 @@ class AppointmentRepoImpl {
 
     /* ---------------- GET BY DOCTOR ID ---------------- */
 
-    fun getAppointmentsByDoctorId(
+    override fun getAppointmentsByDoctorId(
         doctorId: String,
         callback: (Boolean, String, List<AppointmentModel>) -> Unit
     ) {
@@ -114,5 +116,9 @@ class AppointmentRepoImpl {
                     callback(false, error.message, emptyList())
                 }
             })
+    }
+
+    override fun getCurrentUserId(): String? {
+        return auth.currentUser?.uid
     }
 }

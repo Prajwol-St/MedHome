@@ -31,4 +31,6 @@ interface AppointmentRepo {
     )
 
 
+    fun getCurrentUserId(): String?
+
 }
