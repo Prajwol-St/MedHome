@@ -2,7 +2,7 @@ package com.example.medhomeapp.model
 
 data class AppointmentModel(
     val id: String = "",
-    val patientId: String = "",
+    val userId: String = "",
     val doctorId: String = "",
     val date: String = "",
     val time: String = "",
@@ -11,7 +11,7 @@ data class AppointmentModel(
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,
-            "patientId" to patientId,
+            "userId" to userId,
             "doctorId" to doctorId,
             "date" to date,
             "time" to time
