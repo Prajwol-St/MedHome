@@ -95,15 +95,15 @@ class InventoryRepositoryImpl : InventoryRepo {
 
                     val imageUrl = uploadResult["secure_url"] as? String
                     if (imageUrl != null) {
-                        Log.d("InventoryRepository", "Image uploaded successfully: $imageUrl")
+                        Log.d("InventoryRepo", "Image uploaded successfully: $imageUrl")
                         callback(true, "Image uploaded successfully", imageUrl)
                     } else {
-                        Log.e("InventoryRepository", "Failed to get image URL from upload result")
+                        Log.e("InventoryRepo", "Failed to get image URL from upload result")
                         callback(false, "Failed to get image URL", null)
                     }
 
                 } catch (e: Exception) {
-                    Log.e("InventoryRepository", "Error uploading image", e)
+                    Log.e("InventoryRepo", "Error uploading image", e)
                     callback(false, "Error uploading image: ${e.message}", null)
                 }
             }.start()
