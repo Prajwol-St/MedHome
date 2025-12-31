@@ -34,6 +34,7 @@ import com.example.medhomeapp.model.InventoryModel
 import com.example.medhomeapp.repository.InventoryRepositoryImpl
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.InventoryViewModel
+import java.io.File
 
 @Composable
 fun NotificationScreen() {
@@ -387,6 +388,7 @@ fun AddMedicineDialog(
     viewModel: InventoryViewModel,
     onDismiss: () -> Unit
 ) {
+    val context = LocalContext.current
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var medicineName by remember { mutableStateOf(existingInventory?.medicineName ?: "") }
     var description by remember { mutableStateOf(existingInventory?.description ?: "") }
@@ -398,6 +400,23 @@ fun AddMedicineDialog(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         selectedImageUri = uri
+    }
+
+
+    fun getRealPathFromURI(uri: Uri): String? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val file = File(context.cacheDir, "temp_medicine_${System.currentTimeMillis()}.jpg")
+            inputStream?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            file.absolutePath
+        } catch (e: Exception) {
+            android.util.Log.e("ImagePicker", "Error getting file path: ${e.message}")
+            null
+        }
     }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -548,6 +567,11 @@ fun AddMedicineDialog(
                         if (medicineName.isNotBlank() && price.isNotBlank() && amount.isNotBlank()) {
                             isUploading = true
 
+                            // Get real file path from URI - EXACTLY LIKE MYPOSTACTIVITY
+                            val imagePath = selectedImageUri?.let { uri ->
+                                getRealPathFromURI(uri)
+                            }
+
                             if (existingInventory != null) {
                                 // Update existing inventory
                                 viewModel.updateInventoryWithImage(
@@ -557,7 +581,7 @@ fun AddMedicineDialog(
                                     description = description,
                                     price = price,
                                     amount = amount,
-                                    imageUri = selectedImageUri?.path
+                                    imageUri = imagePath
                                 )
                             } else {
                                 // Create new inventory
@@ -566,7 +590,7 @@ fun AddMedicineDialog(
                                     description = description,
                                     price = price,
                                     amount = amount,
-                                    imageUri = selectedImageUri?.path
+                                    imageUri = imagePath
                                 )
                             }
                         }
