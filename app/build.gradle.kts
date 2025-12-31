@@ -60,6 +60,7 @@ dependencies {
 
     //  REQUIRED FOR ICONS
     implementation("androidx.compose.material:material-icons-extended")
+    implementation("com.cloudinary:cloudinary-android:2.1.0")
 
     //  LIFECYCLE
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
