@@ -210,7 +210,8 @@ fun DashboardBody() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        ReminderScreen()
+                        NotificationScreen()  // ← Now it matches
+
                     }
                 }
                 2 -> {
