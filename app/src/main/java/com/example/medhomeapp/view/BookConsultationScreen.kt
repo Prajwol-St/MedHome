@@ -22,11 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.medhomeapp.model.DoctorModel
 import com.example.medhomeapp.viewmodel.AppointmentViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.medhomeapp.viewmodel.DoctorViewModel
+
 
 @Composable
-fun BookConsultationScreen(viewModel: AppointmentViewModel) {
+fun BookConsultationScreen(
+    appointmentViewModel: AppointmentViewModel,
+    doctorViewModel: DoctorViewModel
+) {
 
-    val doctors by viewModel.doctors.collectAsState()
+    val doctors by doctorViewModel.doctors.collectAsStateWithLifecycle()
     var selectedDoctorId by remember { mutableStateOf("") }
 
     var date by remember { mutableStateOf("") }
@@ -78,7 +85,7 @@ fun BookConsultationScreen(viewModel: AppointmentViewModel) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    val patientId = viewModel.getCurrentUserId() ?: return@Button
+                    val patientId = appointmentViewModel.getCurrentUserId() ?: return@Button
 
                     val appointment = AppointmentModel(
                         patientId = patientId,
@@ -88,7 +95,7 @@ fun BookConsultationScreen(viewModel: AppointmentViewModel) {
                         reason = reason
                     )
 
-                    viewModel.addAppointment(appointment)
+                    appointmentViewModel.addAppointment(appointment)
                 }
             ) {
                 Text("Confirm Booking")
