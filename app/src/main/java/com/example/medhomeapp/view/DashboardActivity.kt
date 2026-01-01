@@ -35,9 +35,9 @@ import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
@@ -102,7 +102,7 @@ fun DashboardBody() {
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 title = {
@@ -130,8 +130,8 @@ fun DashboardBody() {
                     icon = { Icon(painterResource(R.drawable.baseline_home_24), stringResource(R.string.home)) },
                     label = { Text(stringResource(R.string.home), fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = SageGreen,
-                        selectedTextColor = SageGreen,
+                        selectedIconColor = MintGreen,
+                        selectedTextColor = MintGreen,
                         indicatorColor = LightSage.copy(alpha = 0.3f),
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
@@ -144,8 +144,8 @@ fun DashboardBody() {
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
                     label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = SageGreen,
-                        selectedTextColor = SageGreen,
+                        selectedIconColor = MintGreen,
+                        selectedTextColor = MintGreen,
                         indicatorColor = LightSage.copy(alpha = 0.3f),
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
@@ -162,13 +162,13 @@ fun DashboardBody() {
                                 painterResource(R.drawable.baseline_qr_code_scanner_24),
                                 stringResource(R.string.scan),
                                 modifier = Modifier.size(28.dp),
-                                tint = if (selectedTab == 2) SageGreen else TextGray
+                                tint = if (selectedTab == 2) MintGreen else TextGray
                             )
                         },
                         label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = SageGreen,
-                            selectedTextColor = SageGreen,
+                            selectedIconColor = MintGreen,
+                            selectedTextColor = MintGreen,
                             indicatorColor = LightSage.copy(alpha = 0.3f),
                             unselectedIconColor = TextGray,
                             unselectedTextColor = TextGray
@@ -182,8 +182,8 @@ fun DashboardBody() {
                     icon = { Icon(painterResource(R.drawable.baseline_settings_24), stringResource(R.string.settings)) },
                     label = { Text(stringResource(R.string.settings), fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = SageGreen,
-                        selectedTextColor = SageGreen,
+                        selectedIconColor = MintGreen,
+                        selectedTextColor = MintGreen,
                         indicatorColor = LightSage.copy(alpha = 0.3f),
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
@@ -255,7 +255,7 @@ fun HomeScreenContent(userName: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            colors = CardDefaults.cardColors(containerColor = SageGreen),
+            colors = CardDefaults.cardColors(containerColor = MintGreen),
             elevation = CardDefaults.cardElevation(6.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
@@ -342,7 +342,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_records),
                     icon = Icons.Default.Description,
-                    color = Color(0xFF6B8E4E),
+                    color = MintGreen,
                     onClick = {
                         val intent = Intent(context, HealthRecords::class.java)
                         context.startActivity(intent)
@@ -353,7 +353,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.book_consultation),
                     icon = Icons.Default.VideoCall,
-                    color = Color(0xFF87A96B),
+                    color = MintGreen,
                     onClick = {
                         val intent = Intent(context, BookConsultationActivity::class.java)
                         context.startActivity(intent)
@@ -364,7 +364,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.ai_health_assistant),
                     icon = Icons.Default.Chat,
-                    color = Color(0xFF6B8E4E),
+                    color =MintGreen,
                     onClick = { }
                 )
             }
@@ -372,7 +372,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.past_bookings),
                     icon = Icons.Default.Event,
-                    color = Color(0xFF87A96B),
+                    color = MintGreen,
                     onClick = { }
                 )
             }
@@ -380,7 +380,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.appointments),
                     icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF6B8E4E),
+                    color = MintGreen,
                     onClick = { }
                 )
             }
@@ -388,7 +388,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.calories_calculator),
                     icon = Icons.Default.FitnessCenter,
-                    color = Color(0xFF87A96B),
+                    color = MintGreen,
                     onClick = { }
                 )
             }
@@ -396,7 +396,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.blood_donation),
                     icon = Icons.Default.Favorite,
-                    color = Color(0xFF6B8E4E),
+                    color = MintGreen,
                     onClick = {
                         val intent = Intent(context, BloodDonationActivity::class.java)
                         context.startActivity(intent)
@@ -407,7 +407,7 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF87A96B),
+                    color = MintGreen,
                     onClick = { }
                 )
             }
