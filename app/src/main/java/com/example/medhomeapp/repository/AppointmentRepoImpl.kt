@@ -1,7 +1,7 @@
 package com.example.medhomeapp.repository
 
+import AppointmentModel
 import AppointmentRepo
-import com.example.medhomeapp.model.AppointmentModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -28,7 +28,7 @@ class AppointmentRepoImpl : AppointmentRepo {
         }
 
         // ✅ FIXED: use `id`
-        val newAppointment = appointment.copy(id = key)
+        val newAppointment = appointment.copy(appointmentId = key)
 
         appointmentsRef.child(key)
             .setValue(newAppointment)
@@ -69,54 +69,13 @@ class AppointmentRepoImpl : AppointmentRepo {
             })
     }
 
-    /* ---------------- MARK DOCTOR LEAVE ---------------- */
 
-    override fun markDoctorLeave(
-        doctorId: String,
-        dateMillis: Long,
-        callback: (Boolean, String) -> Unit
-    ) {
-        val leaveId = doctorLeavesRef
-            .child(doctorId)
-            .push()
-            .key
 
-        if (leaveId == null) {
-            callback(false, "Failed to mark leave")
-            return
-        }
-
-        val leaveData = mapOf(
-            "dateMillis" to dateMillis
-        )
-
-        doctorLeavesRef
-            .child(doctorId)
-            .child(leaveId)
-            .setValue(leaveData)
-            .addOnSuccessListener {
-                callback(true, "Leave day marked successfully")
-            }
-            .addOnFailureListener {
-                callback(false, it.message ?: "Failed to mark leave")
-            }
-    }
-
-    /* ---------------- AUTH HELPERS ---------------- */
 
     override fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
 
-    /**
-     * ⚠️ DO NOT USE this synchronously in UI
-     * Firebase is async
-     */
-    fun getCurrentUserRole(): String? {
-        return null // intentionally unused
-    }
-
-    /* ---------------- SAFE ROLE FETCH ---------------- */
 
     override fun getCurrentUserRole(
         callback: (String?) -> Unit
