@@ -26,7 +26,9 @@ import com.example.medhomeapp.viewmodel.AppointmentViewModel
 @Composable
 fun BookConsultationScreen(viewModel: AppointmentViewModel) {
 
-    val doctors by viewModel.doctors.collectAsState()
+    val doctorsState = viewModel.doctors.collectAsState()
+    val doctors = doctorsState.value
+
     var selectedDoctorId by remember { mutableStateOf("") }
 
     var date by remember { mutableStateOf("") }
