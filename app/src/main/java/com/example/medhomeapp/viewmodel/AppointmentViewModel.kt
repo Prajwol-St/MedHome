@@ -1,10 +1,8 @@
 package com.example.medhomeapp.viewmodel
 
+import AppointmentRepo
 import androidx.lifecycle.ViewModel
 import com.example.medhomeapp.model.AppointmentModel
-import com.example.medhomeapp.repository.AppointmentRepo
-import com.example.medhomeapp.repository.AppointmentRepoImpl
-import com.example.medhomeapp.repository.BloodDonationRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +11,7 @@ class AppointmentViewModel(
     private val repository: AppointmentRepo
 ) : ViewModel() {
 
-    private val appointmentRepo = AppointmentRepoImpl()
+    /* ---------------- COMMON STATES ---------------- */
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -21,103 +19,86 @@ class AppointmentViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val _successMessage = MutableStateFlow<String?>(null)
-    val successMessage: StateFlow<String?> = _successMessage.asStateFlow()
+    private val _success = MutableStateFlow<String?>(null)
+    val success: StateFlow<String?> = _success.asStateFlow()
 
-    private val _appointments = MutableStateFlow<List<AppointmentModel>>(emptyList())
-    val appointments: StateFlow<List<AppointmentModel>> = _appointments.asStateFlow()
+    /* ---------------- ROLE (FIXED) ---------------- */
 
+    private val _userRole = MutableStateFlow<String?>(null)
+    val userRole: StateFlow<String?> = _userRole.asStateFlow()
 
+    fun loadUserRole() {
+        repository.getCurrentUserRole { role ->
+            _userRole.value = role
+        }
+    }
+
+    fun isDoctor(): Boolean = _userRole.value == "doctor"
+
+    /* ---------------- DOCTOR APPOINTMENTS ---------------- */
+
+    private val _doctorAppointments =
+        MutableStateFlow<List<AppointmentModel>>(emptyList())
+    val doctorAppointments: StateFlow<List<AppointmentModel>> =
+        _doctorAppointments.asStateFlow()
+
+    /* ---------------- USER ---------------- */
+
+    fun getCurrentUserId(): String? = repository.getCurrentUserId()
+
+    /* ---------------- ADD APPOINTMENT ---------------- */
 
     fun addAppointment(appointment: AppointmentModel) {
         _isLoading.value = true
-
-        appointmentRepo.addAppointment(appointment) { success, message ->
+        repository.addAppointment(appointment) { success, msg ->
             _isLoading.value = false
             if (success) {
-                _successMessage.value = message
+                _success.value = msg
             } else {
-                _error.value = message
+                _error.value = msg
             }
         }
     }
 
+    /* ---------------- LOAD DOCTOR APPOINTMENTS ---------------- */
 
+    fun loadDoctorAppointments() {
+        val doctorId = getCurrentUserId() ?: return
 
-    fun updateAppointment(appointmentId: String, appointment: AppointmentModel) {
         _isLoading.value = true
-
-        appointmentRepo.updateAppointment(appointmentId, appointment) { success, message ->
+        repository.getAppointmentsByDoctor(doctorId) { list, msg ->
             _isLoading.value = false
-            if (success) {
-                _successMessage.value = message
+            if (list != null) {
+                _doctorAppointments.value = list
             } else {
-                _error.value = message
+                _error.value = msg
             }
         }
     }
 
+    /* ---------------- MARK DOCTOR LEAVE ---------------- */
 
+    fun markDoctorLeave(dateMillis: Long) {
+        val doctorId = getCurrentUserId() ?: return
 
-
-    fun deleteAppointment(appointmentId: String) {
         _isLoading.value = true
-
-        appointmentRepo.deleteAppointment(appointmentId) { success, message ->
+        repository.markDoctorLeave(doctorId, dateMillis) { success, msg ->
             _isLoading.value = false
             if (success) {
-                _successMessage.value = message
+                _success.value = msg
             } else {
-                _error.value = message
+                _error.value = msg
             }
         }
     }
 
+    /* ---------------- CLEAR STATES ---------------- */
 
-
-
-    fun getAppointmentsByPatientId(patientId: String) {
-        _isLoading.value = true
-
-        appointmentRepo.getAppointmentsByPatientId(patientId) { success, message, list ->
-            _isLoading.value = false
-            if (success) {
-                _appointments.value = list
-            } else {
-                _error.value = message
-            }
-        }
-    }
-
-
-
-
-    fun getAppointmentsByDoctorId(doctorId: String) {
-        _isLoading.value = true
-
-        appointmentRepo.getAppointmentsByDoctorId(doctorId) { success, message, list ->
-            _isLoading.value = false
-            if (success) {
-                _appointments.value = list
-            } else {
-                _error.value = message
-            }
-        }
-    }
-
-
-
-    fun getCurrentUserId(): String? {
-        return appointmentRepo.getCurrentUserId()
-    }
-
-
-    fun clearMessages() {
+    fun clearError() {
         _error.value = null
-        _successMessage.value = null
     }
 
-
-
-
+    fun clearSuccess() {
+        _success.value = null
+    }
 }

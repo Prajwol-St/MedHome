@@ -1,5 +1,6 @@
 package com.example.medhomeapp.repository
 
+import AppointmentRepo
 import com.example.medhomeapp.model.AppointmentModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -8,7 +9,10 @@ class AppointmentRepoImpl : AppointmentRepo {
 
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
+
     private val appointmentsRef = database.getReference("appointments")
+    private val usersRef = database.getReference("users")
+    private val doctorLeavesRef = database.getReference("doctorLeaves")
 
     /* ---------------- ADD APPOINTMENT ---------------- */
 
@@ -16,109 +20,121 @@ class AppointmentRepoImpl : AppointmentRepo {
         appointment: AppointmentModel,
         callback: (Boolean, String) -> Unit
     ) {
-        val appointmentId = appointmentsRef.push().key
+        val key = appointmentsRef.push().key
 
-        if (appointmentId == null) {
+        if (key == null) {
             callback(false, "Failed to generate appointment ID")
             return
         }
 
-        val newAppointment = appointment.copy(appointmentId = appointmentId)
+        // ✅ FIXED: use `id`
+        val newAppointment = appointment.copy(id = key)
 
-        appointmentsRef.child(appointmentId)
+        appointmentsRef.child(key)
             .setValue(newAppointment)
             .addOnSuccessListener {
-                callback(true, "Appointment added successfully")
+                callback(true, "Appointment booked successfully")
             }
             .addOnFailureListener {
-                callback(false, it.message ?: "Failed to add appointment")
+                callback(false, it.message ?: "Failed to book appointment")
             }
     }
 
+    /* ---------------- GET APPOINTMENTS BY DOCTOR ---------------- */
 
-
-    override fun updateAppointment(
-        appointmentId: String,
-        appointment: AppointmentModel,
-        callback: (Boolean, String) -> Unit
-    ) {
-        appointmentsRef.child(appointmentId)
-            .setValue(appointment)
-            .addOnSuccessListener {
-                callback(true, "Appointment updated successfully")
-            }
-            .addOnFailureListener {
-                callback(false, it.message ?: "Failed to update appointment")
-            }
-    }
-
-    /* ---------------- DELETE APPOINTMENT ---------------- */
-
-    override fun deleteAppointment(
-        appointmentId: String,
-        callback: (Boolean, String) -> Unit
-    ) {
-        appointmentsRef.child(appointmentId)
-            .removeValue()
-            .addOnSuccessListener {
-                callback(true, "Appointment deleted successfully")
-            }
-            .addOnFailureListener {
-                callback(false, it.message ?: "Failed to delete appointment")
-            }
-    }
-
-    /* ---------------- GET BY PATIENT ID ---------------- */
-
-    override fun getAppointmentsByPatientId(
-        patientId: String,
-        callback: (Boolean, String, List<AppointmentModel>) -> Unit
-    ) {
-        appointmentsRef
-            .orderByChild("patientId")
-            .equalTo(patientId)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val list = mutableListOf<AppointmentModel>()
-                    for (data in snapshot.children) {
-                        val appointment = data.getValue(AppointmentModel::class.java)
-                        if (appointment != null) list.add(appointment)
-                    }
-                    callback(true, "Success", list)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    callback(false, error.message, emptyList())
-                }
-            })
-    }
-
-    /* ---------------- GET BY DOCTOR ID ---------------- */
-
-    override fun getAppointmentsByDoctorId(
+    override fun getAppointmentsByDoctor(
         doctorId: String,
-        callback: (Boolean, String, List<AppointmentModel>) -> Unit
+        callback: (List<AppointmentModel>?, String?) -> Unit
     ) {
         appointmentsRef
             .orderByChild("doctorId")
             .equalTo(doctorId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
+
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val list = mutableListOf<AppointmentModel>()
-                    for (data in snapshot.children) {
-                        val appointment = data.getValue(AppointmentModel::class.java)
-                        if (appointment != null) list.add(appointment)
+
+                    for (child in snapshot.children) {
+                        val appointment =
+                            child.getValue(AppointmentModel::class.java)
+                        appointment?.let { list.add(it) }
                     }
-                    callback(true, "Success", list)
+
+                    callback(list, null)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    callback(false, error.message, emptyList())
+                    callback(null, error.message)
                 }
             })
     }
 
+    /* ---------------- MARK DOCTOR LEAVE ---------------- */
+
+    override fun markDoctorLeave(
+        doctorId: String,
+        dateMillis: Long,
+        callback: (Boolean, String) -> Unit
+    ) {
+        val leaveId = doctorLeavesRef
+            .child(doctorId)
+            .push()
+            .key
+
+        if (leaveId == null) {
+            callback(false, "Failed to mark leave")
+            return
+        }
+
+        val leaveData = mapOf(
+            "dateMillis" to dateMillis
+        )
+
+        doctorLeavesRef
+            .child(doctorId)
+            .child(leaveId)
+            .setValue(leaveData)
+            .addOnSuccessListener {
+                callback(true, "Leave day marked successfully")
+            }
+            .addOnFailureListener {
+                callback(false, it.message ?: "Failed to mark leave")
+            }
+    }
+
+    /* ---------------- AUTH HELPERS ---------------- */
+
     override fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
+    }
+
+    /**
+     * ⚠️ DO NOT USE this synchronously in UI
+     * Firebase is async
+     */
+    fun getCurrentUserRole(): String? {
+        return null // intentionally unused
+    }
+
+    /* ---------------- SAFE ROLE FETCH ---------------- */
+
+    override fun getCurrentUserRole(
+        callback: (String?) -> Unit
+    ) {
+        val uid = auth.currentUser?.uid ?: run {
+            callback(null)
+            return
+        }
+
+        usersRef.child(uid).child("role")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    callback(snapshot.getValue(String::class.java))
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(null)
+                }
+            })
     }
 }
