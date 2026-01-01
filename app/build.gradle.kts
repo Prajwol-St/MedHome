@@ -86,6 +86,7 @@ dependencies {
 
     //  UTIL
     implementation(libs.guava)
+    implementation(libs.androidx.material3)
 
     //  TESTING
     testImplementation(libs.junit)

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Permissions -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -18,7 +21,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
+        <activity
+            android:name=".view.DoctorAppointmentActivity"
+            android:exported="false"
+            android:label="@string/title_activity_doctor_appointment"
+            android:theme="@style/Theme.MedHomeApp" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <!-- =============================================== -->
         <!-- SPLASH & ENTRY POINT -->
         <!-- =============================================== -->
@@ -28,11 +41,10 @@
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- =============================================== -->
+        </activity> <!-- =============================================== -->
         <!-- AUTHENTICATION -->
         <!-- =============================================== -->
         <activity
@@ -50,9 +62,7 @@
         <activity
             android:name=".view.ForgotPasswordActivity"
             android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- =============================================== -->
+            android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- MAIN NAVIGATION -->
         <!-- =============================================== -->
         <activity
@@ -60,15 +70,9 @@
             android:exported="false"
             android:theme="@style/Theme.MedHomeApp" />
         <activity
-            android:name=".view.HomeScreen"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
             android:name=".view.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- =============================================== -->
+            android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- SETTINGS & PROFILE -->
         <!-- =============================================== -->
         <activity
@@ -80,11 +84,6 @@
             android:exported="false"
             android:theme="@style/Theme.MedHomeApp" />
         <activity
-            android:name=".view.ViewProfileActivity"
-            android:exported="false"
-            android:label="@string/title_activity_view_profile"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
             android:name=".view.ChangePasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.MedHomeApp" />
@@ -93,16 +92,10 @@
             android:exported="false"
             android:theme="@style/Theme.MedHomeApp" />
         <activity
-            android:name=".view.UserInfoScreen"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
             android:name=".view.LanguageSelectionActivity"
             android:exported="false"
             android:label="@string/title_activity_language_selection"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- =============================================== -->
+            android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- HELP & LEGAL -->
         <!-- =============================================== -->
         <activity
@@ -119,9 +112,7 @@
             android:name=".view.TermsOfServiceActivity"
             android:exported="false"
             android:label="@string/title_activity_terms_of_service"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- =============================================== -->
+            android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- HEALTH FEATURES -->
         <!-- =============================================== -->
         <activity
@@ -130,22 +121,32 @@
             android:theme="@style/Theme.MedHomeApp" />
         <activity
             android:name=".view.BookConsultationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
+            android:exported="true"
+            android:theme="@style/Theme.MedHomeApp"
+            tools:ignore="IntentFilterExportedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.BloodDonationActivity"
             android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-
-        <!-- =============================================== -->
+            android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- DOCTOR FEATURES -->
         <!-- =============================================== -->
         <activity
             android:name=".view.DoctorAvailabilityActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_doctor_availability"
-            android:theme="@style/Theme.MedHomeApp" />
+            android:theme="@style/Theme.MedHomeApp" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <!-- =============================================== -->
         <!-- QR CODE ACTIVITIES -->
         <!-- =============================================== -->
@@ -157,7 +158,6 @@
             android:name=".view.QrScannerActivity"
             android:exported="false"
             android:theme="@style/Theme.MedHomeApp" />
-
     </application>
 
 </manifest>
