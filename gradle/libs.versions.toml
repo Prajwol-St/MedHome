@@ -21,6 +21,7 @@ firebaseFirestore = "26.0.2"
 runtimeLivedata = "1.10.0"
 zxingAndroidEmbedded = "4.3.0"
 playServicesMlkitBarcodeScanning = "18.3.1"
+material3 = "1.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +50,7 @@ camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", versi
 camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
 play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 
 [plugins]
