@@ -3,7 +3,7 @@ package com.example.medhomeapp.model
 data class DoctorModel(
     val id: Int = 0,
     val role: String,
-    val userId: Int = 0,
+    val userId: String = "",
     val name: String = "",
     val specialization: String = "",
     val type: String = "",
