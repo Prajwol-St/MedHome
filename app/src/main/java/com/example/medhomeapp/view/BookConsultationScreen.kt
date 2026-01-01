@@ -120,7 +120,7 @@ fun DoctorCard(
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { onBookClick(doctor.id.toString()) }
+                onClick = { onBookClick(doctor.userId) }
             ) {
                 Text("Book Now")
             }

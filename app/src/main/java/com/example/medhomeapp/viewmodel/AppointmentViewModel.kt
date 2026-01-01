@@ -49,7 +49,7 @@ class AppointmentViewModel(
     }
 
     fun loadDoctorAppointments() {
-        val doctorId = getCurrentUserId() ?: return
+        val doctorId = getCurrentUserId() ?: return // Firebase UID
         _isLoading.value = true
         repository.getAppointmentsByDoctor(doctorId) { list, msg ->
             _isLoading.value = false
@@ -57,6 +57,7 @@ class AppointmentViewModel(
             else _error.value = msg
         }
     }
+
 
     fun clearError() { _error.value = null }
     fun clearSuccess() { _success.value = null }

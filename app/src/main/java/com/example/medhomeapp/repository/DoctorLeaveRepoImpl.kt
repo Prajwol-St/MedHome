@@ -9,39 +9,29 @@ class DoctorLeaveRepoImpl : DoctorLeaveRepo {
 
     /* ---------------- ADD DOCTOR LEAVE ---------------- */
 
-    fun addLeave(
+    override fun addLeave(
         doctorId: String,
         date: String,
         callback: (Boolean, String) -> Unit
     ) {
-        doctorLeavesRef
-            .child(doctorId)
-            .child(date)
-            .setValue(true)
+        doctorLeavesRef.child(doctorId).child(date).setValue(true)
             .addOnSuccessListener {
                 callback(true, "Leave added successfully")
             }
             .addOnFailureListener {
-                callback(false, it.message ?: "Failed to add leave")
+                callback(false, it.message ?: "Failed")
             }
     }
 
     /* ---------------- CHECK DOCTOR LEAVE ---------------- */
 
-    fun isDoctorOnLeave(
+    override fun isDoctorOnLeave(
         doctorId: String,
         date: String,
         callback: (Boolean) -> Unit
     ) {
-        doctorLeavesRef
-            .child(doctorId)
-            .child(date)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                callback(snapshot.exists())
-            }
-            .addOnFailureListener {
-                callback(false)
-            }
+        doctorLeavesRef.child(doctorId).child(date).get()
+            .addOnSuccessListener { callback(it.exists()) }
+            .addOnFailureListener { callback(false) }
     }
 }
