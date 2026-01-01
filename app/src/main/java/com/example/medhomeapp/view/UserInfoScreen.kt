@@ -63,10 +63,7 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
             .padding(16.dp)
     ) {
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 38ca3cadca3561584e147984053bb24629b1b0a5
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(

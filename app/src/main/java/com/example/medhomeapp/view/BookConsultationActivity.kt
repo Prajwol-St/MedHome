@@ -1,5 +1,6 @@
 package com.example.medhomeapp.view
 
+import BookConsultationScreen
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,17 +23,27 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
+import com.example.medhomeapp.repository.AppointmentRepoImpl
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
+import com.example.medhomeapp.viewmodel.AppointmentViewModel
+import com.example.medhomeapp.viewmodel.AppointmentViewModelFactory
 
 class BookConsultationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BookConsultationBody()
+            val viewModel: AppointmentViewModel = viewModel(
+                factory = AppointmentViewModelFactory(
+                    AppointmentRepoImpl()
+                )
+            )
+
+            BookConsultationScreen(viewModel)
         }
     }
 }

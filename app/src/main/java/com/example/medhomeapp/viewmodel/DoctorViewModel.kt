@@ -42,4 +42,14 @@ class DoctorViewModel: ViewModel() {
     ) {
         doctorRepo.deleteDoctor(userId, callback)
     }
+
+
+    fun addAvailability(date: String, time: String) {
+
+    }
+
+    fun addLeave(date: String) {
+
+    }
+
 }

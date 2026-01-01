@@ -130,8 +130,14 @@
             android:theme="@style/Theme.MedHomeApp" />
         <activity
             android:name=".view.BookConsultationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
+            android:exported="true"
+            android:theme="@style/Theme.MedHomeApp"
+            tools:ignore="IntentFilterExportedReceiver">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <activity
             android:name=".view.BloodDonationActivity"
             android:exported="false"

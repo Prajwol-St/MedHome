@@ -19,3 +19,16 @@
             )
         }
     }
+
+
+    data class DoctorAvailability(
+        val doctorId: String = "",
+        val date: String = "", // yyyy-MM-dd
+        val timeSlots: List<String> = emptyList() // e.g. ["10:00", "11:00"]
+    )
+
+    data class DoctorLeave(
+        val doctorId: String = "",
+        val date: String = "" // full day leave
+    )
+

@@ -1,21 +1,19 @@
 package com.example.medhomeapp.model
 
 data class AppointmentModel(
-    val id: String = "",
-    val userId: String = "",
+    val appointmentId: String = "",
+    val patientId: String = "",
     val doctorId: String = "",
+    val patientName: String = "",
     val date: String = "",
     val time: String = "",
-    val appointmentId: String,
-){
+    val reason: String = ""     // scheduled / cancelled / completed
+) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
-            "id" to id,
-            "userId" to userId,
-            "doctorId" to doctorId,
+            "patientName" to patientName,
             "date" to date,
             "time" to time
         )
+    }
 }
-}
-
