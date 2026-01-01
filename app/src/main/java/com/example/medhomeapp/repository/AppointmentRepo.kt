@@ -1,4 +1,4 @@
-import com.example.medhomeapp.model.AppointmentModel
+
 
 interface AppointmentRepo {
 
@@ -12,14 +12,8 @@ interface AppointmentRepo {
         callback: (List<AppointmentModel>?, String?) -> Unit
     )
 
-    fun markDoctorLeave(
-        doctorId: String,
-        dateMillis: Long,
-        callback: (Boolean, String) -> Unit
-    )
 
     fun getCurrentUserId(): String?
 
-    // 🔴 FIXED
     fun getCurrentUserRole(callback: (String?) -> Unit)
 }

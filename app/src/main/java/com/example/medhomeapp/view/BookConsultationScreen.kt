@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.medhomeapp.model.AppointmentModel
 import com.example.medhomeapp.model.DoctorModel
 import com.example.medhomeapp.viewmodel.AppointmentViewModel
 
@@ -29,49 +28,67 @@ fun BookConsultationScreen(viewModel: AppointmentViewModel) {
 
     val doctors by viewModel.doctors.collectAsState()
     var selectedDoctorId by remember { mutableStateOf("") }
+
     var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
     var reason by remember { mutableStateOf("") }
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Top
+    ) {
 
         Text("Choose Doctor", style = MaterialTheme.typography.headlineMedium)
 
         doctors.forEach { doctor ->
-            DoctorCard(doctor) {
-                selectedDoctorId = it
+            DoctorCard(doctor) { doctorId ->
+                selectedDoctorId = doctorId
             }
         }
 
         if (selectedDoctorId.isNotEmpty()) {
 
+            Spacer(Modifier.height(12.dp))
+
             OutlinedTextField(
                 value = date,
                 onValueChange = { date = it },
-                label = { Text("Date") }
+                label = { Text("Date (yyyy-MM-dd)") },
+                modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = time,
                 onValueChange = { time = it },
-                label = { Text("Time") }
+                label = { Text("Time (HH:mm)") },
+                modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = reason,
                 onValueChange = { reason = it },
-                label = { Text("Reason") }
+                label = { Text("Reason") },
+                modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(Modifier.height(12.dp))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    viewModel.bookAppointment(
-                        selectedDoctorId,
-                        date,
-                        time,
-                        reason
+                    val patientId = viewModel.getCurrentUserId() ?: return@Button
+
+                    val appointment = AppointmentModel(
+                        patientId = patientId,
+                        doctorId = selectedDoctorId,
+                        date = date,
+                        time = time,
+                        reason = reason
                     )
+
+                    viewModel.addAppointment(appointment)
                 }
             ) {
                 Text("Confirm Booking")
@@ -79,6 +96,7 @@ fun BookConsultationScreen(viewModel: AppointmentViewModel) {
         }
     }
 }
+
 
 
 @Composable
@@ -96,6 +114,7 @@ fun DoctorCard(
 
             Text(doctor.name, style = MaterialTheme.typography.titleLarge)
             Text(doctor.specialization, color = MaterialTheme.colorScheme.primary)
+            Text(doctor.type)
 
             Spacer(Modifier.height(8.dp))
 
