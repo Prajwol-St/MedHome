@@ -48,7 +48,7 @@ class HealthRecords : BaseActivity() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         if (!permissions.values.all { it }) {
-            Toast.makeText(this, "Permissions needed to upload files", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Permissions needed to upload files", Toast.LENGTH_SHORT).show()
         }
     }
 

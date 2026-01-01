@@ -20,3 +20,6 @@ val SoftSkyStart = Color(0xFF6BB9FF)
 
 val SoftMintEnd = Color(0xFF87CEEB)
 
+val MintGreen = Color(0xFF8CE88C)
+
+
