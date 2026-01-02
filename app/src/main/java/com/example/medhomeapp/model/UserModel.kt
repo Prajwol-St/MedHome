@@ -1,5 +1,10 @@
 package com.example.medhomeapp.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Suppress("DEPRECATED_ANNOTATION")
+@Parcelize
 data class UserModel(
     val id: String = "",
     val role: String = "patient",
@@ -14,7 +19,7 @@ data class UserModel(
     val bloodGroup: String = "",
     val emergencyContact: String = "",
     val address: String = "",
-) {
+) : Parcelable {
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "id" to id,

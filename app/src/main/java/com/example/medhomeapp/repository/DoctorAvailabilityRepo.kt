@@ -1,23 +1,9 @@
 package com.example.medhomeapp.repository
 
+import com.example.medhomeapp.model.TimeSlot
+
 interface DoctorAvailabilityRepo {
-    fun addAvailability(
-        doctorId: String,
-        date: String,
-        time: String,
-        callback: (Boolean, String) -> Unit
-    )
-
-    fun getAvailability(
-        doctorId: String,
-        date: String,
-        callback: (List<String>) -> Unit
-    )
-
-    fun removeAvailability(
-        doctorId: String,
-        date: String,
-        time: String,
-        callback: (Boolean, String) -> Unit
-    )
+    fun addTimeSlot(slot: TimeSlot)
+    fun deleteTimeSlot(id: String)
+    fun observeTimeSlots(doctorId: String, onResult: (List<TimeSlot>) -> Unit)
 }
