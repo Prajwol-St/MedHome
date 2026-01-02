@@ -26,79 +26,83 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
-import com.example.medhomeapp.viewmodel.AppointmentViewModel
 
 class DoctorAppointmentActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            DoctorAppointmentsScreen(viewModel = viewModel())
+            Hi()
+//            DoctorAppointmentsScreen(viewModel = viewModel())
         }
     }
 }
-
 
 @Composable
-fun DoctorAppointmentsScreen(
-    viewModel: AppointmentViewModel
-) {
-    val appointments by viewModel.doctorAppointments.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadDoctorAppointments()
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-        Text(
-            text = "My Appointments",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
-
-        if (appointments.isEmpty() && !isLoading) {
-            Text("No appointments found")
-        }
-
-        appointments.forEach { appointment ->
-            AppointmentCard(appointment)
-        }
-    }
+fun Hi() {
+    Text("Hwll")
 }
 
-
-
-@Composable
-fun AppointmentCard(appointment: AppointmentModel) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp),
-        elevation = CardDefaults.cardElevation(6.dp)
-    ) {
-        Column(Modifier.padding(16.dp)) {
-
-            Text(
-                text = "Patient ID: ${appointment.patientId}",
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            Spacer(Modifier.height(4.dp))
-
-            Text("Date: ${appointment.date}")
-            Text("Time: ${appointment.time}")
-            Text("Reason: ${appointment.reason}")
-        }
-    }
-}
+//@Composable
+//fun DoctorAppointmentsScreen(
+////    viewModel: AppointmentViewModel
+//) {
+//    val appointments by viewModel.doctorAppointments.collectAsState()
+//    val isLoading by viewModel.isLoading.collectAsState()
+//
+//    LaunchedEffect(Unit) {
+//        viewModel.loadDoctorAppointments()
+//    }
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp)
+//    ) {
+//
+//        Text(
+//            text = "My Appointments",
+//            style = MaterialTheme.typography.headlineMedium
+//        )
+//
+//        Spacer(Modifier.height(12.dp))
+//
+//        if (isLoading) {
+//            CircularProgressIndicator()
+//        }
+//
+//        if (appointments.isEmpty() && !isLoading) {
+//            Text("No appointments found")
+//        }
+//
+//        appointments.forEach { appointment ->
+//            AppointmentCard(appointment)
+//        }
+//    }
+//}
+//
+//
+//
+//@Composable
+//fun AppointmentCard(appointment: AppointmentModel) {
+//    Card(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(vertical = 6.dp),
+//        elevation = CardDefaults.cardElevation(6.dp)
+//    ) {
+//        Column(Modifier.padding(16.dp)) {
+//
+//            Text(
+//                text = "Patient ID: ${appointment.patientId}",
+//                style = MaterialTheme.typography.titleMedium
+//            )
+//
+//            Spacer(Modifier.height(4.dp))
+//
+//            Text("Date: ${appointment.date}")
+//            Text("Time: ${appointment.time}")
+//            Text("Reason: ${appointment.reason}")
+//        }
+//    }
+//}
