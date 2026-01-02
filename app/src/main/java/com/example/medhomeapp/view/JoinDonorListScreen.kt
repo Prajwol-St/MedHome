@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medhomeapp.ui.theme.Blue10
+import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +58,7 @@ fun JoinDonorListScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Blue10,
+                    containerColor = SageGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                 ),
@@ -184,7 +184,7 @@ fun JoinDonorListScreen(
                                     .fillMaxWidth()
                                     .menuAnchor(),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = Blue10
+                                    focusedBorderColor = SageGreen
                                 ),
                                 enabled = !isLoading
                             )
@@ -230,7 +230,7 @@ fun JoinDonorListScreen(
                                     checked = isAvailable,
                                     onCheckedChange = { isAvailable = it },
                                     colors = CheckboxDefaults.colors(
-                                        checkedColor = Blue10
+                                        checkedColor = SageGreen
                                     ),
                                     enabled = !isLoading
                                 )
@@ -267,7 +267,7 @@ fun JoinDonorListScreen(
                                     checked = isEmergencyAvailable,
                                     onCheckedChange = { isEmergencyAvailable = it },
                                     colors = CheckboxDefaults.colors(
-                                        checkedColor = Blue10
+                                        checkedColor = SageGreen
                                     ),
                                     enabled = !isLoading
                                 )
@@ -324,7 +324,7 @@ fun JoinDonorListScreen(
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = Blue10.copy(alpha = 0.1f)),
+                    colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.1f)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Column(
@@ -335,7 +335,7 @@ fun JoinDonorListScreen(
                             text = "Why Donate Blood?",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Blue10
+                            color = SageGreen
                         )
 
                         Text(
@@ -382,7 +382,7 @@ fun JoinDonorListScreen(
                         .fillMaxWidth()
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue10
+                        containerColor = SageGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     enabled = !isLoading && bloodGroup.isNotEmpty()
@@ -427,7 +427,7 @@ fun RequirementItem(requirement: String) {
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Surface(
-            color = Blue10,
+            color = SageGreen,
             shape = RoundedCornerShape(4.dp),
             modifier = Modifier.size(8.dp)
         ) {}
