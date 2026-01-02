@@ -132,5 +132,8 @@
 
     <!-- Google Sign In -->
     <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+    <string name="title_activity_health_packages">HealthPackagesActivity</string>
+    <string name="title_activity_health_packages_management">HealthPackagesManagementActivity
+    </string>
 
 </resources>
