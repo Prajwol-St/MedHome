@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.AppointmentRepoImpl
+import com.example.medhomeapp.repository.DoctorRepoImpl
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
 import com.example.medhomeapp.viewmodel.AppointmentViewModel
@@ -40,7 +41,8 @@ class BookConsultationActivity : BaseActivity() {
         setContent {
             val appointmentViewModel: AppointmentViewModel = viewModel(
                 factory = AppointmentViewModelFactory(
-                    AppointmentRepoImpl()
+                    AppointmentRepoImpl(),
+                    DoctorRepoImpl()
                 )
             )
             val doctorViewModel: DoctorViewModel = viewModel()
