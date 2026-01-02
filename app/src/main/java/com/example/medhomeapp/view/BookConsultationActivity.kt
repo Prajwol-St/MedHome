@@ -31,19 +31,24 @@ import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
 import com.example.medhomeapp.viewmodel.AppointmentViewModel
 import com.example.medhomeapp.viewmodel.AppointmentViewModelFactory
+import com.example.medhomeapp.viewmodel.DoctorViewModel
 
 class BookConsultationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel: AppointmentViewModel = viewModel(
+            val appointmentViewModel: AppointmentViewModel = viewModel(
                 factory = AppointmentViewModelFactory(
                     AppointmentRepoImpl()
                 )
             )
+            val doctorViewModel: DoctorViewModel = viewModel()
 
-            BookConsultationScreen(viewModel)
+            BookConsultationScreen(
+                appointmentViewModel = appointmentViewModel,
+                doctorViewModel = doctorViewModel
+            )
         }
     }
 }
