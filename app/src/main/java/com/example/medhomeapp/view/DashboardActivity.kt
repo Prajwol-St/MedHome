@@ -409,7 +409,8 @@ fun HomeScreenContent(userName: String) {
                     title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
-                    onClick = { }
+                    onClick = { val intent = Intent(context, HealthPackagesActivity::class.java)
+                        context.startActivity(intent)}
                 )
             }
         }
