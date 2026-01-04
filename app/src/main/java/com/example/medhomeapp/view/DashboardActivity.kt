@@ -407,8 +407,10 @@ fun HomeScreenContent(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = MintGreen,
-                    onClick = { }
+
+                    color = Color(0xFF87A96B),
+                    onClick = { val intent = Intent(context, HealthPackagesActivity::class.java)
+                        context.startActivity(intent)}
                 )
             }
         }
