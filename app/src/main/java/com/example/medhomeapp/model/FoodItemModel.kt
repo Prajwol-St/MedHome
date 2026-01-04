@@ -33,5 +33,24 @@ data class FoodItemModel(
         )
     }
 
+    fun isBreakfast(): Boolean = mealType == "breakfast"
+
+    fun isLunch(): Boolean = mealType == "Lunch"
+
+    fun isDinner(): Boolean = mealType == "dinner"
+
+    fun isSnack(): Boolean = mealType == "snack"
+
+    fun isFromApi(): Boolean = apiSource == "USDA"
+
+    fun isManualEntry(): Boolean = apiSource == "manual"
+
+    fun getTotalCalories(): Double = calories * servingAmount
+
+    fun getTotalProtein(): Double = protein * servingAmount
+
+    fun getTotalCarbs(): Double = carbs * servingAmount
+
+    fun getTotalFat(): Double = fat * servingAmount
 
 }
