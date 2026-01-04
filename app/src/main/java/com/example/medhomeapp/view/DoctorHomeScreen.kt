@@ -25,10 +25,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.ui.theme.Blue10
 
 @Composable
-fun DoctorHomeScreen(doctorName: String) {
+fun DoctorHomeScreen(user: UserModel) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -76,7 +77,7 @@ fun DoctorHomeScreen(doctorName: String) {
                         color = Color.White.copy(alpha = 0.9f)
                     )
                     Text(
-                        text = doctorName,
+                        text = user.name,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White

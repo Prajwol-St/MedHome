@@ -22,17 +22,18 @@ class DoctorAvailabilityViewModel(
     }
 
     fun addSlot(day: String, start: String, end: String) {
-        val slot = TimeSlot(
-            doctorId = doctorId,
-            day = day,
-            startTime = start,
-            endTime = end
+        repo.addTimeSlot(
+            TimeSlot(
+                doctorId = doctorId,
+                day = day,
+                startTime = start,
+                endTime = end,
+                isAvailable = true
+            )
         )
-        repo.addTimeSlot(slot)
     }
 
-    fun deleteSlot(id: String) {
-        repo.deleteTimeSlot(id)
+    fun deleteSlot(slotId: String) {
+        repo.deleteTimeSlot(doctorId, slotId)
     }
 }
-

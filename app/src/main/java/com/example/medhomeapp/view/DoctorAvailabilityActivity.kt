@@ -43,89 +43,20 @@ class DoctorAvailabilityActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
+            val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
+            if (user == null) {
+                finish()
+                return
+            }
 
         setContent {
-            if (user != null && user.role.trim().lowercase() == "doctor") {
-                DoctorAvailabilityScreen(user)
-            } else {
-                AccessDeniedScreen()
-            }
+            DoctorAvailabilityScreen(user = user)
         }
     }
 }
 
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AccessDeniedScreen() {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Access Denied",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onErrorContainer
-                )
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                Icons.Default.Error,
-                contentDescription = "Access Denied",
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(64.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Access Restricted",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.error
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "This feature is only available for doctors.",
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            val context = LocalContext.current
-            Button(
-                onClick = {
-                    (context as? ComponentActivity)?.finish()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
-                )
-            ) {
-                Text("Go Back")
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

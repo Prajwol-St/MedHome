@@ -212,7 +212,10 @@ fun DashboardBody() {
             when (selectedTab) {
                 0 -> {
                     if (isDoctor) {
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        currentUser?.let { user ->
+                            DoctorHomeScreen(user)
+                        }
+
                     } else {
                         HomeScreenContent(currentUser?.name ?: "User")
                     }
@@ -224,7 +227,10 @@ fun DashboardBody() {
                         ReminderScreen()
                     } else {
                         // Show doctor home or a loading screen briefly
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        currentUser?.let { user ->
+                            DoctorHomeScreen(user)
+                        }
+
                     }
                 }
                 2 -> {
@@ -236,7 +242,10 @@ fun DashboardBody() {
                         }
                         HomeScreenContent(currentUser?.name ?: "User")
                     } else {
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        currentUser?.let { user ->
+                            DoctorHomeScreen(user)
+                        }
+
                     }
                 }
                 3 -> {
@@ -246,7 +255,9 @@ fun DashboardBody() {
                         selectedTab = 0
                     }
                     if (isDoctor) {
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        currentUser?.let { user ->
+                            DoctorHomeScreen(user)
+                        }
                     } else {
                         HomeScreenContent(currentUser?.name ?: "User")
                     }

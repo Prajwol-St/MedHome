@@ -5,29 +5,31 @@ import com.google.firebase.database.*
 
 class DoctorAvailabilityRepoImpl : DoctorAvailabilityRepo {
 
-    private val dbRef: DatabaseReference =
+    private val rootRef =
         FirebaseDatabase.getInstance().getReference("doctor_availability")
 
     override fun addTimeSlot(slot: TimeSlot) {
-        val key = dbRef.push().key ?: return
-        dbRef.child(key).setValue(slot.copy(id = key))
+        val doctorRef = rootRef.child(slot.doctorId)
+        val key = doctorRef.push().key ?: return
+        doctorRef.child(key).setValue(slot.copy(id = key))
     }
 
-    override fun deleteTimeSlot(id: String) {
-        dbRef.child(id).removeValue()
+    override fun deleteTimeSlot(doctorId: String, slotId: String) {
+        rootRef.child(doctorId).child(slotId).removeValue()
     }
 
-    override fun observeTimeSlots(doctorId: String, onResult: (List<TimeSlot>) -> Unit) {
-        dbRef.orderByChild("doctorId").equalTo(doctorId)
+    override fun observeTimeSlots(
+        doctorId: String,
+        onResult: (List<TimeSlot>) -> Unit
+    ) {
+        rootRef.child(doctorId)
             .addValueEventListener(object : ValueEventListener {
+
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val list = mutableListOf<TimeSlot>()
-                    snapshot.children.forEach {
-                        it.getValue(TimeSlot::class.java)?.let { slot ->
-                            list.add(slot)
-                        }
+                    val slots = snapshot.children.mapNotNull {
+                        it.getValue(TimeSlot::class.java)
                     }
-                    onResult(list)
+                    onResult(slots)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
