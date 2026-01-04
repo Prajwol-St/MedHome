@@ -213,7 +213,14 @@ fun DashboardBody() {
                 0 -> {
                     if (isDoctor) {
                         currentUser?.let { user ->
-                            DoctorHomeScreen(user)
+                            DoctorHomeScreen(
+                                user = user,
+                                onSetAvailabilityClick = {
+                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
+                                    context.startActivity(intent)
+                                }
+                            )
+
                         }
 
                     } else {
@@ -228,7 +235,14 @@ fun DashboardBody() {
                     } else {
                         // Show doctor home or a loading screen briefly
                         currentUser?.let { user ->
-                            DoctorHomeScreen(user)
+                            DoctorHomeScreen(
+                                user = user,
+                                onSetAvailabilityClick = {
+                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
+                                    context.startActivity(intent)
+                                }
+                            )
+
                         }
 
                     }
@@ -243,7 +257,14 @@ fun DashboardBody() {
                         HomeScreenContent(currentUser?.name ?: "User")
                     } else {
                         currentUser?.let { user ->
-                            DoctorHomeScreen(user)
+                            DoctorHomeScreen(
+                                user = user,
+                                onSetAvailabilityClick = {
+                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
+                                    context.startActivity(intent)
+                                }
+                            )
+
                         }
 
                     }
@@ -256,7 +277,14 @@ fun DashboardBody() {
                     }
                     if (isDoctor) {
                         currentUser?.let { user ->
-                            DoctorHomeScreen(user)
+                            DoctorHomeScreen(
+                                user = user,
+                                onSetAvailabilityClick = {
+                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
+                                    context.startActivity(intent)
+                                }
+                            )
+
                         }
                     } else {
                         HomeScreenContent(currentUser?.name ?: "User")

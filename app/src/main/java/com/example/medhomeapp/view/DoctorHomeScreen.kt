@@ -29,7 +29,9 @@ import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.ui.theme.Blue10
 
 @Composable
-fun DoctorHomeScreen(user: UserModel) {
+fun DoctorHomeScreen(user: UserModel,
+                     onSetAvailabilityClick: () -> Unit
+) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -100,10 +102,7 @@ fun DoctorHomeScreen(user: UserModel) {
                 DoctorFeatureCard(
                     title = "Set Availability",
                     icon = Icons.Default.CalendarMonth,
-                    onClick = {
-                        val intent = Intent(context, DoctorAvailabilityActivity::class.java)
-                        context.startActivity(intent)
-                    }
+                    onClick = onSetAvailabilityClick
                 )
             }
             item {
