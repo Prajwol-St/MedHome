@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -39,6 +40,7 @@ import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
+import androidx.core.content.edit
 
 class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +58,6 @@ fun DashboardBody() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    // Fixed: Removed duplicate sharedPrefs declaration
     val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
     val userId = sharedPrefs.getString("user_id", null)
 
@@ -80,7 +81,7 @@ fun DashboardBody() {
             val roleFromDb = user.role.lowercase().trim()
             if (roleFromDb.isNotEmpty() && roleFromDb != userType) {
                 userType = roleFromDb
-                sharedPrefs.edit().putString("user_type", roleFromDb).apply()
+                sharedPrefs.edit { putString("user_type", roleFromDb) }
             }
         }
     }
@@ -94,6 +95,18 @@ fun DashboardBody() {
     // Reset selectedTab if doctor and tab 2 is selected (Scan QR - not available for doctors)
     LaunchedEffect(isDoctor) {
         if (isDoctor && selectedTab == 2) {
+            selectedTab = 0
+        }
+    }
+
+    // Handle tab 1 click for doctors
+    LaunchedEffect(selectedTab) {
+        if (selectedTab == 1 && isDoctor && currentUser != null) {
+            // Launch DoctorAvailabilityActivity
+            val intent = DoctorAvailabilityActivity.newIntent(context, currentUser!!)
+            context.startActivity(intent)
+            // Reset to home tab AFTER a short delay
+            kotlinx.coroutines.delay(100) // Small delay to ensure the activity launches
             selectedTab = 0
         }
     }
@@ -140,7 +153,6 @@ fun DashboardBody() {
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    // Fixed: Removed duplicate icon/label declarations
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
                     label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
@@ -206,10 +218,13 @@ fun DashboardBody() {
                     }
                 }
                 1 -> {
-                    if (isDoctor) {
-                        DoctorScheduleScreen()
-                    } else {
+                    // For doctors, this will be handled by the LaunchedEffect above
+                    // For patients, show ReminderScreen
+                    if (!isDoctor) {
                         ReminderScreen()
+                    } else {
+                        // Show doctor home or a loading screen briefly
+                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
                     }
                 }
                 2 -> {
@@ -220,6 +235,8 @@ fun DashboardBody() {
                             selectedTab = 0
                         }
                         HomeScreenContent(currentUser?.name ?: "User")
+                    } else {
+                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
                     }
                 }
                 3 -> {
@@ -363,7 +380,7 @@ fun HomeScreenContent(userName: String) {
             item {
                 FeatureCard(
                     title = stringResource(R.string.ai_health_assistant),
-                    icon = Icons.Default.Chat,
+                    icon = Icons.AutoMirrored.Filled.Chat,
                     color =MintGreen,
                     onClick = { }
                 )

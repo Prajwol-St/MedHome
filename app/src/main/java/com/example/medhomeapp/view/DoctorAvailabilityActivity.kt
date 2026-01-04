@@ -29,6 +29,7 @@ import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModel
 
 class DoctorAvailabilityActivity : ComponentActivity() {
+
     companion object {
         private const val EXTRA_USER = "extra_user"
 
@@ -42,11 +43,11 @@ class DoctorAvailabilityActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val user = intent.getSerializableExtra(EXTRA_USER) as? UserModel
+        val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
 
         setContent {
-            if (user != null && user.role == "doctor") {
-                DoctorAvailabilityScreen(user = user)
+            if (user != null && user.role.trim().lowercase() == "doctor") {
+                DoctorAvailabilityScreen(user)
             } else {
                 AccessDeniedScreen()
             }
@@ -54,7 +55,9 @@ class DoctorAvailabilityActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+
+    @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccessDeniedScreen() {
     Scaffold(
@@ -457,10 +460,7 @@ fun TimePickerDialog(
                                 selectedMinute = (selectedMinute - 5 + 60) % 60
                             }
                         ) {
-                            Icon(
-                                Icons.Default.ArrowDropDown,
-                                contentDescription = "Decrease minute"
-                            )
+                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Decrease minute")
                         }
                     }
                 }
