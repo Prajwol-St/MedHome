@@ -30,3 +30,26 @@ fun FoodSearchResult.toFoodItemModel(
     )
 }
 
+fun getCurrentDate(): String{
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dateFormat.format(Date())
+}
+
+fun Long.toDateString(): String{
+    val dateFormat = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
+    return dateFormat.format(Date(this))
+}
+
+fun Long.toTimeString(): String{
+    val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    return timeFormat.format(Date(this))
+}
+
+fun String.toTimestamp(): Long{
+    return try {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        dateFormat.parse(this)?.time ?: System.currentTimeMillis()
+    }catch (e: Exception){
+        System.currentTimeMillis()
+    }
+}
