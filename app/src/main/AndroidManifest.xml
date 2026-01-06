@@ -22,17 +22,26 @@
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.AppointmentBookingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_appointment_booking"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
+            android:name=".view.UserAppointmentActivity"
+            android:exported="false"
+            android:label="@string/title_activity_user_appointment"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
             android:name=".view.DoctorAppointmentActivity"
             android:exported="false"
             android:label="@string/title_activity_doctor_appointment"
-            android:theme="@style/Theme.MedHomeApp" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.MedHomeApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-        <!-- =============================================== -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- =============================================== -->
         <!-- SPLASH & ENTRY POINT -->
         <!-- =============================================== -->
         <activity
@@ -140,14 +149,13 @@
             android:name=".view.DoctorAvailabilityActivity"
             android:exported="true"
             android:label="@string/title_activity_doctor_availability"
-            android:theme="@style/Theme.MedHomeApp" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.MedHomeApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-        <!-- =============================================== -->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- =============================================== -->
         <!-- QR CODE ACTIVITIES -->
         <!-- =============================================== -->
         <activity

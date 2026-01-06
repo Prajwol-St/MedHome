@@ -3,9 +3,8 @@ package com.example.medhomeapp.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.edit
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
@@ -40,7 +40,7 @@ import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
-import androidx.core.content.edit
+import kotlinx.coroutines.delay
 
 class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,58 +58,34 @@ fun DashboardBody() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
-    val userId = sharedPrefs.getString("user_id", null)
+    val sharedPrefs =
+        (context as BaseActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
 
+    val userId = sharedPrefs.getString("user_id", null)
     val currentUser by viewModel.currentUser
 
-    // Initialize userType from SharedPreferences
     var userType by remember {
         mutableStateOf(
-            sharedPrefs.getString("user_type", "patient")?.lowercase()?.trim()?.takeIf { it.isNotEmpty() } ?: "patient"
+            sharedPrefs.getString("user_type", "patient")!!
+                .lowercase().trim()
         )
     }
 
-    // Load user data immediately when userId is available
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
     }
 
-    // Update userType when currentUser changes - prioritize database role
     LaunchedEffect(currentUser) {
-        currentUser?.let { user ->
-            val roleFromDb = user.role.lowercase().trim()
-            if (roleFromDb.isNotEmpty() && roleFromDb != userType) {
-                userType = roleFromDb
-                sharedPrefs.edit { putString("user_type", roleFromDb) }
-            }
+        currentUser?.let {
+            userType = it.role.lowercase().trim()
+            sharedPrefs.edit { putString("user_type", userType) }
         }
     }
 
     var selectedTab by remember { mutableStateOf(0) }
 
-    // Check role from both SharedPreferences and currentUser, case-insensitive
-    val roleFromUser = currentUser?.role?.lowercase()?.trim() ?: ""
-    val isDoctor = userType == "doctor" || roleFromUser == "doctor"
+    val isDoctor = userType == "doctor"
 
-    // Reset selectedTab if doctor and tab 2 is selected (Scan QR - not available for doctors)
-    LaunchedEffect(isDoctor) {
-        if (isDoctor && selectedTab == 2) {
-            selectedTab = 0
-        }
-    }
-
-    // Handle tab 1 click for doctors
-    LaunchedEffect(selectedTab) {
-        if (selectedTab == 1 && isDoctor && currentUser != null) {
-            // Launch DoctorAvailabilityActivity
-            val intent = DoctorAvailabilityActivity.newIntent(context, currentUser!!)
-            context.startActivity(intent)
-            // Reset to home tab AFTER a short delay
-            kotlinx.coroutines.delay(100) // Small delay to ensure the activity launches
-            selectedTab = 0
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -137,154 +113,128 @@ fun DashboardBody() {
                 containerColor = Color.White,
                 tonalElevation = 8.dp
             ) {
+
+                // HOME
                 NavigationBarItem(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    icon = { Icon(painterResource(R.drawable.baseline_home_24), stringResource(R.string.home)) },
-                    label = { Text(stringResource(R.string.home), fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_home_24),
+                            stringResource(R.string.home)
+                        )
+                    },
+                    label = { Text(stringResource(R.string.home), fontSize = 11.sp) }
                 )
+
+                // REMINDER
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_access_time_filled_24),
+                            stringResource(R.string.reminder)
+                        )
+                    },
+                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) }
                 )
 
-                // Only show Scan QR for patients
-                if (!isDoctor) {
-                    NavigationBarItem(
-                        selected = selectedTab == 2,
-                        onClick = { selectedTab = 2 },
-                        icon = {
-                            Icon(
-                                painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                stringResource(R.string.scan),
-                                modifier = Modifier.size(28.dp),
-                                tint = if (selectedTab == 2) MintGreen else TextGray
-                            )
-                        },
-                        label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MintGreen,
-                            selectedTextColor = MintGreen,
-                            indicatorColor = LightSage.copy(alpha = 0.3f),
-                            unselectedIconColor = TextGray,
-                            unselectedTextColor = TextGray
+                // QR (NOW FOR BOTH)
+                NavigationBarItem(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_qr_code_scanner_24),
+                            stringResource(R.string.scan),
+                            modifier = Modifier.size(28.dp),
+                            tint = if (selectedTab == 2) MintGreen else TextGray
                         )
-                    )
-                }
+                    },
+                    label = { Text(stringResource(R.string.scan), fontSize = 11.sp) }
+                )
 
+                // SETTINGS
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
-                    icon = { Icon(painterResource(R.drawable.baseline_settings_24), stringResource(R.string.settings)) },
-                    label = { Text(stringResource(R.string.settings), fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_settings_24),
+                            stringResource(R.string.settings)
+                        )
+                    },
+                    label = { Text(stringResource(R.string.settings), fontSize = 11.sp) }
                 )
             }
         }
     ) { padding ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         ) {
             when (selectedTab) {
+
                 0 -> {
                     if (isDoctor) {
-                        currentUser?.let { user ->
+                        currentUser?.let {
                             DoctorHomeScreen(
-                                user = user,
+                                user = it,
                                 onSetAvailabilityClick = {
-                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
+                                    val intent =
+                                        DoctorAvailabilityActivity.newIntent(context, it)
                                     context.startActivity(intent)
                                 }
                             )
-
                         }
-
                     } else {
-                        HomeScreenContent(currentUser?.name ?: "User")
+                        HomeScreen()
                     }
                 }
+
                 1 -> {
-                    // For doctors, this will be handled by the LaunchedEffect above
-                    // For patients, show ReminderScreen
                     if (!isDoctor) {
                         ReminderScreen()
-                    } else {
-                        // Show doctor home or a loading screen briefly
-                        currentUser?.let { user ->
-                            DoctorHomeScreen(
-                                user = user,
-                                onSetAvailabilityClick = {
-                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
-                                    context.startActivity(intent)
-                                }
-                            )
-
-                        }
-
                     }
                 }
+
                 2 -> {
-                    if (!isDoctor) {
-                        LaunchedEffect(Unit) {
-                            val intent = Intent(context, QrScannerActivity::class.java)
-                            context.startActivity(intent)
-                            selectedTab = 0
-                        }
-                        HomeScreenContent(currentUser?.name ?: "User")
-                    } else {
-                        currentUser?.let { user ->
-                            DoctorHomeScreen(
-                                user = user,
-                                onSetAvailabilityClick = {
-                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
-                                    context.startActivity(intent)
-                                }
-                            )
-
-                        }
-
-                    }
-                }
-                3 -> {
                     LaunchedEffect(Unit) {
-                        val intent = Intent(context, SettingsActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, QrScannerActivity::class.java)
+                        )
                         selectedTab = 0
                     }
-                    if (isDoctor) {
-                        currentUser?.let { user ->
-                            DoctorHomeScreen(
-                                user = user,
-                                onSetAvailabilityClick = {
-                                    val intent = DoctorAvailabilityActivity.newIntent(context, user)
-                                    context.startActivity(intent)
-                                }
-                            )
 
+                    if (isDoctor) {
+                        currentUser?.let {
+                            DoctorHomeScreen(
+                                user = it,
+                                onSetAvailabilityClick = {}
+                            )
+                        }
+                    } else {
+                        HomeScreenContent(currentUser?.name ?: "User")
+                    }
+                }
+
+                3 -> {
+                    LaunchedEffect(Unit) {
+                        context.startActivity(
+                            Intent(context, SettingsActivity::class.java)
+                        )
+                        selectedTab = 0
+                    }
+
+                    if (isDoctor) {
+                        currentUser?.let {
+                            DoctorHomeScreen(
+                                user = it,
+                                onSetAvailabilityClick = {}
+                            )
                         }
                     } else {
                         HomeScreenContent(currentUser?.name ?: "User")
@@ -295,7 +245,8 @@ fun DashboardBody() {
     }
 }
 
-// Patient Home Screen (Original)
+/* ---------------- PATIENT HOME ---------------- */
+
 @Composable
 fun HomeScreenContent(userName: String) {
     val context = LocalContext.current
@@ -307,169 +258,31 @@ fun HomeScreenContent(userName: String) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            colors = CardDefaults.cardColors(containerColor = MintGreen),
-            elevation = CardDefaults.cardElevation(6.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.25f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = stringResource(R.string.profile),
-                            modifier = Modifier.size(32.dp),
-                            tint = Color.White
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(14.dp))
-
-                    Column {
-                        Text(
-                            text = stringResource(R.string.welcome),
-                            fontSize = 13.sp,
-                            color = Color.White.copy(alpha = 0.9f),
-                            fontWeight = FontWeight.Normal
-                        )
-                        Text(
-                            text = userName,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                    }
-                }
-
-                IconButton(
-                    onClick = {
-                        val intent = Intent(context, QrActivity::class.java)
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.2f))
-                ) {
-                    Icon(
-                        Icons.Default.QrCode,
-                        contentDescription = "QR Code",
-                        modifier = Modifier.size(26.dp),
-                        tint = Color.White
-                    )
-                }
-            }
-        }
 
         Text(
-            text = "Services",
-            fontSize = 18.sp,
+            "Welcome $userName",
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = TextDark,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+            modifier = Modifier.padding(20.dp)
         )
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier.height(700.dp),
+            contentPadding = PaddingValues(16.dp)
         ) {
             item {
                 FeatureCard(
-                    title = stringResource(R.string.health_records),
-                    icon = Icons.Default.Description,
-                    color = MintGreen,
-                    onClick = {
-                        val intent = Intent(context, HealthRecords::class.java)
-                        context.startActivity(intent)
-                    }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.book_consultation),
-                    icon = Icons.Default.VideoCall,
-                    color = MintGreen,
-                    onClick = {
-                        val intent = Intent(context, BookConsultationActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.ai_health_assistant),
-                    icon = Icons.AutoMirrored.Filled.Chat,
-                    color =MintGreen,
-                    onClick = { }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.past_bookings),
-                    icon = Icons.Default.Event,
-                    color = MintGreen,
-                    onClick = { }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.appointments),
-                    icon = Icons.Default.CalendarMonth,
-                    color = MintGreen,
-                    onClick = { }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.calories_calculator),
-                    icon = Icons.Default.FitnessCenter,
-                    color = MintGreen,
-                    onClick = { }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.blood_donation),
+                    title = "Blood Donation",
                     icon = Icons.Default.Favorite,
-                    color = MintGreen,
-                    onClick = {
-                        val intent = Intent(context, BloodDonationActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
-            }
-            item {
-                FeatureCard(
-                    title = stringResource(R.string.health_packages),
-                    icon = Icons.Default.LocalShipping,
-                    color = MintGreen,
-                    onClick = { }
-                )
+                    color = MintGreen
+                ) {
+                    context.startActivity(
+                        Intent(context, BloodDonationActivity::class.java)
+                    )
+                }
             }
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -485,40 +298,14 @@ fun FeatureCard(
             .fillMaxWidth()
             .height(130.dp)
             .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(3.dp),
-        shape = RoundedCornerShape(14.dp)
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Box(
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color.copy(alpha = 0.15f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    icon,
-                    contentDescription = title,
-                    modifier = Modifier.size(26.dp),
-                    tint = color
-                )
-            }
-
-            Text(
-                title,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = TextDark,
-                lineHeight = 16.sp
-            )
+            Icon(icon, title, tint = color)
+            Text(title, fontWeight = FontWeight.Bold)
         }
     }
 }
-
