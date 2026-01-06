@@ -40,7 +40,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.example.medhomeapp.R
+import com.example.medhomeapp.model.TimeSlot
+import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.ui.theme.Blue10
 
 import com.example.medhomeapp.view.ui.theme.CyanEnd
@@ -50,7 +53,9 @@ import com.example.medhomeapp.view.ui.theme.TealStart
 
 
 @Composable
-fun HomeScreen(){
+fun HomeScreen(
+    currentUser: UserModel
+){
 
 
     val optionCategories = listOf(
@@ -139,59 +144,54 @@ fun HomeScreen(){
 // 🔹 Restore missing components
         Spacer(modifier = Modifier.height(14.dp))
 
-        OptionGrid(optionCategories, optionTitle)
 
+        OptionGrid(optionCategories, optionTitle, currentUser)
 
         Spacer(modifier = Modifier.height(14.dp))
-        OptionGrid(optionCategories,optionTitle)
+
+        OptionGrid(optionCategories, optionTitle, currentUser)
         }
     }
 
 @Composable
 fun OptionGrid(
     optionCategories: List<Int>,
-    optionTitle:List<String>
-){
+    optionTitle: List<String>,
+    currentUser: UserModel
+) {
     val context = LocalContext.current
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
-            .fillMaxHeight()   // ✅ USE THIS
+            .fillMaxHeight()
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-
-    ){
-        items(optionCategories.size){index ->
+    ) {
+        items(optionCategories.size) { index ->
             OptionCard(
                 image = optionCategories[index],
                 label = optionTitle[index],
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    when(index){
-                        0 -> {
-                            val intent = Intent(context, HealthRecords::class.java)
-                            context.startActivity(intent)
-                        }
-                        1 -> {
-                            val intent = Intent(context, BookConsultationActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        4 -> {
-                            val intent = Intent(context, AppointmentBookingActivity::class.java)
-                            context.startActivity(intent)
-                        }
-                        6 -> {
-                            val intent = Intent(context, BloodDonationActivity::class.java)
-                            context.startActivity(intent)
-                        }
+                    when (index) {
+                        0 -> context.startActivity(Intent(context, HealthRecords::class.java))
+                        1 -> context.startActivity(
+                            BookConsultationActivity.newIntent(
+                                context = context,
+                                user = currentUser
+                            )
+                        )
+
+                        5 -> { context.startActivity(Intent(context, AppointmentBookingActivity::class.java)) }
+                        6 -> context.startActivity(Intent(context, BloodDonationActivity::class.java))
                     }
                 }
-
             )
         }
     }
 }
+
 @Composable
 fun OptionCard(modifier: Modifier, image: Int, label: String, onClick : () -> Unit ={}){
     Card(

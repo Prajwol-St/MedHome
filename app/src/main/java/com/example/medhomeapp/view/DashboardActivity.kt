@@ -55,6 +55,7 @@ class DashboardActivity : BaseActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardBody() {
+
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
@@ -191,7 +192,9 @@ fun DashboardBody() {
                             )
                         }
                     } else {
-                        HomeScreen()
+                        currentUser?.let {
+                            HomeScreen(currentUser = it)
+                        }
                     }
                 }
 
