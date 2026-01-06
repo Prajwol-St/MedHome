@@ -133,5 +133,7 @@
     <!-- Google Sign In -->
     <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
     <string name="title_activity_doctor_appointment">DoctorAppointmentActivity</string>
+    <string name="title_activity_user_appointment">UserAppointmentActivity</string>
+    <string name="title_activity_appointment_booking">AppointmentBookingActivity</string>
 
 </resources>
