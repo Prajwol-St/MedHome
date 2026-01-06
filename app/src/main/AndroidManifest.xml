@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
     <!-- Permissions -->
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
             android:name=".view.AppointmentBookingActivity"
             android:exported="false"
@@ -35,7 +35,7 @@
             android:name=".view.DoctorAppointmentActivity"
             android:exported="false"
             android:label="@string/title_activity_doctor_appointment"
-            android:theme="@style/Theme.MedHomeApp">
+            android:theme="@style/Theme.MedHomeApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,7 +47,7 @@
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.MedHomeApp">
+            android:theme="@style/Theme.MedHomeApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -132,7 +132,7 @@
             android:name=".view.BookConsultationActivity"
             android:exported="true"
             android:theme="@style/Theme.MedHomeApp"
-            tools:ignore="IntentFilterExportedReceiver">
+            tools:ignore="IntentFilterExportedReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -149,7 +149,7 @@
             android:name=".view.DoctorAvailabilityActivity"
             android:exported="true"
             android:label="@string/title_activity_doctor_availability"
-            android:theme="@style/Theme.MedHomeApp">
+            android:theme="@style/Theme.MedHomeApp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
