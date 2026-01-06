@@ -19,15 +19,5 @@ data class DoctorModel(
 }
 
 
-data class DoctorAvailability(
-    val doctorId: String = "",   // doctor.id.toString()
-    val date: String = "",
-    val timeSlots: List<String> = emptyList()
-)
 
-
-data class DoctorLeave(
-    val doctorId: String = "",
-    val date: String = ""
-)
 

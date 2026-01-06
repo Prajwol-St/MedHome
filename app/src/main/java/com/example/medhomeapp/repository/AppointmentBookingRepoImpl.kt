@@ -70,4 +70,23 @@ class AppointmentBookingRepoImpl : AppointmentBookingRepo {
             }
         })
     }
+
+    override fun getSlot(
+        doctorId: String,
+        slotId: String,
+        callback: (TimeSlot?) -> Unit
+    ) {
+        val db = FirebaseDatabase.getInstance()
+        val slotRef = db.getReference("doctor_availability")
+            .child(doctorId)
+            .child(slotId)
+
+        slotRef.get().addOnSuccessListener { snapshot ->
+            val slot = snapshot.getValue(TimeSlot::class.java)
+            callback(slot)
+        }.addOnFailureListener {
+            callback(null)
+        }
+    }
+
 }

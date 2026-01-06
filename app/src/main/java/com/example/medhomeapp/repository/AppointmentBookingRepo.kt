@@ -10,4 +10,10 @@ interface AppointmentBookingRepo {
         reason: String,
         callback: (Boolean, String) -> Unit
     )
+
+    fun getSlot(
+        doctorId: String,
+        slotId: String,
+        callback: (TimeSlot?) -> Unit
+    )
 }

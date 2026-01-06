@@ -2,9 +2,12 @@ package com.example.medhomeapp.view
 
 import AppointmentModel
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,227 +41,182 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.DoctorModel
+import com.example.medhomeapp.model.TimeSlot
+import com.example.medhomeapp.model.UserModel
+import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
 import com.example.medhomeapp.repository.DoctorRepoImpl
 import com.example.medhomeapp.ui.theme.Blue10
 import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
+import com.example.medhomeapp.viewmodel.DoctorSlotsViewModel
 import com.example.medhomeapp.viewmodel.DoctorViewModel
 
 class BookConsultationActivity : BaseActivity() {
+
+    companion object {
+        private const val EXTRA_USER = "extra_user"
+
+        fun newIntent(context: Context, user: UserModel): Intent {
+            return Intent(context, BookConsultationActivity::class.java).apply {
+                putExtra(EXTRA_USER, user)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            Hello()
-//            val appointmentViewModel: AppointmentViewModel = viewModel(
-//                factory = AppointmentViewModelFactory(
-//                    AppointmentRepoImpl(),
-//                    DoctorRepoImpl()
-//                )
 
-//            )
-//            val doctorViewModel: DoctorViewModel = viewModel()
-//
-//            BookConsultationScreen(
-//                appointmentViewModel = appointmentViewModel,
-//                doctorViewModel = doctorViewModel
-//            )
+        val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
+        if (user == null) {
+            finish()
+            return
+        }
+
+        setContent {
+            MedHomeAppTheme {
+                BookConsultationRoute(currentUser = user)
+            }
         }
     }
 }
 
 
 @Composable
-fun Hello() {
-    Text(text = "Hello")
+fun BookConsultationRoute(
+    currentUser: UserModel
+) {
+    val doctorViewModel: DoctorViewModel = viewModel(
+        factory = ViewModelProvider.Factory {
+            DoctorViewModel(DoctorRepoImpl())
+        }
+    )
+
+    val doctors by doctorViewModel.doctors.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        doctorViewModel.loadDoctors()
+    }
+
+    when {
+        doctors.isEmpty() -> {
+            CircularProgressIndicator()
+        }
+        else -> {
+            BookConsultationScreen(
+                currentUser = currentUser,
+                doctors = doctors
+            )
+        }
+    }
 }
 
 
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun BookConsultationBody(){
-//    val context = LocalContext.current
-//    val activity = context as Activity
-//
-//    Scaffold(
-//        topBar = {
-//            Column {
-//                CenterAlignedTopAppBar(
-//                    colors = TopAppBarDefaults.topAppBarColors(
-//                        containerColor = Blue10,
-//                        titleContentColor = White,
-//                        navigationIconContentColor = White,
-//                        actionIconContentColor = White,
-//                    ),
-//                    title = { Text("Book Consultation") },
-//                    navigationIcon = {
-//                        IconButton(onClick = { activity.finish() }) {
-//                            Icon(
-//                                painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-//                                contentDescription = null
-//                            )
-//                        }
-//                    },
-//                )
-//            }
-//        }
-//
-//    ) { padding ->
-//        LazyColumn(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(padding)
-//        ) {
-//
-//        }
-//
-//    }
-//}
-//
-//@Composable
-//fun BookConsultationScreen(
-//    appointmentViewModel: AppointmentViewModel,
-//    doctorViewModel: DoctorViewModel
-//) {
-//    val doctors by doctorViewModel.doctors.collectAsStateWithLifecycle()
-//
-//    var selectedDoctorId by remember { mutableStateOf("") }
-//    var date by remember { mutableStateOf("") }
-//    var time by remember { mutableStateOf("") }
-//    var reason by remember { mutableStateOf("") }
-//
-//    // Load doctors when screen opens
-//    LaunchedEffect(Unit) {
-//        doctorViewModel.loadDoctors()
-//    }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//    ) {
-//
-//        Text(
-//            text = "Choose Doctor",
-//            style = MaterialTheme.typography.headlineMedium
-//        )
-//
-//        Spacer(modifier = Modifier.height(12.dp))
-//
-//        if (doctors.isEmpty()) {
-//            Column(
-//                modifier = Modifier.fillMaxWidth(),
-//                verticalArrangement = Arrangement.Center
-//            ) {
-//                CircularProgressIndicator()
-//                Spacer(modifier = Modifier.height(8.dp))
-//                Text("Loading doctors...")
-//            }
-//        } else {
-//            LazyColumn(
-//                verticalArrangement = Arrangement.spacedBy(8.dp)
-//            ) {
-//                items(doctors) { doctor ->
-//                    DoctorCard(
-//                        doctor = doctor,
-//                        onSelect = { selectedDoctorId = it }
-//                    )
-//                }
-//            }
-//        }
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        // Booking form
-//        if (selectedDoctorId.isNotEmpty()) {
-//
-//            OutlinedTextField(
-//                value = date,
-//                onValueChange = { date = it },
-//                label = { Text("Date (yyyy-MM-dd)") },
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            OutlinedTextField(
-//                value = time,
-//                onValueChange = { time = it },
-//                label = { Text("Time (HH:mm)") },
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            OutlinedTextField(
-//                value = reason,
-//                onValueChange = { reason = it },
-//                label = { Text("Reason for Visit") },
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//
-//            Spacer(modifier = Modifier.height(12.dp))
-//
-//            Button(
-//                modifier = Modifier.fillMaxWidth(),
-//                onClick = {
-//                    val patientId =
-//                        appointmentViewModel.getCurrentUserId() ?: return@Button
-//
-//                    val appointment = AppointmentModel(
-//                        patientId = patientId,
-//                        doctorId = selectedDoctorId,
-//                        date = date,
-//                        time = time,
-//                        reason = reason
-//                    )
-//
-//                    appointmentViewModel.addAppointment(appointment)
-//                }
-//            ) {
-//                Text("Confirm Booking")
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun DoctorCard(
-//    doctor: DoctorModel,
-//    onSelect: (String) -> Unit
-//) {
-//    Card(
-//        modifier = Modifier.fillMaxWidth(),
-//        elevation = CardDefaults.cardElevation(6.dp)
-//    ) {
-//        Column(modifier = Modifier.padding(16.dp)) {
-//
-//            Text(
-//                text = doctor.name,
-//                style = MaterialTheme.typography.titleLarge
-//            )
-//
-//            Text(
-//                text = doctor.specialization,
-//                color = MaterialTheme.colorScheme.primary
-//            )
-//
-//            Text(text = doctor.type)
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-//
-//            Button(
-//                modifier = Modifier.fillMaxWidth(),
-//                onClick = { onSelect(doctor.userId) }
-//            ) {
-//                Text("Select Doctor")
-//            }
-//        }
-//    }
-//}
+
+
+
+
+@Composable
+fun BookConsultationScreen(
+    currentUser: UserModel,
+    doctors: List<DoctorModel>
+) {
+    val context = LocalContext.current
+
+    val slotViewModel: DoctorSlotsViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return DoctorSlotsViewModel(DoctorAvailabilityRepoImpl()) as T
+            }
+        }
+    )
+
+    var selectedDoctor by remember { mutableStateOf<DoctorModel?>(null) }
+    val slots by slotViewModel.slots.collectAsState()
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
+        Text("Choose Doctor", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
+        Spacer(Modifier.height(8.dp))
+
+        doctors.forEach { doctor ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp)
+                    .clickable {
+                        selectedDoctor = doctor
+                        slotViewModel.observeSlots(doctor.userId)
+                    }
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(doctor.name, fontWeight = FontWeight.Bold)
+                    Text(doctor.specialization)
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        selectedDoctor?.let {
+            Text(
+                "Available Slots",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            if (slots.isEmpty()) {
+                Text("No available slots")
+            } else {
+                slots.forEach { slot ->
+                    TimeSlotPatientCard(
+                        slot = slot,
+                        onSelect = {
+                            context.startActivity(
+                                AppointmentBookingActivity.newIntent(
+                                    context = context,
+                                    user = currentUser,
+                                    slot = slot
+                                )
+                            )
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TimeSlotPatientCard(
+    slot: TimeSlot,
+    onSelect: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .clickable { onSelect() },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(slot.day, fontWeight = FontWeight.Bold)
+            Text("${slot.startTime} - ${slot.endTime}")
+        }
+    }
+}

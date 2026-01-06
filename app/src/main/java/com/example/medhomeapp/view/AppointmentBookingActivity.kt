@@ -48,7 +48,8 @@ class AppointmentBookingActivity : ComponentActivity() {
 
     companion object {
         private const val EXTRA_USER = "extra_user"
-        private const val EXTRA_SLOT = "extra_slot"
+        private const val EXTRA_SLOT_ID = "slot_id"
+        private const val EXTRA_DOCTOR_ID = "doctor_id"
 
         fun newIntent(
             context: Context,
@@ -57,23 +58,25 @@ class AppointmentBookingActivity : ComponentActivity() {
         ): Intent {
             return Intent(context, AppointmentBookingActivity::class.java).apply {
                 putExtra(EXTRA_USER, user)
-                putExtra("slot_id", slot.id)
-                putExtra("doctor_id", slot.doctorId)
+                putExtra(EXTRA_SLOT_ID, slot.id)
+                putExtra(EXTRA_DOCTOR_ID, slot.doctorId)
             }
         }
+    }
 
-
-        override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
-        val slot = TimeSlot(
-            day = intent.getStringExtra("slot_day")!!,
-            startTime = intent.getStringExtra("slot_start")!!,
-            endTime = intent.getStringExtra("slot_end")!!
-        )
+        val slotId = intent.getStringExtra(EXTRA_SLOT_ID)
+        val doctorId = intent.getStringExtra(EXTRA_DOCTOR_ID)
 
-        if (user == null || slot == null) {
+        if (
+            user == null ||
+            slotId.isNullOrBlank() ||
+            doctorId.isNullOrBlank()
+        ) {
             finish()
             return
         }
@@ -83,7 +86,8 @@ class AppointmentBookingActivity : ComponentActivity() {
                 Surface {
                     AppointmentBookingScreen(
                         user = user,
-                        slot = slot,
+                        slotId = slotId,
+                        doctorId = doctorId,
                         onFinish = { finish() }
                     )
                 }
@@ -94,11 +98,14 @@ class AppointmentBookingActivity : ComponentActivity() {
 
 
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppointmentBookingScreen(
     user: UserModel,
-    slot: TimeSlot,
+    slotId: String,
+    doctorId: String,
     onFinish: () -> Unit
 ) {
 
@@ -108,16 +115,27 @@ fun AppointmentBookingScreen(
         )
     )
 
+    val slot by bookingViewModel.slot.collectAsState()
     val bookingState by bookingViewModel.bookingState.collectAsState()
 
     var reason by remember { mutableStateOf("") }
     var showDialog by remember { mutableStateOf(false) }
 
-    // ✅ React to booking result ONLY ONCE
+    // 🔹 Load slot ONCE
+    LaunchedEffect(Unit) {
+        bookingViewModel.loadSlot(doctorId, slotId)
+    }
+
+    // 🔹 Booking result
     LaunchedEffect(bookingState.first) {
         if (bookingState.first != null) {
             showDialog = true
         }
+    }
+
+    if (slot == null) {
+        Text("Loading...")
+        return
     }
 
     Scaffold(
@@ -136,32 +154,23 @@ fun AppointmentBookingScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            // 🔹 Slot Details
             Card {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Appointment Details",
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Appointment Details", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Day: ${slot.day}")
-                    Text("Time: ${slot.startTime} - ${slot.endTime}")
+                    Text("Day: ${slot!!.day}")
+                    Text("Time: ${slot!!.startTime} - ${slot!!.endTime}")
                 }
             }
 
-            // 🔹 Patient Info
             Card {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text(
-                        text = "Patient",
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text("Patient", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(user.name)
                 }
             }
 
-            // 🔹 Reason Input
             OutlinedTextField(
                 value = reason,
                 onValueChange = { reason = it },
@@ -172,11 +181,10 @@ fun AppointmentBookingScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // 🔹 Book Button
             Button(
                 onClick = {
                     bookingViewModel.book(
-                        slot = slot,
+                        slot = slot!!,
                         patient = user,
                         reason = reason
                     )
@@ -189,7 +197,6 @@ fun AppointmentBookingScreen(
         }
     }
 
-    // 🔹 Result Dialog
     if (showDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -197,20 +204,16 @@ fun AppointmentBookingScreen(
                 onFinish()
             },
             title = {
-                Text(
-                    if (bookingState.first == true) "Success" else "Failed"
-                )
+                Text(if (bookingState.first == true) "Success" else "Failed")
             },
             text = {
                 Text(bookingState.second ?: "")
             },
             confirmButton = {
-                TextButton(
-                    onClick = {
-                        showDialog = false
-                        onFinish()
-                    }
-                ) {
+                TextButton(onClick = {
+                    showDialog = false
+                    onFinish()
+                }) {
                     Text("OK")
                 }
             }
