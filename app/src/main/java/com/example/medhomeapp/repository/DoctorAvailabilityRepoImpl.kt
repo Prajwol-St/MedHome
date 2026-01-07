@@ -26,8 +26,9 @@ class DoctorAvailabilityRepoImpl : DoctorAvailabilityRepo {
             .addValueEventListener(object : ValueEventListener {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val slots = snapshot.children.mapNotNull {
-                        it.getValue(TimeSlot::class.java)
+                    val slots = snapshot.children.mapNotNull { child ->
+                        val slot = child.getValue(TimeSlot::class.java)
+                        slot?.copy(id = child.key ?: "")
                     }
                     onResult(slots)
                 }
@@ -37,4 +38,5 @@ class DoctorAvailabilityRepoImpl : DoctorAvailabilityRepo {
                 }
             })
     }
+
 }
