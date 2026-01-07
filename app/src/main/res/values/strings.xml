@@ -136,5 +136,6 @@
     <string name="title_activity_health_packages">HealthPackagesActivity</string>
     <string name="title_activity_health_packages_management">HealthPackagesManagementActivity
     </string>
+    <string name="title_activity_calories_calculator">CaloriesCalculatorActivity</string>
 
 </resources>

@@ -38,7 +38,7 @@ fun DoctorHomeScreen(doctorName: String) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-
+        // Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -87,6 +87,7 @@ fun DoctorHomeScreen(doctorName: String) {
             }
         }
 
+        // Management Section
         Text(
             text = "Management",
             fontSize = 18.sp,
@@ -95,6 +96,7 @@ fun DoctorHomeScreen(doctorName: String) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
+        // Management Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
