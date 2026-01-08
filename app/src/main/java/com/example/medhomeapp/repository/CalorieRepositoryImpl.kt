@@ -3,14 +3,44 @@ package com.example.medhomeapp.repository
 import com.example.medhomeapp.model.CalorieGoalModel
 import com.example.medhomeapp.model.DailySummaryModel
 import com.example.medhomeapp.model.FoodItemModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class CalorieRepositoryImpl : CalorieRepository {
+
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
+    private fun getUserId(): String? = auth.currentUser?.uid
+
+    private fun getCalorieTrackerRef(): DatabaseReference? {
+        val userId = getUserId() ?: return null
+        return database.getReference("calorieTracker").child(userId)
+    }
     override fun addFoodItem(
         foodItem: FoodItemModel,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        val newItemRef = ref.push()
+        val itemId = newItemRef.key ?: run {
+            onError(Exception("Failed to generate item ID"))
+            return
+        }
+
+        val foodItemWithId = foodItem.copy(id = itemId)
+        newItemRef.setValue(foodItemWithId.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getFoodItemsByDate(
@@ -18,14 +48,50 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<FoodItemModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.orderByChild("date").equalTo(date)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val items = mutableListOf<FoodItemModel>()
+                    for (child in snapshot.children) {
+                        child.getValue(FoodItemModel::class.java)?.let { items.add(it) }
+                    }
+                    onSuccess(items.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+            })
     }
 
     override fun getAllFoodItems(
         onSuccess: (List<FoodItemModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.orderByChild("timestamp")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val items = mutableListOf<FoodItemModel>()
+                    for (child in snapshot.children) {
+                        child.getValue(FoodItemModel::class.java)?.let { items.add(it) }
+                    }
+                    onSuccess(items.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+            })
     }
 
     override fun getFoodItemById(
@@ -33,7 +99,21 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (FoodItemModel?) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems")?.child(foodItemId) ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val foodItem = snapshot.getValue(FoodItemModel::class.java)
+                onSuccess(foodItem)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError(error.toException())
+            }
+        })
     }
 
     override fun updateFoodItem(
@@ -42,7 +122,14 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems")?.child(foodItemId) ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.setValue(foodItem.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun deleteFoodItem(
