@@ -137,7 +137,15 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems")?.child(foodItemId) ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
+
     }
 
     override fun getFoodItemByMealType(
@@ -146,7 +154,10 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<FoodItemModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getFoodItemsByDate(date, { items ->
+            val filteredItems = items.filter { it.mealType == mealType }
+            onSuccess(filteredItems)
+        }, onError)
     }
 
     override fun getFoodItemByDateRange(
@@ -155,7 +166,25 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<FoodItemModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.orderByChild("date").startAt(startDate).endAt(endDate)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val items = mutableListOf<FoodItemModel>()
+                    for (child in snapshot.children) {
+                        child.getValue(FoodItemModel::class.java)?.let { items.add(it) }
+                    }
+                    onSuccess(items.sortedByDescending { it.timestamp })
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+            })
     }
 
     override fun setCalorieGoal(
@@ -163,14 +192,35 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("calorieGoal") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.setValue(goal.toMap())
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getCalorieGoal(
         onSuccess: (CalorieGoalModel?) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("calorieGoal") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val goal = snapshot.getValue(CalorieGoalModel::class.java)
+                onSuccess(goal)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onError(error.toException())
+            }
+        })
     }
 
     override fun updateCalorieGoal(
@@ -178,7 +228,19 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("calorieGoal") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        val updates = mapOf(
+            "targetCalories" to targetCalories,
+            "updatedAt" to System.currentTimeMillis()
+        )
+
+        ref.updateChildren(updates)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun updateMacroGoals(
@@ -188,7 +250,21 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("calorieGoal") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        val updates = mapOf(
+            "proteinGoal" to proteinGoal,
+            "carbsGoal" to carbsGoal,
+            "fatGoal" to fatGoal,
+            "updatedAt" to System.currentTimeMillis()
+        )
+
+        ref.updateChildren(updates)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onError(it) }
     }
 
     override fun getDailySummary(
@@ -196,7 +272,34 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (DailySummaryModel) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getFoodItemsByDate(date, { foodItems ->
+            getCalorieGoal({ goal ->
+                val totalCalories = foodItems.sumOf { it.getTotalCalories() }
+                val totalProtein = foodItems.sumOf { it.getTotalProtein() }
+                val totalCarbs = foodItems.sumOf { it.getTotalCarbs() }
+                val totalFat = foodItems.sumOf { it.getTotalFat() }
+
+                val remainingCalories = (goal?.targetCalories ?: 0.0) - totalCalories
+                val progress = if (goal != null && goal.targetCalories > 0) {
+                    (totalCalories / goal.targetCalories).toFloat().coerceIn(0f, 1f)
+                } else 0f
+
+                val summary = DailySummaryModel(
+                    date = date,
+                    foodItems = foodItems,
+                    totalCalories = totalCalories,
+                    totalProtein = totalProtein,
+                    totalCarbs = totalCarbs,
+                    totalFat = totalFat,
+                    goal = goal,
+                    remainingCalories = remainingCalories,
+                    calorieProgress = progress,
+                    mealCount = foodItems.size
+                )
+
+                onSuccess(summary)
+            }, onError)
+        }, onError)
     }
 
     override fun getWeeklySummary(
@@ -205,7 +308,41 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<DailySummaryModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getFoodItemByDateRange(startDate, endDate, { foodItems ->
+            getCalorieGoal({ goal ->
+                val summaries = mutableListOf<DailySummaryModel>()
+                    val groupedByDate = foodItems.groupBy { it.date }
+
+                for ((date, items) in groupedByDate) {
+                    val totalCalories = items.sumOf { it.getTotalCalories() }
+                    val totalProtein = items.sumOf { it.getTotalProtein() }
+                    val totalCarbs = items.sumOf { it.getTotalCarbs() }
+                    val totalFat = items.sumOf { it.getTotalFat() }
+
+                    val remainingCalories = (goal?.targetCalories ?: 0.0) - totalCalories
+                    val progress = if (goal != null && goal.targetCalories > 0) {
+                        (totalCalories / goal.targetCalories).toFloat().coerceIn(0f, 1f)
+                    } else 0f
+
+                    summaries.add(
+                        DailySummaryModel(
+                            date = date,
+                            foodItems = items,
+                            totalCalories = totalCalories,
+                            totalProtein = totalProtein,
+                            totalCarbs = totalCarbs,
+                            totalFat = totalFat,
+                            goal = goal,
+                            remainingCalories = remainingCalories,
+                            calorieProgress = progress,
+                            mealCount = items.size
+                        )
+                    )
+                }
+
+                onSuccess(summaries.sortedBy { it.date })
+            }, onError)
+        }, onError)
     }
 
     override fun getMonthlySummary(
@@ -213,7 +350,58 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<DailySummaryModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        val ref = getCalorieTrackerRef()?.child("foodItems") ?: run {
+            onError(Exception("User not logged in"))
+            return
+        }
+
+        ref.orderByChild("date").startAt(month).endAt("$month\uf8ff")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val items = mutableListOf<FoodItemModel>()
+                    for (child in snapshot.children) {
+                        child.getValue(FoodItemModel::class.java)?.let { items.add(it) }
+                    }
+
+                    getCalorieGoal({ goal ->
+                        val summaries = mutableListOf<DailySummaryModel>()
+                        val groupedByDate = items.groupBy { it.date }
+
+                        for ((date, dailyItems) in groupedByDate) {
+                            val totalCalories = dailyItems.sumOf { it.getTotalCalories() }
+                            val totalProtein = dailyItems.sumOf { it.getTotalProtein() }
+                            val totalCarbs = dailyItems.sumOf { it.getTotalCarbs() }
+                            val totalFat = dailyItems.sumOf { it.getTotalFat() }
+
+                            val remainingCalories = (goal?.targetCalories ?: 0.0) - totalCalories
+                            val progress = if (goal != null && goal.targetCalories > 0) {
+                                (totalCalories / goal.targetCalories).toFloat().coerceIn(0f, 1f)
+                            } else 0f
+
+                            summaries.add(
+                                DailySummaryModel(
+                                    date = date,
+                                    foodItems = dailyItems,
+                                    totalCalories = totalCalories,
+                                    totalProtein = totalProtein,
+                                    totalCarbs = totalCarbs,
+                                    totalFat = totalFat,
+                                    goal = goal,
+                                    remainingCalories = remainingCalories,
+                                    calorieProgress = progress,
+                                    mealCount = dailyItems.size
+                                )
+                            )
+                        }
+
+                        onSuccess(summaries.sortedBy { it.date })
+                    }, onError)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onError(error.toException())
+                }
+            })
     }
 
     override fun getTotalCaloriesForDate(
@@ -221,7 +409,10 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (Double) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getFoodItemsByDate(date, { items ->
+            val total = items.sumOf { it.getTotalCalories() }
+            onSuccess(total)
+        }, onError)
     }
 
     override fun getAverageCaloriesForWeek(
@@ -230,7 +421,16 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (Double) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getFoodItemByDateRange(startDate, endDate, { items ->
+            val groupedByDate = items.groupBy { it.date }
+            val dailyTotals = groupedByDate.map { (_, dailyItems) ->
+                dailyItems.sumOf { it.getTotalCalories() }
+            }
+            val average = if (dailyTotals.isNotEmpty()) {
+                dailyTotals.average()
+            } else 0.0
+            onSuccess(average)
+        }, onError)
     }
 
     override fun getMealHistoryByType(
@@ -239,10 +439,13 @@ class CalorieRepositoryImpl : CalorieRepository {
         onSuccess: (List<FoodItemModel>) -> Unit,
         onError: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        getAllFoodItems({ items ->
+            val filteredItems = items.filter { it.mealType == mealType }.take(limit)
+            onSuccess(filteredItems)
+        }, onError)
     }
 
-    override fun getCurrentUserId(): String? {
-        TODO("Not yet implemented")
-    }
+    override fun getCurrentUserId(): String? = getUserId()
+
+
 }
