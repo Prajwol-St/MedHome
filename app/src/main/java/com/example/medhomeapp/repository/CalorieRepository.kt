@@ -1,6 +1,7 @@
 package com.example.medhomeapp.repository
 
 import com.example.medhomeapp.model.CalorieGoalModel
+import com.example.medhomeapp.model.DailySummaryModel
 import com.example.medhomeapp.model.FoodItemModel
 
 interface CalorieRepository {
@@ -81,6 +82,43 @@ interface CalorieRepository {
     )
 
     fun getDailySummary(
-
+        date: String,
+        onSuccess: (DailySummaryModel) -> Unit,
+        onError: (Exception) -> Unit
     )
+
+    fun getWeeklySummary(
+        startDate: String,
+        endDate: String,
+        onSuccess: (List<DailySummaryModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getMonthlySummary(
+        month: String,
+        onSuccess: (List<DailySummaryModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getTotalCaloriesForDate(
+        date: String,
+        onSuccess: (Double) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getAverageCaloriesForWeek(
+        startDate: String,
+        endDate: String,
+        onSuccess: (Double) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getMealHistoryByType(
+        mealType: String,
+        limit: Int,
+        onSuccess: (List<FoodItemModel>) -> Unit,
+        onError: (Exception) -> Unit
+    )
+
+    fun getCurrentUserId(): String?
 }
