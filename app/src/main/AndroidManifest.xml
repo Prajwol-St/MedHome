@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,7 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".view.MyPackagesActivity"
+            android:exported="false"
+            android:label="@string/title_activity_my_packages"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
+            android:name=".view.HealthPackageDetailsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_health_package_details"
+            android:theme="@style/Theme.MedHomeApp" />
+        <activity
+            android:name=".view.HealthPackagesActivity"
+            android:exported="false"
+            android:label="@string/title_activity_health_packages"
+            android:theme="@style/Theme.MedHomeApp" />
         <activity
             android:name=".view.PackageBookingsActivity"
             android:exported="false"
@@ -42,7 +57,7 @@
         <activity
             android:name=".view.SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.MedHomeApp" >
+            android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
