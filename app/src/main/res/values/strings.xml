@@ -137,5 +137,8 @@
     <string name="title_activity_create_package">CreatePackageActivity</string>
     <string name="title_activity_edit_package">EditPackageActivity</string>
     <string name="title_activity_package_bookings">PackageBookingsActivity</string>
+    <string name="title_activity_health_packages">HealthPackagesActivity</string>
+    <string name="title_activity_health_package_details">HealthPackageDetailsActivity</string>
+    <string name="title_activity_my_packages">MyPackagesActivity</string>
 
 </resources>
