@@ -1,132 +1,184 @@
 package com.example.medhomeapp.repository
 
-import com.example.medhomeapp.model.HealthPackage
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.example.medhomeapp.model.HealthPackageModel
+import com.google.firebase.database.*
 
 class HealthPackageRepoImpl : HealthPackageRepo {
 
-    private val database = FirebaseDatabase.getInstance()
-    private val packagesRef = database.getReference("health_packages")
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val ref: DatabaseReference = database.getReference("HealthPackages")
 
     override fun createPackage(
-        healthPackage: HealthPackage,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        packageModel: HealthPackageModel,
+        callback: (Boolean, String) -> Unit
     ) {
-        val packageId = packagesRef.push().key
-        if (packageId == null) {
-            onError(Exception("Failed to generate package ID"))
-            return
-        }
+        val packageId = ref.push().key ?: return callback(false, "Failed to generate ID")
+        val packageWithId = packageModel.copy(id = packageId)
 
-        val packageWithId = healthPackage.copy(
-            id = packageId,
-            timestamp = System.currentTimeMillis()
-        )
-
-        packagesRef.child(packageId).setValue(packageWithId.toMap())
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
+        ref.child(packageId).setValue(packageWithId.toMap())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Package created successfully")
+                } else {
+                    callback(false, task.exception?.message ?: "Failed to create package")
+                }
+            }
     }
 
     override fun getAllPackages(
-        onSuccess: (List<HealthPackage>) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     ) {
-        packagesRef.orderByChild("timestamp")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val packages = mutableListOf<HealthPackage>()
-                    for (childSnapshot in snapshot.children) {
-                        childSnapshot.getValue(HealthPackage::class.java)?.let {
-                            packages.add(it)
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val packages = mutableListOf<HealthPackageModel>()
+                    for (data in snapshot.children) {
+                        val pkg = data.getValue(HealthPackageModel::class.java)
+                        if (pkg != null) {
+                            packages.add(pkg)
                         }
                     }
-                    onSuccess(packages.sortedByDescending { it.timestamp })
+                    callback(true, "Packages fetched successfully", packages)
+                } else {
+                    callback(true, "No packages found", emptyList())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback(false, error.message, emptyList())
+            }
+        })
+    }
+
+    override fun getPackagesByDoctor(
+        doctorId: String,
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
+    ) {
+        ref.orderByChild("doctorId").equalTo(doctorId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val packages = mutableListOf<HealthPackageModel>()
+                        for (data in snapshot.children) {
+                            val pkg = data.getValue(HealthPackageModel::class.java)
+                            if (pkg != null) {
+                                packages.add(pkg)
+                            }
+                        }
+                        callback(true, "Doctor packages fetched", packages)
+                    } else {
+                        callback(true, "No packages found", emptyList())
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    onError(error.toException())
+                    callback(false, error.message, emptyList())
                 }
             })
     }
 
     override fun getActivePackages(
-        onSuccess: (List<HealthPackage>) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     ) {
-        packagesRef.orderByChild("isActive").equalTo(true)
-            .addValueEventListener(object : ValueEventListener {
+        ref.orderByChild("isActive").equalTo(true)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val packages = mutableListOf<HealthPackage>()
-                    for (childSnapshot in snapshot.children) {
-                        childSnapshot.getValue(HealthPackage::class.java)?.let {
-                            packages.add(it)
+                    if (snapshot.exists()) {
+                        val packages = mutableListOf<HealthPackageModel>()
+                        for (data in snapshot.children) {
+                            val pkg = data.getValue(HealthPackageModel::class.java)
+                            if (pkg != null) {
+                                packages.add(pkg)
+                            }
                         }
+                        callback(true, "Active packages fetched", packages)
+                    } else {
+                        callback(true, "No active packages", emptyList())
                     }
-                    onSuccess(packages.sortedByDescending { it.timestamp })
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    onError(error.toException())
+                    callback(false, error.message, emptyList())
                 }
             })
     }
 
     override fun getPackageById(
         packageId: String,
-        onSuccess: (HealthPackage?) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, HealthPackageModel?) -> Unit
     ) {
-        packagesRef.child(packageId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val healthPackage = snapshot.getValue(HealthPackage::class.java)
-                onSuccess(healthPackage)
+        ref.child(packageId).get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.exists()) {
+                    val pkg = snapshot.getValue(HealthPackageModel::class.java)
+                    if (pkg != null) {
+                        callback(true, "Package fetched", pkg)
+                    } else {
+                        callback(false, "Failed to parse package", null)
+                    }
+                } else {
+                    callback(false, "Package not found", null)
+                }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                onError(error.toException())
+            .addOnFailureListener { exception ->
+                callback(false, exception.message ?: "Failed to fetch", null)
             }
-        })
     }
 
     override fun updatePackage(
         packageId: String,
-        healthPackage: HealthPackage,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        packageModel: HealthPackageModel,
+        callback: (Boolean, String) -> Unit
     ) {
-        val updatePackage = healthPackage.copy(
-            id = packageId,
-            timestamp = System.currentTimeMillis()
-        )
-
-        packagesRef.child(packageId).setValue(updatePackage.toMap())
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
+        // 🔧 FIX: Use setValue instead of updateChildren to properly update all fields
+        ref.child(packageId).setValue(packageModel.toMap())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Package updated successfully")
+                } else {
+                    callback(false, task.exception?.message ?: "Failed to update")
+                }
+            }
     }
 
     override fun deletePackage(
         packageId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String) -> Unit
     ) {
-        packagesRef.child(packageId).removeValue()
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
+        ref.child(packageId).removeValue()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Package deleted successfully")
+                } else {
+                    callback(false, task.exception?.message ?: "Failed to delete")
+                }
+            }
     }
 
-    override fun updatePackageStatus(
-        packageId: String,
-        isActive: Boolean,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+    override fun getPackagesByCategory(
+        category: String,
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     ) {
-        packagesRef.child(packageId).child("isActive").setValue(isActive)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { onError(it) }
+        ref.orderByChild("category").equalTo(category)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val packages = mutableListOf<HealthPackageModel>()
+                        for (data in snapshot.children) {
+                            val pkg = data.getValue(HealthPackageModel::class.java)
+                            if (pkg != null && pkg.isActive) {
+                                packages.add(pkg)
+                            }
+                        }
+                        callback(true, "Category packages fetched", packages)
+                    } else {
+                        callback(true, "No packages in category", emptyList())
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    callback(false, error.message, emptyList())
+                }
+            })
     }
 }

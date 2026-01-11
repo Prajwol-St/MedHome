@@ -38,7 +38,8 @@ fun DoctorHomeScreen(doctorName: String) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-        // Welcome Card
+
+        // 🔹 Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,8 +75,7 @@ fun DoctorHomeScreen(doctorName: String) {
                     Text(
                         text = "Welcome Dr.",
                         fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Normal
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                     Text(
                         text = doctorName,
@@ -87,7 +87,7 @@ fun DoctorHomeScreen(doctorName: String) {
             }
         }
 
-        // Management Section
+        // 🔹 Section Title
         Text(
             text = "Management",
             fontSize = 18.sp,
@@ -96,7 +96,7 @@ fun DoctorHomeScreen(doctorName: String) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // Management Grid
+        // 🔹 Grid Menu
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
@@ -104,17 +104,20 @@ fun DoctorHomeScreen(doctorName: String) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
             modifier = Modifier.height(700.dp)
         ) {
+
             item {
                 DoctorFeatureCard(
                     title = "Set Availability",
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF6B8E4E),
                     onClick = {
-                        val intent = Intent(context, DoctorAvailabilityActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, DoctorAvailabilityActivity::class.java)
+                        )
                     }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Messages",
@@ -123,6 +126,7 @@ fun DoctorHomeScreen(doctorName: String) {
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Patient Records",
@@ -131,14 +135,16 @@ fun DoctorHomeScreen(doctorName: String) {
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Health Packages",
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
                     onClick = {
-                        val intent = Intent(context, HealthPackagesManagementActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, HealthPackagesManagementActivity::class.java)
+                        )
                     }
                 )
             }
@@ -168,7 +174,6 @@ fun DoctorFeatureCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
@@ -187,11 +192,10 @@ fun DoctorFeatureCard(
             }
 
             Text(
-                title,
+                text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = TextDark,
-                lineHeight = 16.sp
+                color = TextDark
             )
         }
     }
