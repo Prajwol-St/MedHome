@@ -1,23 +1,31 @@
 package com.example.medhomeapp.view
 
 import android.content.Context.MODE_PRIVATE
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -25,29 +33,52 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
+import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.utils.ImageUtils
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class EditProfileActivity : BaseActivity() {
+
+    private lateinit var imageUtils: ImageUtils
+    private val commonRepo = CommonRepoImpl()
+    private var selectedImageUri by mutableStateOf<Uri?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        imageUtils = ImageUtils(this, this)
+
+        imageUtils.registerLaunchers { uri ->
+            selectedImageUri = uri
+        }
+
         setContent {
-            EditProfileScreen()
+            EditProfileScreen(
+                imageUtils = imageUtils,
+                commonRepo = commonRepo,
+                selectedImageUri = selectedImageUri
+            )
         }
     }
 }
 
 @Composable
-fun EditProfileScreen() {
+fun EditProfileScreen(
+    imageUtils: ImageUtils,
+    commonRepo: CommonRepoImpl,
+    selectedImageUri: Uri?
+) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
@@ -58,6 +89,7 @@ fun EditProfileScreen() {
 
     val currentUser by viewModel.currentUser
     var isLoading by remember { mutableStateOf(false) }
+    var isUploadingImage by remember { mutableStateOf(false) }
 
     var name by remember { mutableStateOf("") }
     var contact by remember { mutableStateOf("") }
@@ -66,6 +98,8 @@ fun EditProfileScreen() {
     var bloodGroup by remember { mutableStateOf("") }
     var emergencyContact by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
+    var profileImageUrl by remember { mutableStateOf("") }
+    var profileImagePublicId by remember { mutableStateOf("") }
 
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
@@ -80,6 +114,25 @@ fun EditProfileScreen() {
             bloodGroup = it.bloodGroup
             emergencyContact = it.emergencyContact
             address = it.address
+            profileImageUrl = it.profileImageUrl
+            profileImagePublicId = it.profileImagePublicId
+        }
+    }
+
+    LaunchedEffect(selectedImageUri) {
+        if (selectedImageUri != null && userId != null) {
+            isUploadingImage = true
+
+            viewModel.uploadProfilePicture(context, userId, selectedImageUri, commonRepo) { success, message ->
+                isUploadingImage = false
+                if (success) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    profileImageUrl = currentUser?.profileImageUrl ?: ""
+                    profileImagePublicId = currentUser?.profileImagePublicId ?: ""
+                } else {
+                    Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -136,15 +189,91 @@ fun EditProfileScreen() {
                     .fillMaxSize()
                     .verticalScroll(scrollState)
                     .padding(horizontal = 28.dp)
-                    .padding(top = 32.dp, bottom = 32.dp)
+                    .padding(top = 32.dp, bottom = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Box(
+                    modifier = Modifier.size(120.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(SageGreen.copy(alpha = 0.15f))
+                            .border(3.dp, SageGreen.copy(alpha = 0.3f), CircleShape)
+                            .clickable(enabled = !isUploadingImage) {
+                                imageUtils.launchImagePicker()
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (isUploadingImage) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(40.dp),
+                                color = SageGreen,
+                                strokeWidth = 3.dp
+                            )
+                        } else if (profileImageUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data(profileImageUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "Profile Picture",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Profile",
+                                modifier = Modifier.size(50.dp),
+                                tint = SageGreen
+                            )
+                        }
+                    }
+
+                    if (!isUploadingImage) {
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .align(Alignment.BottomEnd)
+                                .clip(CircleShape)
+                                .background(SageGreen)
+                                .border(2.dp, BackgroundCream, CircleShape)
+                                .clickable { imageUtils.launchImagePicker() },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.CameraAlt,
+                                contentDescription = "Change Picture",
+                                tint = Color.White,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Tap to change profile picture",
+                    fontSize = 12.sp,
+                    color = TextGray
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 Text(
                     text = "Personal Information",
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
-                    )
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -156,14 +285,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
                     placeholder = { Text("Enter your full name", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -187,14 +318,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = contact,
                     onValueChange = { contact = it },
                     placeholder = { Text("10-digit phone number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -217,14 +350,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = gender,
                     onValueChange = { gender = it },
                     placeholder = { Text("Male/Female/Other", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -239,6 +374,7 @@ fun EditProfileScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = "Date of Birth",
                     style = TextStyle(
@@ -246,14 +382,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = dateOfBirth,
                     onValueChange = { dateOfBirth = it },
                     placeholder = { Text("DD/MM/YYYY", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -268,6 +406,7 @@ fun EditProfileScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = "Blood Group",
                     style = TextStyle(
@@ -275,14 +414,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = bloodGroup,
                     onValueChange = { bloodGroup = it },
                     placeholder = { Text("A+, B+, O+, etc.", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -304,10 +445,12 @@ fun EditProfileScreen() {
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
-                    )
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
+
                 Text(
                     text = "Emergency Contact Number",
                     style = TextStyle(
@@ -315,14 +458,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = emergencyContact,
                     onValueChange = { emergencyContact = it },
                     placeholder = { Text("10-digit number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -345,14 +490,16 @@ fun EditProfileScreen() {
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium
                     ),
-                    modifier = Modifier.padding(bottom = 6.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
                 )
 
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
                     placeholder = { Text("Enter your address", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
@@ -402,7 +549,7 @@ fun EditProfileScreen() {
                             }
                         }
                     },
-                    enabled = !isLoading,
+                    enabled = !isLoading && !isUploadingImage,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
