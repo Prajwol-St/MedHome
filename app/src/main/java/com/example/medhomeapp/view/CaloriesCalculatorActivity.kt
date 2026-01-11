@@ -31,10 +31,10 @@ import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.FoodItemModel
 import com.example.medhomeapp.model.api.FoodSearchResult
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.CalorieViewModel
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class CaloriesCalculatorActivity : BaseActivity() {
 
@@ -131,7 +131,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 title = {
@@ -166,7 +166,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     .fillMaxWidth()
                     .padding(16.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = SageGreen)
+                colors = CardDefaults.cardColors(containerColor = MintGreen)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
@@ -268,7 +268,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
-                            contentColor = SageGreen
+                            contentColor = MintGreen
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -297,7 +297,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         "Search USDA Food Database",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SageGreen
+                        color = MintGreen
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -316,15 +316,15 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_search_24),
                                 contentDescription = null,
-                                tint = SageGreen
+                                tint = MintGreen
                             )
                         },
                         enabled = false,
                         colors = OutlinedTextFieldDefaults.colors(
                             disabledTextColor = Color.Black,
-                            disabledBorderColor = SageGreen,
+                            disabledBorderColor =MintGreen,
                             disabledPlaceholderColor = Color.Gray,
-                            disabledLeadingIconColor = SageGreen
+                            disabledLeadingIconColor = MintGreen
                         ),
                         shape = RoundedCornerShape(12.dp)
                     )
@@ -353,7 +353,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = SageGreen
+                            contentColor = MintGreen
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -382,7 +382,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         "Today's Meals",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = SageGreen
+                        color = MintGreen
                     )
 
                     Spacer(Modifier.height(12.dp))
@@ -391,13 +391,13 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     ScrollableTabRow(
                         selectedTabIndex = selectedTab,
                         containerColor = Color.Transparent,
-                        contentColor = SageGreen,
+                        contentColor = MintGreen,
                         edgePadding = 0.dp,
                         indicator = { tabPositions ->
                             if (selectedTab < tabPositions.size) {
                                 TabRowDefaults.SecondaryIndicator(
                                     Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                                    color = SageGreen
+                                    color = MintGreen
                                 )
                             }
                         }
@@ -472,7 +472,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                 .height(200.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(color = SageGreen)
+                            CircularProgressIndicator(color = MintGreen)
                         }
                     }
 
@@ -531,7 +531,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = SageGreen
+                    contentColor = MintGreen
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
@@ -561,7 +561,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     text = "Search USDA Food Database",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = SageGreen
+                    color = MintGreen
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -591,7 +591,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_search_24),
                             contentDescription = null,
-                            tint = SageGreen
+                            tint = MintGreen
                         )
                     },
                     trailingIcon = {
@@ -609,8 +609,8 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         }
                     },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        cursorColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        cursorColor = MintGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true
@@ -627,7 +627,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                CircularProgressIndicator(color = SageGreen)
+                                CircularProgressIndicator(color = MintGreen)
                                 Spacer(Modifier.height(16.dp))
                                 Text(
                                     "Searching USDA database...",
@@ -788,7 +788,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     text = "Add Food Manually",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = SageGreen
+                    color = MintGreen
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -809,9 +809,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     placeholder = { Text("e.g., Home-cooked Meal") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true
@@ -827,9 +827,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     placeholder = { Text("e.g., 250") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -939,9 +939,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     placeholder = { Text("e.g., 1.5") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -1052,7 +1052,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                    colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(
@@ -1094,7 +1094,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     text = "Set Daily Goal",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = SageGreen
+                    color = MintGreen
                 )
 
                 Spacer(Modifier.height(8.dp))
@@ -1115,9 +1115,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     placeholder = { Text("e.g., 2000") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen
                     ),
                     shape = RoundedCornerShape(12.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -1264,7 +1264,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                    colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(
@@ -1398,14 +1398,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.1f))
+                    colors = CardDefaults.cardColors(containerColor = MintGreen.copy(alpha = 0.1f))
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "Nutrition Information",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         Spacer(Modifier.height(16.dp))
@@ -1414,7 +1414,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         NutritionRow(
                             label = "Calories",
                             value = "${selectedFood?.getTotalCalories()?.toInt()} kcal",
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         Spacer(Modifier.height(12.dp))
@@ -1604,7 +1604,7 @@ fun FoodItemCard(
                 
                 Box(
                     modifier = Modifier
-                        .background(SageGreen, RoundedCornerShape(8.dp))
+                        .background(MintGreen, RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
@@ -1795,7 +1795,7 @@ fun SearchResultCard(
                         NutrientBadge(
                             label = "Cal",
                             value = "${searchResult.getCalories().toInt()}",
-                            color = SageGreen
+                            color = MintGreen
                         )
                     }
                     if (searchResult.getProtein() > 0) {
@@ -1842,7 +1842,7 @@ fun SearchResultCard(
             Icon(
                 painter = painterResource(R.drawable.baseline_add_24),
                 contentDescription = "Add",
-                tint = SageGreen,
+                tint = MintGreen,
                 modifier = Modifier.size(28.dp)
             )
         }
@@ -1886,7 +1886,7 @@ fun MealTypeChip(
             .height(48.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) SageGreen else Color(0xFFF5F5F5)
+            containerColor = if (isSelected) MintGreen else Color(0xFFF5F5F5)
         ),
         border = if (isSelected) null else androidx.compose.foundation.BorderStroke(1.dp, Color.LightGray)
     ) {

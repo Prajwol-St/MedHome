@@ -34,13 +34,15 @@ import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
-import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
-import com.example.medhomeapp.ui.theme.TextDark
-import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.viewmodel.UserViewModel
+
+// Local color constants to match your new theme
+private val MintBackground = Color(0xFFF1FBF9)
+private val TextMainDark = Color(0xFF2C3E50)
+private val TextSecondaryGray = Color(0xFF78909C)
+private val DangerRed = Color(0xFFE57373)
 
 class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,14 +85,14 @@ fun SettingsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream)
+            .background(MintBackground) // Updated color
             .verticalScroll(scrollState)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
-                .padding(16.dp),
+                .background(MintGreen) // Updated color
+                .padding(top = 48.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { (context as BaseActivity).finish() }) {
@@ -128,8 +130,8 @@ fun SettingsScreen() {
                     modifier = Modifier
                         .size(70.dp)
                         .clip(CircleShape)
-                        .background(SageGreen.copy(alpha = 0.15f))
-                        .border(2.dp, SageGreen.copy(alpha = 0.3f), CircleShape),
+                        .background(MintGreen.copy(alpha = 0.15f)) // Updated color
+                        .border(2.dp, MintGreen.copy(alpha = 0.3f), CircleShape), // Updated color
                     contentAlignment = Alignment.Center
                 ) {
                     if (currentUser?.profileImageUrl?.isNotEmpty() == true) {
@@ -149,7 +151,7 @@ fun SettingsScreen() {
                             Icons.Default.Person,
                             contentDescription = stringResource(R.string.profile),
                             modifier = Modifier.size(40.dp),
-                            tint = SageGreen
+                            tint = MintGreen // Updated color
                         )
                     }
                 }
@@ -161,24 +163,24 @@ fun SettingsScreen() {
                         text = currentUser?.name ?: stringResource(R.string.loading),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextDark
+                        color = TextMainDark // Updated color
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = currentUser?.email ?: "",
                         fontSize = 13.sp,
-                        color = TextGray
+                        color = TextSecondaryGray // Updated color
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.15f)),
+                        colors = CardDefaults.cardColors(containerColor = MintGreen.copy(alpha = 0.12f)), // Updated color
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = currentUser?.role?.uppercase() ?: stringResource(R.string.patient),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = SageGreen,
+                            color = MintGreen, // Updated color
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
                     }
@@ -270,8 +272,8 @@ fun SettingsScreen() {
             icon = R.drawable.baseline_logout_24,
             title = stringResource(R.string.logout),
             subtitle = stringResource(R.string.sign_out),
-            titleColor = Color(0xFFD32F2F),
-            iconTint = Color(0xFFD32F2F),
+            titleColor = DangerRed, // Updated color
+            iconTint = DangerRed,  // Updated color
             onClick = { showLogoutDialog = true }
         )
 
@@ -279,8 +281,8 @@ fun SettingsScreen() {
             icon = R.drawable.baseline_delete_24,
             title = stringResource(R.string.delete_account),
             subtitle = stringResource(R.string.permanently_delete),
-            titleColor = Color(0xFFD32F2F),
-            iconTint = Color(0xFFD32F2F),
+            titleColor = DangerRed, // Updated color
+            iconTint = DangerRed,  // Updated color
             onClick = { showDeleteDialog = true }
         )
 
@@ -303,12 +305,12 @@ fun SettingsScreen() {
                         context.finish()
                     }
                 ) {
-                    Text(stringResource(R.string.logout), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.logout), color = DangerRed, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) {
-                    Text(stringResource(R.string.cancel), color = TextGray)
+                    Text(stringResource(R.string.cancel), color = TextSecondaryGray)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -324,7 +326,7 @@ fun SettingsScreen() {
                 TextButton(
                     onClick = {
                         if (userId != null) {
-                            viewModel.deleteAccount(userId) { success, message ->
+                            viewModel.deleteAccount(userId) { success, _ ->
                                 if (success) {
                                     viewModel.logout()
                                     sharedPrefs.edit().clear().apply()
@@ -337,12 +339,12 @@ fun SettingsScreen() {
                         }
                     }
                 ) {
-                    Text(stringResource(R.string.delete), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.delete), color = DangerRed, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text(stringResource(R.string.cancel), color = TextGray)
+                    Text(stringResource(R.string.cancel), color = TextSecondaryGray)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -373,7 +375,7 @@ fun SettingsScreen() {
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+                            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.english))
@@ -397,7 +399,7 @@ fun SettingsScreen() {
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+                            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.nepali))
@@ -406,7 +408,7 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.close), color = MintGreen, fontWeight = FontWeight.Bold)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -428,7 +430,7 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.close), color = MintGreen, fontWeight = FontWeight.Bold)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -441,7 +443,7 @@ fun SectionHeader(title: String) {
     Text(
         text = title,
         style = TextStyle(
-            color = TextDark,
+            color = TextMainDark,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         ),
@@ -456,8 +458,8 @@ fun SettingsItem(
     icon: Int,
     title: String,
     subtitle: String,
-    titleColor: Color = TextDark,
-    iconTint: Color = SageGreen,
+    titleColor: Color = TextMainDark,
+    iconTint: Color = MintGreen,
     onClick: () -> Unit
 ) {
     Card(
@@ -507,7 +509,7 @@ fun SettingsItem(
                 Text(
                     text = subtitle,
                     style = TextStyle(
-                        color = TextGray,
+                        color = TextSecondaryGray,
                         fontSize = 12.sp
                     )
                 )
@@ -516,7 +518,7 @@ fun SettingsItem(
             Icon(
                 painter = painterResource(id = R.drawable.baseline_arrow_right_24),
                 contentDescription = "Navigate",
-                tint = TextGray.copy(alpha = 0.5f),
+                tint = TextSecondaryGray.copy(alpha = 0.5f),
                 modifier = Modifier.size(18.dp)
             )
         }
