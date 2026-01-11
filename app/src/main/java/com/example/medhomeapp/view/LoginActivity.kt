@@ -121,7 +121,10 @@ fun LoginBody() {
                                 if (user != null) {
                                     sharedPrefs.edit()
                                         .putString("user_id", userId)
-                                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                                        .putString("user_type", user.role)
+                                        .putString("user_name", user.name)
+                                        .putString("user_email", user.email)
+                                        .putString("user_contact", user.contact)
                                         .apply()
                                     Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
 
@@ -161,7 +164,10 @@ fun LoginBody() {
                 currentUser?.let { user ->
                     sharedPrefs.edit()
                         .putString("user_id", user.id)
-                        .putString("user_type", user.role) // Save user role (doctor/patient)
+                        .putString("user_type", user.role)
+                        .putString("user_name", user.name)
+                        .putString("user_email", user.email)
+                        .putString("user_contact", user.contact)
                         .apply()
 
                     if (rememberMe) {

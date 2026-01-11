@@ -92,7 +92,12 @@ fun SignupDetailsBody(
                 Toast.makeText(context, "Account created successfully!", Toast.LENGTH_SHORT).show()
 
                 val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-                sharedPrefs.edit().putString("user_id", state.userId).apply()
+                sharedPrefs.edit().putString("user_id", state.userId)
+                    .putString("user_name", name)
+                    .putString("user_email", email)
+                    .putString("user_contact", contact)
+                    .putString("user_type", "patient")
+                    .apply()
 
                 val intent = Intent(context, DashboardActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -540,7 +545,13 @@ fun SignupDetailsBody(
                                             Toast.makeText(context, "Profile created successfully!", Toast.LENGTH_SHORT).show()
 
                                             val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-                                            sharedPrefs.edit().putString("user_id", googleUid).apply()
+                                            sharedPrefs.edit()
+                                                .putString("user_id", googleUid)
+                                                .putString("user_name", name)
+                                                .putString("user_email", email)
+                                                .putString("user_contact", contact)
+                                                .putString("user_type", "patient")
+                                                .apply()
 
                                             val intent = Intent(context, DashboardActivity::class.java)
                                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

@@ -1,5 +1,7 @@
 package com.example.medhomeapp.model
 
+import com.google.firebase.database.PropertyName
+
 data class HealthPackageModel(
     val id: String = "",
     val doctorId: String = "",
@@ -13,7 +15,9 @@ data class HealthPackageModel(
     val includedServices: List<String> = emptyList(),
     val imageUrl: String = "",
     val imagePublicId: String = "",
-    val isActive: Boolean = true,
+    @get:PropertyName("isActive")
+    @set:PropertyName("isActive")
+    var isActive: Boolean = true,
     val createdAt: String = "",
     val updatedAt: String = ""
 ) {

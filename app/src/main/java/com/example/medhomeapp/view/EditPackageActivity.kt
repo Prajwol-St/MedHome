@@ -1,6 +1,7 @@
 package com.example.medhomeapp.view
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -28,6 +29,7 @@ import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.utils.ImageUtils
@@ -39,22 +41,40 @@ class EditPackageActivity : BaseActivity() {
 
     private lateinit var imageUtils: ImageUtils
     private val commonRepo = CommonRepoImpl()
+    private var selectedImageUri by mutableStateOf<Uri?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        imageUtils = ImageUtils(this, this)
         val packageId = intent.getStringExtra("package_id") ?: ""
 
+        // Initialize ImageUtils
+        imageUtils = ImageUtils(this, this)
+
+        // Register launchers BEFORE setContent
+        imageUtils.registerLaunchers { uri ->
+            selectedImageUri = uri
+        }
+
         setContent {
-            EditPackageScreen(packageId, imageUtils, commonRepo)
+            EditPackageScreen(
+                packageId = packageId,
+                imageUtils = imageUtils,
+                commonRepo = commonRepo,
+                selectedImageUri = selectedImageUri
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
+fun EditPackageScreen(
+    packageId: String,
+    imageUtils: ImageUtils,
+    commonRepo: CommonRepoImpl,
+    selectedImageUri: Uri?
+) {
     val context = LocalContext.current
     val viewModel = remember {
         HealthPackageViewModel(
@@ -92,6 +112,21 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
     var isLoadingPackage by remember { mutableStateOf(true) }
 
     var existingPackage by remember { mutableStateOf<HealthPackageModel?>(null) }
+    var showExitDialog by remember { mutableStateOf(false) }
+
+    val hasChanges = remember(packageName, shortDescription, fullDescription, price, category, includedServices, isActive, uploadedImageUrl, startDate, endDate, existingPackage) {
+        existingPackage?.let { pkg ->
+            packageName != pkg.packageName ||
+                    shortDescription != pkg.shortDescription ||
+                    fullDescription != pkg.fullDescription ||
+                    price != pkg.price.toString() ||
+                    category != pkg.category ||
+                    includedServices != pkg.includedServices.joinToString(", ") ||
+                    isActive != pkg.isActive ||
+                    uploadedImageUrl != pkg.imageUrl ||
+                    selectedImageUri != null
+        } ?: false
+    }
 
     val categories = listOf(
         "General Checkup",
@@ -121,8 +156,6 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                 uploadedImageUrl = pkg.imageUrl
                 uploadedImagePublicId = pkg.imagePublicId
 
-                // Parse duration to extract dates if possible
-                // Format: "01 Jan 2024 to 31 Dec 2024"
                 try {
                     val dates = pkg.duration.split(" to ")
                     if (dates.size == 2) {
@@ -130,31 +163,29 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                         endDate = dateFormatter.parse(dates[1])?.time
                     }
                 } catch (e: Exception) {
-                    // If parsing fails, leave dates as null
+                    // Ignore parsing errors
                 }
             }
             isLoadingPackage = false
         }
     }
 
-    // Register image picker
-    LaunchedEffect(Unit) {
-        imageUtils.registerLaunchers { uri ->
-            if (uri != null) {
-                isUploadingImage = true
-                commonRepo.uploadImage(
-                    context,
-                    uri,
-                    "health_packages"
-                ) { success, message, imageUrl, publicId ->
-                    isUploadingImage = false
-                    if (success && imageUrl != null) {
-                        uploadedImageUrl = imageUrl
-                        uploadedImagePublicId = publicId ?: ""
-                        Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
-                    }
+    // Upload image when selectedImageUri changes
+    LaunchedEffect(selectedImageUri) {
+        if (selectedImageUri != null) {
+            isUploadingImage = true
+            commonRepo.uploadImage(
+                context,
+                selectedImageUri,
+                "health_packages"
+            ) { success, message, imageUrl, publicId ->
+                isUploadingImage = false
+                if (success && imageUrl != null) {
+                    uploadedImageUrl = imageUrl
+                    uploadedImagePublicId = publicId ?: ""
+                    Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -170,7 +201,11 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
-                        (context as? EditPackageActivity)?.finish()
+                        if (hasChanges) {
+                            showExitDialog = true
+                        } else {
+                            (context as? EditPackageActivity)?.finish()
+                        }
                     }) {
                         Icon(Icons.Default.ArrowBack, "Back", tint = Color.White)
                     }
@@ -264,7 +299,8 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                                             tint = SageGreen
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
-                                        Text("Tap to upload image", color = Color.Gray, fontSize = 14.sp)
+                                        Text("Tap to upload package image", color = Color.Gray, fontSize = 14.sp)
+                                        Text("(Optional)", color = Color.Gray, fontSize = 12.sp)
                                     }
                                 }
                             }
@@ -273,18 +309,23 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Package Name
+                    // All form fields (same as Create, just pre-filled)
                     OutlinedTextField(
                         value = packageName,
                         onValueChange = { packageName = it },
-                        label = { Text("Package Name *") },
+                        label = { Text("Package Name") },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Category Dropdown
                     ExposedDropdownMenuBox(
                         expanded = showCategoryDropdown,
                         onExpandedChange = { showCategoryDropdown = !showCategoryDropdown }
@@ -293,15 +334,15 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                             value = category,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Category *") },
-                            trailingIcon = {
-                                Icon(Icons.Default.ArrowDropDown, null)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .menuAnchor()
+                            label = { Text("Category") },
+                            trailingIcon = { Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen) },
+                            modifier = Modifier.fillMaxWidth().menuAnchor(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = SageGreen,
+                                focusedLabelColor = SageGreen,
+                                unfocusedBorderColor = LightSage
+                            )
                         )
-
                         ExposedDropdownMenu(
                             expanded = showCategoryDropdown,
                             onDismissRequest = { showCategoryDropdown = false }
@@ -320,107 +361,79 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Short Description
                     OutlinedTextField(
                         value = shortDescription,
                         onValueChange = { shortDescription = it },
-                        label = { Text("Short Description *") },
+                        label = { Text("Short Description") },
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 2,
-                        supportingText = { Text("${shortDescription.length}/100") }
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Full Description
                     OutlinedTextField(
                         value = fullDescription,
                         onValueChange = { fullDescription = it },
-                        label = { Text("Full Description *") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp),
-                        maxLines = 5
+                        label = { Text("Full Description") },
+                        modifier = Modifier.fillMaxWidth().height(120.dp),
+                        maxLines = 5,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Price
                     OutlinedTextField(
                         value = price,
-                        onValueChange = { if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) price = it },
-                        label = { Text("Price (NPR) *") },
+                        onValueChange = { if (it.isEmpty() || it.all { c -> c.isDigit() || c == '.' }) price = it },
+                        label = { Text("Price (NPR)") },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
                         prefix = { Text("NPR ") },
-                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) }
+                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Validity Period
-                    Text("Validity Period *", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
-                    Text("Select package validity dates", fontSize = 12.sp, color = Color.Gray)
+                    Text("Validity Period", fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedCard(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable { showStartDatePicker = true },
-                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                            modifier = Modifier.weight(1f).clickable { showStartDatePicker = true },
+                            border = BorderStroke(1.dp, LightSage)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("Start Date", fontSize = 12.sp, color = Color.Gray)
-                                    Icon(Icons.Default.CalendarToday, null, tint = SageGreen, modifier = Modifier.size(16.dp))
-                                }
-                                Spacer(modifier = Modifier.height(4.dp))
+                            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                                Text("Start Date", fontSize = 12.sp, color = Color.Gray)
                                 Text(
-                                    if (startDate != null) dateFormatter.format(Date(startDate!!)) else "Select date",
+                                    if (startDate != null) dateFormatter.format(Date(startDate!!)) else "Select",
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = if (startDate != null) TextDark else Color.Gray
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
-
                         OutlinedCard(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickable { showEndDatePicker = true },
-                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                            modifier = Modifier.weight(1f).clickable { showEndDatePicker = true },
+                            border = BorderStroke(1.dp, LightSage)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Text("End Date", fontSize = 12.sp, color = Color.Gray)
-                                    Icon(Icons.Default.Event, null, tint = SageGreen, modifier = Modifier.size(16.dp))
-                                }
-                                Spacer(modifier = Modifier.height(4.dp))
+                            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                                Text("End Date", fontSize = 12.sp, color = Color.Gray)
                                 Text(
-                                    if (endDate != null) dateFormatter.format(Date(endDate!!)) else "Select date",
+                                    if (endDate != null) dateFormatter.format(Date(endDate!!)) else "Select",
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = if (endDate != null) TextDark else Color.Gray
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
                         }
@@ -428,42 +441,60 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Included Services
                     OutlinedTextField(
                         value = includedServices,
                         onValueChange = { includedServices = it },
-                        label = { Text("Included Services *") },
-                        placeholder = { Text("Blood Test, BP Check, Consultation") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
+                        label = { Text("Included Services") },
+                        modifier = Modifier.fillMaxWidth().height(100.dp),
                         maxLines = 4,
-                        supportingText = { Text("Enter services separated by commas") }
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text("Package Status", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                Text(
+                                    if (isActive) "Visible to patients" else "Hidden",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                            Switch(
+                                checked = isActive,
+                                onCheckedChange = { isActive = it },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = SageGreen,
+                                    checkedTrackColor = SageGreen.copy(alpha = 0.5f),
+                                    uncheckedThumbColor = Color.Gray,
+                                    uncheckedTrackColor = Color.LightGray,
+                                    uncheckedBorderColor = Color.Gray
+                                )
+                            )
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Update Button
                     Button(
                         onClick = {
                             when {
-                                packageName.isBlank() -> {
-                                    Toast.makeText(context, "Please enter package name", Toast.LENGTH_SHORT).show()
-                                }
-                                shortDescription.isBlank() -> {
-                                    Toast.makeText(context, "Please enter short description", Toast.LENGTH_SHORT).show()
-                                }
-                                fullDescription.isBlank() -> {
-                                    Toast.makeText(context, "Please enter full description", Toast.LENGTH_SHORT).show()
-                                }
-                                price.isBlank() -> {
-                                    Toast.makeText(context, "Please enter price", Toast.LENGTH_SHORT).show()
-                                }
-                                startDate == null || endDate == null -> {
-                                    Toast.makeText(context, "Please select validity dates", Toast.LENGTH_SHORT).show()
-                                }
-                                includedServices.isBlank() -> {
-                                    Toast.makeText(context, "Please enter included services", Toast.LENGTH_SHORT).show()
+                                packageName.isBlank() || price.isBlank() || startDate == null || endDate == null -> {
+                                    Toast.makeText(context, "Fill all fields", Toast.LENGTH_SHORT).show()
                                 }
                                 else -> {
                                     val servicesList = includedServices.split(",").map { it.trim() }.filter { it.isNotEmpty() }
@@ -480,12 +511,13 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                                         includedServices = servicesList,
                                         imageUrl = uploadedImageUrl,
                                         imagePublicId = uploadedImagePublicId,
+                                        isActive = isActive,
                                         updatedAt = currentTime
                                     )
 
                                     viewModel.updatePackage(packageId, updatedPackage) { success, message ->
                                         if (success) {
-                                            Toast.makeText(context, "Package updated!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Updated!", Toast.LENGTH_SHORT).show()
                                             (context as? EditPackageActivity)?.finish()
                                         } else {
                                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -494,22 +526,13 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                                 }
                             }
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp),
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
-                        enabled = !isLoading && !isUploadingImage && existingPackage != null,
-                        shape = RoundedCornerShape(12.dp)
+                        enabled = !isLoading && !isUploadingImage && existingPackage != null
                     ) {
                         if (isLoading) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(24.dp),
-                                color = Color.White,
-                                strokeWidth = 2.dp
-                            )
+                            CircularProgressIndicator(Modifier.size(24.dp), color = Color.White)
                         } else {
-                            Icon(Icons.Default.Save, null, modifier = Modifier.size(20.dp))
-                            Spacer(modifier = Modifier.width(8.dp))
                             Text("Update Package", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         }
                     }
@@ -524,27 +547,13 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
             DatePickerDialog(
                 onDismissRequest = { showStartDatePicker = false },
                 confirmButton = {
-                    TextButton(onClick = {
-                        startDate = startDateState.selectedDateMillis
-                        showStartDatePicker = false
-                    }) {
+                    TextButton(onClick = { startDate = startDateState.selectedDateMillis; showStartDatePicker = false }) {
                         Text("OK", color = SageGreen)
                     }
                 },
-                dismissButton = {
-                    TextButton(onClick = { showStartDatePicker = false }) {
-                        Text("Cancel")
-                    }
-                }
+                dismissButton = { TextButton(onClick = { showStartDatePicker = false }) { Text("Cancel") } }
             ) {
-                DatePicker(
-                    state = startDateState,
-                    colors = DatePickerDefaults.colors(
-                        selectedDayContainerColor = SageGreen,
-                        todayContentColor = SageGreen,
-                        todayDateBorderColor = SageGreen
-                    )
-                )
+                DatePicker(state = startDateState)
             }
         }
 
@@ -552,28 +561,39 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
             DatePickerDialog(
                 onDismissRequest = { showEndDatePicker = false },
                 confirmButton = {
-                    TextButton(onClick = {
-                        endDate = endDateState.selectedDateMillis
-                        showEndDatePicker = false
-                    }) {
+                    TextButton(onClick = { endDate = endDateState.selectedDateMillis; showEndDatePicker = false }) {
                         Text("OK", color = SageGreen)
                     }
                 },
+                dismissButton = { TextButton(onClick = { showEndDatePicker = false }) { Text("Cancel") } }
+            ) {
+                DatePicker(state = endDateState)
+            }
+        }
+
+        if (showExitDialog) {
+            AlertDialog(
+                onDismissRequest = { showExitDialog = false },
+                title = { Text("Unsaved Changes", fontWeight = FontWeight.Bold) },
+                text = {
+                    Text("You have unsaved changes. Are you sure you want to leave without saving?")
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            (context as? EditPackageActivity)?.finish()
+                        },
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFFF44336))
+                    ) {
+                        Text("Leave", fontWeight = FontWeight.Bold)
+                    }
+                },
                 dismissButton = {
-                    TextButton(onClick = { showEndDatePicker = false }) {
-                        Text("Cancel")
+                    TextButton(onClick = { showExitDialog = false }) {
+                        Text("Cancel", color = Color.Gray)
                     }
                 }
-            ) {
-                DatePicker(
-                    state = endDateState,
-                    colors = DatePickerDefaults.colors(
-                        selectedDayContainerColor = SageGreen,
-                        todayContentColor = SageGreen,
-                        todayDateBorderColor = SageGreen
-                    )
-                )
-            }
+            )
         }
     }
 }
