@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
@@ -129,12 +132,26 @@ fun SettingsScreen() {
                         .border(2.dp, SageGreen.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = stringResource(R.string.profile),
-                        modifier = Modifier.size(40.dp),
-                        tint = SageGreen
-                    )
+                    if (currentUser?.profileImageUrl?.isNotEmpty() == true) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(currentUser?.profileImageUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier.size(40.dp),
+                            tint = SageGreen
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
