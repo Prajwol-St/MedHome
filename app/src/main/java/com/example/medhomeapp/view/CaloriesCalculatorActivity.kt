@@ -742,7 +742,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                         )
                                         var selectedIndex = 0
 
-                                        androidx.appcompat.app.AlertDialog.Builder(context)
+                                        android.app.AlertDialog.Builder(context)  // Changed from androidx.appcompat
                                             .setTitle("Add ${result.description}")
                                             .setSingleChoiceItems(mealTypes, 0) { _, which ->
                                                 selectedIndex = which
