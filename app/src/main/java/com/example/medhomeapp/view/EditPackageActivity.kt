@@ -28,6 +28,7 @@ import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.utils.ImageUtils
@@ -121,8 +122,7 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                 uploadedImageUrl = pkg.imageUrl
                 uploadedImagePublicId = pkg.imagePublicId
 
-                // Parse duration to extract dates if possible
-                // Format: "01 Jan 2024 to 31 Dec 2024"
+                // Parse duration to extract dates
                 try {
                     val dates = pkg.duration.split(" to ")
                     if (dates.size == 2) {
@@ -264,7 +264,8 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                                             tint = SageGreen
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
-                                        Text("Tap to upload image", color = Color.Gray, fontSize = 14.sp)
+                                        Text("Tap to upload package image", color = Color.Gray, fontSize = 14.sp)
+                                        Text("(Optional)", color = Color.Gray, fontSize = 12.sp)
                                     }
                                 }
                             }
@@ -277,9 +278,18 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                     OutlinedTextField(
                         value = packageName,
                         onValueChange = { packageName = it },
-                        label = { Text("Package Name *") },
+                        label = { Text("Package Name") },
+                        placeholder = { Text("Complete Health Checkup") },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        singleLine = true,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -293,13 +303,21 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                             value = category,
                             onValueChange = {},
                             readOnly = true,
-                            label = { Text("Category *") },
+                            label = { Text("Category") },
                             trailingIcon = {
-                                Icon(Icons.Default.ArrowDropDown, null)
+                                Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen)
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .menuAnchor()
+                                .menuAnchor(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = SageGreen,
+                                focusedLabelColor = SageGreen,
+                                cursorColor = SageGreen,
+                                focusedTextColor = TextDark,
+                                unfocusedTextColor = TextDark,
+                                unfocusedBorderColor = LightSage
+                            )
                         )
 
                         ExposedDropdownMenu(
@@ -324,10 +342,19 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                     OutlinedTextField(
                         value = shortDescription,
                         onValueChange = { shortDescription = it },
-                        label = { Text("Short Description *") },
+                        label = { Text("Short Description") },
+                        placeholder = { Text("Brief description") },
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 2,
-                        supportingText = { Text("${shortDescription.length}/100") }
+                        supportingText = { Text("${shortDescription.length}/100", fontSize = 12.sp) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -336,11 +363,20 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                     OutlinedTextField(
                         value = fullDescription,
                         onValueChange = { fullDescription = it },
-                        label = { Text("Full Description *") },
+                        label = { Text("Full Description") },
+                        placeholder = { Text("Detailed description") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(120.dp),
-                        maxLines = 5
+                        maxLines = 5,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -349,17 +385,26 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                     OutlinedTextField(
                         value = price,
                         onValueChange = { if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) price = it },
-                        label = { Text("Price (NPR) *") },
+                        label = { Text("Price (NPR)") },
+                        placeholder = { Text("1000") },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         prefix = { Text("NPR ") },
-                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) }
+                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     // Validity Period
-                    Text("Validity Period *", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
+                    Text("Validity Period", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
                     Text("Select package validity dates", fontSize = 12.sp, color = Color.Gray)
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -367,11 +412,13 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+                        // Start Date
                         OutlinedCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .clickable { showStartDatePicker = true },
-                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White),
+                            border = BorderStroke(1.dp, LightSage)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -396,11 +443,13 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                             }
                         }
 
+                        // End Date
                         OutlinedCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .clickable { showEndDatePicker = true },
-                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                            colors = CardDefaults.outlinedCardColors(containerColor = Color.White),
+                            border = BorderStroke(1.dp, LightSage)
                         ) {
                             Column(
                                 modifier = Modifier
@@ -432,14 +481,56 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                     OutlinedTextField(
                         value = includedServices,
                         onValueChange = { includedServices = it },
-                        label = { Text("Included Services *") },
+                        label = { Text("Included Services") },
                         placeholder = { Text("Blood Test, BP Check, Consultation") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp),
                         maxLines = 4,
-                        supportingText = { Text("Enter services separated by commas") }
+                        supportingText = { Text("Separate with commas", fontSize = 12.sp) },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Active Status Toggle (THE MISSING PART!)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text("Package Status", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextDark)
+                                Text(
+                                    if (isActive) "Visible to patients" else "Hidden from patients",
+                                    fontSize = 12.sp,
+                                    color = Color.Gray
+                                )
+                            }
+                            Switch(
+                                checked = isActive,
+                                onCheckedChange = { isActive = it },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = SageGreen,
+                                    checkedTrackColor = SageGreen.copy(alpha = 0.5f)
+                                )
+                            )
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -480,6 +571,7 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                                         includedServices = servicesList,
                                         imageUrl = uploadedImageUrl,
                                         imagePublicId = uploadedImagePublicId,
+                                        isActive = isActive,  // ✅ NOW SAVES THE ACTIVE STATUS
                                         updatedAt = currentTime
                                     )
 
@@ -519,7 +611,7 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
             }
         }
 
-        // Date Pickers
+        // Start Date Picker Dialog
         if (showStartDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showStartDatePicker = false },
@@ -528,12 +620,12 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                         startDate = startDateState.selectedDateMillis
                         showStartDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showStartDatePicker = false }) {
-                        Text("Cancel")
+                        Text("Cancel", color = Color.Gray)
                     }
                 }
             ) {
@@ -548,6 +640,7 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
             }
         }
 
+        // End Date Picker Dialog
         if (showEndDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showEndDatePicker = false },
@@ -556,12 +649,12 @@ fun EditPackageScreen(packageId: String, imageUtils: ImageUtils, commonRepo: Com
                         endDate = endDateState.selectedDateMillis
                         showEndDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showEndDatePicker = false }) {
-                        Text("Cancel")
+                        Text("Cancel", color = Color.Gray)
                     }
                 }
             ) {
