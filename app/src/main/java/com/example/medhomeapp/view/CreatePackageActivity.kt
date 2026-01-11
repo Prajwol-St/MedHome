@@ -41,21 +41,36 @@ class CreatePackageActivity : BaseActivity() {
 
     private lateinit var imageUtils: ImageUtils
     private val commonRepo = CommonRepoImpl()
+    private var selectedImageUri by mutableStateOf<Uri?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Initialize ImageUtils
         imageUtils = ImageUtils(this, this)
 
+        // Register launchers BEFORE setContent
+        imageUtils.registerLaunchers { uri ->
+            selectedImageUri = uri
+        }
+
         setContent {
-            CreatePackageScreen(imageUtils, commonRepo)
+            CreatePackageScreen(
+                imageUtils = imageUtils,
+                commonRepo = commonRepo,
+                selectedImageUri = selectedImageUri
+            )
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
+fun CreatePackageScreen(
+    imageUtils: ImageUtils,
+    commonRepo: CommonRepoImpl,
+    selectedImageUri: Uri?
+) {
     val context = LocalContext.current
     val viewModel = remember {
         HealthPackageViewModel(
@@ -80,7 +95,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
     var uploadedImagePublicId by remember { mutableStateOf("") }
     var isUploadingImage by remember { mutableStateOf(false) }
 
-    // Date picker states
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
     var startDate by remember { mutableStateOf<Long?>(null) }
@@ -105,25 +119,23 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
 
     val dateFormatter = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
 
-    // Register image picker
-    LaunchedEffect(Unit) {
-        imageUtils.registerLaunchers { uri ->
-            if (uri != null) {
-                isUploadingImage = true
+    // Upload image when selectedImageUri changes
+    LaunchedEffect(selectedImageUri) {
+        if (selectedImageUri != null) {
+            isUploadingImage = true
 
-                commonRepo.uploadImage(
-                    context,
-                    uri,
-                    "health_packages"
-                ) { success, message, imageUrl, publicId ->
-                    isUploadingImage = false
-                    if (success && imageUrl != null) {
-                        uploadedImageUrl = imageUrl
-                        uploadedImagePublicId = publicId ?: ""
-                        Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
-                    }
+            commonRepo.uploadImage(
+                context,
+                selectedImageUri,
+                "health_packages"
+            ) { success, message, imageUrl, publicId ->
+                isUploadingImage = false
+                if (success && imageUrl != null) {
+                    uploadedImageUrl = imageUrl
+                    uploadedImagePublicId = publicId ?: ""
+                    Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -375,7 +387,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Start Date
                     OutlinedCard(
                         modifier = Modifier
                             .weight(1f)
@@ -406,7 +417,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         }
                     }
 
-                    // End Date
                     OutlinedCard(
                         modifier = Modifier
                             .weight(1f)
@@ -500,7 +510,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 // Create Button
                 Button(
                     onClick = {
-                        // Validation
                         when {
                             packageName.isBlank() -> {
                                 Toast.makeText(context, "Please enter package name", Toast.LENGTH_SHORT).show()
@@ -523,7 +532,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                             else -> {
                                 val servicesList = includedServices.split(",").map { it.trim() }.filter { it.isNotEmpty() }
                                 val currentTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-
                                 val durationString = "${dateFormatter.format(Date(startDate!!))} to ${dateFormatter.format(Date(endDate!!))}"
 
                                 val newPackage = HealthPackageModel(
@@ -579,7 +587,7 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
             }
         }
 
-        // Start Date Picker Dialog
+        // Date Pickers
         if (showStartDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showStartDatePicker = false },
@@ -608,7 +616,6 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
             }
         }
 
-        // End Date Picker Dialog
         if (showEndDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showEndDatePicker = false },
