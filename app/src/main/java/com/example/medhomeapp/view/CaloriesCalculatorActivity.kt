@@ -64,7 +64,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
     var foodToDelete by remember { mutableStateOf<FoodItemModel?>(null) }
     var selectedFood by remember { mutableStateOf<FoodItemModel?>(null) }
     var selectedMealType by remember { mutableStateOf("other") }
-    var selectedTab by remember { mutableStateOf(0) } // 0: All, 1: Breakfast, 2: Lunch, 3: Dinner, 4: Snacks
+    var selectedTab by remember { mutableStateOf(0) } 
 
 
     val searchSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -156,17 +156,11 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             )
         }
     ) { padding ->
-
-        // Replace the Box(modifier = Modifier.padding(padding)) { } in Part 1 with this:
-
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            // ============================================
-            // SUMMARY CARD
-            // ============================================
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -193,8 +187,6 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             fontSize = 48.sp,
                             fontWeight = FontWeight.Bold
                         )
-
-                        // Circular Progress Indicator
                         Box(
                             modifier = Modifier.size(80.dp),
                             contentAlignment = Alignment.Center
@@ -235,7 +227,6 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         )
                     }
 
-                    // Macros Row (if available)
                     if (dailySummary != null && dailySummary!!.totalProtein > 0) {
                         Spacer(Modifier.height(16.dp))
                         Divider(color = Color.White.copy(alpha = 0.3f))
@@ -311,7 +302,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                     Spacer(Modifier.height(12.dp))
 
-                    // Search Bar
+                    
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
@@ -396,7 +387,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                     Spacer(Modifier.height(12.dp))
 
-                    // Meal Type Tabs
+                    
                     ScrollableTabRow(
                         selectedTabIndex = selectedTab,
                         containerColor = Color.Transparent,
@@ -547,7 +538,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Text("View Daily Summary", fontWeight = FontWeight.Bold)
             }
 
-            Spacer(Modifier.height(80.dp)) // Bottom padding
+            Spacer(Modifier.height(80.dp)) 
 
         }
     }
@@ -583,7 +574,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                // Search Input Field
+                
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = {
@@ -742,7 +733,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                         )
                                         var selectedIndex = 0
 
-                                        android.app.AlertDialog.Builder(context)  // Changed from androidx.appcompat
+                                        android.app.AlertDialog.Builder(context)  
                                             .setTitle("Add ${result.description}")
                                             .setSingleChoiceItems(mealTypes, 0) { _, which ->
                                                 selectedIndex = which
@@ -810,7 +801,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(20.dp))
 
-                // Food Name
+                
                 OutlinedTextField(
                     value = manualFoodName,
                     onValueChange = { manualFoodName = it },
@@ -828,7 +819,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                // Calories (Required)
+                
                 OutlinedTextField(
                     value = manualCalories,
                     onValueChange = { manualCalories = it },
@@ -856,7 +847,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Protein
+                
                 OutlinedTextField(
                     value = manualProtein,
                     onValueChange = { manualProtein = it },
@@ -884,7 +875,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Carbs
+                
                 OutlinedTextField(
                     value = manualCarbs,
                     onValueChange = { manualCarbs = it },
@@ -912,7 +903,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Fat
+                
                 OutlinedTextField(
                     value = manualFat,
                     onValueChange = { manualFat = it },
@@ -940,7 +931,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                // Serving Amount
+                
                 OutlinedTextField(
                     value = servingAmount,
                     onValueChange = { servingAmount = it },
@@ -962,7 +953,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                // Meal Type Selection
+                
                 Text(
                     text = "Meal Type *",
                     fontSize = 14.sp,
@@ -1021,7 +1012,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(24.dp))
 
-                // Add Button
+                
                 Button(
                     onClick = {
                         if (manualFoodName.isNotEmpty() && manualCalories.isNotEmpty()) {
@@ -1116,7 +1107,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(20.dp))
 
-                // Calorie Goal (Required)
+                
                 OutlinedTextField(
                     value = goalCalories,
                     onValueChange = { goalCalories = it },
@@ -1213,7 +1204,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Fat Goal
+                
                 OutlinedTextField(
                     value = goalFat,
                     onValueChange = { goalFat = it },
@@ -1419,7 +1410,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                         Spacer(Modifier.height(16.dp))
 
-                        // Calories
+                        
                         NutritionRow(
                             label = "Calories",
                             value = "${selectedFood?.getTotalCalories()?.toInt()} kcal",
@@ -1430,7 +1421,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         Divider(color = Color.LightGray.copy(alpha = 0.5f))
                         Spacer(Modifier.height(12.dp))
 
-                        // Protein
+                        
                         if ((selectedFood?.protein ?: 0.0) > 0) {
                             NutritionRow(
                                 label = "Protein",
@@ -1440,7 +1431,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             Spacer(Modifier.height(8.dp))
                         }
 
-                        // Carbs
+                        
                         if ((selectedFood?.carbs ?: 0.0) > 0) {
                             NutritionRow(
                                 label = "Carbohydrates",
@@ -1450,7 +1441,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             Spacer(Modifier.height(8.dp))
                         }
 
-                        // Fat
+                        
                         if ((selectedFood?.fat ?: 0.0) > 0) {
                             NutritionRow(
                                 label = "Fat",
@@ -1463,7 +1454,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                // Source Information
+                
                 if (selectedFood?.isFromApi() == true) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -1594,7 +1585,7 @@ fun FoodItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Food Name
+                
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = foodItem.name,
@@ -1610,7 +1601,7 @@ fun FoodItemCard(
                     )
                 }
 
-                // Calories Badge
+                
                 Box(
                     modifier = Modifier
                         .background(SageGreen, RoundedCornerShape(8.dp))
@@ -1624,7 +1615,7 @@ fun FoodItemCard(
                     )
                 }
 
-                // Menu Button
+                
                 Box {
                     IconButton(onClick = { showMenu = true }) {
                         Icon(
@@ -1689,7 +1680,7 @@ fun FoodItemCard(
                 }
             }
 
-            // Meal Type Badge
+            
             Spacer(Modifier.height(8.dp))
             Row(
                 modifier = Modifier
@@ -1718,7 +1709,7 @@ fun FoodItemCard(
                 )
             }
 
-            // API Source Badge (if from USDA)
+            
             if (foodItem.isFromApi()) {
                 Spacer(Modifier.height(4.dp))
                 Text(
@@ -1785,7 +1776,7 @@ fun SearchResultCard(
 
                 Spacer(Modifier.height(6.dp))
 
-                // Brand Name (if available)
+                
                 if (searchResult.isBrandedFood()) {
                     Text(
                         text = searchResult.brandOwner,
@@ -1796,7 +1787,7 @@ fun SearchResultCard(
                     Spacer(Modifier.height(4.dp))
                 }
 
-                // Nutrition Summary
+                
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
@@ -1832,7 +1823,7 @@ fun SearchResultCard(
 
                 Spacer(Modifier.height(6.dp))
 
-                // Data Type Badge
+                
                 Text(
                     text = when (searchResult.dataType) {
                         "Foundation" -> "Foundation Food"
