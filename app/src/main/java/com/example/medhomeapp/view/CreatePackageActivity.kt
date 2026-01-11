@@ -29,6 +29,7 @@ import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.utils.ImageUtils
@@ -158,7 +159,7 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                     .verticalScroll(rememberScrollState())
                     .padding(20.dp)
             ) {
-                // Image Upload Section (FIXED - Now clickable)
+                // Image Upload Section
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -240,10 +241,18 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 OutlinedTextField(
                     value = packageName,
                     onValueChange = { packageName = it },
-                    label = { Text("Package Name *") },
-                    placeholder = { Text("e.g., Complete Health Checkup") },
+                    label = { Text("Package Name") },
+                    placeholder = { Text("Complete Health Checkup") },
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = SageGreen,
+                        focusedLabelColor = SageGreen,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark,
+                        unfocusedBorderColor = LightSage
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -257,13 +266,21 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         value = category,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Category *") },
+                        label = { Text("Category") },
                         trailingIcon = {
-                            Icon(Icons.Default.ArrowDropDown, null)
+                            Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .menuAnchor()
+                            .menuAnchor(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SageGreen,
+                            focusedLabelColor = SageGreen,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark,
+                            unfocusedBorderColor = LightSage
+                        )
                     )
 
                     ExposedDropdownMenu(
@@ -288,11 +305,19 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 OutlinedTextField(
                     value = shortDescription,
                     onValueChange = { shortDescription = it },
-                    label = { Text("Short Description *") },
-                    placeholder = { Text("Brief description (max 100 characters)") },
+                    label = { Text("Short Description") },
+                    placeholder = { Text("Brief description") },
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 2,
-                    supportingText = { Text("${shortDescription.length}/100") }
+                    supportingText = { Text("${shortDescription.length}/100", fontSize = 12.sp) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = SageGreen,
+                        focusedLabelColor = SageGreen,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark,
+                        unfocusedBorderColor = LightSage
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -301,12 +326,20 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 OutlinedTextField(
                     value = fullDescription,
                     onValueChange = { fullDescription = it },
-                    label = { Text("Full Description *") },
-                    placeholder = { Text("Detailed description of the package") },
+                    label = { Text("Full Description") },
+                    placeholder = { Text("Detailed description") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
-                    maxLines = 5
+                    maxLines = 5,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = SageGreen,
+                        focusedLabelColor = SageGreen,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark,
+                        unfocusedBorderColor = LightSage
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -315,18 +348,26 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 OutlinedTextField(
                     value = price,
                     onValueChange = { if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) price = it },
-                    label = { Text("Price (NPR) *") },
-                    placeholder = { Text("0.00") },
+                    label = { Text("Price (NPR)") },
+                    placeholder = { Text("1000") },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     prefix = { Text("NPR ") },
-                    leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) }
+                    leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = SageGreen,
+                        focusedLabelColor = SageGreen,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark,
+                        unfocusedBorderColor = LightSage
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Validity Period - Calendar Date Picker
-                Text("Validity Period *", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
+                // Validity Period
+                Text("Validity Period", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
                 Text("Select package validity dates", fontSize = 12.sp, color = Color.Gray)
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -339,7 +380,8 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         modifier = Modifier
                             .weight(1f)
                             .clickable { showStartDatePicker = true },
-                        colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                        colors = CardDefaults.outlinedCardColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, LightSage)
                     ) {
                         Column(
                             modifier = Modifier
@@ -369,7 +411,8 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         modifier = Modifier
                             .weight(1f)
                             .clickable { showEndDatePicker = true },
-                        colors = CardDefaults.outlinedCardColors(containerColor = Color.White)
+                        colors = CardDefaults.outlinedCardColors(containerColor = Color.White),
+                        border = BorderStroke(1.dp, LightSage)
                     ) {
                         Column(
                             modifier = Modifier
@@ -401,13 +444,21 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                 OutlinedTextField(
                     value = includedServices,
                     onValueChange = { includedServices = it },
-                    label = { Text("Included Services *") },
-                    placeholder = { Text("Blood Test, BP Check, Consultation (comma separated)") },
+                    label = { Text("Included Services") },
+                    placeholder = { Text("Blood Test, BP Check, Consultation") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
                     maxLines = 4,
-                    supportingText = { Text("Enter services separated by commas") }
+                    supportingText = { Text("Separate with commas", fontSize = 12.sp) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = SageGreen,
+                        focusedLabelColor = SageGreen,
+                        cursorColor = SageGreen,
+                        focusedTextColor = TextDark,
+                        unfocusedTextColor = TextDark,
+                        unfocusedBorderColor = LightSage
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -537,12 +588,12 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         startDate = startDateState.selectedDateMillis
                         showStartDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showStartDatePicker = false }) {
-                        Text("Cancel")
+                        Text("Cancel", color = Color.Gray)
                     }
                 }
             ) {
@@ -566,12 +617,12 @@ fun CreatePackageScreen(imageUtils: ImageUtils, commonRepo: CommonRepoImpl) {
                         endDate = endDateState.selectedDateMillis
                         showEndDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showEndDatePicker = false }) {
-                        Text("Cancel")
+                        Text("Cancel", color = Color.Gray)
                     }
                 }
             ) {
