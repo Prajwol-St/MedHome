@@ -1,47 +1,45 @@
 package com.example.medhomeapp.repository
 
-import com.example.medhomeapp.model.HealthPackage
+import com.example.medhomeapp.model.HealthPackageModel
 
 interface HealthPackageRepo {
+
     fun createPackage(
-        healthPackage: HealthPackage,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        packageModel: HealthPackageModel,
+        callback: (Boolean, String) -> Unit
     )
 
     fun getAllPackages(
-        onSuccess: (List<HealthPackage>) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
+    )
+
+    fun getPackagesByDoctor(
+        doctorId: String,
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     )
 
     fun getActivePackages(
-        onSuccess: (List<HealthPackage>) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     )
 
     fun getPackageById(
         packageId: String,
-        onSuccess: (HealthPackage?) -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String, HealthPackageModel?) -> Unit
     )
 
     fun updatePackage(
         packageId: String,
-        healthPackage: HealthPackage,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        packageModel: HealthPackageModel,
+        callback: (Boolean, String) -> Unit
     )
 
     fun deletePackage(
         packageId: String,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+        callback: (Boolean, String) -> Unit
     )
 
-    fun updatePackageStatus(
-        packageId: String,
-        isActive: Boolean,
-        onSuccess: () -> Unit,
-        onError: (Exception) -> Unit
+    fun getPackagesByCategory(
+        category: String,
+        callback: (Boolean, String, List<HealthPackageModel>) -> Unit
     )
 }

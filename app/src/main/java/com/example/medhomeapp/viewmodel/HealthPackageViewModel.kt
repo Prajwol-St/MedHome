@@ -1,210 +1,206 @@
 package com.example.medhomeapp.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.medhomeapp.model.HealthPackage
+import com.example.medhomeapp.model.HealthPackageModel
+import com.example.medhomeapp.model.PackageBookingModel
 import com.example.medhomeapp.repository.HealthPackageRepo
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.medhomeapp.repository.HealthPackageRepoImpl
+import com.example.medhomeapp.repository.PackageBookingRepo
+import com.example.medhomeapp.repository.PackageBookingRepoImpl
 
 class HealthPackageViewModel(
-    private val repository: HealthPackageRepo
+    private val packageRepo: HealthPackageRepo = HealthPackageRepoImpl(),
+    private val bookingRepo: PackageBookingRepo = PackageBookingRepoImpl()
 ) : ViewModel() {
 
-    private val _packages = MutableStateFlow<List<HealthPackage>>(emptyList())
-    val packages: StateFlow<List<HealthPackage>> = _packages.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    val allPackages = mutableStateOf<List<HealthPackageModel>>(emptyList())
+    val doctorPackages = mutableStateOf<List<HealthPackageModel>>(emptyList())
+    val activePackages = mutableStateOf<List<HealthPackageModel>>(emptyList())
+    val currentPackage = mutableStateOf<HealthPackageModel?>(null)
 
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val _successMessage = MutableStateFlow<String?>(null)
-    val successMessage: StateFlow<String?> = _successMessage.asStateFlow()
+    val patientBookings = mutableStateOf<List<PackageBookingModel>>(emptyList())
+    val doctorBookings = mutableStateOf<List<PackageBookingModel>>(emptyList())
+    val packageBookings = mutableStateOf<List<PackageBookingModel>>(emptyList())
 
-    private val _selectedPackage = MutableStateFlow<HealthPackage?>(null)
-    val selectedPackage: StateFlow<HealthPackage?> = _selectedPackage.asStateFlow()
 
-    fun createPackage(
-        name: String,
-        description: String,
-        testsIncluded: List<String>,
-        price: Double,
-        discountPercentage: Int,
-        duration: String,
-        recommendedFor: String
-    ) {
-        if (name.isEmpty() || description.isEmpty() || testsIncluded.isEmpty() ||
-            price <= 0 || duration.isEmpty() || recommendedFor.isEmpty()
-        ) {
-            _error.value = "Please fill all required fields"
-            return
-        }
+    val isLoading = mutableStateOf(false)
+    val errorMessage = mutableStateOf<String?>(null)
+    val successMessage = mutableStateOf<String?>(null)
 
-        _isLoading.value = true
-        val healthPackage = HealthPackage(
-            name = name,
-            description = description,
-            testsIncluded = testsIncluded,
-            price = price,
-            discountPercentage = discountPercentage,
-            duration = duration,
-            recommendedFor = recommendedFor,
-            isActive = true
-        )
 
-        repository.createPackage(
-            healthPackage = healthPackage,
-            onSuccess = {
-                _isLoading.value = false
-                _successMessage.value = "Package created successfully"
-                _error.value = null
-                getAllPackages()
-            },
-            onError = { exception ->
-                _isLoading.value = false
-                _error.value = exception.message ?: "Failed to create package"
+
+    fun createPackage(packageModel: HealthPackageModel, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        packageRepo.createPackage(packageModel) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
             }
-        )
+            callback(success, message)
+        }
     }
 
     fun getAllPackages() {
-        _isLoading.value = true
-        repository.getAllPackages(
-            onSuccess = { packagesList ->
-                _packages.value = packagesList
-                _isLoading.value = false
-                _error.value = null
-            },
-            onError = { exception ->
-                _isLoading.value = false
-                _error.value = exception.message ?: "Failed to load packages"
+        isLoading.value = true
+        packageRepo.getAllPackages { success, message, packages ->
+            isLoading.value = false
+            if (success) {
+                allPackages.value = packages
+            } else {
+                errorMessage.value = message
             }
-        )
+        }
+    }
+
+    fun getPackagesByDoctor(doctorId: String) {
+        isLoading.value = true
+        packageRepo.getPackagesByDoctor(doctorId) { success, message, packages ->
+            isLoading.value = false
+            if (success) {
+                doctorPackages.value = packages
+            } else {
+                errorMessage.value = message
+            }
+        }
     }
 
     fun getActivePackages() {
-        _isLoading.value = true
-        repository.getActivePackages(
-            onSuccess = { packagesList ->
-                _packages.value = packagesList
-                _isLoading.value = false
-                _error.value = null
-            },
-            onError = { exception ->
-                _isLoading.value = false
-                _error.value = exception.message ?: "Failed to load packages"
+        isLoading.value = true
+        packageRepo.getActivePackages { success, message, packages ->
+            isLoading.value = false
+            if (success) {
+                activePackages.value = packages
+            } else {
+                errorMessage.value = message
             }
-        )
-    }
-
-    fun getPackageById(packageId: String) {
-        repository.getPackageById(
-            packageId = packageId,
-            onSuccess = { healthPackage ->
-                _selectedPackage.value = healthPackage
-            },
-            onError = { exception ->
-                _error.value = exception.message ?: "Failed to load package details"
-            }
-        )
-    }
-
-    fun updatePackage(
-        packageId: String,
-        name: String,
-        description: String,
-        testsIncluded: List<String>,
-        price: Double,
-        discountPercentage: Int,
-        duration: String,
-        recommendedFor: String,
-        isActive: Boolean
-    ) {
-        if (name.isEmpty() || description.isEmpty() || testsIncluded.isEmpty() ||
-            price <= 0 || duration.isEmpty() || recommendedFor.isEmpty()
-        ) {
-            _error.value = "Please fill all required fields"
-            return
         }
+    }
 
-        _isLoading.value = true
-        val healthPackage = HealthPackage(
-            id = packageId,
-            name = name,
-            description = description,
-            testsIncluded = testsIncluded,
-            price = price,
-            discountPercentage = discountPercentage,
-            duration = duration,
-            recommendedFor = recommendedFor,
-            isActive = isActive
-        )
-
-        repository.updatePackage(
-            packageId = packageId,
-            healthPackage = healthPackage,
-            onSuccess = {
-                _isLoading.value = false
-                _successMessage.value = "Package updated successfully"
-                _error.value = null
-                getAllPackages()
-            },
-            onError = { exception ->
-                _isLoading.value = false
-                _error.value = exception.message ?: "Failed to update package"
+    fun getPackageById(packageId: String, callback: (HealthPackageModel?) -> Unit) {
+        isLoading.value = true
+        packageRepo.getPackageById(packageId) { success, message, pkg ->
+            isLoading.value = false
+            if (success && pkg != null) {
+                currentPackage.value = pkg
+                callback(pkg)
+            } else {
+                errorMessage.value = message
+                callback(null)
             }
-        )
+        }
     }
 
-    fun deletePackage(packageId: String) {
-        _isLoading.value = true
-        repository.deletePackage(
-            packageId = packageId,
-            onSuccess = {
-                _isLoading.value = false
-                _successMessage.value = "Package deleted successfully"
-                getAllPackages()
-            },
-            onError = { exception ->
-                _isLoading.value = false
-                _error.value = exception.message ?: "Failed to delete package"
+    fun updatePackage(packageId: String, packageModel: HealthPackageModel, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        packageRepo.updatePackage(packageId, packageModel) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
             }
-        )
+            callback(success, message)
+        }
     }
 
-    fun togglePackageStatus(packageId: String, currentStatus: Boolean) {
-        repository.updatePackageStatus(
-            packageId = packageId,
-            isActive = !currentStatus,
-            onSuccess = {
-                _successMessage.value = if (!currentStatus) "Package activated" else "Package deactivated"
-                getAllPackages()
-            },
-            onError = { exception ->
-                _error.value = exception.message ?: "Failed to update package status"
+    fun deletePackage(packageId: String, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        packageRepo.deletePackage(packageId) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
             }
-        )
+            callback(success, message)
+        }
     }
 
-    fun clearError() {
-        _error.value = null
+    fun getPackagesByCategory(category: String, callback: (List<HealthPackageModel>) -> Unit) {
+        isLoading.value = true
+        packageRepo.getPackagesByCategory(category) { success, message, packages ->
+            isLoading.value = false
+            if (success) {
+                callback(packages)
+            } else {
+                errorMessage.value = message
+                callback(emptyList())
+            }
+        }
     }
 
-    fun clearSuccessMessage() {
-        _successMessage.value = null
+
+
+    fun createBooking(bookingModel: PackageBookingModel, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        bookingRepo.createBooking(bookingModel) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
+            }
+            callback(success, message)
+        }
     }
 
-    fun clearSelectedPackage() {
-        _selectedPackage.value = null
+    fun getBookingsByPatient(patientId: String) {
+        isLoading.value = true
+        bookingRepo.getBookingsByPatient(patientId) { success, message, bookings ->
+            isLoading.value = false
+            if (success) {
+                patientBookings.value = bookings
+            } else {
+                errorMessage.value = message
+            }
+        }
     }
 
-    fun clearAllState() {
-        _packages.value = emptyList()
-        _selectedPackage.value = null
-        _error.value = null
-        _successMessage.value = null
-        _isLoading.value = false
+    fun getBookingsByDoctor(doctorId: String) {
+        isLoading.value = true
+        bookingRepo.getBookingsByDoctor(doctorId) { success, message, bookings ->
+            isLoading.value = false
+            if (success) {
+                doctorBookings.value = bookings
+            } else {
+                errorMessage.value = message
+            }
+        }
+    }
+
+    fun getBookingsByPackage(packageId: String) {
+        isLoading.value = true
+        bookingRepo.getBookingsByPackage(packageId) { success, message, bookings ->
+            isLoading.value = false
+            if (success) {
+                packageBookings.value = bookings
+            } else {
+                errorMessage.value = message
+            }
+        }
+    }
+
+    fun cancelBooking(bookingId: String, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        bookingRepo.cancelBooking(bookingId) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
+            }
+            callback(success, message)
+        }
+    }
+
+
+    fun clearMessages() {
+        errorMessage.value = null
+        successMessage.value = null
     }
 }
