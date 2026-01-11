@@ -1082,12 +1082,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             }
         }
     }
-    // Add this after Part 5's Manual Add Bottom Sheet code
-// (Inside CalorieCalculatorBody, after the manual add bottom sheet closing brace)
 
-    // ============================================
-    // GOAL SETTING BOTTOM SHEET
-    // ============================================
     if (showGoalSheet) {
         ModalBottomSheet(
             onDismissRequest = {
@@ -1152,7 +1147,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Protein Goal
+
                 OutlinedTextField(
                     value = goalProtein,
                     onValueChange = { goalProtein = it },
@@ -1185,7 +1180,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                // Carbs Goal
+
                 OutlinedTextField(
                     value = goalCarbs,
                     onValueChange = { goalCarbs = it },
@@ -1251,7 +1246,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(24.dp))
 
-                // Save Goal Button
+
                 Button(
                     onClick = {
                         val calories = goalCalories.toDoubleOrNull()
@@ -1660,7 +1655,7 @@ fun FoodItemCard(
                 }
             }
 
-            // Macros Row (if available)
+
             if (foodItem.protein > 0 || foodItem.carbs > 0 || foodItem.fat > 0) {
                 Spacer(Modifier.height(12.dp))
                 Divider(color = Color.LightGray)
