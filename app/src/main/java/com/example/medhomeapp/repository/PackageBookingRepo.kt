@@ -43,4 +43,9 @@ interface PackageBookingRepo {
     fun getAllBookings(
         callback: (Boolean, String, List<PackageBookingModel>) -> Unit
     )
+
+    fun deleteBooking(
+        bookingId: String,
+        callback: (Boolean, String) -> Unit
+    )
 }

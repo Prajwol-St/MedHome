@@ -169,9 +169,23 @@ class PackageBookingRepoImpl : PackageBookingRepo {
                 }
             }
 
+
             override fun onCancelled(error: DatabaseError) {
                 callback(false, error.message, emptyList())
             }
         })
+    }
+    override fun deleteBooking(
+        bookingId: String,
+        callback: (Boolean, String) -> Unit
+    ) {
+        ref.child(bookingId).removeValue()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true, "Booking deleted successfully")
+                } else {
+                    callback(false, task.exception?.message ?: "Failed to delete")
+                }
+            }
     }
 }

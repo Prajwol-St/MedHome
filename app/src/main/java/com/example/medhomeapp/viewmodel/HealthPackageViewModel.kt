@@ -198,9 +198,22 @@ class HealthPackageViewModel(
         }
     }
 
-
     fun clearMessages() {
         errorMessage.value = null
         successMessage.value = null
     }
+
+    fun deleteBooking(bookingId: String, callback: (Boolean, String) -> Unit) {
+        isLoading.value = true
+        bookingRepo.deleteBooking(bookingId) { success, message ->
+            isLoading.value = false
+            if (success) {
+                successMessage.value = message
+            } else {
+                errorMessage.value = message
+            }
+            callback(success, message)
+        }
+    }
+
 }

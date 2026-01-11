@@ -7,9 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -184,7 +183,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                 }
             }
 
-            // Packages Grid
+            // Packages List
             if (isLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -206,7 +205,6 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                         modifier = Modifier.size(80.dp),
                         tint = Color.Gray
                     )
-
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         "No packages available",
@@ -221,11 +219,9 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     )
                 }
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
+                LazyColumn(
                     contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredPackages, key = { it.id }) { pkg ->
                         PatientPackageCard(
@@ -272,7 +268,7 @@ fun PatientPackageCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -288,96 +284,164 @@ fun PatientPackageCard(
                         contentDescription = "Package Image",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
-                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                            .height(180.dp)
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
                         contentScale = ContentScale.Crop
                     )
                 } else {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
-                            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                            .height(180.dp)
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                             .background(LightSage),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             Icons.Default.LocalShipping,
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp),
+                            modifier = Modifier.size(60.dp),
                             tint = SageGreen.copy(alpha = 0.5f)
                         )
                     }
                 }
-
-                // Days remaining badge
                 if (daysRemaining != null && daysRemaining > 0) {
                     Surface(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(8.dp),
-                        shape = RoundedCornerShape(6.dp),
+                            .padding(12.dp),
+                        shape = RoundedCornerShape(8.dp),
                         color = when {
                             daysRemaining <= 7 -> Color(0xFFFF9800)
                             else -> SageGreen
                         }
                     ) {
                         Text(
-                            "$daysRemaining days",
-                            fontSize = 10.sp,
+                            "$daysRemaining days left",
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                         )
                     }
                 }
             }
-
-            // Package Info
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp)
+                    .padding(16.dp)
             ) {
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = SageGreen.copy(alpha = 0.15f)
+                ) {
+                    Text(
+                        packageModel.category,
+                        fontSize = 11.sp,
+                        color = SageGreen,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     packageModel.packageName,
-                    fontSize = 14.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextDark,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    minLines = 2
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    packageModel.category,
-                    fontSize = 11.sp,
-                    color = SageGreen,
-                    fontWeight = FontWeight.Medium
+                    overflow = TextOverflow.Ellipsis
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    packageModel.shortDescription,
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 20.sp
+                )
 
+                Spacer(modifier = Modifier.height(12.dp))
+                if (packageModel.includedServices.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        packageModel.includedServices.take(3).forEach { service ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.CheckCircle,
+                                    contentDescription = null,
+                                    tint = SageGreen,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Text(
+                                    service,
+                                    fontSize = 13.sp,
+                                    color = TextDark
+                                )
+                            }
+                        }
+
+                        // Show "+X more" if there are more services
+                        if (packageModel.includedServices.size > 3) {
+                            Text(
+                                "+${packageModel.includedServices.size - 3} more services",
+                                fontSize = 12.sp,
+                                color = SageGreen,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(start = 22.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                HorizontalDivider(color = Color.LightGray.copy(alpha = 0.3f))
+
+                Spacer(modifier = Modifier.height(12.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        "NPR ${packageModel.price}",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = SageGreen
-                    )
-
-                    Icon(
-                        Icons.Default.ArrowForward,
-                        contentDescription = null,
-                        tint = SageGreen,
-                        modifier = Modifier.size(18.dp)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Text(
+                            packageModel.doctorName,
+                            fontSize = 13.sp,
+                            color = Color.Gray
+                        )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            "NPR ${packageModel.price.toInt()}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = SageGreen
+                        )
+                        Icon(
+                            Icons.Default.ArrowForward,
+                            contentDescription = null,
+                            tint = SageGreen,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
             }
         }
