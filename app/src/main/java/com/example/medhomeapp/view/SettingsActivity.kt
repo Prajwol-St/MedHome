@@ -35,10 +35,10 @@ import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.LanguageManager
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class SettingsActivity : BaseActivity() {
@@ -88,7 +88,7 @@ fun SettingsScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
+                .background(MintGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -127,8 +127,8 @@ fun SettingsScreen() {
                     modifier = Modifier
                         .size(70.dp)
                         .clip(CircleShape)
-                        .background(SageGreen.copy(alpha = 0.15f))
-                        .border(2.dp, SageGreen.copy(alpha = 0.3f), CircleShape),
+                        .background(MintGreen.copy(alpha = 0.15f))
+                        .border(2.dp, MintGreen.copy(alpha = 0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 )
                 {
@@ -146,7 +146,7 @@ fun SettingsScreen() {
                             Icons.Default.Person,
                             contentDescription = stringResource(R.string.profile),
                             modifier = Modifier.size(40.dp),
-                            tint = SageGreen
+                            tint = MintGreen
                         )
                     }
                 }
@@ -168,14 +168,14 @@ fun SettingsScreen() {
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     Card(
-                        colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.15f)),
+                        colors = CardDefaults.cardColors(containerColor = MintGreen.copy(alpha = 0.15f)),
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(
                             text = currentUser?.role?.uppercase() ?: stringResource(R.string.patient),
                             fontSize = 11.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = SageGreen,
+                            color = MintGreen,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                         )
                     }
@@ -370,7 +370,7 @@ fun SettingsScreen() {
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+                            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.english))
@@ -394,7 +394,7 @@ fun SettingsScreen() {
                                 (context as BaseActivity).recreate()
                                 showLanguageDialog = false
                             },
-                            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+                            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(stringResource(R.string.nepali))
@@ -403,7 +403,7 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showLanguageDialog = false }) {
-                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.close), color = MintGreen, fontWeight = FontWeight.Bold)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -425,7 +425,7 @@ fun SettingsScreen() {
             },
             confirmButton = {
                 TextButton(onClick = { showAboutDialog = false }) {
-                    Text(stringResource(R.string.close), color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.close), color = MintGreen, fontWeight = FontWeight.Bold)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -454,7 +454,7 @@ fun SettingsItem(
     title: String,
     subtitle: String,
     titleColor: Color = TextDark,
-    iconTint: Color = SageGreen,
+    iconTint: Color = MintGreen,
     onClick: () -> Unit
 ) {
     Card(
