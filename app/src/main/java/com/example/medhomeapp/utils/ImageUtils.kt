@@ -24,8 +24,6 @@ class ImageUtils(
 
     fun registerLaunchers(onImageSelected: (Uri?) -> Unit) {
         onImageSelectedCallback = onImageSelected
-
-        // Register for selecting image from gallery
         galleryLauncher = registryOwner.activityResultRegistry.register(
             "galleryLauncher", ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -38,8 +36,6 @@ class ImageUtils(
                 onImageSelectedCallback?.invoke(null)
             }
         }
-
-        // Register permission request
         permissionLauncher = registryOwner.activityResultRegistry.register(
             "permissionLauncher", ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -53,12 +49,9 @@ class ImageUtils(
     }
 
     fun launchImagePicker() {
-        // ✅ FIX: Check for correct permission based on Android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ - Just open gallery directly, no permission needed!
             openGallery()
         } else {
-            // Android 12 and below - Need READ_EXTERNAL_STORAGE
             val permission = Manifest.permission.READ_EXTERNAL_STORAGE
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                 permissionLauncher.launch(permission)
