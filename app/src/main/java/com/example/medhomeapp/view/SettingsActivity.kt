@@ -133,23 +133,23 @@ fun SettingsScreen() {
                 )
                 {
                     if (currentUser?.profilePicture?.isNotEmpty() == true) {
-                AsyncImage(
-                    model = currentUser?.profilePicture,
-                    contentDescription = stringResource(R.string.profile),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Icon(
-                    Icons.Default.Person,
-                    contentDescription = stringResource(R.string.profile),
-                    modifier = Modifier.size(40.dp),
-                    tint = SageGreen
-                )
-            }
-            }
+                        AsyncImage(
+                            model = currentUser?.profilePicture,
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier.size(40.dp),
+                            tint = SageGreen
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.width(16.dp))
 

@@ -13,20 +13,20 @@ import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.view.ui.theme.MintGreen
 
-class BookConsultationActivity : BaseActivity() {
+class AppointmentBookingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BookConsultationTopBarOnly()
+            AppointmentBookingTopBarOnly()
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookConsultationTopBarOnly() {
+fun AppointmentBookingTopBarOnly() {
     val context = LocalContext.current
     val activity = context as Activity
 
@@ -38,7 +38,7 @@ fun BookConsultationTopBarOnly() {
                     titleContentColor = Color.White
                 ),
                 title = {
-                    Text("Book Consultation")
+                    Text("Appointment Booking")
                 },
                 navigationIcon = {
                     IconButton(onClick = { activity.finish() }) {
