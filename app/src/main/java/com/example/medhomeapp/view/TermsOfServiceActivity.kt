@@ -86,7 +86,7 @@ fun TermsOfServiceScreen() {
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "Last Updated: December 27, 2025",
+                    text = "Last Updated: January 12, 2026",
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
@@ -197,19 +197,25 @@ fun TermsOfServiceScreen() {
                 TermsSection(
                     title = "13. Contact Information",
                     content = "For questions about these Terms:\n\n" +
-                            "Email: legal@medhome.com\n" +
-                            "Phone: +977 9800000000\n" +
+                            "Email: medhome0001@gmail.com\n" +
                             "Address: Kathmandu, Nepal"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
+
+                Divider(
+                    color = SageGreen.copy(alpha = 0.2f),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
 
                 Text(
                     text = "By using MedHome, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.",
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                        lineHeight = 18.sp
                     )
                 )
             }
