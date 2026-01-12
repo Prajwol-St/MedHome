@@ -19,16 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 
 @Composable
-fun DoctorHomeScreen(doctorName: String) {
+fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -39,7 +42,7 @@ fun DoctorHomeScreen(doctorName: String) {
             .verticalScroll(scrollState)
     ) {
 
-        // 🔹 Header Card
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,12 +64,26 @@ fun DoctorHomeScreen(doctorName: String) {
                         .background(Color.White.copy(alpha = 0.25f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = "Profile",
-                        modifier = Modifier.size(32.dp),
-                        tint = Color.White
-                    )
+                    if (!profilePictureUrl.isNullOrEmpty()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(profilePictureUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(32.dp),
+                            tint = Color.White
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(14.dp))
@@ -87,7 +104,7 @@ fun DoctorHomeScreen(doctorName: String) {
             }
         }
 
-        // 🔹 Section Title
+
         Text(
             text = "Management",
             fontSize = 18.sp,
@@ -96,7 +113,7 @@ fun DoctorHomeScreen(doctorName: String) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // 🔹 Grid Menu
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
