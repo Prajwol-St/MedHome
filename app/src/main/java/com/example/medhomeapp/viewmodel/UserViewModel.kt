@@ -170,4 +170,27 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
     fun resetAuthState() {
         _authState.value = AuthState.Idle
     }
+
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        callback: (Boolean, String) -> Unit
+    ) {
+        if (currentPassword.isBlank() || newPassword.isBlank()) {
+            callback(false, "Passwords cannot be empty")
+            return
+        }
+
+        if (newPassword.length < 6) {
+            callback(false, "Password must be at least 6 characters")
+            return
+        }
+
+        _loading.value = true
+
+        repo.changePassword(currentPassword, newPassword) { success, message ->
+            _loading.value = false
+            callback(success, message)
+        }
+    }
 }
