@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,13 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
+import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
+import com.example.medhomeapp.viewmodel.UserViewModel
 
 class ChangePasswordActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,13 +51,16 @@ fun ChangePasswordScreen() {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
 
+    val viewModel = remember { UserViewModel(UserRepoImpl()) }
+
     var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var currentPasswordVisible by remember { mutableStateOf(false) }
     var newPasswordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
+
+    val isLoading by viewModel.loading
 
     Box(
         modifier = Modifier
@@ -132,7 +136,6 @@ fun ChangePasswordScreen() {
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-
                 Text(
                     text = "Current Password",
                     style = TextStyle(
@@ -146,7 +149,13 @@ fun ChangePasswordScreen() {
                 OutlinedTextField(
                     value = currentPassword,
                     onValueChange = { currentPassword = it },
-                    placeholder = { Text("Enter current password", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(
+                            "Enter current password",
+                            color = TextGray.copy(alpha = 0.6f),
+                            fontSize = 14.sp
+                        )
+                    },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { currentPasswordVisible = !currentPasswordVisible }) {
@@ -155,12 +164,15 @@ fun ChangePasswordScreen() {
                                     painterResource(R.drawable.baseline_visibility_off_24)
                                 else
                                     painterResource(R.drawable.baseline_visibility_24),
-                                contentDescription = null,
+                                contentDescription = if (currentPasswordVisible) "Hide password" else "Show password",
                                 tint = TextGray
                             )
                         }
                     },
-                    visualTransformation = if (currentPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (currentPasswordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -170,12 +182,13 @@ fun ChangePasswordScreen() {
                         unfocusedIndicatorColor = LightSage,
                         cursorColor = SageGreen,
                         focusedTextColor = TextDark,
-                        unfocusedTextColor = TextDark
-                    )
+                        unfocusedTextColor = TextDark,
+                        disabledContainerColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-
                 Text(
                     text = "New Password",
                     style = TextStyle(
@@ -189,7 +202,13 @@ fun ChangePasswordScreen() {
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newPassword = it },
-                    placeholder = { Text("At least 6 characters", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(
+                            "At least 6 characters",
+                            color = TextGray.copy(alpha = 0.6f),
+                            fontSize = 14.sp
+                        )
+                    },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { newPasswordVisible = !newPasswordVisible }) {
@@ -198,12 +217,15 @@ fun ChangePasswordScreen() {
                                     painterResource(R.drawable.baseline_visibility_off_24)
                                 else
                                     painterResource(R.drawable.baseline_visibility_24),
-                                contentDescription = null,
+                                contentDescription = if (newPasswordVisible) "Hide password" else "Show password",
                                 tint = TextGray
                             )
                         }
                     },
-                    visualTransformation = if (newPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (newPasswordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -213,8 +235,10 @@ fun ChangePasswordScreen() {
                         unfocusedIndicatorColor = LightSage,
                         cursorColor = SageGreen,
                         focusedTextColor = TextDark,
-                        unfocusedTextColor = TextDark
-                    )
+                        unfocusedTextColor = TextDark,
+                        disabledContainerColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -232,7 +256,13 @@ fun ChangePasswordScreen() {
                 OutlinedTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
-                    placeholder = { Text("Re-enter new password", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(
+                            "Re-enter new password",
+                            color = TextGray.copy(alpha = 0.6f),
+                            fontSize = 14.sp
+                        )
+                    },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
@@ -241,12 +271,15 @@ fun ChangePasswordScreen() {
                                     painterResource(R.drawable.baseline_visibility_off_24)
                                 else
                                     painterResource(R.drawable.baseline_visibility_24),
-                                contentDescription = null,
+                                contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password",
                                 tint = TextGray
                             )
                         }
                     },
-                    visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (confirmPasswordVisible)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
@@ -256,67 +289,57 @@ fun ChangePasswordScreen() {
                         unfocusedIndicatorColor = LightSage,
                         cursorColor = SageGreen,
                         focusedTextColor = TextDark,
-                        unfocusedTextColor = TextDark
-                    )
+                        unfocusedTextColor = TextDark,
+                        disabledContainerColor = Color.White.copy(alpha = 0.5f)
+                    ),
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-
                 Button(
                     onClick = {
                         when {
                             currentPassword.isBlank() -> {
-                                Toast.makeText(context, "Enter current password", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Please enter your current password",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             newPassword.isBlank() -> {
-                                Toast.makeText(context, "Enter new password", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Please enter a new password",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             newPassword.length < 6 -> {
-                                Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Password must be at least 6 characters",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             newPassword != confirmPassword -> {
-                                Toast.makeText(context, "Passwords don't match", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Passwords don't match",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            currentPassword == newPassword -> {
+                                Toast.makeText(
+                                    context,
+                                    "New password must be different from current password",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             else -> {
-                                isLoading = true
-                                val user = FirebaseAuth.getInstance().currentUser
-                                val email = user?.email
-
-                                if (user != null && email != null) {
-                                    val credential = EmailAuthProvider.getCredential(email, currentPassword)
-                                    user.reauthenticate(credential)
-                                        .addOnCompleteListener { reauth ->
-                                            if (reauth.isSuccessful) {
-                                                user.updatePassword(newPassword)
-                                                    .addOnCompleteListener { update ->
-                                                        isLoading = false
-                                                        if (update.isSuccessful) {
-                                                            Toast.makeText(
-                                                                context,
-                                                                "Password changed successfully",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                            (context as ComponentActivity).finish()
-                                                        } else {
-                                                            Toast.makeText(
-                                                                context,
-                                                                "Failed to update password",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        }
-                                                    }
-                                            } else {
-                                                isLoading = false
-                                                Toast.makeText(
-                                                    context,
-                                                    "Current password is incorrect",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-                                } else {
-                                    isLoading = false
-                                    Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
+                                viewModel.changePassword(currentPassword, newPassword) { success, message ->
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    if (success) {
+                                        (context as ComponentActivity).finish()
+                                    }
                                 }
                             }
                         }
@@ -350,9 +373,12 @@ fun ChangePasswordScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.1f)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = SageGreen.copy(alpha = 0.1f)
+                    ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(
@@ -377,10 +403,11 @@ fun ChangePasswordScreen() {
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "• Minimum 6 characters\n• Use a strong, unique password",
+                                text = "• Minimum 6 characters\n• Use a strong, unique password\n• Don't reuse old passwords",
                                 style = TextStyle(
                                     color = TextGray,
-                                    fontSize = 12.sp
+                                    fontSize = 12.sp,
+                                    lineHeight = 18.sp
                                 )
                             )
                         }
