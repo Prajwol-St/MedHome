@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 
@@ -39,6 +38,8 @@ fun DoctorHomeScreen(doctorName: String) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
+
+        // 🔹 Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,10 +73,9 @@ fun DoctorHomeScreen(doctorName: String) {
 
                 Column {
                     Text(
-                        text = "Welcome",
+                        text = "Welcome Dr.",
                         fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontWeight = FontWeight.Normal
+                        color = Color.White.copy(alpha = 0.9f)
                     )
                     Text(
                         text = doctorName,
@@ -87,32 +87,37 @@ fun DoctorHomeScreen(doctorName: String) {
             }
         }
 
+        // 🔹 Section Title
         Text(
-            text = "Services",
+            text = "Management",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = TextDark,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
+        // 🔹 Grid Menu
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(500.dp)
+            modifier = Modifier.height(700.dp)
         ) {
+
             item {
                 DoctorFeatureCard(
                     title = "Set Availability",
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF6B8E4E),
                     onClick = {
-                        val intent = Intent(context, DoctorAvailabilityActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, DoctorAvailabilityActivity::class.java)
+                        )
                     }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Messages",
@@ -121,6 +126,7 @@ fun DoctorHomeScreen(doctorName: String) {
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Patient Records",
@@ -129,14 +135,16 @@ fun DoctorHomeScreen(doctorName: String) {
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
                     title = "Health Packages",
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
                     onClick = {
-                        val intent = Intent(context, HealthPackagesManagementActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, HealthPackagesManagementActivity::class.java)
+                        )
                     }
                 )
             }
@@ -166,7 +174,6 @@ fun DoctorFeatureCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
@@ -185,11 +192,10 @@ fun DoctorFeatureCard(
             }
 
             Text(
-                title,
+                text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = TextDark,
-                lineHeight = 16.sp
+                color = TextDark
             )
         }
     }

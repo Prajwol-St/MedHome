@@ -14,6 +14,8 @@ data class UserModel(
     val bloodGroup: String = "",
     val emergencyContact: String = "",
     val address: String = "",
+    val profileImageUrl: String = "",
+    val profileImagePublicId: String = "",
     val profilePicture: String = "",
     val profilePicturePublicId: String = ""
 ) {
@@ -32,6 +34,8 @@ data class UserModel(
             "bloodGroup" to bloodGroup,
             "emergencyContact" to emergencyContact,
             "address" to address,
+            "profileImageUrl" to profileImageUrl,
+            "profileImagePublicId" to profileImagePublicId,
             "profilePicture" to profilePicture,
             "profilePicturePublicId" to profilePicturePublicId
         )
