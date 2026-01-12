@@ -1,71 +1,42 @@
 package com.example.medhomeapp.repository
 
-import com.google.firebase.database.FirebaseDatabase
+import com.example.medhomeapp.model.TimeSlot
+import com.google.firebase.database.*
 
 class DoctorAvailabilityRepoImpl : DoctorAvailabilityRepo {
 
-    private val database = FirebaseDatabase.getInstance()
-    private val availabilityRef = database.getReference("availability")
+    private val rootRef =
+        FirebaseDatabase.getInstance().getReference("doctor_availability")
 
-    /* ---------------- ADD AVAILABILITY ---------------- */
-
-    override fun addAvailability(
-        doctorId: String,
-        date: String,
-        time: String,
-        callback: (Boolean, String) -> Unit
-    ) {
-        availabilityRef
-            .child(doctorId)
-            .child(date)
-            .child(time)
-            .setValue(true)
-            .addOnSuccessListener {
-                callback(true, "Availability added successfully")
-            }
-            .addOnFailureListener {
-                callback(false, it.message ?: "Failed to add availability")
-            }
+    override fun addTimeSlot(slot: TimeSlot) {
+        val doctorRef = rootRef.child(slot.doctorId)
+        val key = doctorRef.push().key ?: return
+        doctorRef.child(key).setValue(slot.copy(id = key))
     }
 
-    /* ---------------- GET AVAILABILITY ---------------- */
-
-    override fun getAvailability(
-        doctorId: String,
-        date: String,
-        callback: (List<String>) -> Unit
-    ) {
-        availabilityRef
-            .child(doctorId)
-            .child(date)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                val timeSlots = snapshot.children.mapNotNull { it.key }
-                callback(timeSlots)
-            }
-            .addOnFailureListener {
-                callback(emptyList())
-            }
+    override fun deleteTimeSlot(doctorId: String, slotId: String) {
+        rootRef.child(doctorId).child(slotId).removeValue()
     }
 
-    /* ---------------- REMOVE AVAILABILITY ---------------- */
-
-    override fun removeAvailability(
+    override fun observeTimeSlots(
         doctorId: String,
-        date: String,
-        time: String,
-        callback: (Boolean, String) -> Unit
+        onResult: (List<TimeSlot>) -> Unit
     ) {
-        availabilityRef
-            .child(doctorId)
-            .child(date)
-            .child(time)
-            .removeValue()
-            .addOnSuccessListener {
-                callback(true, "Availability removed successfully")
-            }
-            .addOnFailureListener {
-                callback(false, it.message ?: "Failed to remove availability")
-            }
+        rootRef.child(doctorId)
+            .addValueEventListener(object : ValueEventListener {
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val slots = snapshot.children.mapNotNull { child ->
+                        val slot = child.getValue(TimeSlot::class.java)
+                        slot?.copy(id = child.key ?: "")
+                    }
+                    onResult(slots)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onResult(emptyList())
+                }
+            })
     }
+
 }
