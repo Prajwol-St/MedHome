@@ -40,6 +40,8 @@ import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.AuthState
 import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SignupDetailsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,7 @@ class SignupDetailsActivity : BaseActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignupDetailsBody(
     emailFromIntent: String,
@@ -82,6 +85,9 @@ fun SignupDetailsBody(
 
     var passwordVisibility by remember { mutableStateOf(false) }
     var confirmPasswordVisibility by remember { mutableStateOf(false) }
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
 
     val authState by viewModel.authState
     val isLoading = authState is AuthState.Loading
@@ -259,23 +265,63 @@ fun SignupDetailsBody(
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 
-                OutlinedTextField(
-                    value = gender,
-                    onValueChange = { gender = it },
-                    placeholder = { Text("Male/Female/Other", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
-                        unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
-                        focusedTextColor = TextDark,
-                        unfocusedTextColor = TextDark
+                var expandedGender by remember { mutableStateOf(false) }
+                val genderOptions = listOf("Male", "Female", "Other")
+
+                ExposedDropdownMenuBox(
+                    expanded = expandedGender,
+                    onExpandedChange = { expandedGender = !expandedGender },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(
+                        value = gender,
+                        onValueChange = {},
+                        readOnly = true,
+                        placeholder = { Text("Male/Female/Other", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGender)
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedIndicatorColor = SageGreen,
+                            unfocusedIndicatorColor = LightSage,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark
+                        )
                     )
-                )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedGender,
+                        onDismissRequest = { expandedGender = false },
+                        modifier = Modifier.background(Color.White)
+                    ) {
+                        genderOptions.forEach { option ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        option,
+                                        color = TextDark,
+                                        fontSize = 14.sp
+                                    )
+                                },
+                                onClick = {
+                                    gender = option
+                                    expandedGender = false
+                                },
+                                colors = MenuDefaults.itemColors(
+                                    textColor = TextDark
+                                )
+                            )
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -290,14 +336,27 @@ fun SignupDetailsBody(
 
                 OutlinedTextField(
                     value = dateOfBirth,
-                    onValueChange = { dateOfBirth = it },
+                    onValueChange = { },
                     placeholder = { Text("DD/MM/YYYY", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDatePicker = true },
                     shape = RoundedCornerShape(12.dp),
+                    trailingIcon = {
+                        IconButton(onClick = { showDatePicker = true }) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_calendar_month_24),
+                                contentDescription = "Select Date",
+                                tint = SageGreen
+                            )
+                        }
+                    },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White,
                         focusedIndicatorColor = SageGreen,
                         unfocusedIndicatorColor = LightSage,
                         cursorColor = SageGreen,
@@ -317,23 +376,63 @@ fun SignupDetailsBody(
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 
-                OutlinedTextField(
-                    value = bloodGroup,
-                    onValueChange = { bloodGroup = it },
-                    placeholder = { Text("A+, B+, O+, etc.", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
-                    enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
-                        unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
-                        focusedTextColor = TextDark,
-                        unfocusedTextColor = TextDark
+                var expandedBloodGroup by remember { mutableStateOf(false) }
+                val bloodGroups = listOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+
+                ExposedDropdownMenuBox(
+                    expanded = expandedBloodGroup,
+                    onExpandedChange = { expandedBloodGroup = !expandedBloodGroup },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    OutlinedTextField(
+                        value = bloodGroup,
+                        onValueChange = {},
+                        readOnly = true,
+                        placeholder = { Text("A+, B+, O+, etc.", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        enabled = !isLoading,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .menuAnchor(),
+                        shape = RoundedCornerShape(12.dp),
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedBloodGroup)
+                        },
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedIndicatorColor = SageGreen,
+                            unfocusedIndicatorColor = LightSage,
+                            cursorColor = SageGreen,
+                            focusedTextColor = TextDark,
+                            unfocusedTextColor = TextDark
+                        )
                     )
-                )
+
+                    ExposedDropdownMenu(
+                        expanded = expandedBloodGroup,
+                        onDismissRequest = { expandedBloodGroup = false },
+                        modifier = Modifier.background(Color.White)
+                    ) {
+                        bloodGroups.forEach { group ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        group,
+                                        color = TextDark,
+                                        fontSize = 14.sp
+                                    )
+                                },
+                                onClick = {
+                                    bloodGroup = group
+                                    expandedBloodGroup = false
+                                },
+                                colors = MenuDefaults.itemColors(
+                                    textColor = TextDark
+                                )
+                            )
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -509,9 +608,9 @@ fun SignupDetailsBody(
                             name.isBlank() -> Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show()
                             contact.isBlank() -> Toast.makeText(context, "Please enter contact number", Toast.LENGTH_SHORT).show()
                             contact.length != 10 -> Toast.makeText(context, "Contact number must be 10 digits", Toast.LENGTH_SHORT).show()
-                            gender.isBlank() -> Toast.makeText(context, "Please enter gender", Toast.LENGTH_SHORT).show()
-                            dateOfBirth.isBlank() -> Toast.makeText(context, "Please enter date of birth", Toast.LENGTH_SHORT).show()
-                            bloodGroup.isBlank() -> Toast.makeText(context, "Please enter blood group", Toast.LENGTH_SHORT).show()
+                            gender.isBlank() -> Toast.makeText(context, "Please select gender", Toast.LENGTH_SHORT).show()
+                            dateOfBirth.isBlank() -> Toast.makeText(context, "Please select date of birth", Toast.LENGTH_SHORT).show()
+                            bloodGroup.isBlank() -> Toast.makeText(context, "Please select blood group", Toast.LENGTH_SHORT).show()
                             emergencyContact.isBlank() -> Toast.makeText(context, "Please enter emergency contact", Toast.LENGTH_SHORT).show()
                             address.isBlank() -> Toast.makeText(context, "Please enter address", Toast.LENGTH_SHORT).show()
                             password.isBlank() -> Toast.makeText(context, "Please enter password", Toast.LENGTH_SHORT).show()
@@ -627,6 +726,45 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(24.dp))
             }
+        }
+    }
+
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val calendar = Calendar.getInstance().apply {
+                                timeInMillis = millis
+                            }
+                            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                            dateOfBirth = dateFormat.format(calendar.time)
+                        }
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel", color = TextGray)
+                }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = BackgroundCream
+            )
+        ) {
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    selectedDayContainerColor = SageGreen,
+                    todayDateBorderColor = SageGreen,
+                    todayContentColor = SageGreen
+                )
+            )
         }
     }
 }
