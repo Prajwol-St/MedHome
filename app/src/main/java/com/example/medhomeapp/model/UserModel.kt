@@ -14,6 +14,10 @@ data class UserModel(
     val bloodGroup: String = "",
     val emergencyContact: String = "",
     val address: String = "",
+    val profileImageUrl: String = "",
+    val profileImagePublicId: String = "",
+    val profilePicture: String = "",
+    val profilePicturePublicId: String = ""
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -29,7 +33,11 @@ data class UserModel(
             "updatedAt" to updatedAt,
             "bloodGroup" to bloodGroup,
             "emergencyContact" to emergencyContact,
-            "address" to address
+            "address" to address,
+            "profileImageUrl" to profileImageUrl,
+            "profileImagePublicId" to profileImagePublicId,
+            "profilePicture" to profilePicture,
+            "profilePicturePublicId" to profilePicturePublicId
         )
     }
 }
