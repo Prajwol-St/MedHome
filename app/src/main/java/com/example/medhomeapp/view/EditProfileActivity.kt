@@ -158,7 +158,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { (context as ComponentActivity).finish() }) {
+                IconButton(onClick = { (context as BaseActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
                         contentDescription = "Back",

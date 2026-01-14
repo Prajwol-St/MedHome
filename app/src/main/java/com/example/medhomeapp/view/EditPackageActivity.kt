@@ -302,7 +302,7 @@ fun EditPackageScreen(
                                         Text("Tap to upload package image", color = Color.Gray, fontSize = 14.sp)
                                         Text("(Optional)", color = Color.Gray, fontSize = 12.sp)
                                     }
-                                }
+                                }   
                             }
                         }
                     }
