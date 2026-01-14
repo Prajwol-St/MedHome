@@ -35,10 +35,10 @@ import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.DeepSage
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.AuthState
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -201,7 +201,7 @@ fun LoginBody() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SageGreen)
+            .background(MintGreen)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -291,9 +291,9 @@ fun LoginBody() {
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         disabledContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -333,9 +333,9 @@ fun LoginBody() {
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         disabledContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -355,7 +355,7 @@ fun LoginBody() {
                             onCheckedChange = { rememberMe = it },
                             enabled = !isLoading,
                             colors = CheckboxDefaults.colors(
-                                checkedColor = SageGreen,
+                                checkedColor = MintGreen,
                                 checkmarkColor = Color.White,
                                 uncheckedColor = LightSage
                             )
@@ -371,7 +371,7 @@ fun LoginBody() {
                     Text(
                         text = "Forgot password?",
                         style = TextStyle(
-                            color = SageGreen,
+                            color = MintGreen,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
                         ),
@@ -471,7 +471,7 @@ fun LoginBody() {
                     if (isGoogleLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
-                            color = SageGreen,
+                            color = MintGreen,
                             strokeWidth = 2.dp
                         )
                     } else {
@@ -509,7 +509,7 @@ fun LoginBody() {
                     Text(
                         text = "Register",
                         style = TextStyle(
-                            color = SageGreen,
+                            color = MintGreen,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
