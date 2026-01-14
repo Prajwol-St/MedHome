@@ -12,7 +12,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 // --- MedHome Core Branding ---
-val MintGreen = Color(0xFF7AE3C3) // Your Primary Color
+val MintGreen = Color(0xFF76D686) // Your Primary Color
 val OceanTeal = Color(0xFF00C1D4)
 
 // --- Gradient Sets ---
