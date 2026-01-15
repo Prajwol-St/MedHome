@@ -98,7 +98,11 @@ fun LoginBody() {
             val idToken = account?.idToken
 
             if (idToken.isNullOrEmpty()) {
-                Toast.makeText(context, "Google Sign-In failed: no ID token", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.google_no_token),
+                    Toast.LENGTH_SHORT
+                ).show()
                 isGoogleLoading = false
                 return@rememberLauncherForActivityResult
             }
@@ -126,14 +130,22 @@ fun LoginBody() {
                                         .putString("user_email", user.email)
                                         .putString("user_contact", user.contact)
                                         .apply()
-                                    Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.welcome_back, user.name),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
                                     val intent = Intent(context, DashboardActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     context.startActivity(intent)
                                     (context as BaseActivity).finish()
                                 } else {
-                                    Toast.makeText(context, "Please complete your profile", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.complete_profile),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     val intent = Intent(context, SignupDetailsActivity::class.java)
                                     intent.putExtra("email", account.email ?: "")
                                     intent.putExtra("googleUid", userId)
@@ -144,17 +156,30 @@ fun LoginBody() {
                             }
                         } else {
                             isGoogleLoading = false
-                            Toast.makeText(context, "Failed to get user ID", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_user_id_failed),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
                         isGoogleLoading = false
-                        Toast.makeText(context, "Firebase Sign-In failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.error_firebase_signin_failed),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
         } catch (e: ApiException) {
             isGoogleLoading = false
-            Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            val errorText = e.message?.let {
+                context.getString(R.string.error_google_signin_failed, it)
+            } ?: context.getString(R.string.error_google_signin_failed_generic)
+
+            Toast.makeText(context, errorText, Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -182,7 +207,12 @@ fun LoginBody() {
                             .apply()
                     }
 
-                    Toast.makeText(context, "Welcome back, ${user.name}!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.welcome_back, user.name),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     val intent = Intent(context, DashboardActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     context.startActivity(intent)
@@ -191,7 +221,13 @@ fun LoginBody() {
                 viewModel.resetAuthState()
             }
             is AuthState.Error -> {
-                Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    state.message.ifBlank {
+                        context.getString(R.string.login_failed)
+                    },
+                    Toast.LENGTH_LONG
+                ).show()
                 viewModel.resetAuthState()
             }
             else -> {}
@@ -216,7 +252,7 @@ fun LoginBody() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "MedHome",
+                text = stringResource(R.string.login_app_title),
                 style = TextStyle(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -226,7 +262,7 @@ fun LoginBody() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Your health, our priority",
+                text = stringResource(R.string.login_tagline),
                 style = TextStyle(
                     color = Color.White.copy(alpha = 0.9f),
                     fontSize = 14.sp
@@ -250,7 +286,7 @@ fun LoginBody() {
                     .padding(top = 40.dp, bottom = 24.dp)
             ) {
                 Text(
-                    text = "Sign in",
+                    text = stringResource(R.string.sign_in),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -261,7 +297,7 @@ fun LoginBody() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Welcome! Please enter your details.",
+                    text = stringResource(R.string.login_subtitle),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 14.sp
@@ -271,7 +307,7 @@ fun LoginBody() {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Username",
+                    text = stringResource(R.string.username),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 14.sp,
@@ -283,9 +319,15 @@ fun LoginBody() {
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    placeholder = { Text("Enter your email", color = TextGray.copy(alpha = 0.6f)) },
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.email_hint),
+                            color = TextGray.copy(alpha = 0.6f)
+                        )
+                    },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.
+                    fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -301,7 +343,7 @@ fun LoginBody() {
 
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Password",
+                    text = stringResource(R.string.password_label),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 14.sp,
@@ -313,7 +355,10 @@ fun LoginBody() {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("Enter your password", color = TextGray.copy(alpha = 0.6f)) },
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.password_hint),
+                            color = TextGray.copy(alpha = 0.6f)) },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -361,7 +406,7 @@ fun LoginBody() {
                             )
                         )
                         Text(
-                            text = "Remember me",
+                            text = stringResource(R.string.remember_me),
                             style = TextStyle(
                                 color = TextDark,
                                 fontSize = 13.sp
@@ -369,7 +414,7 @@ fun LoginBody() {
                         )
                     }
                     Text(
-                        text = "Forgot password?",
+                        text = stringResource(R.string.forgot_password),
                         style = TextStyle(
                             color = MintGreen,
                             fontSize = 13.sp,
@@ -381,20 +426,31 @@ fun LoginBody() {
                         }
                     )
                 }
-
                 Spacer(modifier = Modifier.height(28.dp))
                 Button(
                     onClick = {
                         if (email.isBlank()) {
-                            Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_empty_email),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
                         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_empty_email),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
                         if (password.isBlank()) {
-                            Toast.makeText(context, "Please enter your password", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_empty_password),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
 
@@ -418,7 +474,7 @@ fun LoginBody() {
                         )
                     } else {
                         Text(
-                            text = "Sign up",
+                            text = stringResource(R.string.sign_up_button),
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -439,7 +495,7 @@ fun LoginBody() {
                         color = LightSage
                     )
                     Text(
-                        text = "Or",
+                        text = stringResource(R.string.or),
                         modifier = Modifier.padding(horizontal = 16.dp),
                         style = TextStyle(
                             color = TextGray,
@@ -483,7 +539,7 @@ fun LoginBody() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Continue with Google",
+                            text = stringResource(R.string.continue_with_google),
                             style = TextStyle(
                                 color = TextDark,
                                 fontSize = 15.sp,
@@ -500,14 +556,14 @@ fun LoginBody() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Don't have an account? ",
+                        text = stringResource(R.string.no_account),
                         style = TextStyle(
                             color = TextGray,
                             fontSize = 14.sp
                         )
                     )
                     Text(
-                        text = "Register",
+                        text = stringResource(R.string.register),
                         style = TextStyle(
                             color = MintGreen,
                             fontSize = 14.sp,
