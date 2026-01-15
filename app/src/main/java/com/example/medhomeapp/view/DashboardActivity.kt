@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
@@ -87,7 +86,7 @@ fun DashboardScaffold() {
                 title = {
                     Text(
                         when (selectedTab) {
-                            0 -> stringResource(R.string.medhome)
+                            0 -> stringResource(R.string.app_name)
                             1 -> stringResource(R.string.reminder)
                             2 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
