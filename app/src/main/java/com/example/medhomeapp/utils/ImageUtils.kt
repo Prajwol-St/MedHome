@@ -12,6 +12,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistryOwner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import java.io.File
 
 class ImageUtils(
     private val activity: Activity,
@@ -19,56 +21,101 @@ class ImageUtils(
 ) {
 
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
-    private lateinit var permissionLauncher: ActivityResultLauncher<String>
+    private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
+    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
+    private lateinit var storagePermissionLauncher: ActivityResultLauncher<String>
+
     private var onImageSelectedCallback: ((Uri?) -> Unit)? = null
+    private var capturedImageUri: Uri? = null
+    private var showImageSourceDialog: (() -> Unit)? = null
 
-    fun registerLaunchers(onImageSelected: (Uri?) -> Unit) {
+    fun registerLaunchers(
+        onImageSelected: (Uri?) -> Unit,
+        onShowDialog: (() -> Unit)? = null
+    ) {
         onImageSelectedCallback = onImageSelected
-
-        // Register for selecting image from gallery
+        showImageSourceDialog = onShowDialog
         galleryLauncher = registryOwner.activityResultRegistry.register(
             "galleryLauncher", ActivityResultContracts.StartActivityForResult()
         ) { result ->
             val uri = result.data?.data
             if (result.resultCode == Activity.RESULT_OK && uri != null) {
-                Log.d("ImageUtils", "Image selected: $uri")
+                Log.d("ImageUtils", "Image selected from gallery: $uri")
                 onImageSelectedCallback?.invoke(uri)
             } else {
-                Log.e("ImageUtils", "Image selection cancelled or failed")
-                onImageSelectedCallback?.invoke(null)
+                Log.e("ImageUtils", "Gallery selection cancelled or failed")
             }
         }
 
-        // Register permission request
-        permissionLauncher = registryOwner.activityResultRegistry.register(
-            "permissionLauncher", ActivityResultContracts.RequestPermission()
+        cameraLauncher = registryOwner.activityResultRegistry.register(
+            "cameraLauncher", ActivityResultContracts.TakePicture()
+        ) { success ->
+            if (success && capturedImageUri != null) {
+                Log.d("ImageUtils", "Image captured from camera: $capturedImageUri")
+                onImageSelectedCallback?.invoke(capturedImageUri)
+            } else {
+                Log.e("ImageUtils", "Camera capture cancelled or failed")
+            }
+        }
+
+        cameraPermissionLauncher = registryOwner.activityResultRegistry.register(
+            "cameraPermissionLauncher", ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
-                Log.d("ImageUtils", "Permission granted")
+                Log.d("ImageUtils", "Camera permission granted")
+                openCamera()
+            } else {
+                Log.e("ImageUtils", "Camera permission denied")
+            }
+        }
+
+        // Storage Permission Launcher (for older Android versions)
+        storagePermissionLauncher = registryOwner.activityResultRegistry.register(
+            "storagePermissionLauncher", ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                Log.d("ImageUtils", "Storage permission granted")
                 openGallery()
             } else {
-                Log.e("ImageUtils", "Permission denied")
+                Log.e("ImageUtils", "Storage permission denied")
             }
         }
     }
 
     fun launchImagePicker() {
-        // ✅ FIX: Check for correct permission based on Android version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Android 13+ - Just open gallery directly, no permission needed!
-            openGallery()
+        showImageSourceDialog?.invoke() ?: openGallery()
+    }
+    fun openCamera() {
+        val permission = Manifest.permission.CAMERA
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            cameraPermissionLauncher.launch(permission)
         } else {
-            // Android 12 and below - Need READ_EXTERNAL_STORAGE
+            val photoFile = File(activity.cacheDir, "profile_${System.currentTimeMillis()}.jpg")
+            capturedImageUri = FileProvider.getUriForFile(
+                activity,
+                "${activity.packageName}.fileprovider",
+                photoFile
+            )
+            Log.d("ImageUtils", "Opening camera with URI: $capturedImageUri")
+            cameraLauncher.launch(capturedImageUri!!)
+        }
+    }
+
+    fun openGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ doesn't need READ_EXTERNAL_STORAGE
+            launchGalleryIntent()
+        } else {
             val permission = Manifest.permission.READ_EXTERNAL_STORAGE
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                permissionLauncher.launch(permission)
+                storagePermissionLauncher.launch(permission)
             } else {
-                openGallery()
+                launchGalleryIntent()
             }
         }
     }
 
-    private fun openGallery() {
+    private fun launchGalleryIntent() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
             type = "image/*"
         }
