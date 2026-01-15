@@ -71,7 +71,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
     val commonRepo = remember { CommonRepoImpl() }
     val scrollState = rememberScrollState()
 
-    val userId = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
         .getString("user_id", null)
 
     val currentUser by viewModel.currentUser
