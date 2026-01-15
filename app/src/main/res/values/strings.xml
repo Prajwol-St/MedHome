@@ -1,38 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- App Name -->
+    <!-- App -->
     <string name="app_name">MedHome</string>
-    <string name="medhome">MedHome</string>
 
-    <!-- Authentication -->
-    <string name="login">Log In</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="email">Email Address</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="remember_me">Remember Me</string>
-    <string name="forgot_password">Forgot your password?</string>
-    <string name="login_with_google">Continue with Google</string>
-    <string name="sign_up_with_google">Sign up with Google</string>
-    <string name="dont_have_account">Don’t have an account?</string>
-    <string name="already_have_account">Already have an account?</string>
+    <!-- Common -->
+    <string name="or">Or</string>
     <string name="continue_button">Continue</string>
-    <string name="or">OR</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
+    <string name="loading">Loading…</string>
 
-    <!-- Sign Up -->
-    <string name="complete_your_profile">Complete Your Profile</string>
-    <string name="full_name">Full Name</string>
-    <string name="contact_number">Contact Number</string>
-    <string name="gender">Gender (Male / Female / Other)</string>
-    <string name="date_of_birth">Date of Birth (YYYY/MM/DD)</string>
-    <string name="blood_group">Blood Group (A+, B-, O+, etc.)</string>
-    <string name="emergency_contact">Emergency Contact</string>
-    <string name="address">Address</string>
-    <string name="agree_terms">I agree to the Terms &amp; Conditions</string>
+    <!-- Login -->
+    <string name="login_app_title">MedHome</string>
+    <string name="login_tagline">Your health, our priority</string>
+    <string name="sign_in">Sign In</string>
+    <string name="login_subtitle">Welcome! Please enter your details.</string>
+    <string name="username">Email</string>
+    <string name="password_label">Password</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="complete_profile">Complete your profile</string>
+    <string name="email_label">Email</string>
+
+
+    <!-- Signup -->
+    <string name="create_account">Create Account</string>
+    <string name="signup_subtitle">Sign up to get started with your health journey.</string>
+    <string name="already_have_account">Already have an account?</string>
+
+    <!-- Buttons -->
+    <string name="sign_up_button">Sign In</string>
+    <string name="continue_with_google">Continue with Google</string>
+
+    <!-- Forgot Password -->
+    <string name="reset_password">Reset Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="didnt_receive_email">Didn\'t receive the email?</string>
+    <string name="check_spam_hint">Check your spam folder or try again with a different email address.</string>
+
+    <!-- Validation Errors -->
+    <string name="error_email_required">Email is required</string>
+    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_invalid_email">Please enter a valid email</string>
+    <string name="error_empty_password">Please enter your password</string>
+
+    <!-- Auth Errors -->
+    <string name="login_failed">Login failed. Please try again.</string>
+    <string name="email_already_registered">This email is already registered. Please login instead.</string>
+    <string name="check_email_failed">Failed to check email</string>
+    <string name="google_no_token">Google Sign-In failed: no ID token</string>
+    <string name="error_user_id_failed">Failed to get user ID</string>
+    <string name="error_firebase_signin_failed">Firebase Sign-In failed</string>
+    <string name="error_google_signin_failed">Google Sign-In failed: %1$s</string>
+    <string name="error_google_signin_failed_generic">Google Sign-In failed</string>
+    <string name="welcome_back">Welcome back, %1$s!</string>
+
+    <!-- Dialog -->
+    <string name="account_exists_title">Account Already Exists</string>
+    <string name="account_exists_message">This account is already registered. Please go back to login.</string>
+    <string name="go_to_login">Go to Login</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="reminder">Reminders</string>
+    <string name="scan">Scan</string>
+    <string name="settings">Settings</string>
 
     <!-- Home -->
     <string name="welcome">Welcome</string>
     <string name="profile">Profile</string>
+    <string name="services">Services</string>
+
+    <!-- Home Features -->
     <string name="health_records">Health Records</string>
     <string name="book_consultation">Book Consultation</string>
     <string name="ai_health_assistant">AI Health Assistant</string>
@@ -42,91 +91,70 @@
     <string name="blood_donation">Blood Donation</string>
     <string name="health_packages">Health Packages</string>
 
-    <!-- Bottom Navigation -->
-    <string name="home">Home</string>
-    <string name="reminder">Reminders</string>
-    <string name="scan">Scan</string>
-    <string name="settings">Settings</string>
-
     <!-- Settings -->
     <string name="account">Account</string>
-    <string name="edit_profile">Edit Profile</string>
-    <string name="change_password">Change Password</string>
-    <string name="notifications">Notifications</string>
-    <string name="language">Language</string>
-    <string name="english">English</string>
-    <string name="nepali">Nepali</string>
-    <string name="back">Back</string>
-    <string name="loading">Loading…</string>
-    <string name="update_personal_info">Update your personal information</string>
-    <string name="update_password">Update your password</string>
     <string name="preferences">Preferences</string>
-    <string name="manage_notifications">Manage notification settings</string>
-    <string name="select_language">Select Language</string>
-    <string name="close">Close</string>
     <string name="help_and_support">Help &amp; Support</string>
+    <string name="danger_zone">Danger Zone</string>
+
+    <string name="edit_profile">Edit Profile</string>
+    <string name="update_personal_info">Update personal information</string>
+    <string name="change_password">Change Password</string>
+    <string name="update_password">Update your password</string>
+
+    <string name="notifications">Notifications</string>
+    <string name="manage_notifications">Manage notifications</string>
+    <string name="language">Language</string>
+
     <string name="help_center">Help Center</string>
     <string name="get_help">Get help and support</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="read_privacy">Read our privacy policy</string>
     <string name="terms_of_service">Terms of Service</string>
-    <string name="read_terms">Read our terms of service</string>
+    <string name="read_terms">Read terms and conditions</string>
     <string name="about">About</string>
-    <string name="version">Version 1.0.0</string>
-    <string name="about_medhome">About MedHome</string>
-    <string name="about_version">Version 1.0.0</string>
-    <string name="about_description">
-        MedHome is your all-in-one healthcare companion, helping you manage records,
-        consultations, and essential medical services with ease.
-    </string>
-    <string name="about_copyright">© 2025 MedHome. All rights reserved.</string>
-    <string name="danger_zone">Danger Zone</string>
-    <string name="logout">Log Out</string>
+    <string name="version">Version</string>
+
+    <string name="logout">Logout</string>
     <string name="sign_out">Sign out of your account</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+
     <string name="delete_account">Delete Account</string>
     <string name="permanently_delete">Permanently delete your account</string>
-
-    <!-- Dialogs -->
-    <string name="logout_confirmation">Are you sure you want to log out?</string>
-    <string name="delete_confirmation">
-        This action is permanent. Your account and all associated data will be deleted.
-    </string>
-    <string name="cancel">Cancel</string>
+    <string name="delete_confirmation">This action cannot be undone.</string>
     <string name="delete">Delete</string>
+
+    <!-- Language -->
+    <string name="select_language">Select Language</string>
+    <string name="english">English</string>
+    <string name="nepali">Nepali</string>
+
+    <!-- About -->
+    <string name="about_medhome">About MedHome</string>
+    <string name="about_version">Version 1.0.0</string>
+    <string name="about_description">MedHome helps you manage your health digitally.</string>
+    <string name="about_copyright">© 2026 MedHome</string>
 
     <!-- Roles -->
     <string name="patient">PATIENT</string>
     <string name="doctor">DOCTOR</string>
-    <string name="admin">ADMIN</string>
 
-    <!-- Activities -->
-    <string name="title_activity_dashboard">Dashboard</string>
-    <string name="title_activity_login">Login</string>
-    <string name="title_activity_signup">Sign Up</string>
-    <string name="title_activity_splash">Splash</string>
-
-    <!-- Health Packages -->
-    <string name="title_activity_health_packages">Health Packages</string>
-    <string name="title_activity_health_packages_management">Manage Health Packages</string>
-    <string name="title_activity_create_package">Create Package</string>
-    <string name="title_activity_edit_package">Edit Package</string>
-    <string name="title_activity_package_bookings">Package Bookings</string>
-    <string name="title_activity_health_package_details">Package Details</string>
-    <string name="title_activity_my_packages">My Packages</string>
-
-    <!-- Calories -->
-    <string name="title_activity_calories_calculator">Calories Calculator</string>
-
-    <!-- Profile & Settings -->
-    <string name="title_activity_view_profile">View Profile</string>
-    <string name="title_activity_language_selection">Language Selection</string>
-
-    <!-- Help & Legal -->
-    <string name="title_activity_help_center">Help Center</string>
-    <string name="title_activity_privacy_policy">Privacy Policy</string>
-    <string name="title_activity_terms_of_service">Terms of Service</string>
+    <!-- Doctor Home -->
+    <string name="doctor_welcome">Welcome Dr.</string>
+    <string name="doctor_management">Management</string>
 
     <!-- Doctor Features -->
-    <string name="title_activity_doctor_availability">Doctor Availability</string>
+    <string name="doctor_set_availability">Set Availability</string>
+    <string name="doctor_messages">Messages</string>
+    <string name="doctor_patient_records">Patient Records</string>
+    <string name="doctor_health_packages">Health Packages</string>
+
+    <!-- Accessibility / Content descriptions -->
+    <string name="profile_picture">Profile Picture</string>
+
+    <!-- Google Client ID -->
+    <string name="default_web_client_id">
+        104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com
+    </string>
 
 </resources>
