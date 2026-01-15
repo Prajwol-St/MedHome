@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +30,7 @@ import coil.request.ImageRequest
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.R
 
 @Composable
 fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
@@ -90,7 +92,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
                 Column {
                     Text(
-                        text = "Welcome Dr.",
+                        text = stringResource(R.string.doctor_welcome),
                         fontSize = 13.sp,
                         color = Color.White.copy(alpha = 0.9f)
                     )
@@ -106,7 +108,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
 
         Text(
-            text = "Management",
+            text = stringResource(R.string.doctor_management),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = TextDark,
@@ -124,7 +126,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
             item {
                 DoctorFeatureCard(
-                    title = "Set Availability",
+                    title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF6B8E4E),
                     onClick = {
@@ -137,7 +139,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
             item {
                 DoctorFeatureCard(
-                    title = "Messages",
+                    title = stringResource(R.string.doctor_messages),
                     icon = Icons.Default.Message,
                     color = Color(0xFF87A96B),
                     onClick = { }
@@ -146,7 +148,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
             item {
                 DoctorFeatureCard(
-                    title = "Patient Records",
+                    title = stringResource(R.string.doctor_messages),
                     icon = Icons.Default.Description,
                     color = Color(0xFF6B8E4E),
                     onClick = { }
@@ -155,7 +157,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
             item {
                 DoctorFeatureCard(
-                    title = "Health Packages",
+                    title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
                     onClick = {
