@@ -338,7 +338,7 @@ fun ChangePasswordScreen() {
                                 viewModel.changePassword(currentPassword, newPassword) { success, message ->
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                     if (success) {
-                                        (context as ComponentActivity).finish()
+                                        (context as BaseActivity).finish()
                                     }
                                 }
                             }
