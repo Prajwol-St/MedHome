@@ -644,7 +644,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 isLoading = false
                                 if (success) {
                                     Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 } else {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 }
