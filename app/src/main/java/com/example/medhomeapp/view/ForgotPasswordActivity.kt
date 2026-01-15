@@ -2,7 +2,6 @@ package com.example.medhomeapp.view
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -20,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -62,7 +62,7 @@ fun ForgotPasswordScreen() {
             is AuthState.Success -> {
                 Toast.makeText(context, (authState as AuthState.Success).message, Toast.LENGTH_LONG).show()
                 viewModel.resetAuthState()
-                (context as ComponentActivity).finish()
+                (context as BaseActivity).finish()
             }
             is AuthState.Error -> {
                 Toast.makeText(context, (authState as AuthState.Error).message, Toast.LENGTH_LONG).show()
@@ -95,7 +95,7 @@ fun ForgotPasswordScreen() {
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { (context as ComponentActivity).finish() }) {
+                IconButton(onClick = { (context as BaseActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
                         contentDescription = "Back",
@@ -103,7 +103,7 @@ fun ForgotPasswordScreen() {
                     )
                 }
                 Text(
-                    text = "Reset Password",
+                    text = stringResource(R.string.reset_password),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -144,7 +144,7 @@ fun ForgotPasswordScreen() {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Forgot Password?",
+                    text = stringResource(R.string.forgot_password),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -156,7 +156,7 @@ fun ForgotPasswordScreen() {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Enter your email address and we'll send you a link to reset your password",
+                    text = stringResource(R.string.forgot_password),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 14.sp,
@@ -167,7 +167,7 @@ fun ForgotPasswordScreen() {
 
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
-                    text = "Email Address",
+                    text = stringResource(R.string.email_address),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -181,7 +181,10 @@ fun ForgotPasswordScreen() {
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    placeholder = { Text("Enter your email", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text( text = stringResource(R.string.email_hint),
+                        color = TextGray.
+                        copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = authState !is AuthState.Loading,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -201,9 +204,17 @@ fun ForgotPasswordScreen() {
                 Button(
                     onClick = {
                         if (email.isEmpty()) {
-                            Toast.makeText(context, "Email is required", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_email_required),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_invalid_email),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             viewModel.forgetPassword(email)
                         }
@@ -226,7 +237,7 @@ fun ForgotPasswordScreen() {
                         )
                     } else {
                         Text(
-                            "Send Reset Link",
+                            text = stringResource(R.string.send_reset_link),
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -238,11 +249,11 @@ fun ForgotPasswordScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
                 TextButton(
-                    onClick = { (context as ComponentActivity).finish() },
+                    onClick = { (context as BaseActivity).finish() },
                     enabled = authState !is AuthState.Loading
                 ) {
                     Text(
-                        "Back to Login",
+                        text = stringResource(R.string.back_to_login),
                         style = TextStyle(
                             color = SageGreen,
                             fontSize = 14.sp,
@@ -270,7 +281,7 @@ fun ForgotPasswordScreen() {
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = "Didn't receive the email?",
+                                text = stringResource(R.string.didnt_receive_email),
                                 style = TextStyle(
                                     color = TextDark,
                                     fontWeight = FontWeight.SemiBold,
@@ -279,7 +290,7 @@ fun ForgotPasswordScreen() {
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Check your spam folder or try again with a different email address.",
+                                text = stringResource(R.string.check_spam_hint),
                                 style = TextStyle(
                                     color = TextGray,
                                     fontSize = 12.sp,
