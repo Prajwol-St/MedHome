@@ -18,9 +18,9 @@ class AppointmentBookingViewModel(
     private val _slot = MutableStateFlow<TimeSlot?>(null)
     val slot: StateFlow<TimeSlot?> = _slot
 
-    fun loadSlot(doctorId: String, slotId: String) {
-        repo.getSlot(doctorId, slotId) {
-            _slot.value = it
+    fun loadSlot(doctorId: String, date: String, slotId: String) {
+        repo.getSlot(doctorId, date, slotId) { slot ->
+            _slot.value = slot
         }
     }
 
@@ -29,5 +29,8 @@ class AppointmentBookingViewModel(
             _bookingState.value = success to msg
         }
     }
-}
 
+    fun clearBookingState() {
+        _bookingState.value = null to null
+    }
+}
