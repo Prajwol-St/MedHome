@@ -20,25 +20,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.medhomeapp.model.InventoryModel
+import com.example.medhomeapp.model.OrderModel
 import com.example.medhomeapp.repository.InventoryRepositoryImpl
+import com.example.medhomeapp.repository.OrderRepoImpl
 import com.example.medhomeapp.viewmodel.InventoryViewModel
+import com.example.medhomeapp.viewmodel.OrderViewModel
 import android.widget.Toast
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun NotificationScreen() {
+fun NotificationScreen(
+    onNavigateToMyOrders: () -> Unit = {} // Add navigation callback
+) {
     val context = LocalContext.current
-    val repo = remember { InventoryRepositoryImpl() }
-    val inventoryViewModel = remember { InventoryViewModel(repo) }
+    val inventoryRepo = remember { InventoryRepositoryImpl() }
+    val inventoryViewModel = remember { InventoryViewModel(inventoryRepo) }
+
+    val orderRepo = remember { OrderRepoImpl() }
+    val orderViewModel = remember { OrderViewModel(orderRepo) }
 
     // Dialog state
     var showBuyDialog by remember { mutableStateOf(false) }
     var selectedMedicine by remember { mutableStateOf<InventoryModel?>(null) }
-    var quantity by remember { mutableStateOf(1) }
 
     var searchQuery by remember { mutableStateOf("") }
     val inventoryList by inventoryViewModel.allInventory.observeAsState(emptyList())
     val isLoading by inventoryViewModel.loading.observeAsState(false)
+
+    // Order state
+    val orderStatus by orderViewModel.orderStatus.observeAsState()
+    val isOrderLoading by orderViewModel.loading.observeAsState(false)
 
     val filteredList = remember(inventoryList, searchQuery) {
         if (searchQuery.isBlank()) {
@@ -47,6 +58,23 @@ fun NotificationScreen() {
             inventoryList.filter { medicine ->
                 medicine.medicineName.contains(searchQuery, ignoreCase = true) ||
                         medicine.description.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
+
+    // Handle order status changes
+    LaunchedEffect(orderStatus) {
+        orderStatus?.let { (success, message) ->
+            if (success) {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                showBuyDialog = false
+                selectedMedicine = null
+                orderViewModel.clearStatus()
+                // Navigate to My Orders screen after successful order
+                onNavigateToMyOrders()
+            } else if (message.isNotEmpty()) {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                orderViewModel.clearStatus()
             }
         }
     }
@@ -110,7 +138,6 @@ fun NotificationScreen() {
                                 inventory = inventory,
                                 onBuyClick = {
                                     selectedMedicine = inventory
-                                    quantity = 1
                                     showBuyDialog = true
                                 }
                             )
@@ -120,20 +147,17 @@ fun NotificationScreen() {
             }
         }
 
-        // Buy Dialog
+        // Buy Dialog with Order Form
         if (showBuyDialog && selectedMedicine != null) {
             BuyMedicineDialog(
                 medicine = selectedMedicine!!,
-                quantity = quantity,
-                onQuantityChange = { quantity = it },
+                isLoading = isOrderLoading,
                 onDismiss = {
                     showBuyDialog = false
                     selectedMedicine = null
                 },
-                onBuy = {
-                    Toast.makeText(context, "Bought ${quantity} x ${selectedMedicine!!.medicineName}", Toast.LENGTH_LONG).show()
-                    showBuyDialog = false
-                    selectedMedicine = null
+                onPlaceOrder = { order ->
+                    orderViewModel.createOrder(order)
                 }
             )
         }
@@ -173,7 +197,12 @@ fun MedicineCardReadOnly(
                         .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("No Image", fontSize = MaterialTheme.typography.bodySmall.fontSize, color = Color.Gray)
+                    Icon(
+                        Icons.Default.Medication,
+                        contentDescription = "Medicine",
+                        tint = Color.Gray,
+                        modifier = Modifier.size(32.dp)
+                    )
                 }
             }
 
@@ -202,7 +231,7 @@ fun MedicineCardReadOnly(
                         color = Color(0xFF4A6741)
                     )
                     Text(
-                        text = "Qty: ${inventory.amount}",
+                        text = "Stock: ${inventory.amount}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray
                     )
@@ -220,127 +249,259 @@ fun MedicineCardReadOnly(
 @Composable
 fun BuyMedicineDialog(
     medicine: InventoryModel,
-    quantity: Int,
-    onQuantityChange: (Int) -> Unit,
+    isLoading: Boolean,
     onDismiss: () -> Unit,
-    onBuy: () -> Unit
+    onPlaceOrder: (OrderModel) -> Unit
 ) {
+    var quantity by remember { mutableStateOf(1) }
+    var deliveryAddress by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+
+    var addressError by remember { mutableStateOf(false) }
+    var phoneError by remember { mutableStateOf(false) }
+
+    val totalAmount = (medicine.price.toDoubleOrNull() ?: 0.0) * quantity
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = medicine.medicineName,
+                text = "Place Order",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                // Image
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (medicine.imageUrl.isNotEmpty()) {
-                        AsyncImage(
-                            model = medicine.imageUrl,
-                            contentDescription = null,
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    // Medicine Info Card
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            if (medicine.imageUrl.isNotEmpty()) {
+                                AsyncImage(
+                                    model = medicine.imageUrl,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(60.dp)
+                                        .background(Color.White, RoundedCornerShape(8.dp)),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                            Column {
+                                Text(
+                                    text = medicine.medicineName,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = "₹${medicine.price}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color(0xFF4A6741),
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    // Quantity Selector
+                    Text(
+                        text = "Quantity",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = { if (quantity > 1) quantity-- },
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp),
-                            contentScale = ContentScale.Crop
+                                .size(40.dp)
+                                .background(Color(0xFF4A6741), RoundedCornerShape(8.dp))
+                        ) {
+                            Icon(
+                                Icons.Default.Remove,
+                                contentDescription = "Decrease",
+                                tint = Color.White
+                            )
+                        }
+
+                        Text(
+                            text = "$quantity",
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 24.dp)
                         )
-                    } else {
-                        Icon(
-                            Icons.Default.Medication,
-                            contentDescription = "Medicine",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(48.dp)
+
+                        IconButton(
+                            onClick = {
+                                val availableStock = medicine.amount.toIntOrNull() ?: 0
+                                if (quantity < availableStock) quantity++
+                            },
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(Color(0xFF4A6741), RoundedCornerShape(8.dp))
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "Increase",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    // Delivery Address
+                    OutlinedTextField(
+                        value = deliveryAddress,
+                        onValueChange = {
+                            deliveryAddress = it
+                            addressError = false
+                        },
+                        label = { Text("Delivery Address *") },
+                        placeholder = { Text("Enter your full address") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = addressError,
+                        supportingText = {
+                            if (addressError) {
+                                Text("Address is required", color = MaterialTheme.colorScheme.error)
+                            }
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Default.LocationOn, contentDescription = null)
+                        },
+                        minLines = 2,
+                        maxLines = 3,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+
+                item {
+                    // Phone Number
+                    OutlinedTextField(
+                        value = phoneNumber,
+                        onValueChange = {
+                            if (it.length <= 10 && it.all { char -> char.isDigit() }) {
+                                phoneNumber = it
+                                phoneError = false
+                            }
+                        },
+                        label = { Text("Phone Number *") },
+                        placeholder = { Text("10-digit mobile number") },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = phoneError,
+                        supportingText = {
+                            if (phoneError) {
+                                Text("Valid 10-digit phone number required", color = MaterialTheme.colorScheme.error)
+                            }
+                        },
+                        leadingIcon = {
+                            Icon(Icons.Default.Phone, contentDescription = null)
+                        },
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                }
+
+                item {
+                    // Total Amount
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFF4A6741).copy(alpha = 0.1f)
                         )
-                    }
-                }
-
-                // Price & Stock
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "₹${medicine.price}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF4A6741)
-                    )
-                    Text(
-                        text = "Stock: ${medicine.amount}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                }
-
-                if (medicine.description.isNotEmpty()) {
-                    Text(
-                        text = medicine.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
-                        maxLines = 2
-                    )
-                }
-
-                // Quantity Selector
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedButton(
-                        onClick = { if (quantity > 1) onQuantityChange(quantity - 1) },
-                        modifier = Modifier.size(44.dp)
                     ) {
-                        Text("-", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
-                    }
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Text(
-                        text = "$quantity",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    OutlinedButton(
-                        onClick = { onQuantityChange(quantity + 1) },
-                        modifier = Modifier.size(44.dp)
-                    ) {
-                        Text("+", fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "Total Amount:",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "₹${"%.2f".format(totalAmount)}",
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF4A6741)
+                            )
+                        }
                     }
                 }
-
-                // Total
-                Text(
-                    text = "Total: ₹${(medicine.price.toDoubleOrNull() ?: 0.0) * quantity}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4A6741),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         },
         confirmButton = {
             Button(
-                onClick = onBuy,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A6741))
+                onClick = {
+                    // Validate inputs
+                    var hasError = false
+
+                    if (deliveryAddress.isBlank()) {
+                        addressError = true
+                        hasError = true
+                    }
+
+                    if (phoneNumber.length != 10) {
+                        phoneError = true
+                        hasError = true
+                    }
+
+                    if (!hasError) {
+                        // Create order
+                        val order = OrderModel(
+                            inventoryID = medicine.inventoryID,
+                            medicineName = medicine.medicineName,
+                            price = medicine.price,
+                            quantity = quantity,
+                            totalAmount = totalAmount,
+                            imageUrl = medicine.imageUrl,
+                            orderStatus = "Pending",
+                            deliveryAddress = deliveryAddress,
+                            phoneNumber = phoneNumber
+                        )
+                        onPlaceOrder(order)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A6741)),
+                enabled = !isLoading
             ) {
-                Text("BUY NOW", fontWeight = FontWeight.Bold)
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+                Text(
+                    text = if (isLoading) "Placing Order..." else "PLACE ORDER",
+                    fontWeight = FontWeight.Bold
+                )
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = onDismiss,
+                enabled = !isLoading
+            ) {
                 Text("Cancel")
             }
         }

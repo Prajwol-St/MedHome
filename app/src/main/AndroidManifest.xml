@@ -19,9 +19,9 @@
         tools:replace="android:fullBackupContent"
         tools:targetApi="31">
         <activity
-            android:name=".view.BuyMedicineScreen"
+            android:name=".view.MyOrdersActivity"
             android:exported="true"
-            android:label="@string/title_activity_buy_medicine_screen"
+            android:label="@string/title_activity_my_orders"
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,6 +34,16 @@
         <!-- =============================================== -->
         <activity
             android:name=".view.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MedHomeApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.DashboardActivity"
             android:exported="true"
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
@@ -62,10 +72,6 @@
             android:theme="@style/Theme.MedHomeApp" /> <!-- =============================================== -->
         <!-- MAIN NAVIGATION -->
         <!-- =============================================== -->
-        <activity
-            android:name=".view.DashboardActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
         <activity
             android:name=".view.HomeScreen"
             android:exported="false"

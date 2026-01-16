@@ -144,7 +144,20 @@ fun DashboardBody() {
                     onClick = { selectedTab = 1 },
                     // Fixed: Removed duplicate icon/label declarations
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
+                    label = { Text("Pharmacy", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
+                )
+                NavigationBarItem(
+                    selected = selectedTab == 4,
+                    onClick = { selectedTab = 4 },
+                    icon = { Icon(Icons.Default.Notifications, stringResource(R.string.notifications)) },
+                    label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = SageGreen,
                         selectedTextColor = SageGreen,
@@ -236,6 +249,10 @@ fun DashboardBody() {
                     } else {
                         HomeScreenContent(currentUser?.name ?: "User")
                     }
+                }
+
+                4 -> {
+                    MyOrdersScreen()  // ← Now it matches
                 }
             }
         }
