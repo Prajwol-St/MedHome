@@ -1,5 +1,6 @@
 package com.example.medhomeapp.repository
 
+import com.example.medhomeapp.model.AppointmentModel
 import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.model.UserModel
 
@@ -13,7 +14,13 @@ interface AppointmentBookingRepo {
 
     fun getSlot(
         doctorId: String,
+        date: String,
         slotId: String,
         callback: (TimeSlot?) -> Unit
+    )
+
+    fun getAppointmentById(
+        appointmentId: String,
+        callback: (AppointmentModel?) -> Unit
     )
 }
