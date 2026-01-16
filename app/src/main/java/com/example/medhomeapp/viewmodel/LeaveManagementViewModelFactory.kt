@@ -2,17 +2,17 @@ package com.example.medhomeapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.medhomeapp.repository.DoctorAvailabilityRepo
+import com.example.medhomeapp.repository.LeaveManagementRepo
 
-class DoctorAvailabilityViewModelFactory(
-    private val repo: DoctorAvailabilityRepo,
+class LeaveManagementViewModelFactory(
+    private val repo: LeaveManagementRepo,
     private val doctorId: String
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DoctorAvailabilityViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(LeaveManagementViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return DoctorAvailabilityViewModel(repo, doctorId) as T
+            return LeaveManagementViewModel(repo, doctorId) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
