@@ -1,245 +1,281 @@
 package com.example.medhomeapp.utils
 
-import android.util.Patterns
-import java.util.regex.Pattern
+import com.example.medhomeapp.model.AppointmentModel
+import com.example.medhomeapp.model.DoctorLeaveModel
+import com.example.medhomeapp.model.TimeSlot
 
 object ValidationUtils {
 
-    private const val MIN_PASSWORD_LENGTH = 6
-    private const val MIN_NAME_LENGTH = 2
-    private const val MAX_NAME_LENGTH = 50
-    private const val MIN_AGE = 1
-    private const val MAX_AGE = 150
-    private const val MIN_EXPERIENCE = 0
-    private const val MAX_EXPERIENCE = 70
-    private const val MIN_FEE = 0.0
-    private const val MAX_FEE = 100000.0
-
     // Email validation
     fun isValidEmail(email: String): Boolean {
-        return email.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        if (email.isBlank()) return false
+        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+        return email.matches(emailPattern.toRegex())
     }
 
-    // Password validation (at least 6 characters)
-    fun isValidPassword(password: String): Boolean {
-        return password.length >= MIN_PASSWORD_LENGTH
+    // Phone validation
+    fun isValidPhone(phone: String): Boolean {
+        if (phone.isBlank()) return false
+        // Accepts formats: +977-9841234567, 9841234567, +9779841234567
+        val phonePattern = "^[+]?[0-9]{10,14}$"
+        return phone.replace("-", "").replace(" ", "").matches(phonePattern.toRegex())
     }
 
-    // Strong password validation (at least 8 chars, 1 uppercase, 1 lowercase, 1 digit)
-    fun isStrongPassword(password: String): Boolean {
-        val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$"
-        return Pattern.compile(passwordPattern).matcher(password).matches()
-    }
-
-    // Phone number validation (10 digits)
-    fun isValidPhoneNumber(phone: String): Boolean {
-        val cleanedPhone = phone.replace(Regex("[\\s()-]"), "")
-        return cleanedPhone.matches(Regex("^[0-9]{10}$"))
+    // Password validation
+    fun isValidPassword(password: String): Pair<Boolean, String> {
+        return when {
+            password.length < 6 -> false to "Password must be at least 6 characters"
+            password.length > 20 -> false to "Password must not exceed 20 characters"
+            !password.any { it.isDigit() } -> false to "Password must contain at least one number"
+            !password.any { it.isLetter() } -> false to "Password must contain at least one letter"
+            else -> true to "Valid password"
+        }
     }
 
     // Name validation
     fun isValidName(name: String): Boolean {
-        val trimmedName = name.trim()
-        return trimmedName.length in MIN_NAME_LENGTH..MAX_NAME_LENGTH &&
-                trimmedName.matches(Regex("^[a-zA-Z\\s.'-]+$"))
+        return name.isNotBlank() && name.length >= 2 && name.all { it.isLetter() || it.isWhitespace() }
     }
 
-    // Age validation
-    fun isValidAge(age: Int): Boolean {
-        return age in MIN_AGE..MAX_AGE
+    // Appointment booking validation
+    fun validateAppointmentBooking(
+        slot: TimeSlot,
+        patientNotes: String
+    ): Pair<Boolean, String> {
+        // Check if slot is available
+        if (!slot.isAvailable) {
+            return false to "This time slot is not available"
+        }
+
+        // Check if slot is already booked
+        if (slot.isBooked) {
+            return false to "This time slot is already booked"
+        }
+
+        // Check if date is in future
+        if (DateTimeUtils.isDateInPast(slot.date)) {
+            return false to "Cannot book appointment for a past date"
+        }
+
+        // Check if time is valid (at least 1 hour from now for same day)
+        if (DateTimeUtils.isDateToday(slot.date)) {
+            val hoursUntil = DateTimeUtils.getTimeDifferenceInHours(slot.date, slot.startTime)
+            if (hoursUntil < 1) {
+                return false to "Please book at least 1 hour in advance"
+            }
+        }
+
+        // Validate notes length
+        if (patientNotes.isNotBlank() && patientNotes.length > 500) {
+            return false to "Notes cannot exceed 500 characters"
+        }
+
+        return true to "Booking is valid"
     }
 
-    // Experience validation (for doctors)
-    fun isValidExperience(experience: Int): Boolean {
-        return experience in MIN_EXPERIENCE..MAX_EXPERIENCE
+    // Cancellation validation
+    fun validateCancellation(
+        appointment: AppointmentModel,
+        reason: String
+    ): Pair<Boolean, String> {
+        // Check if appointment is already cancelled
+        if (appointment.status == AppConstants.STATUS_CANCELLED) {
+            return false to "This appointment is already cancelled"
+        }
+
+        // Check if appointment is already completed
+        if (appointment.status == AppConstants.STATUS_COMPLETED) {
+            return false to "Cannot cancel a completed appointment"
+        }
+
+        // Check if cancellation is within allowed time
+        if (!DateTimeUtils.canCancelAppointment(appointment.date, appointment.time)) {
+            return false to "Cannot cancel appointment less than ${AppConstants.MIN_HOURS_BEFORE_CANCELLATION} hours before scheduled time"
+        }
+
+        // Validate reason
+        if (reason.isBlank()) {
+            return false to "Please provide a cancellation reason"
+        }
+
+        if (reason.length > 200) {
+            return false to "Cancellation reason cannot exceed 200 characters"
+        }
+
+        return true to "Cancellation is valid"
     }
 
-    // Consultation fee validation
-    fun isValidConsultationFee(fee: Double): Boolean {
-        return fee in MIN_FEE..MAX_FEE
+    // Reschedule validation
+    fun validateReschedule(
+        currentAppointment: AppointmentModel,
+        newDate: String,
+        newTime: String
+    ): Pair<Boolean, String> {
+        // Check if current appointment can be rescheduled
+        if (currentAppointment.status == AppConstants.STATUS_CANCELLED) {
+            return false to "Cannot reschedule a cancelled appointment"
+        }
+
+        if (currentAppointment.status == AppConstants.STATUS_COMPLETED) {
+            return false to "Cannot reschedule a completed appointment"
+        }
+
+        // Check if reschedule is within allowed time
+        if (!DateTimeUtils.canRescheduleAppointment(currentAppointment.date, currentAppointment.time)) {
+            return false to "Cannot reschedule appointment less than ${AppConstants.MIN_HOURS_BEFORE_RESCHEDULE} hours before scheduled time"
+        }
+
+        // Check if new date is in future
+        if (DateTimeUtils.isDateInPast(newDate)) {
+            return false to "Cannot reschedule to a past date"
+        }
+
+        // Check if new time is valid
+        if (!DateTimeUtils.isAppointmentTimeValid(newDate, newTime)) {
+            return false to "Please select a future date and time"
+        }
+
+        return true to "Reschedule is valid"
     }
 
-    // Rating validation (0.0 to 5.0)
-    fun isValidRating(rating: Float): Boolean {
-        return rating in 0.0f..5.0f
+    // Leave validation
+    fun validateLeave(
+        startDate: String,
+        endDate: String,
+        reason: String
+    ): Pair<Boolean, String> {
+        // Check if dates are valid
+        if (startDate.isBlank() || endDate.isBlank()) {
+            return false to "Please select both start and end dates"
+        }
+
+        // Check if start date is not in past
+        if (DateTimeUtils.isDateInPast(startDate)) {
+            return false to "Start date cannot be in the past"
+        }
+
+        // Check if end date is after start date
+        if (DateTimeUtils.compareDates(endDate, startDate) < 0) {
+            return false to "End date must be after start date"
+        }
+
+        // Check leave duration (max 30 days)
+        val duration = DateTimeUtils.getTimeDifferenceInDays(endDate) -
+                DateTimeUtils.getTimeDifferenceInDays(startDate)
+        if (duration > 30) {
+            return false to "Leave duration cannot exceed 30 days"
+        }
+
+        // Validate reason
+        if (reason.isBlank()) {
+            return false to "Please provide a reason for leave"
+        }
+
+        if (reason.length > 200) {
+            return false to "Reason cannot exceed 200 characters"
+        }
+
+        return true to "Leave is valid"
     }
 
-    // Address validation
-    fun isValidAddress(address: String): Boolean {
-        return address.trim().length >= 5
+    // Rating validation
+    fun validateRating(
+        rating: Float,
+        review: String
+    ): Pair<Boolean, String> {
+        // Check rating value
+        if (rating < AppConstants.MIN_RATING || rating > AppConstants.MAX_RATING) {
+            return false to "Please provide a rating between ${AppConstants.MIN_RATING} and ${AppConstants.MAX_RATING} stars"
+        }
+
+        // Validate review length (optional but if provided)
+        if (review.isNotBlank() && review.length > 500) {
+            return false to "Review cannot exceed 500 characters"
+        }
+
+        return true to "Rating is valid"
     }
 
-    // Specialization validation
-    fun isValidSpecialization(specialization: String): Boolean {
-        return specialization.trim().length >= 2
-    }
+    // Time slot validation
+    fun validateTimeSlot(
+        date: String,
+        startTime: String,
+        endTime: String,
+        duration: Int
+    ): Pair<Boolean, String> {
+        // Check if date is in future
+        if (DateTimeUtils.isDateInPast(date)) {
+            return false to "Cannot create slots for past dates"
+        }
 
-    // Reason/Notes validation
-    fun isValidReason(reason: String, minLength: Int = 5): Boolean {
-        return reason.trim().length >= minLength
-    }
+        // Check if times are valid
+        if (startTime.isBlank() || endTime.isBlank()) {
+            return false to "Please select both start and end times"
+        }
 
-    // Time slot validation (HH:mm format)
-    fun isValidTimeFormat(time: String): Boolean {
-        return time.matches(Regex("^([01]?[0-9]|2[0-3]):[0-5][0-9]$"))
-    }
+        // Check duration
+        if (duration !in AppConstants.SLOT_DURATIONS) {
+            return false to "Please select a valid duration: ${AppConstants.SLOT_DURATIONS.joinToString(", ")} minutes"
+        }
 
-    // Date validation (yyyy-MM-dd format)
-    fun isValidDateFormat(date: String): Boolean {
-        return date.matches(Regex("^\\d{4}-\\d{2}-\\d{2}$"))
-    }
+        // Validate time range
+        try {
+            val start = DateTimeUtils.parseDateTime(date, startTime)
+            val end = DateTimeUtils.parseDateTime(date, endTime)
 
-    // Check if end time is after start time
-    fun isEndTimeAfterStartTime(startTime: String, endTime: String): Boolean {
-        return try {
-            val start = startTime.split(":").map { it.toInt() }
-            val end = endTime.split(":").map { it.toInt() }
+            if (end <= start) {
+                return false to "End time must be after start time"
+            }
 
-            when {
-                end[0] > start[0] -> true
-                end[0] == start[0] && end[1] > start[1] -> true
-                else -> false
+            val durationInMillis = end - start
+            val minDuration = duration * 60 * 1000L
+
+            if (durationInMillis < minDuration) {
+                return false to "Time range is too short for the selected duration"
             }
         } catch (e: Exception) {
-            false
+            return false to "Invalid time format"
         }
+
+        return true to "Time slot is valid"
     }
 
-    // Check if end date is after or equal to start date
-    fun isEndDateValid(startDate: String, endDate: String): Boolean {
-        return DateTimeUtils.getDaysBetween(startDate, endDate) >= 0
-    }
-
-    // Validate slot duration (minimum 15 minutes)
-    fun isValidSlotDuration(startTime: String, endTime: String, minMinutes: Int = 15): Boolean {
-        return try {
-            val start = startTime.split(":").map { it.toInt() }
-            val end = endTime.split(":").map { it.toInt() }
-
-            val startMinutes = start[0] * 60 + start[1]
-            val endMinutes = end[0] * 60 + end[1]
-
-            (endMinutes - startMinutes) >= minMinutes
-        } catch (e: Exception) {
-            false
+    // Doctor profile validation
+    fun validateDoctorProfile(
+        specialization: String,
+        experience: Int,
+        qualifications: String,
+        consultationFee: Double
+    ): Pair<Boolean, String> {
+        if (specialization.isBlank()) {
+            return false to "Please select a specialization"
         }
-    }
 
-    // License number validation
-    fun isValidLicenseNumber(license: String): Boolean {
-        return license.trim().matches(Regex("^[A-Z0-9-]{5,20}$"))
-    }
-
-    // Qualification validation
-    fun isValidQualification(qualification: String): Boolean {
-        return qualification.trim().length >= 2
-    }
-
-    // Blood group validation
-    fun isValidBloodGroup(bloodGroup: String): Boolean {
-        val validGroups = listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-        return bloodGroup.trim().uppercase() in validGroups
-    }
-
-    // Gender validation
-    fun isValidGender(gender: String): Boolean {
-        val validGenders = listOf("Male", "Female", "Other")
-        return gender.trim() in validGenders
-    }
-
-    // Review text validation
-    fun isValidReview(review: String): Boolean {
-        val trimmed = review.trim()
-        return trimmed.isEmpty() || trimmed.length in 5..500
-    }
-
-    // Cancel reason validation
-    fun isValidCancelReason(reason: String): Boolean {
-        return reason.trim().length >= 10
-    }
-
-    // Doctor notes validation
-    fun isValidDoctorNotes(notes: String): Boolean {
-        return notes.trim().length >= 5
-    }
-
-    // Leave type validation
-    fun isValidLeaveType(leaveType: String): Boolean {
-        val validTypes = listOf("Sick Leave", "Vacation", "Emergency", "Personal", "Conference", "Other")
-        return leaveType.trim() in validTypes
-    }
-
-    // Search query validation
-    fun isValidSearchQuery(query: String): Boolean {
-        return query.trim().length >= 2
-    }
-
-    // Fee range validation
-    fun isValidFeeRange(minFee: Double, maxFee: Double): Boolean {
-        return minFee >= 0 && maxFee >= minFee && maxFee <= MAX_FEE
-    }
-
-    // Get password strength (Weak, Medium, Strong)
-    fun getPasswordStrength(password: String): String {
-        return when {
-            password.length < 6 -> "Weak"
-            password.length < 8 -> "Medium"
-            isStrongPassword(password) -> "Strong"
-            else -> "Medium"
+        if (experience < 0 || experience > 50) {
+            return false to "Please enter valid years of experience (0-50)"
         }
+
+        if (qualifications.isBlank()) {
+            return false to "Please enter your qualifications"
+        }
+
+        if (consultationFee < 0 || consultationFee > 100000) {
+            return false to "Please enter a valid consultation fee"
+        }
+
+        return true to "Profile is valid"
     }
 
-    // Get validation error message
-    fun getEmailError(email: String): String? {
-        return when {
-            email.isBlank() -> "Email is required"
-            !isValidEmail(email) -> "Invalid email format"
-            else -> null
+    // Notes validation
+    fun validateNotes(notes: String, maxLength: Int = 500): Pair<Boolean, String> {
+        if (notes.isBlank()) {
+            return false to "Notes cannot be empty"
         }
-    }
 
-    fun getPasswordError(password: String): String? {
-        return when {
-            password.isBlank() -> "Password is required"
-            password.length < MIN_PASSWORD_LENGTH -> "Password must be at least $MIN_PASSWORD_LENGTH characters"
-            else -> null
+        if (notes.length > maxLength) {
+            return false to "Notes cannot exceed $maxLength characters"
         }
-    }
 
-    fun getNameError(name: String): String? {
-        return when {
-            name.isBlank() -> "Name is required"
-            name.trim().length < MIN_NAME_LENGTH -> "Name is too short"
-            !isValidName(name) -> "Name contains invalid characters"
-            else -> null
-        }
-    }
-
-    fun getPhoneError(phone: String): String? {
-        return when {
-            phone.isBlank() -> "Phone number is required"
-            !isValidPhoneNumber(phone) -> "Invalid phone number (10 digits required)"
-            else -> null
-        }
-    }
-
-    fun getTimeSlotError(startTime: String, endTime: String): String? {
-        return when {
-            !isValidTimeFormat(startTime) -> "Invalid start time format"
-            !isValidTimeFormat(endTime) -> "Invalid end time format"
-            !isEndTimeAfterStartTime(startTime, endTime) -> "End time must be after start time"
-            !isValidSlotDuration(startTime, endTime) -> "Slot duration must be at least 15 minutes"
-            else -> null
-        }
-    }
-
-    fun getLeaveError(startDate: String, endDate: String, reason: String): String? {
-        return when {
-            !isValidDateFormat(startDate) -> "Invalid start date"
-            !isValidDateFormat(endDate) -> "Invalid end date"
-            !isEndDateValid(startDate, endDate) -> "End date must be after or equal to start date"
-            !isValidReason(reason, 10) -> "Reason must be at least 10 characters"
-            else -> null
-        }
+        return true to "Notes are valid"
     }
 }

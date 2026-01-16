@@ -6,275 +6,280 @@ import java.util.concurrent.TimeUnit
 
 object DateTimeUtils {
 
-    private const val DATE_FORMAT = "yyyy-MM-dd"
-    private const val TIME_FORMAT = "HH:mm"
-    private const val DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm"
-    private const val DISPLAY_DATE_FORMAT = "dd MMM yyyy"
-    private const val DISPLAY_TIME_FORMAT = "hh:mm a"
-    private const val DISPLAY_DATE_TIME_FORMAT = "dd MMM yyyy, hh:mm a"
-    private const val DAY_NAME_FORMAT = "EEEE"
+    private val dateFormat = SimpleDateFormat(AppConstants.DATE_FORMAT, Locale.getDefault())
+    private val timeFormat = SimpleDateFormat(AppConstants.TIME_FORMAT, Locale.getDefault())
+    private val dateTimeFormat = SimpleDateFormat(AppConstants.DATETIME_FORMAT, Locale.getDefault())
 
-    // Get current date in yyyy-MM-dd format
+    private val displayDateFormat = SimpleDateFormat(AppConstants.DISPLAY_DATE_FORMAT, Locale.getDefault())
+    private val displayTimeFormat = SimpleDateFormat(AppConstants.DISPLAY_TIME_FORMAT, Locale.getDefault())
+    private val displayDateTimeFormat = SimpleDateFormat(AppConstants.DISPLAY_DATETIME_FORMAT, Locale.getDefault())
+
+    // Get current date and time
     fun getCurrentDate(): String {
-        val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-        return sdf.format(Date())
+        return dateFormat.format(Date())
     }
 
-    // Get current time in HH:mm format
     fun getCurrentTime(): String {
-        val sdf = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
-        return sdf.format(Date())
+        return timeFormat.format(Date())
     }
 
-    // Get current timestamp
+    fun getCurrentDateTime(): String {
+        return dateTimeFormat.format(Date())
+    }
+
     fun getCurrentTimestamp(): Long {
         return System.currentTimeMillis()
     }
 
-    // Format date for display (e.g., "16 Jan 2026")
+    // Format date and time for display
     fun formatDateForDisplay(date: String): String {
         return try {
-            val inputFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val outputFormat = SimpleDateFormat(DISPLAY_DATE_FORMAT, Locale.getDefault())
-            val parsedDate = inputFormat.parse(date)
-            parsedDate?.let { outputFormat.format(it) } ?: date
+            val parsedDate = dateFormat.parse(date)
+            parsedDate?.let { displayDateFormat.format(it) } ?: date
         } catch (e: Exception) {
             date
         }
     }
 
-    // Format time for display (e.g., "02:30 PM")
     fun formatTimeForDisplay(time: String): String {
         return try {
-            val inputFormat = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
-            val outputFormat = SimpleDateFormat(DISPLAY_TIME_FORMAT, Locale.getDefault())
-            val parsedTime = inputFormat.parse(time)
-            parsedTime?.let { outputFormat.format(it) } ?: time
+            val parsedTime = timeFormat.parse(time)
+            parsedTime?.let { displayTimeFormat.format(it) } ?: time
         } catch (e: Exception) {
             time
         }
     }
 
-    // Format timestamp to readable date
-    fun formatTimestampToDate(timestamp: Long): String {
-        val sdf = SimpleDateFormat(DISPLAY_DATE_FORMAT, Locale.getDefault())
-        return sdf.format(Date(timestamp))
-    }
-
-    // Format timestamp to readable date and time
-    fun formatTimestampToDateTime(timestamp: Long): String {
-        val sdf = SimpleDateFormat(DISPLAY_DATE_TIME_FORMAT, Locale.getDefault())
-        return sdf.format(Date(timestamp))
-    }
-
-    // Get day name from date (e.g., "Monday")
-    fun getDayName(date: String): String {
+    fun formatDateTimeForDisplay(date: String, time: String): String {
         return try {
-            val inputFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val outputFormat = SimpleDateFormat(DAY_NAME_FORMAT, Locale.getDefault())
-            val parsedDate = inputFormat.parse(date)
-            parsedDate?.let { outputFormat.format(it) } ?: ""
+            val dateTime = "$date $time"
+            val parsedDateTime = dateTimeFormat.parse(dateTime)
+            parsedDateTime?.let { displayDateTimeFormat.format(it) } ?: dateTime
         } catch (e: Exception) {
-            ""
+            "$date $time"
         }
     }
 
-    // Check if date is today
-    fun isToday(date: String): Boolean {
+    fun formatTimestampToDate(timestamp: Long): String {
+        return dateFormat.format(Date(timestamp))
+    }
+
+    fun formatTimestampToTime(timestamp: Long): String {
+        return timeFormat.format(Date(timestamp))
+    }
+
+    fun formatTimestampToDateTime(timestamp: Long): String {
+        return dateTimeFormat.format(Date(timestamp))
+    }
+
+    fun formatTimestampForDisplay(timestamp: Long): String {
+        return displayDateTimeFormat.format(Date(timestamp))
+    }
+
+    // Date validation and comparison
+    fun isDateInPast(date: String): Boolean {
+        return try {
+            val parsedDate = dateFormat.parse(date)
+            val today = dateFormat.parse(getCurrentDate())
+            parsedDate != null && today != null && parsedDate.before(today)
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun isDateInFuture(date: String): Boolean {
+        return try {
+            val parsedDate = dateFormat.parse(date)
+            val today = dateFormat.parse(getCurrentDate())
+            parsedDate != null && today != null && parsedDate.after(today)
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun isDateToday(date: String): Boolean {
         return date == getCurrentDate()
     }
 
-    // Check if date is in the past
-    fun isPastDate(date: String): Boolean {
-        return try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val inputDate = sdf.parse(date)
-            val today = sdf.parse(getCurrentDate())
-            inputDate?.before(today) ?: false
-        } catch (e: Exception) {
-            false
+    fun isDateTomorrow(date: String): Boolean {
+        val tomorrow = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_MONTH, 1)
         }
+        return date == dateFormat.format(tomorrow.time)
     }
 
-    // Check if date is in the future
-    fun isFutureDate(date: String): Boolean {
+    fun compareDates(date1: String, date2: String): Int {
         return try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val inputDate = sdf.parse(date)
-            val today = sdf.parse(getCurrentDate())
-            inputDate?.after(today) ?: false
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    // Get days between two dates
-    fun getDaysBetween(startDate: String, endDate: String): Int {
-        return try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val start = sdf.parse(startDate)
-            val end = sdf.parse(endDate)
-            if (start != null && end != null) {
-                val diff = end.time - start.time
-                TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-            } else 0
+            val d1 = dateFormat.parse(date1)
+            val d2 = dateFormat.parse(date2)
+            when {
+                d1 == null || d2 == null -> 0
+                d1.before(d2) -> -1
+                d1.after(d2) -> 1
+                else -> 0
+            }
         } catch (e: Exception) {
             0
         }
     }
 
-    // Get hours between two times
-    fun getHoursBetween(startTime: String, endTime: String): Int {
+    // Date/Time calculations
+    fun parseDateTime(date: String, time: String): Long {
         return try {
-            val sdf = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
-            val start = sdf.parse(startTime)
-            val end = sdf.parse(endTime)
-            if (start != null && end != null) {
-                val diff = end.time - start.time
-                TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS).toInt()
-            } else 0
+            val dateTime = "$date $time"
+            dateTimeFormat.parse(dateTime)?.time ?: 0L
         } catch (e: Exception) {
-            0
+            0L
         }
     }
 
-    // Check if a date is within a range
-    fun isDateInRange(date: String, startDate: String, endDate: String): Boolean {
-        return try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val checkDate = sdf.parse(date)
-            val start = sdf.parse(startDate)
-            val end = sdf.parse(endDate)
+    fun getTimeDifferenceInHours(date: String, time: String): Long {
+        val appointmentTime = parseDateTime(date, time)
+        val now = System.currentTimeMillis()
+        val diffInMillis = appointmentTime - now
+        return TimeUnit.MILLISECONDS.toHours(diffInMillis)
+    }
 
-            if (checkDate != null && start != null && end != null) {
-                !checkDate.before(start) && !checkDate.after(end)
-            } else false
+    fun getTimeDifferenceInMinutes(date: String, time: String): Long {
+        val appointmentTime = parseDateTime(date, time)
+        val now = System.currentTimeMillis()
+        val diffInMillis = appointmentTime - now
+        return TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+    }
+
+    fun getTimeDifferenceInDays(date: String): Long {
+        return try {
+            val targetDate = dateFormat.parse(date)
+            val today = dateFormat.parse(getCurrentDate())
+            if (targetDate != null && today != null) {
+                val diffInMillis = targetDate.time - today.time
+                TimeUnit.MILLISECONDS.toDays(diffInMillis)
+            } else {
+                0L
+            }
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
+    // Appointment-specific validations
+    fun canCancelAppointment(date: String, time: String): Boolean {
+        val hoursUntilAppointment = getTimeDifferenceInHours(date, time)
+        return hoursUntilAppointment >= AppConstants.MIN_HOURS_BEFORE_CANCELLATION
+    }
+
+    fun canRescheduleAppointment(date: String, time: String): Boolean {
+        val hoursUntilAppointment = getTimeDifferenceInHours(date, time)
+        return hoursUntilAppointment >= AppConstants.MIN_HOURS_BEFORE_RESCHEDULE
+    }
+
+    fun isAppointmentTimeValid(date: String, time: String): Boolean {
+        val appointmentTime = parseDateTime(date, time)
+        val now = System.currentTimeMillis()
+        return appointmentTime > now
+    }
+
+    // Date range operations
+    fun isDateInRange(checkDate: String, startDate: String, endDate: String): Boolean {
+        return try {
+            val check = dateFormat.parse(checkDate)
+            val start = dateFormat.parse(startDate)
+            val end = dateFormat.parse(endDate)
+
+            check != null && start != null && end != null &&
+                    !check.before(start) && !check.after(end)
         } catch (e: Exception) {
             false
         }
     }
 
-    // Add days to a date
     fun addDaysToDate(date: String, days: Int): String {
         return try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+            val parsedDate = dateFormat.parse(date)
             val calendar = Calendar.getInstance()
-            calendar.time = sdf.parse(date) ?: Date()
+            calendar.time = parsedDate ?: Date()
             calendar.add(Calendar.DAY_OF_MONTH, days)
-            sdf.format(calendar.time)
+            dateFormat.format(calendar.time)
         } catch (e: Exception) {
             date
         }
     }
 
-    // Get time remaining until appointment (e.g., "2 hours 30 minutes")
-    fun getTimeRemaining(date: String, time: String): String {
+    fun getDayOfWeek(date: String): String {
         return try {
-            val sdf = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-            val appointmentDateTime = sdf.parse("$date $time")
-            val now = Date()
-
-            if (appointmentDateTime != null && appointmentDateTime.after(now)) {
-                val diff = appointmentDateTime.time - now.time
-                val hours = TimeUnit.MILLISECONDS.toHours(diff)
-                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60
-
-                when {
-                    hours > 24 -> {
-                        val days = TimeUnit.MILLISECONDS.toDays(diff)
-                        "$days day${if (days > 1) "s" else ""}"
-                    }
-                    hours > 0 -> "$hours hour${if (hours > 1) "s" else ""} $minutes min"
-                    else -> "$minutes minute${if (minutes > 1) "s" else ""}"
-                }
-            } else "Past"
+            val parsedDate = dateFormat.parse(date)
+            val calendar = Calendar.getInstance()
+            calendar.time = parsedDate ?: Date()
+            val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+            dayFormat.format(calendar.time)
         } catch (e: Exception) {
-            "Unknown"
+            ""
         }
     }
 
-    // Check if time slot conflicts with another
-    fun isTimeSlotConflict(
-        slot1Start: String,
-        slot1End: String,
-        slot2Start: String,
-        slot2End: String
-    ): Boolean {
-        return try {
-            val sdf = SimpleDateFormat(TIME_FORMAT, Locale.getDefault())
-            val s1Start = sdf.parse(slot1Start)
-            val s1End = sdf.parse(slot1End)
-            val s2Start = sdf.parse(slot2Start)
-            val s2End = sdf.parse(slot2End)
-
-            if (s1Start != null && s1End != null && s2Start != null && s2End != null) {
-                s1Start.before(s2End) && s1End.after(s2Start)
-            } else false
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    // Format relative time (e.g., "2 hours ago", "Just now")
-    fun getRelativeTime(timestamp: Long): String {
-        val now = System.currentTimeMillis()
-        val diff = now - timestamp
-
+    // Relative time descriptions
+    fun getRelativeTimeDescription(date: String): String {
         return when {
-            diff < TimeUnit.MINUTES.toMillis(1) -> "Just now"
-            diff < TimeUnit.HOURS.toMillis(1) -> {
-                val minutes = TimeUnit.MILLISECONDS.toMinutes(diff)
-                "$minutes minute${if (minutes > 1) "s" else ""} ago"
-            }
-            diff < TimeUnit.DAYS.toMillis(1) -> {
-                val hours = TimeUnit.MILLISECONDS.toHours(diff)
-                "$hours hour${if (hours > 1) "s" else ""} ago"
-            }
-            diff < TimeUnit.DAYS.toMillis(7) -> {
-                val days = TimeUnit.MILLISECONDS.toDays(diff)
-                "$days day${if (days > 1) "s" else ""} ago"
-            }
-            else -> formatTimestampToDate(timestamp)
-        }
-    }
-
-    // Get list of dates between two dates
-    fun getDatesBetween(startDate: String, endDate: String): List<String> {
-        val dates = mutableListOf<String>()
-        try {
-            val sdf = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-            val start = sdf.parse(startDate)
-            val end = sdf.parse(endDate)
-
-            if (start != null && end != null) {
-                val calendar = Calendar.getInstance()
-                calendar.time = start
-
-                while (!calendar.time.after(end)) {
-                    dates.add(sdf.format(calendar.time))
-                    calendar.add(Calendar.DAY_OF_MONTH, 1)
+            isDateToday(date) -> "Today"
+            isDateTomorrow(date) -> "Tomorrow"
+            isDateInPast(date) -> {
+                val daysAgo = -getTimeDifferenceInDays(date)
+                when {
+                    daysAgo == 1L -> "Yesterday"
+                    daysAgo < 7 -> "$daysAgo days ago"
+                    daysAgo < 30 -> "${daysAgo / 7} weeks ago"
+                    else -> formatDateForDisplay(date)
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+            else -> {
+                val daysFromNow = getTimeDifferenceInDays(date)
+                when {
+                    daysFromNow < 7 -> "In $daysFromNow days"
+                    daysFromNow < 30 -> "In ${daysFromNow / 7} weeks"
+                    else -> formatDateForDisplay(date)
+                }
+            }
         }
-        return dates
     }
 
-    // Check if appointment can be cancelled (e.g., at least 24 hours before)
-    fun canCancelAppointment(appointmentDate: String, appointmentTime: String, hoursBeforeLimit: Int = 24): Boolean {
+    // Time slot helpers
+    fun calculateEndTime(startTime: String, durationMinutes: Int): String {
         return try {
-            val sdf = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-            val appointmentDateTime = sdf.parse("$appointmentDate $appointmentTime")
-            val now = Date()
-
-            if (appointmentDateTime != null) {
-                val diff = appointmentDateTime.time - now.time
-                val hoursRemaining = TimeUnit.MILLISECONDS.toHours(diff)
-                hoursRemaining >= hoursBeforeLimit
-            } else false
+            val parsedTime = timeFormat.parse(startTime)
+            val calendar = Calendar.getInstance()
+            calendar.time = parsedTime ?: Date()
+            calendar.add(Calendar.MINUTE, durationMinutes)
+            timeFormat.format(calendar.time)
         } catch (e: Exception) {
-            false
+            startTime
         }
+    }
+
+    fun generateTimeSlots(
+        startTime: String,
+        endTime: String,
+        slotDuration: Int
+    ): List<Pair<String, String>> {
+        val slots = mutableListOf<Pair<String, String>>()
+        try {
+            val start = timeFormat.parse(startTime) ?: return slots
+            val end = timeFormat.parse(endTime) ?: return slots
+
+            val calendar = Calendar.getInstance()
+            calendar.time = start
+
+            while (calendar.time.before(end)) {
+                val slotStart = timeFormat.format(calendar.time)
+                calendar.add(Calendar.MINUTE, slotDuration)
+
+                if (calendar.time.after(end)) break
+
+                val slotEnd = timeFormat.format(calendar.time)
+                slots.add(slotStart to slotEnd)
+            }
+        } catch (e: Exception) {
+            // Return empty list on error
+        }
+        return slots
     }
 }

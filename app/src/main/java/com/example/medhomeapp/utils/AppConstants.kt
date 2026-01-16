@@ -2,92 +2,88 @@ package com.example.medhomeapp.utils
 
 object AppConstants {
 
-    // User Roles
-    const val ROLE_PATIENT = "patient"
-    const val ROLE_DOCTOR = "doctor"
-    const val ROLE_ADMIN = "admin"
-
     // Appointment Status
-    const val STATUS_SCHEDULED = "scheduled"
+    const val STATUS_PENDING = "pending"
+    const val STATUS_CONFIRMED = "confirmed"
     const val STATUS_COMPLETED = "completed"
     const val STATUS_CANCELLED = "cancelled"
-    const val STATUS_NO_SHOW = "no-show"
-    const val STATUS_RESCHEDULED = "rescheduled"
+    const val STATUS_NO_SHOW = "no_show"
 
-    // Cancellation
+    // Appointment Type
+    const val TYPE_IN_PERSON = "in_person"
+    const val TYPE_VIDEO_CALL = "video_call"
+
+    // Cancelled By
     const val CANCELLED_BY_PATIENT = "patient"
     const val CANCELLED_BY_DOCTOR = "doctor"
     const val CANCELLED_BY_SYSTEM = "system"
 
     // Leave Types
-    const val LEAVE_SICK = "Sick Leave"
-    const val LEAVE_VACATION = "Vacation"
-    const val LEAVE_EMERGENCY = "Emergency"
-    const val LEAVE_PERSONAL = "Personal"
-    const val LEAVE_CONFERENCE = "Conference"
-    const val LEAVE_OTHER = "Other"
+    const val LEAVE_TYPE_PERSONAL = "personal"
+    const val LEAVE_TYPE_MEDICAL = "medical"
+    const val LEAVE_TYPE_CONFERENCE = "conference"
+    const val LEAVE_TYPE_VACATION = "vacation"
+
+    // User Roles
+    const val ROLE_PATIENT = "patient"
+    const val ROLE_DOCTOR = "doctor"
+
+    // Cancellation Policy
+    const val MIN_HOURS_BEFORE_CANCELLATION = 2
+    const val MIN_HOURS_BEFORE_RESCHEDULE = 2
+    const val MAX_CANCELLATIONS_PER_MONTH = 3
+    const val NO_SHOW_PENALTY_DAYS = 7
+
+    // Slot Durations (in minutes)
+    val SLOT_DURATIONS = listOf(15, 30, 45, 60)
+    const val DEFAULT_SLOT_DURATION = 30
 
     // Sort Options
     const val SORT_RATING_DESC = "rating_desc"
     const val SORT_RATING_ASC = "rating_asc"
     const val SORT_FEE_ASC = "fee_asc"
     const val SORT_FEE_DESC = "fee_desc"
+    const val SORT_DISTANCE_ASC = "distance_asc"
     const val SORT_EXPERIENCE_DESC = "experience_desc"
-    const val SORT_NAME_ASC = "name_asc"
 
-    // Time Constraints
-    const val MIN_CANCELLATION_HOURS = 24
-    const val SLOT_DURATION_MINUTES = 30
-    const val MIN_SLOT_DURATION_MINUTES = 15
+    // Rating Range
+    const val MIN_RATING = 1f
+    const val MAX_RATING = 5f
 
-    // Limits
-    const val MAX_RATING = 5.0f
-    const val MIN_RATING = 0.0f
-    const val MAX_REVIEW_LENGTH = 500
-    const val MIN_REVIEW_LENGTH = 5
-    const val MAX_NOTES_LENGTH = 1000
-    const val MIN_NOTES_LENGTH = 5
-
-    // Firebase Collections
-    const val COLLECTION_USERS = "users"
-    const val COLLECTION_DOCTORS = "doctors"
-    const val COLLECTION_APPOINTMENTS = "appointments"
-    const val COLLECTION_TIME_SLOTS = "timeSlots"
-    const val COLLECTION_RATINGS = "ratings"
-    const val COLLECTION_LEAVES = "leaves"
-
-    // Preferences Keys
-    const val PREF_USER_ID = "user_id"
-    const val PREF_USER_ROLE = "user_role"
-    const val PREF_USER_NAME = "user_name"
-    const val PREF_USER_EMAIL = "user_email"
-    const val PREF_IS_LOGGED_IN = "is_logged_in"
-
-    // Request Codes
-    const val REQUEST_CODE_LOCATION = 100
-    const val REQUEST_CODE_CAMERA = 101
-    const val REQUEST_CODE_GALLERY = 102
-
-    // Blood Groups
-    val BLOOD_GROUPS = listOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-
-    // Genders
-    val GENDERS = listOf("Male", "Female", "Other")
-
-    // Specializations
-    val SPECIALIZATIONS = listOf(
-        "General Physician",
-        "Cardiologist",
-        "Dermatologist",
-        "Pediatrician",
-        "Orthopedic",
-        "Gynecologist",
-        "Neurologist",
-        "Psychiatrist",
-        "Dentist",
-        "ENT Specialist",
-        "Ophthalmologist",
-        "Urologist",
-        "Gastroenterologist"
+    // Days of Week
+    val DAYS_OF_WEEK = listOf(
+        "Monday", "Tuesday", "Wednesday", "Thursday",
+        "Friday", "Saturday", "Sunday"
     )
+
+    // Time Slots (24-hour format)
+    val MORNING_SLOTS = listOf(
+        "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"
+    )
+
+    val AFTERNOON_SLOTS = listOf(
+        "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"
+    )
+
+    val EVENING_SLOTS = listOf(
+        "17:00", "17:30", "18:00", "18:30", "19:00"
+    )
+
+    // Firebase Database Paths
+    const val PATH_USER = "User"
+    const val PATH_APPOINTMENTS = "appointments"
+    const val PATH_DOCTOR_AVAILABILITY = "doctor_availability"
+    const val PATH_DOCTOR_LEAVES = "doctorLeaves"
+    const val PATH_RATINGS = "ratings"
+    const val PATH_APPOINTMENTS_BY_PATIENT = "appointmentsByPatient"
+    const val PATH_APPOINTMENTS_BY_DOCTOR = "appointmentsByDoctor"
+    const val PATH_SPECIALIZATIONS = "specializations"
+
+    // Date/Time Formats
+    const val DATE_FORMAT = "yyyy-MM-dd"
+    const val TIME_FORMAT = "HH:mm"
+    const val DATETIME_FORMAT = "yyyy-MM-dd HH:mm"
+    const val DISPLAY_DATE_FORMAT = "dd MMM yyyy"
+    const val DISPLAY_TIME_FORMAT = "hh:mm a"
+    const val DISPLAY_DATETIME_FORMAT = "dd MMM yyyy, hh:mm a"
 }
