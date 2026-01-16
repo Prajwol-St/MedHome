@@ -1,12 +1,109 @@
 package com.example.medhomeapp.utils
 
 import android.content.Context
-import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
-// Context Extensions
+fun String.toFormattedDate(): String {
+    return DateTimeUtils.formatDateForDisplay(this)
+}
+
+fun String.toFormattedTime(): String {
+    return DateTimeUtils.formatTimeForDisplay(this)
+}
+
+fun String.isValidEmail(): Boolean {
+    return ValidationUtils.isValidEmail(this)
+}
+
+fun String.isValidPhone(): Boolean {
+    return ValidationUtils.isValidPhone(this)
+}
+
+fun String.capitalizeWords(): String {
+    return split(" ").joinToString(" ") { word ->
+        word.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
+    }
+}
+
+fun String.truncate(maxLength: Int, ellipsis: String = "..."): String {
+    return if (this.length > maxLength) {
+        "${this.substring(0, maxLength)}$ellipsis"
+    } else {
+        this
+    }
+}
+
+// Long (timestamp) extensions
+fun Long.toDateonlyString(): String {
+    return DateTimeUtils.formatTimestampToDate(this)
+}
+
+fun Long.toTimeonlyString(): String {
+    return DateTimeUtils.formatTimestampToTime(this)
+}
+
+fun Long.toDateTimeString(): String {
+    return DateTimeUtils.formatTimestampToDateTime(this)
+}
+
+fun Long.toDisplayDateString(): String {
+    return DateTimeUtils.formatDateForDisplay(this.toDateString())
+}
+
+fun Long.toDisplayTimeString(): String {
+    return DateTimeUtils.formatTimeForDisplay(this.toTimeString())
+}
+
+fun Long.toRelativeTime(): String {
+    val now = System.currentTimeMillis()
+    val diff = now - this
+
+    val seconds = diff / 1000
+    val minutes = seconds / 60
+    val hours = minutes / 60
+    val days = hours / 24
+
+    return when {
+        seconds < 60 -> "Just now"
+        minutes < 60 -> "$minutes minute${if (minutes > 1) "s" else ""} ago"
+        hours < 24 -> "$hours hour${if (hours > 1) "s" else ""} ago"
+        days < 7 -> "$days day${if (days > 1) "s" else ""} ago"
+        days < 30 -> "${days / 7} week${if (days / 7 > 1) "s" else ""} ago"
+        else -> DateTimeUtils.formatTimestampForDisplay(this)
+    }
+}
+
+// Float (rating) extensions
+fun Float.toRatingString(): String {
+    return String.format("%.1f", this)
+}
+
+fun Float.toStars(): String {
+    val fullStars = this.toInt()
+    val hasHalfStar = (this - fullStars) >= 0.5
+    val emptyStars = 5 - fullStars - if (hasHalfStar) 1 else 0
+
+    return "★".repeat(fullStars) +
+            (if (hasHalfStar) "½" else "") +
+            "☆".repeat(emptyStars)
+}
+
+// Double (fee/price) extensions
+fun Double.toCurrency(): String {
+    return "NPR ${String.format("%.2f", this)}"
+}
+
+fun Double.toCompactCurrency(): String {
+    return when {
+        this >= 1000 -> "NPR ${String.format("%.1fk", this / 1000)}"
+        else -> "NPR ${this.toInt()}"
+    }
+}
+
+// Context extensions
 fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
@@ -15,153 +112,22 @@ fun Context.showLongToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
-// Fragment Extensions
-fun Fragment.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
-    requireContext().showToast(message, duration)
+// List extensions
+fun <T> List<T>.secondOrNull(): T? {
+    return if (this.size >= 2) this[1] else null
 }
 
-fun Fragment.showLongToast(message: String) {
-    requireContext().showLongToast(message)
+fun <T> List<T>.thirdOrNull(): T? {
+    return if (this.size >= 3) this[2] else null
 }
 
-// View Extensions
-fun View.show() {
-    visibility = View.VISIBLE
-}
-
-fun View.hide() {
-    visibility = View.GONE
-}
-
-fun View.invisible() {
-    visibility = View.INVISIBLE
-}
-
-fun View.isVisible(): Boolean = visibility == View.VISIBLE
-
-fun View.isGone(): Boolean = visibility == View.GONE
-
-fun View.isInvisible(): Boolean = visibility == View.INVISIBLE
-
-fun View.showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar.make(this, message, duration).show()
-}
-
-fun View.showLongSnackbar(message: String) {
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG).show()
-}
-
-fun View.showSnackbarWithAction(
-    message: String,
-    actionText: String,
-    action: (View) -> Unit
-) {
-    Snackbar.make(this, message, Snackbar.LENGTH_LONG)
-        .setAction(actionText, action)
-        .show()
-}
-
-// String Extensions
-fun String.isValidEmail(): Boolean = ValidationUtils.isValidEmail(this)
-
-fun String.isValidPhone(): Boolean = ValidationUtils.isValidPhoneNumber(this)
-
-fun String.isValidPassword(): Boolean = ValidationUtils.isValidPassword(this)
-
-fun String.capitalizeWords(): String {
-    return split(" ").joinToString(" ") { word ->
-        word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
-    }
-}
-
-fun String.toInitials(): String {
-    return split(" ")
-        .mapNotNull { it.firstOrNull()?.toString() }
-        .take(2)
-        .joinToString("")
-        .uppercase()
-}
-
-fun String.truncate(maxLength: Int, ellipsis: String = "..."): String {
-    return if (length > maxLength) {
-        "${take(maxLength - ellipsis.length)}$ellipsis"
-    } else this
-}
-
-// Double Extensions
-fun Double.formatAsCurrency(): String {
-    return "₹%.2f".format(this)
-}
-
-fun Double.formatAsWholeNumber(): String {
-    return "₹${toInt()}"
-}
-
-// Float Extensions
-fun Float.formatRating(): String {
-    return "%.1f".format(this)
-}
-
-// List Extensions
-fun <T> List<T>.isNotNullOrEmpty(): Boolean {
-    return isNotEmpty()
-}
-
-// StateFlow Result Extensions
-fun Pair<Boolean?, String?>.isSuccess(): Boolean = first == true
-
-fun Pair<Boolean?, String?>.isFailure(): Boolean = first == false
-
-fun Pair<Boolean?, String?>.isPending(): Boolean = first == null
-
-fun Pair<Boolean, String>.isSuccess(): Boolean = first
-
-fun Pair<Boolean, String>.getMessage(): String = second
-
-// Date/Time Extensions
-fun String.formatAsDisplayDate(): String = DateTimeUtils.formatDateForDisplay(this)
-
-fun String.formatAsDisplayTime(): String = DateTimeUtils.formatTimeForDisplay(this)
-
-fun String.isToday(): Boolean = DateTimeUtils.isToday(this)
-
-fun String.isPast(): Boolean = DateTimeUtils.isPastDate(this)
-
-fun String.isFuture(): Boolean = DateTimeUtils.isFutureDate(this)
-
-fun String.getDayName(): String = DateTimeUtils.getDayName(this)
-
-fun Long.toRelativeTime(): String = DateTimeUtils.getRelativeTime(this)
-
-fun Long.toDisplayDate(): String = DateTimeUtils.formatTimestampToDate(this)
-
-fun Long.toDisplayDateTime(): String = DateTimeUtils.formatTimestampToDateTime(this)
-
-// Collection Extensions for ViewModels
-fun <T> List<T>.filterByQuery(query: String, predicate: (T, String) -> Boolean): List<T> {
-    return if (query.isBlank()) this else filter { predicate(it, query) }
-}
-
-// Safe navigation for nullable lists
-fun <T> List<T>?.orEmpty(): List<T> = this ?: emptyList()
-
-// Appointment Status Extensions
-fun String.getStatusColor(): Int {
-    return when (this.lowercase()) {
-        "scheduled", "upcoming" -> android.R.color.holo_green_dark
-        "completed" -> android.R.color.holo_blue_dark
-        "cancelled" -> android.R.color.holo_red_dark
-        "no-show" -> android.R.color.holo_orange_dark
-        else -> android.R.color.darker_gray
-    }
-}
-
-fun String.getStatusText(): String {
-    return when (this.lowercase()) {
-        "scheduled" -> "Scheduled"
-        "completed" -> "Completed"
-        "cancelled" -> "Cancelled"
-        "no-show" -> "No Show"
-        else -> this.capitalizeWords()
+// Int extensions for minutes
+fun Int.toHoursMinutesString(): String {
+    val hours = this / 60
+    val minutes = this % 60
+    return when {
+        hours == 0 -> "$minutes min"
+        minutes == 0 -> "$hours hr"
+        else -> "$hours hr $minutes min"
     }
 }
