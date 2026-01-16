@@ -10,14 +10,13 @@ import com.google.firebase.database.ValueEventListener
 class DoctorRepoImpl: DoctorRepo {
 
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private val ref: DatabaseReference = database.getReference("Doctor")
-
+    private val ref: DatabaseReference = database.getReference("User") // CHANGED from "Doctor"
 
     override fun addDoctor(
         doctor: DoctorModel,
         callback: (Boolean, String) -> Unit
     ) {
-        val doctorId = doctor.id.toString()
+        val doctorId = doctor.id
         ref.child(doctorId).setValue(doctor)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -40,6 +39,13 @@ class DoctorRepoImpl: DoctorRepo {
                 }
 
                 val doctor = snapshot.getValue(DoctorModel::class.java)
+
+                // Verify it's actually a doctor
+                if (doctor?.role != "doctor") {
+                    callback(false, "User is not a doctor", null)
+                    return
+                }
+
                 callback(true, "Doctor fetched", doctor)
             }
 
@@ -52,27 +58,29 @@ class DoctorRepoImpl: DoctorRepo {
     override fun getAllDoctors(
         callback: (Boolean, String, List<DoctorModel>) -> Unit
     ) {
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (!snapshot.exists()) {
-                    callback(true, "No doctors found", emptyList())
-                    return
+        ref.orderByChild("role")
+            .equalTo("doctor")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists()) {
+                        callback(true, "No doctors found", emptyList())
+                        return
+                    }
+
+                    val allDoctors = mutableListOf<DoctorModel>()
+
+                    for (data in snapshot.children) {
+                        val doctor = data.getValue(DoctorModel::class.java)
+                        if (doctor != null) allDoctors.add(doctor)
+                    }
+
+                    callback(true, "Doctors fetched", allDoctors)
                 }
 
-                val allDoctors = mutableListOf<DoctorModel>()
-
-                for (data in snapshot.children) {
-                    val doctor = data.getValue(DoctorModel::class.java)
-                    if (doctor != null) allDoctors.add(doctor)
+                override fun onCancelled(error: DatabaseError) {
+                    callback(false, error.message, emptyList())
                 }
-
-                callback(true, "Doctors fetched", allDoctors)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                callback(false, error.message, emptyList())
-            }
-        })
+            })
     }
 
     override fun editDoctorProfile(

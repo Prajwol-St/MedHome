@@ -16,7 +16,7 @@ class AppointmentBookingRepoImpl : AppointmentBookingRepo {
     private val db = FirebaseDatabase.getInstance()
     private val availabilityRef = db.getReference("doctor_availability")
     private val appointmentRef = db.getReference("appointments")
-    private val doctorRef = db.getReference("Doctor")
+    private val doctorRef = db.getReference("User")
 
     override fun bookAppointment(
         slot: TimeSlot,
@@ -71,7 +71,7 @@ class AppointmentBookingRepoImpl : AppointmentBookingRepo {
                     .addOnSuccessListener { doctorSnapshot ->
                         val doctor = doctorSnapshot.getValue(DoctorModel::class.java)
 
-                        if (doctor == null) {
+                        if (doctor == null || doctor.role != "doctor") {
                             callback(false, "Doctor information not found")
                             return@addOnSuccessListener
                         }
