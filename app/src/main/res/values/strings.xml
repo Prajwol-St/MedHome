@@ -123,5 +123,6 @@
 
     <!-- Doctor Features -->
     <string name="title_activity_doctor_availability">Doctor Availability</string>
+    <string name="title_activity_appointment_booking">AppointmentBookingActivity</string>
 
 </resources>
