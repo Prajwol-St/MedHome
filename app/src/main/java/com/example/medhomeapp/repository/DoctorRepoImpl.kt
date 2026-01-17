@@ -1,5 +1,6 @@
 package com.example.medhomeapp.repository
 
+import android.util.Log
 import com.example.medhomeapp.model.DoctorModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -38,15 +39,20 @@ class DoctorRepoImpl: DoctorRepo {
                     return
                 }
 
-                val doctor = snapshot.getValue(DoctorModel::class.java)
+                try {
+                    val doctor = snapshot.getValue(DoctorModel::class.java)
 
-                // Verify it's actually a doctor
-                if (doctor?.role != "doctor") {
-                    callback(false, "User is not a doctor", null)
-                    return
+                    // Verify it's actually a doctor
+                    if (doctor?.role != "doctor") {
+                        callback(false, "User is not a doctor", null)
+                        return
+                    }
+
+                    callback(true, "Doctor fetched", doctor)
+                } catch (e: Exception) {
+                    Log.e("DoctorRepo", "Failed to parse doctor data for userId: $userId", e)
+                    callback(false, "Error parsing doctor data: ${e.message}", null)
                 }
-
-                callback(true, "Doctor fetched", doctor)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -70,8 +76,16 @@ class DoctorRepoImpl: DoctorRepo {
                     val allDoctors = mutableListOf<DoctorModel>()
 
                     for (data in snapshot.children) {
-                        val doctor = data.getValue(DoctorModel::class.java)
-                        if (doctor != null) allDoctors.add(doctor)
+                        try {
+                            val doctor = data.getValue(DoctorModel::class.java)
+                            if (doctor != null) {
+                                allDoctors.add(doctor)
+                            }
+                        } catch (e: Exception) {
+                            // Log which doctor failed to parse
+                            Log.e("DoctorRepo", "Failed to parse doctor: ${data.key}", e)
+                            // Continue with other doctors instead of crashing
+                        }
                     }
 
                     callback(true, "Doctors fetched", allDoctors)
