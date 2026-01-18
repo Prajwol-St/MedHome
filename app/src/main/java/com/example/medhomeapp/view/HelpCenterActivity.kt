@@ -79,6 +79,7 @@ fun HelpCenterScreen() {
         }
 
         Spacer(modifier = Modifier.height(20.dp))
+
         Text(
             text = "Contact Support",
             style = TextStyle(
@@ -92,23 +93,11 @@ fun HelpCenterScreen() {
         ContactCard(
             icon = Icons.Default.Email,
             title = "Email Support",
-            subtitle = "support@medhome.com",
+            subtitle = "medhome0001@gmail.com",
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:support@medhome.com")
+                    data = Uri.parse("mailto:medhome0001@gmail.com")
                     putExtra(Intent.EXTRA_SUBJECT, "MedHome Support Request")
-                }
-                context.startActivity(intent)
-            }
-        )
-
-        ContactCard(
-            icon = Icons.Default.Phone,
-            title = "Phone Support",
-            subtitle = "+977 9800000000",
-            onClick = {
-                val intent = Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:+9779800000000")
                 }
                 context.startActivity(intent)
             }
@@ -117,11 +106,24 @@ fun HelpCenterScreen() {
         ContactCard(
             icon = Icons.Default.BugReport,
             title = "Report a Bug",
-            subtitle = "Help us improve",
+            subtitle = "Help us improve the app",
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:support@medhome.com")
+                    data = Uri.parse("mailto:medhome0001@gmail.com")
                     putExtra(Intent.EXTRA_SUBJECT, "Bug Report - MedHome")
+                }
+                context.startActivity(intent)
+            }
+        )
+
+        ContactCard(
+            icon = Icons.Default.Feedback,
+            title = "Send Feedback",
+            subtitle = "Share your suggestions",
+            onClick = {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:medhome0001@gmail.com")
+                    putExtra(Intent.EXTRA_SUBJECT, "Feedback - MedHome")
                 }
                 context.startActivity(intent)
             }
@@ -146,7 +148,10 @@ fun HelpCenterScreen() {
             "How do I set medication reminders?" to "Tap the 'Reminder' tab in the bottom navigation to create and manage your medication reminders.",
             "Can I change my profile information?" to "Yes! Go to Settings > Edit Profile to update your personal information, contact details, and emergency contacts.",
             "How do I reset my password?" to "Go to Settings > Change Password. You'll need to enter your current password and then set a new one.",
-            "Is my health data secure?" to "Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details."
+            "Is my health data secure?" to "Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details.",
+            "How do I cancel a consultation?" to "Go to your consultation history, select the appointment you want to cancel, and tap 'Cancel Appointment'. Please note cancellation policies may apply.",
+            "Can I upload my own medical documents?" to "Yes, you can upload medical documents through the Health Records section. Supported formats include PDF, JPG, and PNG.",
+            "What payment methods are accepted?" to "We accept all major credit/debit cards, mobile wallets, and online banking for consultation payments."
         )
 
         faqs.forEachIndexed { index, (question, answer) ->
@@ -271,19 +276,25 @@ fun FaqItem(
                         if (isExpanded) R.drawable.baseline_expand_less_24
                         else R.drawable.baseline_expand_more_24
                     ),
-                    contentDescription = null,
-                    tint = SageGreen
+                    contentDescription = if (isExpanded) "Collapse" else "Expand",
+                    tint = SageGreen,
+                    modifier = Modifier.size(24.dp)
                 )
             }
 
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(12.dp))
+                Divider(
+                    color = SageGreen.copy(alpha = 0.2f),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
                 Text(
                     text = answer,
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 13.sp,
-                        lineHeight = 18.sp
+                        lineHeight = 20.sp
                     )
                 )
             }

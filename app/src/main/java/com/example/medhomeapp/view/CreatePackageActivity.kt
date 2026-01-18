@@ -41,7 +41,6 @@ class CreatePackageActivity : BaseActivity() {
 
     private lateinit var imageUtils: ImageUtils
     private val commonRepo = CommonRepoImpl()
-    private var selectedImageUri by mutableStateOf<Uri?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +48,18 @@ class CreatePackageActivity : BaseActivity() {
         // Initialize ImageUtils
         imageUtils = ImageUtils(this, this)
 
-        // Register launchers BEFORE setContent
-        imageUtils.registerLaunchers { uri ->
-            selectedImageUri = uri
-        }
-
         setContent {
+            var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+            // Register launchers inside setContent WITH NAMED PARAMETER
+            LaunchedEffect(Unit) {
+                imageUtils.registerLaunchers(
+                    onImageSelected = { uri ->
+                        selectedImageUri = uri
+                    }
+                )
+            }
+
             CreatePackageScreen(
                 imageUtils = imageUtils,
                 commonRepo = commonRepo,
@@ -63,6 +68,8 @@ class CreatePackageActivity : BaseActivity() {
         }
     }
 }
+
+// Rest of the file stays the same...
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -5,12 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.UserRepo
+
 import com.example.medhomeapp.utils.AuthState
 import com.example.medhomeapp.utils.UiState
 import com.google.firebase.auth.FirebaseAuth
-import android.content.Context
-import android.net.Uri
-import com.example.medhomeapp.repository.CommonRepo
 
 class UserViewModel(private val repo: UserRepo) : ViewModel() {
 
@@ -172,43 +170,27 @@ class UserViewModel(private val repo: UserRepo) : ViewModel() {
     fun resetAuthState() {
         _authState.value = AuthState.Idle
     }
-    fun uploadProfilePicture(
-        context: Context,
-        userId: String,
-        imageUri: Uri,
-        commonRepo: CommonRepo,
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
         callback: (Boolean, String) -> Unit
     ) {
+        if (currentPassword.isBlank() || newPassword.isBlank()) {
+            callback(false, "Passwords cannot be empty")
+            return
+        }
+
+        if (newPassword.length < 6) {
+            callback(false, "Password must be at least 6 characters")
+            return
+        }
+
         _loading.value = true
 
-        commonRepo.uploadImage(context, imageUri, "profile_pictures") { success, message, imageUrl, publicId ->
-            if (success && imageUrl != null) {
-                val currentUserData = _currentUser.value
-                if (currentUserData != null) {
-                    val updatedUser = currentUserData.copy(
-                        profileImageUrl = imageUrl,
-                        profileImagePublicId = publicId ?: "",
-                        updatedAt = System.currentTimeMillis().toString()
-                    )
-
-                    repo.editProfile(userId, updatedUser) { editSuccess, editMessage ->
-                        _loading.value = false
-                        if (editSuccess) {
-                            _currentUser.value = updatedUser
-                            callback(true, "Profile picture updated successfully!")
-                        } else {
-                            callback(false, editMessage)
-                        }
-                    }
-                } else {
-                    _loading.value = false
-                    callback(false, "User data not found")
-                }
-            } else {
-                _loading.value = false
-                callback(false, message)
-            }
+        repo.changePassword(currentPassword, newPassword) { success, message ->
+            _loading.value = false
+            callback(success, message)
         }
-    }
 
-}
+    }
+    }

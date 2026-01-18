@@ -3,7 +3,6 @@ package com.example.medhomeapp.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
@@ -46,19 +45,16 @@ fun DashboardScaffold() {
 
     val currentUser by viewModel.currentUser
 
-    // Initialize userType from SharedPreferences
     var userType by remember {
         mutableStateOf(
             sharedPrefs.getString("user_type", "patient")?.lowercase()?.trim()?.takeIf { it.isNotEmpty() } ?: "patient"
         )
     }
 
-    // Load user data immediately when userId is available
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
     }
 
-    // Update userType when currentUser changes - prioritize database role
     LaunchedEffect(currentUser) {
         currentUser?.let { user ->
             val roleFromDb = user.role.lowercase().trim()
@@ -71,11 +67,9 @@ fun DashboardScaffold() {
 
     var selectedTab by remember { mutableStateOf(0) }
 
-    // Check role from both SharedPreferences and currentUser, case-insensitive
     val roleFromUser = currentUser?.role?.lowercase()?.trim() ?: ""
     val isDoctor = userType == "doctor" || roleFromUser == "doctor"
 
-    // Reset selectedTab if doctor and tab 2 is selected (Scan QR - not available for doctors)
     LaunchedEffect(isDoctor) {
         if (isDoctor && selectedTab == 2) {
             selectedTab = 0
@@ -92,7 +86,7 @@ fun DashboardScaffold() {
                 title = {
                     Text(
                         when (selectedTab) {
-                            0 -> stringResource(R.string.medhome)
+                            0 -> stringResource(R.string.app_name)
                             1 -> stringResource(R.string.reminder)
                             2 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
@@ -135,7 +129,6 @@ fun DashboardScaffold() {
                     )
                 )
 
-                // Only show Scan QR for patients
                 if (!isDoctor) {
                     NavigationBarItem(
                         selected = selectedTab == 2,
@@ -183,9 +176,15 @@ fun DashboardScaffold() {
             when (selectedTab) {
                 0 -> {
                     if (isDoctor) {
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        DoctorHomeScreen(
+                            doctorName = currentUser?.name ?: "Doctor",
+                            profilePictureUrl = currentUser?.profilePicture
+                        )
                     } else {
-                        HomeScreen(currentUser?.name ?: "User")
+                        HomeScreen(
+                            userName = currentUser?.name ?: "User",
+                            profilePictureUrl = currentUser?.profilePicture
+                        )
                     }
                 }
                 1 -> {
@@ -202,7 +201,10 @@ fun DashboardScaffold() {
                             context.startActivity(intent)
                             selectedTab = 0
                         }
-                        HomeScreen(currentUser?.name ?: "User")
+                        HomeScreen(
+                            userName = currentUser?.name ?: "User",
+                            profilePictureUrl = currentUser?.profilePicture
+                        )
                     }
                 }
                 3 -> {
@@ -212,17 +214,18 @@ fun DashboardScaffold() {
                         selectedTab = 0
                     }
                     if (isDoctor) {
-                        DoctorHomeScreen(currentUser?.name ?: "Doctor")
+                        DoctorHomeScreen(
+                            doctorName = currentUser?.name ?: "Doctor",
+                            profilePictureUrl = currentUser?.profilePicture
+                        )
                     } else {
-                        HomeScreen(currentUser?.name ?: "User")
+                        HomeScreen(
+                            userName = currentUser?.name ?: "User",
+                            profilePictureUrl = currentUser?.profilePicture
+                        )
                     }
                 }
             }
         }
     }
-
 }
-
-
-
-

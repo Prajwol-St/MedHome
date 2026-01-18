@@ -71,7 +71,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
     val commonRepo = remember { CommonRepoImpl() }
     val scrollState = rememberScrollState()
 
-    val userId = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
         .getString("user_id", null)
 
     val currentUser by viewModel.currentUser
@@ -93,29 +93,36 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
 
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+    var showImageSourceDialog by remember { mutableStateOf(false) }
 
-    // Register image picker
+
     LaunchedEffect(Unit) {
-        imageUtils.registerLaunchers { uri ->
-            selectedImageUri = uri
-            uri?.let {
-                isUploadingImage = true
-                commonRepo.uploadImage(context, it, "profile_pictures") { success, message, url, publicId ->
-                    isUploadingImage = false
-                    if (success && url != null) {
-                        if (profilePicturePublicId.isNotEmpty()) {
-                            commonRepo.deleteImage(profilePicturePublicId) { _, _ -> }
+        imageUtils.registerLaunchers(
+            onImageSelected = { uri ->
+                selectedImageUri = uri
+                uri?.let {
+                    isUploadingImage = true
+                    commonRepo.uploadImage(context, it, "profile_pictures") { success, message, url, publicId ->
+                        isUploadingImage = false
+                        if (success && url != null) {
+                            if (profilePicturePublicId.isNotEmpty()) {
+                                commonRepo.deleteImage(profilePicturePublicId) { _, _ -> }
+                            }
+                            profilePictureUrl = url
+                            profilePicturePublicId = publicId ?: ""
+                            Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
-                        profilePictureUrl = url
-                        profilePicturePublicId = publicId ?: ""
-                        Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
                 }
+            },
+            onShowDialog = {
+                showImageSourceDialog = true
             }
-        }
+        )
     }
+
 
     LaunchedEffect(userId) {
         userId?.let { viewModel.getUserByID(it) }
@@ -637,7 +644,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 isLoading = false
                                 if (success) {
                                     Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 } else {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 }
@@ -747,6 +754,102 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 }
             },
             shape = RoundedCornerShape(16.dp)
+        )
+    }
+    // Image Source Selection Dialog
+    if (showImageSourceDialog) {
+        AlertDialog(
+            onDismissRequest = { showImageSourceDialog = false },
+            title = {
+                Text(
+                    "Choose Photo Source",
+                    fontWeight = FontWeight.Bold,
+                    color = TextDark
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Camera Option
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                showImageSourceDialog = false
+                                imageUtils.openCamera()
+                            },
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(2.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_camera_alt_24),
+                                contentDescription = "Camera",
+                                tint = SageGreen,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                "Take Photo",
+                                fontSize = 16.sp,
+                                color = TextDark,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Gallery Option
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                showImageSourceDialog = false
+                                imageUtils.openGallery()
+                            },
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(2.dp),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_photo_library_24),
+                                contentDescription = "Gallery",
+                                tint = SageGreen,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                "Choose from Gallery",
+                                fontSize = 16.sp,
+                                color = TextDark,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showImageSourceDialog = false }) {
+                    Text("Cancel", color = TextGray, fontWeight = FontWeight.Medium)
+                }
+            },
+            shape = RoundedCornerShape(16.dp),
+            containerColor = BackgroundCream
         )
     }
 }
