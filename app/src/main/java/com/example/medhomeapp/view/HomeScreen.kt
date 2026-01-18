@@ -19,20 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.medhomeapp.R
 import com.example.medhomeapp.view.ui.theme.*
 
 @Composable
-fun HomeScreen(userName: String) {
+fun HomeScreen(userName: String, profilePictureUrl: String?) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    // Using MintUltraLight for background and MintDark for text for better harmony
     val BackgroundTint = Color(0xFFF1FBF9)
     val TextMain = Color(0xFF2C3E50)
 
@@ -42,7 +44,6 @@ fun HomeScreen(userName: String) {
             .background(BackgroundTint)
             .verticalScroll(scrollState)
     ) {
-        // Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,12 +70,26 @@ fun HomeScreen(userName: String) {
                             .background(Color.White.copy(alpha = 0.25f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = stringResource(R.string.profile),
-                            modifier = Modifier.size(32.dp),
-                            tint = Color.White
-                        )
+                        if (!profilePictureUrl.isNullOrEmpty()) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data(profilePictureUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = stringResource(R.string.profile),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = stringResource(R.string.profile),
+                                modifier = Modifier.size(32.dp),
+                                tint = Color.White
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.width(14.dp))
@@ -114,8 +129,6 @@ fun HomeScreen(userName: String) {
                 }
             }
         }
-
-        // Services Section
         Text(
             text = "Services",
             fontSize = 18.sp,
@@ -123,8 +136,6 @@ fun HomeScreen(userName: String) {
             color = TextMain,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
-
-        // Services Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
@@ -136,7 +147,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_records),
                     icon = Icons.Default.Description,
-                    color = Color(0xFF4DB6AC), // Mint Dark
+                    color = Color(0xFF4DB6AC),
                     onClick = {
                         val intent = Intent(context, HealthRecords::class.java)
                         context.startActivity(intent)
@@ -147,7 +158,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.book_consultation),
                     icon = Icons.Default.VideoCall,
-                    color = Color(0xFF81D4FA), // Med Blue
+                    color = Color(0xFF81D4FA),
                     onClick = {
                         val intent = Intent(context, BookConsultationActivity::class.java)
                         context.startActivity(intent)
@@ -158,7 +169,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.ai_health_assistant),
                     icon = Icons.Default.Chat,
-                    color = Color(0xFF9575CD), // Soft Purple
+                    color = Color(0xFF9575CD),
                     onClick = { }
                 )
             }
@@ -166,7 +177,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.past_bookings),
                     icon = Icons.Default.Event,
-                    color = Color(0xFFA5D6A7), // Fresh Leaf
+                    color = Color(0xFFA5D6A7),
                     onClick = { }
                 )
             }
@@ -174,7 +185,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.appointments),
                     icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF4DB6AC), // Mint Dark
+                    color = Color(0xFF4DB6AC),
                     onClick = { }
                 )
             }
@@ -182,7 +193,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.calories_calculator),
                     icon = Icons.Default.FitnessCenter,
-                    color = Color(0xFFFFB74D), // Warning Gold/Orange
+                    color = Color(0xFFFFB74D),
                     onClick = {
                         val intent = Intent(context, CaloriesCalculatorActivity::class.java)
                         context.startActivity(intent)
@@ -193,7 +204,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.blood_donation),
                     icon = Icons.Default.Favorite,
-                    color = Color(0xFFFF8A80), // Soft Coral
+                    color = Color(0xFFFF8A80),
                     onClick = {
                         val intent = Intent(context, BloodDonationActivity::class.java)
                         context.startActivity(intent)
@@ -204,7 +215,7 @@ fun HomeScreen(userName: String) {
                 FeatureCard(
                     title = stringResource(R.string.health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF64B5F6), // Sky Blue
+                    color = Color(0xFF64B5F6),
                     onClick = {
                         val intent = Intent(context, HealthPackagesActivity::class.java)
                         context.startActivity(intent)

@@ -5,6 +5,7 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+
       <SelectionState runConfigName="SplashActivity">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
@@ -30,6 +31,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
+
     </selectionStates>
   </component>
 </project>

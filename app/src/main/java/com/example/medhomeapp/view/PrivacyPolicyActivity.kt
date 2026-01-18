@@ -85,7 +85,7 @@ fun PrivacyPolicyScreen() {
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "Last Updated: December 27, 2025",
+                    text = "Last Updated: January 12, 2026",
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
@@ -122,7 +122,7 @@ fun PrivacyPolicyScreen() {
                             "• All data is encrypted in transit and at rest\n" +
                             "• We use industry-standard security protocols\n" +
                             "• Regular security audits and updates\n" +
-                            "• Secure cloud storage infrastructure\n" +
+                            "• Secure cloud storage infrastructure (Firebase)\n" +
                             "• Limited access to authorized personnel only"
                 )
 
@@ -148,7 +148,7 @@ fun PrivacyPolicyScreen() {
 
                 PolicySection(
                     title = "6. Data Retention",
-                    content = "We retain your data for as long as your account is active or as needed to provide services. Medical records are retained according to healthcare regulations and legal requirements."
+                    content = "We retain your data for as long as your account is active or as needed to provide services. Medical records are retained according to healthcare regulations and legal requirements in Nepal."
                 )
 
                 PolicySection(
@@ -159,7 +159,7 @@ fun PrivacyPolicyScreen() {
                 PolicySection(
                     title = "8. Third-Party Services",
                     content = "We use third-party services for:\n\n" +
-                            "• Authentication (Firebase)\n" +
+                            "• Authentication and database (Firebase)\n" +
                             "• Cloud storage and hosting\n" +
                             "• Payment processing\n" +
                             "• Analytics and crash reporting\n\n" +
@@ -169,19 +169,25 @@ fun PrivacyPolicyScreen() {
                 PolicySection(
                     title = "9. Contact Us",
                     content = "If you have questions about this Privacy Policy, contact us at:\n\n" +
-                            "Email: privacy@medhome.com\n" +
-                            "Phone: +977 9800000000\n" +
+                            "Email: medhome0001@gmail.com\n" +
                             "Address: Kathmandu, Nepal"
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
+
+                Divider(
+                    color = SageGreen.copy(alpha = 0.2f),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 12.dp)
+                )
 
                 Text(
                     text = "By using MedHome, you agree to this Privacy Policy. We may update this policy periodically, and changes will be posted in the app.",
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
-                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                        fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                        lineHeight = 18.sp
                     )
                 )
             }

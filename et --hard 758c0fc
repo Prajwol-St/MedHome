@@ -1,0 +1,81 @@
+[33m38ca3ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: checkout: moving from prabhash to main
+[33m758c0fc[m[33m ([m[1;32mprabhash[m[33m)[m HEAD@{1}: reset: moving to 758c0fc8218e4fce627b24a35a770cc5e4d94c42
+[33md2a52c0[m[33m ([m[1;31morigin/prabhash[m[33m)[m HEAD@{2}: commit: notification and camera fixes for package activities and model
+[33m9a05886[m HEAD@{3}: commit: AndroidManifest
+[33m2347cd1[m HEAD@{4}: commit: Revamped UI and Logic for NotificationSettingsActivity
+[33m5a11a2a[m HEAD@{5}: commit: NotificationReceiver added
+[33m4462991[m HEAD@{6}: commit: Notification helper added
+[33mddd8156[m HEAD@{7}: commit: added asking Permissions in PermissionsIntroActivity
+[33m5ea2508[m HEAD@{8}: commit: UI and Logic changes
+[33mceba408[m HEAD@{9}: commit: strings xml
+[33m758c0fc[m[33m ([m[1;32mprabhash[m[33m)[m HEAD@{10}: commit: Displays user profile pictures in home screens
+[33m74b2b45[m HEAD@{11}: commit: Updated Package Activities and Error fixed
+[33m9c5170c[m HEAD@{12}: commit: AAdded Camera/Gallery choice dialog for profile picture upload
+[33m0626eb2[m HEAD@{13}: commit: Added camera support to ImageUtils with backward compatibility
+[33m7e43857[m HEAD@{14}: commit (merge): Merge branch main into prabhash
+[33m571986e[m HEAD@{15}: commit: Moved password change logic
+[33mc0a6d0e[m HEAD@{16}: commit: Updated PrivacyPolicyActivity
+[33m2bcfd07[m HEAD@{17}: commit: Updated HelpCenterActivity
+[33m9f17783[m HEAD@{18}: commit: Updated ChangePasswordActivity Logic
+[33m9fc6987[m HEAD@{19}: commit: Updated ImageUtils
+[33mcc5452d[m HEAD@{20}: commit: Updated TOS
+[33mc533205[m HEAD@{21}: commit: added profilepicture fields to UserModel
+[33m98a8967[m HEAD@{22}: commit: Added gender/blood group dropdowns and date picker to signup
+[33m6e59fe5[m HEAD@{23}: commit: added display profile picture in settings screen
+[33me66efa7[m HEAD@{24}: commit: Added profile picture upload with dropdowns and date picker to edit profile
+[33m0012906[m HEAD@{25}: commit: icons
+[33mbaff549[m HEAD@{26}: reset: moving to baff549
+[33mbaff549[m HEAD@{27}: reset: moving to baff549b4a6a1b13945b27d9a5f16b49af6a92e4
+[33m5506eda[m HEAD@{28}: commit: ImageUtils code modifications
+[33ma9acbd7[m HEAD@{29}: commit: Updated EditProfileActivity
+[33m6ed8645[m HEAD@{30}: commit: Updated SettingsActivity
+[33m59f0e8e[m HEAD@{31}: commit: Updated UserModel
+[33m8594f3d[m HEAD@{32}: commit: Updated UserViewModel
+[33mbaff549[m HEAD@{33}: commit: Updated permission handling
+[33m02eee35[m HEAD@{34}: commit: Added unsaved changes detection and exit confirmation dialog
+[33mb4d5451[m HEAD@{35}: commit: UI changes in create package
+[33m764ce7a[m HEAD@{36}: commit: Updated dependencies and organize build configuration
+[33m12b6d85[m HEAD@{37}: commit: AndroidManifest
+[33mc176323[m HEAD@{38}: commit: Saves user details to SharedPreferences on signup
+[33m9519966[m HEAD@{39}: commit: Added booking insights dashboard with filter and delete actions
+[33m9ef42d9[m HEAD@{40}: commit: Implemented deleteBooking repository method
+[33m1bc0a29[m HEAD@{41}: commit: Added deleteBooking method to repository interface
+[33m2bbe212[m HEAD@{42}: commit: Saves user details to SharedPreferences on login
+[33m80dbed4[m HEAD@{43}: commit: Added deleteBooking function to ViewModel
+[33m0152f46[m HEAD@{44}: commit: Redesigned health packages list with card layout and enhanced info
+[33m11bfdc4[m HEAD@{45}: commit: Added Firebase PropertyName annotations for isActive field
+[33ma2aa1f8[m HEAD@{46}: commit: UI changes and bug fixes inside EditPackageActivity
+[33m8ecb50f[m HEAD@{47}: commit: CreatePackageActivity fixed
+[33m2d8c2d7[m HEAD@{48}: commit: Created MyPackagesActivity
+[33m3de889b[m HEAD@{49}: commit: xmls
+[33m34e3fba[m HEAD@{50}: commit: created HealthPackagesActivity
+[33mb2a68b0[m HEAD@{51}: commit: Created HealthPackageDetailsActivity
+[33m8eef9f9[m HEAD@{52}: commit: HealthPackagesActivity intent added in DashboardActivity
+[33ma1cbab4[m HEAD@{53}: commit: AndroidManifest
+[33me2297e3[m HEAD@{54}: commit: Fixed health packages CRUD - doctor side complete
+[33mb8577d6[m HEAD@{55}: reset: moving to b8577d61815d21e91352d3ca9368348c79dd8e43
+[33me1e02ec[m HEAD@{56}: commit (merge): file changes
+[33mb8577d6[m HEAD@{57}: commit: PackageBookingRepoImpl added
+[33m9b43057[m HEAD@{58}: commit: PackageBookingsActivity added
+[33m4930957[m HEAD@{59}: commit: PackageBookingRepo addded
+[33mcbac299[m HEAD@{60}: commit: PackageBookingModel added
+[33m6af06e9[m HEAD@{61}: commit: ImageUtils added
+[33m7d9f3ff[m HEAD@{62}: commit: HealthPackageViewModel added
+[33mc563bf5[m HEAD@{63}: commit: HealthPackagesManagementActivity added
+[33m97209fe[m HEAD@{64}: commit: HealthPackageRepoImpl added
+[33m3b7c497[m HEAD@{65}: commit: HealthPackageRepo added
+[33mb83061b[m HEAD@{66}: commit: HealthPackageModel added
+[33m19dc854[m HEAD@{67}: commit: EditPackageActivity added
+[33m3f3b305[m HEAD@{68}: commit: DoctorHomeScreen modified
+[33m55cf07e[m HEAD@{69}: commit: CreatePackageActivity Created
+[33m435d1e6[m HEAD@{70}: commit: CommonRepoImpl Created
+[33mf36b770[m HEAD@{71}: commit: CommonRepo Created
+[33m340034e[m HEAD@{72}: commit: dependencies added
+[33me388601[m HEAD@{73}: commit: xmls idea
+[33me41871a[m HEAD@{74}: commit: AndroidManifest
+[33m38ca3ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{75}: reset: moving to 38ca3cadca3561584e147984053bb24629b1b0a5
+[33m4ea73de[m HEAD@{76}: reset: moving to 4ea73dedd70b13bbcfd9bd16eae3e1b171c0413b
+[33m38ca3ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{77}: reset: moving to 38ca3cadca3561584e147984053bb24629b1b0a5
+[33mf30d849[m HEAD@{78}: checkout: moving from prabhash to prabhash
+[33mf30d849[m HEAD@{79}: checkout: moving from main to prabhash
+[33m38ca3ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{80}: clone: from https://github.com/Prajwol-St/MedHome.git
