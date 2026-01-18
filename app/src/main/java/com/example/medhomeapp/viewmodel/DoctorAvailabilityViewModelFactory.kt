@@ -1,7 +1,8 @@
+package com.example.medhomeapp.viewmodel
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.medhomeapp.repository.DoctorAvailabilityRepo
-import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModel
 
 class DoctorAvailabilityViewModelFactory(
     private val repo: DoctorAvailabilityRepo,

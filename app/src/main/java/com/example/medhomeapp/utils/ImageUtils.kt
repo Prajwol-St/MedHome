@@ -35,8 +35,6 @@ class ImageUtils(
     ) {
         onImageSelectedCallback = onImageSelected
         showImageSourceDialog = onShowDialog
-
-        // Gallery Launcher
         galleryLauncher = registryOwner.activityResultRegistry.register(
             "galleryLauncher", ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -65,46 +63,43 @@ class ImageUtils(
         ) { isGranted ->
             if (isGranted) {
                 Log.d("ImageUtils", "Camera permission granted")
-                launchCamera()
+                openCamera()
             } else {
                 Log.e("ImageUtils", "Camera permission denied")
             }
         }
 
+        // Storage Permission Launcher (for older Android versions)
         storagePermissionLauncher = registryOwner.activityResultRegistry.register(
             "storagePermissionLauncher", ActivityResultContracts.RequestPermission()
         ) { isGranted ->
             if (isGranted) {
                 Log.d("ImageUtils", "Storage permission granted")
-                launchGalleryIntent()
+                openGallery()
             } else {
                 Log.e("ImageUtils", "Storage permission denied")
             }
         }
     }
 
-
     fun launchImagePicker() {
-        if (showImageSourceDialog != null) {
-
-            showImageSourceDialog?.invoke()
-        } else {
-
-            openGallery()
-        }
+        showImageSourceDialog?.invoke() ?: openGallery()
     }
-
-
     fun openCamera() {
         val permission = Manifest.permission.CAMERA
         if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("ImageUtils", "Requesting camera permission")
             cameraPermissionLauncher.launch(permission)
         } else {
-            launchCamera()
+            val photoFile = File(activity.cacheDir, "profile_${System.currentTimeMillis()}.jpg")
+            capturedImageUri = FileProvider.getUriForFile(
+                activity,
+                "${activity.packageName}.fileprovider",
+                photoFile
+            )
+            Log.d("ImageUtils", "Opening camera with URI: $capturedImageUri")
+            cameraLauncher.launch(capturedImageUri!!)
         }
     }
-
 
     fun openGallery() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -113,7 +108,6 @@ class ImageUtils(
         } else {
             val permission = Manifest.permission.READ_EXTERNAL_STORAGE
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                Log.d("ImageUtils", "Requesting storage permission")
                 storagePermissionLauncher.launch(permission)
             } else {
                 launchGalleryIntent()
@@ -121,28 +115,11 @@ class ImageUtils(
         }
     }
 
-
-    private fun launchCamera() {
-        try {
-            val photoFile = File(activity.cacheDir, "profile_${System.currentTimeMillis()}.jpg")
-            capturedImageUri = FileProvider.getUriForFile(
-                activity,
-                "${activity.packageName}.fileprovider",
-                photoFile
-            )
-            Log.d("ImageUtils", "Launching camera with URI: $capturedImageUri")
-            cameraLauncher.launch(capturedImageUri!!)
-        } catch (e: Exception) {
-            Log.e("ImageUtils", "Error launching camera: ${e.message}")
-        }
-    }
-
-
     private fun launchGalleryIntent() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
             type = "image/*"
         }
-        Log.d("ImageUtils", "Launching gallery")
+        Log.d("ImageUtils", "Opening gallery")
         galleryLauncher.launch(intent)
     }
 }

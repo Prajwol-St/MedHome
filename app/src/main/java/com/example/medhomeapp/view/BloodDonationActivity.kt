@@ -38,8 +38,7 @@ import com.example.medhomeapp.model.BloodRequestModel
 import com.example.medhomeapp.model.DonorModel
 import com.example.medhomeapp.repository.BloodDonationRepo
 import com.example.medhomeapp.repository.BloodDonationRepoImpl
-import com.example.medhomeapp.ui.theme.SageGreen
-import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -162,7 +161,7 @@ fun MainDonationScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White,
@@ -202,7 +201,7 @@ fun MainDonationScreen(
             ) {
                 FloatingActionButton(
                     onClick = onJoinDonorClick,
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     shape = CircleShape
                 ) {
                     Icon(
@@ -213,7 +212,7 @@ fun MainDonationScreen(
                 }
                 FloatingActionButton(
                     onClick = onPostRequestClick,
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     shape = CircleShape
                 ) {
                     Icon(
@@ -244,7 +243,7 @@ fun MainDonationScreen(
                             onClick = { selectedGroup = group },
                             label = { Text(group) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = SageGreen,
+                                selectedContainerColor = MintGreen,
                                 selectedLabelColor = Color.White,
                                 containerColor = Color.White,
                                 labelColor = Color(0xFF2D3436)
@@ -276,7 +275,7 @@ fun MainDonationScreen(
                             .padding(32.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = SageGreen)
+                        CircularProgressIndicator(color = MintGreen)
                     }
                 }
             }
@@ -409,7 +408,7 @@ fun BloodRequestCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Surface(
-                    color = SageGreen,
+                    color = MintGreen,
                     shape = CircleShape,
                     modifier = Modifier.size(48.dp)
                 ) {
@@ -470,7 +469,7 @@ fun BloodRequestCard(
                 Button(
                     onClick = { onContactClick(request) },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = SageGreen
+                        containerColor = MintGreen
                     ),
                     shape = RoundedCornerShape(8.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
@@ -560,7 +559,7 @@ fun PostBloodRequestScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                 ),
@@ -614,8 +613,8 @@ fun PostBloodRequestScreen(
                     placeholder = { Text("Enter patient name or leave anonymous") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -637,7 +636,7 @@ fun PostBloodRequestScreen(
                             .fillMaxWidth()
                             .menuAnchor(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen
+                            focusedBorderColor = MintGreen
                         ),
                         enabled = !isLoading
                     )
@@ -666,7 +665,7 @@ fun PostBloodRequestScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen
+                        focusedBorderColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -679,7 +678,7 @@ fun PostBloodRequestScreen(
                     placeholder = { Text("e.g. City General Hospital") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen
+                        focusedBorderColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -692,7 +691,7 @@ fun PostBloodRequestScreen(
                     placeholder = { Text("Satdobato,Lalitpur") },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen
+                        focusedBorderColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -706,7 +705,7 @@ fun PostBloodRequestScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen
+                        focusedBorderColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -728,7 +727,7 @@ fun PostBloodRequestScreen(
                             .fillMaxWidth()
                             .menuAnchor(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen
+                            focusedBorderColor = MintGreen
                         ),
                         enabled = !isLoading
                     )
@@ -759,7 +758,7 @@ fun PostBloodRequestScreen(
                         .height(120.dp),
                     maxLines = 5,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen
+                        focusedBorderColor = MintGreen
                     ),
                     enabled = !isLoading
                 )
@@ -782,7 +781,7 @@ fun PostBloodRequestScreen(
                         .fillMaxWidth()
                         .height(56.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = SageGreen
+                        containerColor = MintGreen
                     ),
                     shape = RoundedCornerShape(8.dp),
                     enabled = !isLoading
@@ -820,7 +819,7 @@ fun HistoryScreen(
             Column {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = SageGreen,
+                        containerColor = MintGreen,
                         titleContentColor = Color.White,
                         navigationIconContentColor = Color.White
                     ),
@@ -837,7 +836,7 @@ fun HistoryScreen(
                 )
                 TabRow(
                     selectedTabIndex = selectedTab,
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     contentColor = Color.White
                 ) {
                     tabs.forEachIndexed { index, title ->
@@ -898,7 +897,7 @@ fun MyRequestsTab(
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = SageGreen)
+                    CircularProgressIndicator(color = MintGreen)
                 }
             }
         }
@@ -977,7 +976,7 @@ fun DonorProfileTab(
                         .padding(32.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = SageGreen)
+                    CircularProgressIndicator(color = MintGreen)
                 }
             }
         }
@@ -1041,7 +1040,7 @@ fun DonorProfileTab(
                                 color = Color(0xFF2D3436)
                             )
                             Surface(
-                                color = SageGreen,
+                                color = MintGreen,
                                 shape = CircleShape,
                                 modifier = Modifier.size(60.dp)
                             ) {
@@ -1272,7 +1271,7 @@ fun DonorProfileTab(
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = SageGreen),
+                    colors = CardDefaults.cardColors(containerColor = MintGreen),
                     elevation = CardDefaults.cardElevation(2.dp),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -1398,7 +1397,7 @@ fun DonationGuideline(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Surface(
-            color = SageGreen.copy(alpha = 0.1f),
+            color = MintGreen.copy(alpha = 0.1f),
             shape = CircleShape,
             modifier = Modifier.size(40.dp)
         ) {
@@ -1409,7 +1408,7 @@ fun DonationGuideline(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = SageGreen,
+                    tint = MintGreen,
                     modifier = Modifier.size(20.dp)
                 )
             }

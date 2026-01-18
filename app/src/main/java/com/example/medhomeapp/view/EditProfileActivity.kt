@@ -71,7 +71,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
     val commonRepo = remember { CommonRepoImpl() }
     val scrollState = rememberScrollState()
 
-    val userId = (context as ComponentActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
         .getString("user_id", null)
 
     val currentUser by viewModel.currentUser
@@ -165,7 +165,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { (context as ComponentActivity).finish() }) {
+                IconButton(onClick = { (context as BaseActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
                         contentDescription = "Back",
@@ -644,7 +644,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 isLoading = false
                                 if (success) {
                                     Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                                    (context as ComponentActivity).finish()
+                                    (context as BaseActivity).finish()
                                 } else {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 }
