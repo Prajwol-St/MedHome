@@ -84,7 +84,11 @@ fun SignupInitialBody() {
             val idToken = account?.idToken
 
             if (idToken.isNullOrEmpty()) {
-                Toast.makeText(context, "Google Sign-In failed: no ID token", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.google_no_token),
+                    Toast.LENGTH_SHORT
+                ).show()
                 isGoogleLoading = false
                 return@rememberLauncherForActivityResult
             }
@@ -117,25 +121,42 @@ fun SignupInitialBody() {
                             }
                         } else {
                             isGoogleLoading = false
-                            Toast.makeText(context, "Failed to get user ID", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_user_id_failed),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
                         isGoogleLoading = false
-                        Toast.makeText(context, "Firebase Sign-In failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.error_firebase_signin_failed),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
         } catch (e: ApiException) {
             isGoogleLoading = false
-            Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            val errorMessage = e.message?.let {
+                context.getString(R.string.error_google_signin_failed, it)
+            } ?: context.getString(R.string.error_google_signin_failed_generic)
+
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+
         }
     }
 
     if (showExistingAccountDialog) {
         AlertDialog(
             onDismissRequest = { },
-            title = { Text("Account Already Exists") },
-            text = { Text("This account is already registered. Please go back to login.") },
+            title = {
+                Text(stringResource(R.string.account_exists_title))
+            },
+            text = {
+                Text(stringResource(R.string.account_exists_message))
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -146,7 +167,7 @@ fun SignupInitialBody() {
                         (context as BaseActivity).finish()
                     }
                 ) {
-                    Text("Go to Login")
+                    Text(stringResource(R.string.go_to_login))
                 }
             }
         )
@@ -170,7 +191,7 @@ fun SignupInitialBody() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "MedHome",
+                text = stringResource(R.string.app_name),
                 style = TextStyle(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -180,7 +201,7 @@ fun SignupInitialBody() {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Your health, our priority",
+                text = stringResource(R.string.login_tagline),
                 style = TextStyle(
                     color = Color.White.copy(alpha = 0.9f),
                     fontSize = 14.sp
@@ -204,7 +225,7 @@ fun SignupInitialBody() {
                     .padding(top = 40.dp, bottom = 24.dp)
             ) {
                 Text(
-                    text = "Create Account",
+                    text = stringResource(R.string.create_account),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -215,7 +236,7 @@ fun SignupInitialBody() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Sign up to get started with your health journey.",
+                    text = stringResource(R.string.signup_subtitle),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 14.sp
@@ -225,7 +246,7 @@ fun SignupInitialBody() {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Email",
+                    text = stringResource(R.string.email_label),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 14.sp,
@@ -237,9 +258,13 @@ fun SignupInitialBody() {
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    placeholder = { Text("Enter your email", color = TextGray.copy(alpha = 0.6f)) },
+                    placeholder =
+                        {
+                            Text(stringResource(R.string.email_hint),
+                        color = TextGray.copy(alpha = 0.6f)) },
                     enabled = !isLoading && !isGoogleLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.
+                    fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -257,11 +282,20 @@ fun SignupInitialBody() {
                 Button(
                     onClick = {
                         if (email.isBlank()) {
-                            Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_empty_email),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
+
                         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                            Toast.makeText(context, "Please enter a valid email", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.error_invalid_email),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
 
@@ -270,12 +304,14 @@ fun SignupInitialBody() {
                         FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
                             .addOnCompleteListener { task ->
                                 isLoading = false
+
                                 if (task.isSuccessful) {
                                     val signInMethods = task.result?.signInMethods
+
                                     if (!signInMethods.isNullOrEmpty()) {
                                         Toast.makeText(
                                             context,
-                                            "This email is already registered. Please login instead.",
+                                            context.getString(R.string.email_already_registered),
                                             Toast.LENGTH_LONG
                                         ).show()
                                     } else {
@@ -286,7 +322,7 @@ fun SignupInitialBody() {
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "Failed to check email: ${task.exception?.message}",
+                                        context.getString(R.string.check_email_failed),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -310,15 +346,14 @@ fun SignupInitialBody() {
                         )
                     } else {
                         Text(
-                            text = "Continue",
-                            style = TextStyle(
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            text = stringResource(R.string.continue_button),
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
+
 
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
@@ -331,7 +366,7 @@ fun SignupInitialBody() {
                         color = LightSage
                     )
                     Text(
-                        text = "Or",
+                        text = stringResource(R.string.or),
                         modifier = Modifier.padding(horizontal = 16.dp),
                         style = TextStyle(
                             color = TextGray,
@@ -375,7 +410,7 @@ fun SignupInitialBody() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = "Continue with Google",
+                            text = stringResource(R.string.continue_with_google),
                             style = TextStyle(
                                 color = TextDark,
                                 fontSize = 15.sp,
@@ -392,14 +427,14 @@ fun SignupInitialBody() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Already have an account? ",
+                        text = stringResource(R.string.already_have_account),
                         style = TextStyle(
                             color = TextGray,
                             fontSize = 14.sp
                         )
                     )
                     Text(
-                        text = "Login",
+                        text = stringResource(R.string.login),
                         style = TextStyle(
                             color = SageGreen,
                             fontSize = 14.sp,

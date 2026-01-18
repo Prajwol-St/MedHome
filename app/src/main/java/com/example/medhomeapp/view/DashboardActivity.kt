@@ -3,10 +3,11 @@ package com.example.medhomeapp.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -17,10 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.LightSage
+import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
@@ -87,7 +90,7 @@ fun DashboardScaffold() {
                 title = {
                     Text(
                         when (selectedTab) {
-                            0 -> stringResource(R.string.medhome)
+                            0 -> stringResource(R.string.app_name)
                             1 -> stringResource(R.string.reminder)
                             2 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
@@ -120,7 +123,20 @@ fun DashboardScaffold() {
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
+                    label = { Text("Pharmacy", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
+                )
+                NavigationBarItem(
+                    selected = selectedTab == 4,
+                    onClick = { selectedTab = 4 },
+                    icon = { Icon(Icons.Default.Notifications, stringResource(R.string.notifications)) },
+                    label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MintGreen,
                         selectedTextColor = MintGreen,
@@ -192,7 +208,8 @@ fun DashboardScaffold() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        ReminderScreen()
+                        NotificationScreen()  // ← Now it matches
+
                     }
                 }
                 2 -> {
@@ -225,6 +242,10 @@ fun DashboardScaffold() {
                             profilePictureUrl = currentUser?.profilePicture
                         )
                     }
+                }
+
+                4 -> {
+                    MyOrdersScreen()  // ← Now it matches
                 }
             }
         }

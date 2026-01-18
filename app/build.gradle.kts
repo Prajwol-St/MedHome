@@ -49,7 +49,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt.coil3:coil:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
     //  COMPOSE
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -57,14 +59,23 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.runtime.livedata)
+    // In your app/build.gradle
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     //  REQUIRED FOR ICONS
     implementation("androidx.compose.material:material-icons-extended")
+
+    implementation("com.google.android.material:material:1.11.0")
+
+
+    implementation("com.cloudinary:cloudinary-android:2.1.0")
 
     //  LIFECYCLE
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.10.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
 
     //  FIREBASE
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
