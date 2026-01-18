@@ -151,4 +151,12 @@
     <!-- Accessibility / Content descriptions -->
     <string name="profile_picture">प्रोफाइल तस्वीर</string>
 
+    <!-- Missing strings from English that need to be added -->
+    <string name="title_activity_language_selection">भाषा चयन</string>
+    <string name="title_activity_help_center">मद्दत केन्द्र</string>
+    <string name="title_activity_privacy_policy">गोपनीयता नीति</string>
+    <string name="title_activity_terms_of_service">सेवाका सर्तहरू</string>
+    <string name="title_activity_doctor_availability">डाक्टर उपलब्धता</string>
+    <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
 </resources>
