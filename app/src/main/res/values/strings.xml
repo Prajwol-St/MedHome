@@ -145,8 +145,15 @@
 
     <!-- Doctor Features -->
 
+
     <string name="title_activity_doctor_availability">Doctor Availability</string>
     <string name="title_activity_appointment_booking">AppointmentBookingActivity</string>
+
+    <!-- Google Sign In -->
+    <string name="default_web_client_id">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+    <string name="title_activity_buy_medicine_screen">BuyMedicineScreen</string>
+    <string name="title_activity_my_orders">MyOrdersActivity</string>
+
 
     <string name="doctor_set_availability">Set Availability</string>
     <string name="doctor_messages">Messages</string>

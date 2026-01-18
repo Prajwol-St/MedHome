@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
@@ -119,7 +120,20 @@ fun DashboardScaffold() {
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text(stringResource(R.string.reminder), fontSize = 11.sp) },
+                    label = { Text("Pharmacy", fontSize = 11.sp) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = SageGreen,
+                        selectedTextColor = SageGreen,
+                        indicatorColor = LightSage.copy(alpha = 0.3f),
+                        unselectedIconColor = TextGray,
+                        unselectedTextColor = TextGray
+                    )
+                )
+                NavigationBarItem(
+                    selected = selectedTab == 4,
+                    onClick = { selectedTab = 4 },
+                    icon = { Icon(Icons.Default.Notifications, stringResource(R.string.notifications)) },
+                    label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MintGreen,
                         selectedTextColor = MintGreen,
@@ -191,7 +205,8 @@ fun DashboardScaffold() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        ReminderScreen()
+                        NotificationScreen()  // ← Now it matches
+
                     }
                 }
                 2 -> {
@@ -224,6 +239,10 @@ fun DashboardScaffold() {
                             profilePictureUrl = currentUser?.profilePicture
                         )
                     }
+                }
+
+                4 -> {
+                    MyOrdersScreen()  // ← Now it matches
                 }
             }
         }
