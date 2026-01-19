@@ -593,11 +593,23 @@ fun SignupDetailsBody(
                         )
                     )
                     Text(
-                        text = "I agree to the Terms & Conditions",
+                        text = "I agree to the ",
                         style = TextStyle(
                             color = TextDark,
                             fontSize = 13.sp
                         )
+                    )
+                    Text(
+                        text = "Terms & Conditions",
+                        style = TextStyle(
+                            color = SageGreen,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.clickable(enabled = !isLoading) {
+                            val intent = Intent(context, TermsOfServiceActivity::class.java)
+                            context.startActivity(intent)
+                        }
                     )
                 }
 
