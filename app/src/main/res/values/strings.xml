@@ -135,5 +135,6 @@
     <string name="title_activity_doctor_appointment">DoctorAppointmentActivity</string>
     <string name="title_activity_user_appointment">UserAppointmentActivity</string>
     <string name="title_activity_appointment_booking">AppointmentBookingActivity</string>
+    <string name="title_activity_add_doctor">AddDoctorActivity</string>
 
 </resources>

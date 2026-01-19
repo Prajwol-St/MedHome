@@ -20,6 +20,7 @@ data class UserModel(
     val bloodGroup: String = "",
     val emergencyContact: String = "",
     val address: String = "",
+    val specialization: String = "",
 ) : Parcelable {
     fun toMap(): Map<String, Any?> {
         return mapOf(

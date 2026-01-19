@@ -13,6 +13,7 @@ class DoctorRepoImpl: DoctorRepo {
     private val ref: DatabaseReference = database.getReference("Doctor")
 
 
+
     override fun addDoctor(
         doctor: DoctorModel,
         callback: (Boolean, String) -> Unit
