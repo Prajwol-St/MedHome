@@ -91,8 +91,9 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> stringResource(R.string.reminder)
-                            2 -> stringResource(R.string.scan)
+                            1 -> "Pharmacy"
+                            4 -> "My Orders"
+                            3 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
                         },
                         fontWeight = FontWeight.Bold,
@@ -122,7 +123,7 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
+                    icon = { Icon(painterResource(R.drawable.baseline_local_pharmacy_24), stringResource(R.string.reminder)) },
                     label = { Text("Pharmacy", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = SageGreen,
@@ -135,7 +136,7 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 4,
                     onClick = { selectedTab = 4 },
-                    icon = { Icon(Icons.Default.Notifications, stringResource(R.string.notifications)) },
+                    icon = { Icon(painterResource(R.drawable.baseline_shopping_cart_24), stringResource(R.string.notifications)) },
                     label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MintGreen,
@@ -208,7 +209,7 @@ fun DashboardScaffold() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        NotificationScreen()  // ← Now it matches
+                        PharmacyScreen()  // ← Now it matches
 
                     }
                 }
