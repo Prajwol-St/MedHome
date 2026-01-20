@@ -1,225 +1,496 @@
 package com.example.medhomeapp.view
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medhomeapp.BaseActivity
-import com.example.medhomeapp.model.TimeSlot
-import com.example.medhomeapp.model.UserModel
-import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
-import com.example.medhomeapp.repository.UserRepoImpl
-import com.example.medhomeapp.utils.UiState
-import com.example.medhomeapp.view.ui.theme.MedHomeAppTheme
-import com.example.medhomeapp.viewmodel.DoctorSlotsViewModel
-import com.example.medhomeapp.viewmodel.UserViewModel
-import com.example.medhomeapp.viewmodel.UserViewModelFactory
+import com.example.medhomeapp.R
+import com.example.medhomeapp.model.DoctorModel
+import com.example.medhomeapp.repository.DoctorRepoImpl
+import com.example.medhomeapp.view.ui.theme.MintGreen
+import com.example.medhomeapp.viewmodel.SearchDoctorsViewModel
+import com.example.medhomeapp.viewmodel.SearchDoctorsViewModelFactory
 
 class BookConsultationActivity : BaseActivity() {
-
-    companion object {
-        private const val EXTRA_USER = "extra_user"
-
-        fun newIntent(context: Context, user: UserModel): Intent {
-            return Intent(context, BookConsultationActivity::class.java)
-                .putExtra(EXTRA_USER, user)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
-        if (user == null) {
-            finish()
-            return
-        }
-
         setContent {
-            MedHomeAppTheme {
-                BookConsultationRoute(currentUser = user)
-            }
+            SearchDoctorsScreen()
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookConsultationRoute(currentUser: UserModel) {
+fun SearchDoctorsScreen() {
+    val context = LocalContext.current
+    val activity = context as? Activity
 
-    val userViewModel: UserViewModel = viewModel(
-        factory = remember { UserViewModelFactory(UserRepoImpl()) }
+    val doctorRepo = DoctorRepoImpl()
+    val viewModel: SearchDoctorsViewModel = viewModel(
+        factory = SearchDoctorsViewModelFactory(doctorRepo)
     )
 
-    val allUsersState by userViewModel.allUsers
-    val loading by userViewModel.loading
+    val filteredDoctors by viewModel.filteredDoctors.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val specializations = viewModel.getSpecializations()
 
-    LaunchedEffect(Unit) {
-        userViewModel.getAllUser()
-    }
-
-    val doctors: List<UserModel> = remember(allUsersState) {
-        when (allUsersState) {
-            is UiState.Success -> {
-                (allUsersState as UiState.Success<List<UserModel>>)
-                    .data
-                    .filter { it.role == "doctor" }
-            }
-            else -> emptyList()
-        }
-    }
+    var showFilterSheet by remember { mutableStateOf(false) }
+    var selectedSpecialization by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Book Consultation") })
-        }
-    ) { padding ->
-        Box(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-        ) {
-            when {
-                loading -> CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                doctors.isEmpty() -> Text(
-                    "No doctors available",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                else -> BookConsultationScreen(
-                    currentUser = currentUser,
-                    doctors = doctors
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BookConsultationScreen(
-    currentUser: UserModel,
-    doctors: List<UserModel>
-) {
-    val context = LocalContext.current
-
-    val slotViewModel: DoctorSlotsViewModel = viewModel(
-        factory = remember {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return DoctorSlotsViewModel(
-                        DoctorAvailabilityRepoImpl()
-                    ) as T
-                }
-            }
-        }
-    )
-
-    var selectedDoctor by remember { mutableStateOf<UserModel?>(null) }
-    val slots by slotViewModel.slots.collectAsStateWithLifecycle()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-
-        Text(
-            text = "Choose Doctor",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(doctors) { doctor ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 6.dp)
-                        .clickable {
-                            selectedDoctor = doctor
-                            slotViewModel.observeSlots(doctor.id)
-                        }
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(doctor.name, fontWeight = FontWeight.Bold)
-                        Text("Doctor")
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MintGreen,
+                    titleContentColor = Color.White
+                ),
+                title = { Text("Find Doctors") },
+                navigationIcon = {
+                    IconButton(onClick = { activity?.finish() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { showFilterSheet = true }) {
+                        Icon(
+                            Icons.Default.FilterList,
+                            contentDescription = "Filter",
+                            tint = Color.White
+                        )
                     }
                 }
-            }
+            )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        selectedDoctor?.let {
-            Text(
-                text = "Available Slots",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(Color(0xFFF5F5F5))
+        ) {
+            // Search Bar
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { viewModel.searchDoctors(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                placeholder = { Text("Search by name or specialization") },
+                leadingIcon = {
+                    Icon(Icons.Default.Search, contentDescription = "Search")
+                },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { viewModel.searchDoctors("") }) {
+                            Icon(Icons.Default.Clear, contentDescription = "Clear")
+                        }
+                    }
+                },
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White
+                ),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Specialization Chips
+            if (specializations.isNotEmpty()) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        FilterChip(
+                            selected = selectedSpecialization.isEmpty(),
+                            onClick = {
+                                selectedSpecialization = ""
+                                viewModel.filterBySpecialization("")
+                            },
+                            label = { Text("All") }
+                        )
+                    }
+                    items(specializations) { spec ->
+                        FilterChip(
+                            selected = selectedSpecialization == spec,
+                            onClick = {
+                                selectedSpecialization = spec
+                                viewModel.filterBySpecialization(spec)
+                            },
+                            label = { Text(spec) }
+                        )
+                    }
+                }
+            }
 
-            if (slots.isEmpty()) {
-                Text("No available slots")
+            // Results Count
+            Text(
+                text = "${filteredDoctors.size} doctor${if (filteredDoctors.size != 1) "s" else ""} found",
+                fontSize = 14.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+
+            // Doctor List
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MintGreen)
+                }
+            } else if (filteredDoctors.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            Icons.Default.SearchOff,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "No doctors found",
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        )
+                    }
+                }
             } else {
-                LazyColumn {
-                    items(slots) { slot ->
-                        TimeSlotPatientCard(slot) {
-                            context.startActivity(
-                                AppointmentBookingActivity.newIntent(
-                                    context,
-                                    currentUser,
-                                    slot
-                                )
-                            )
-                        }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(filteredDoctors) { doctor ->
+                        DoctorCard(
+                            doctor = doctor,
+                            onClick = {
+                                val intent = Intent(context, DoctorDetailActivity::class.java)
+                                intent.putExtra("DOCTOR_ID", doctor.id)
+                                context.startActivity(intent)
+                            }
+                        )
                     }
                 }
             }
         }
     }
+
+    // Filter Bottom Sheet
+    if (showFilterSheet) {
+        FilterBottomSheet(
+            viewModel = viewModel,
+            onDismiss = { showFilterSheet = false }
+        )
+    }
 }
 
 @Composable
-fun TimeSlotPatientCard(
-    slot: TimeSlot,
-    onSelect: () -> Unit
+fun DoctorCard(
+    doctor: DoctorModel,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .clickable { onSelect() },
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(2.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(slot.day, fontWeight = FontWeight.Bold)
-            Text("${slot.startTime} - ${slot.endTime}")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            // Doctor Image
+            Box(
+                modifier = Modifier
+                    .size(70.dp)
+                    .clip(CircleShape)
+                    .background(MintGreen.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp),
+                    tint = MintGreen
+                )
+            }
+
+            // Doctor Info
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = doctor.name,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF2C3E50)
+                )
+
+                Text(
+                    text = doctor.specialization,
+                    fontSize = 14.sp,
+                    color = MintGreen,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Star,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = Color(0xFFFFB300)
+                    )
+                    Text(
+                        text = String.format("%.1f", doctor.averageRating),
+                        fontSize = 13.sp,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "(${doctor.totalRatings})",
+                        fontSize = 12.sp,
+                        color = Color.LightGray
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Work,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "${doctor.experience} yrs",
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
+                    }
+
+                    Text(
+                        text = "•",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+
+                    Text(
+                        text = "NPR ${doctor.consultationFee.toInt()}",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF2C3E50)
+                    )
+                }
+            }
+
+            // Arrow Icon
+            Icon(
+                Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = Color.Gray
+            )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FilterBottomSheet(
+    viewModel: SearchDoctorsViewModel,
+    onDismiss: () -> Unit
+) {
+    val currentFilter by viewModel.currentFilter.collectAsState()
+    var minRating by remember { mutableFloatStateOf(currentFilter.minRating) }
+    var minFee by remember { mutableDoubleStateOf(currentFilter.minFee) }
+    var maxFee by remember { mutableDoubleStateOf(currentFilter.maxFee) }
+    var sortBy by remember { mutableStateOf(currentFilter.sortBy) }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = Color.White
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            Text(
+                text = "Filter & Sort",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            // Minimum Rating
+            Column {
+                Text(
+                    text = "Minimum Rating: ${String.format("%.1f", minRating)} ★",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Slider(
+                    value = minRating,
+                    onValueChange = { minRating = it },
+                    valueRange = 0f..5f,
+                    steps = 9,
+                    colors = SliderDefaults.colors(
+                        thumbColor = MintGreen,
+                        activeTrackColor = MintGreen
+                    )
+                )
+            }
+
+            // Fee Range
+            Column {
+                Text(
+                    text = "Fee Range: NPR ${minFee.toInt()} - ${maxFee.toInt()}",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                RangeSlider(
+                    value = minFee.toFloat()..maxFee.toFloat(),
+                    onValueChange = { range ->
+                        minFee = range.start.toDouble()
+                        maxFee = range.endInclusive.toDouble()
+                    },
+                    valueRange = 0f..10000f,
+                    steps = 19,
+                    colors = SliderDefaults.colors(
+                        thumbColor = MintGreen,
+                        activeTrackColor = MintGreen
+                    )
+                )
+            }
+
+            // Sort By
+            Column {
+                Text(
+                    text = "Sort By",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SortOption("Rating (High to Low)", "rating_desc", sortBy) { sortBy = it }
+                    SortOption("Fee (Low to High)", "fee_asc", sortBy) { sortBy = it }
+                    SortOption("Fee (High to Low)", "fee_desc", sortBy) { sortBy = it }
+                    SortOption("Experience", "experience_desc", sortBy) { sortBy = it }
+                }
+            }
+
+            // Buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        minRating = 0f
+                        minFee = 0.0
+                        maxFee = 10000.0
+                        sortBy = "rating_desc"
+                        viewModel.clearFilters()
+                        onDismiss()
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Clear")
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.updateFilter(
+                            currentFilter.copy(
+                                minRating = minRating,
+                                minFee = minFee,
+                                maxFee = maxFee,
+                                sortBy = sortBy
+                            )
+                        )
+                        onDismiss()
+                    },
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(containerColor = MintGreen)
+                ) {
+                    Text("Apply")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SortOption(
+    label: String,
+    value: String,
+    selectedValue: String,
+    onSelect: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onSelect(value) }
+            .padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = selectedValue == value,
+            onClick = { onSelect(value) },
+            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = label, fontSize = 14.sp)
     }
 }

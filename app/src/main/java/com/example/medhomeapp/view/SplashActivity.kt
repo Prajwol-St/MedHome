@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
-import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import kotlinx.coroutines.delay
 
 class SplashActivity : BaseActivity() {
@@ -106,7 +106,7 @@ fun SplashBody() {
 
             Text(
                 text = "MedHome",
-                color = SageGreen,
+                color = MintGreen,
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.5.sp
@@ -116,7 +116,7 @@ fun SplashBody() {
 
             Text(
                 text = "Your health, our priority",
-                color = SageGreen.copy(alpha = 0.7f),
+                color = MintGreen.copy(alpha = 0.7f),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal
             )

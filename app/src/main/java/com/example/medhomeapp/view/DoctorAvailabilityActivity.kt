@@ -1,263 +1,164 @@
 package com.example.medhomeapp.view
 
-import DoctorAvailabilityViewModelFactory
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.medhomeapp.BaseActivity
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.TimeSlot
-import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.utils.AppConstants
+import com.example.medhomeapp.utils.DateTimeUtils
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModel
+import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.*
 
-class DoctorAvailabilityActivity : ComponentActivity() {
-
-    companion object {
-        private const val EXTRA_USER = "extra_user"
-
-        fun newIntent(context: Context, user: UserModel): Intent {
-            return Intent(context, DoctorAvailabilityActivity::class.java).apply {
-                putExtra(EXTRA_USER, user)
-            }
-        }
-    }
+class DoctorAvailabilityActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-            val user = intent.getParcelableExtra<UserModel>(EXTRA_USER)
-            if (user == null) {
-                finish()
-                return
-            }
+        enableEdgeToEdge()
 
         setContent {
-            DoctorAvailabilityScreen(user = user)
+            DoctorAvailabilityScreen()
         }
     }
 }
 
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DoctorAvailabilityScreen(user: UserModel) {
+fun DoctorAvailabilityScreen() {
+    val context = LocalContext.current
+    val activity = context as? BaseActivity
+
+    val doctorId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    val repo = DoctorAvailabilityRepoImpl()
     val viewModel: DoctorAvailabilityViewModel = viewModel(
-        factory = DoctorAvailabilityViewModelFactory(
-            repo = DoctorAvailabilityRepoImpl(),
-            doctorId = user.id
-        )
+        factory = DoctorAvailabilityViewModelFactory(repo, doctorId)
     )
 
-    var selectedDay by remember { mutableStateOf("Monday") }
+    val timeSlots by viewModel.allSlots.collectAsState()
+
+    var showAddSlotDialog by remember { mutableStateOf(false) }
+    var selectedDate by remember { mutableStateOf(DateTimeUtils.getCurrentDate()) }
     var startTime by remember { mutableStateOf("09:00") }
     var endTime by remember { mutableStateOf("17:00") }
-    var showStartTimePicker by remember { mutableStateOf(false) }
-    var showEndTimePicker by remember { mutableStateOf(false) }
+    var selectedDuration by remember { mutableStateOf(30) }
 
-    val timeSlots by viewModel.timeSlots.collectAsState()
-
-    val daysOfWeek = listOf(
-        "Monday", "Tuesday", "Wednesday", "Thursday",
-        "Friday", "Saturday", "Sunday"
-    )
+    // Group slots by date
+    val groupedSlots = timeSlots.groupBy { it.date }.toSortedMap()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    Column {
-                        Text(
-                            text = "Doctor Availability",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
-                        )
-                        Text(
-                            text = "Dr. ${user.name}",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = SageGreen,
+                    titleContentColor = Color.White
+                ),
+                title = { Text("Set Availability") },
+                navigationIcon = {
+                    IconButton(onClick = { activity?.finish() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
+                            contentDescription = "Back",
+                            tint = Color.White
                         )
                     }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                }
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.addSlot(selectedDay, startTime, endTime)
-                },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+            ExtendedFloatingActionButton(
+                onClick = { showAddSlotDialog = true },
+                containerColor = SageGreen,
+                contentColor = Color.White
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Time Slot")
+                Icon(Icons.Default.Add, contentDescription = "Add")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Add Time Slots")
             }
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(16.dp)
-                .fillMaxSize()
-        ) {
-            Card(
+        if (groupedSlots.isEmpty()) {
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = "Add New Time Slot",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(bottom = 12.dp)
-                    )
-
-                    Text(
-                        text = "Select Day",
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-
-                    DayDropdownMenu(
-                        selectedDay = selectedDay,
-                        onDaySelected = { day ->
-                            selectedDay = day
-                        },
-                        days = daysOfWeek,
-                        modifier = Modifier.padding(bottom = 12.dp)
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "Start Time",
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
-                            TimeSelectionField(
-                                time = startTime,
-                                label = "Start",
-                                onClick = { showStartTimePicker = true }
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "End Time",
-                                fontWeight = FontWeight.Medium,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
-                            TimeSelectionField(
-                                time = endTime,
-                                label = "End",
-                                onClick = { showEndTimePicker = true }
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Button(
-                        onClick = {
-                            viewModel.addSlot(selectedDay, startTime, endTime)
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Add Time Slot")
-                    }
-                }
-            }
-
-            if (timeSlots.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Icon(
-                        Icons.Default.Schedule,
+                        Icons.Default.EventBusy,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier.size(64.dp),
+                        tint = Color.Gray
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No Time Slots Added",
+                        text = "No time slots added",
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = Color.Gray
                     )
                     Text(
-                        text = "Add your first time slot above",
+                        text = "Tap the button below to add availability",
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = Color.LightGray
                     )
                 }
-            } else {
-                Text(
-                    text = "Available Time Slots",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .background(Color(0xFFF5F5F5)),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                groupedSlots.forEach { (date, slots) ->
+                    item {
+                        Text(
+                            text = DateTimeUtils.formatDateForDisplay(date),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2C3E50),
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
 
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(timeSlots) { slot ->
-                        TimeSlotCard(
+                    items(slots) { slot ->
+                        TimeSlotItem(
                             slot = slot,
                             onDelete = {
-                                viewModel.deleteSlot(slot.id)
+                                // FIXED: Match current ViewModel signature
+                                viewModel.deleteSlot(slot.date, slot.id)
+                                Toast.makeText(context, "Slot deleted", Toast.LENGTH_SHORT).show()
                             }
                         )
                     }
@@ -266,215 +167,116 @@ fun DoctorAvailabilityScreen(user: UserModel) {
         }
     }
 
-    if (showStartTimePicker) {
-        TimePickerDialog(
-            onCancel = { showStartTimePicker = false },
-            onConfirm = { hour, minute ->
-                startTime = String.format("%02d:%02d", hour, minute)
-                showStartTimePicker = false
-            },
-            initialHour = startTime.substring(0, 2).toInt(),
-            initialMinute = startTime.substring(3, 5).toInt()
-        )
-    }
-
-    if (showEndTimePicker) {
-        TimePickerDialog(
-            onCancel = { showEndTimePicker = false },
-            onConfirm = { hour, minute ->
-                endTime = String.format("%02d:%02d", hour, minute)
-                showEndTimePicker = false
-            },
-            initialHour = endTime.substring(0, 2).toInt(),
-            initialMinute = endTime.substring(3, 5).toInt()
-        )
-    }
-}
-
-@Composable
-fun TimeSelectionField(
-    time: String,
-    label: String,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = time,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Icon(
-                Icons.Default.Schedule,
-                contentDescription = "Select $label Time",
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TimePickerDialog(
-    onCancel: () -> Unit,
-    onConfirm: (Int, Int) -> Unit,
-    initialHour: Int = 0,
-    initialMinute: Int = 0
-) {
-    var selectedHour by remember { mutableIntStateOf(initialHour) }
-    var selectedMinute by remember { mutableIntStateOf(initialMinute) }
-
-    AlertDialog(
-        onDismissRequest = onCancel,
-        title = { Text("Select Time") },
-        text = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        IconButton(
-                            onClick = {
-                                selectedHour = (selectedHour + 1) % 24
-                            }
-                        ) {
-                            Icon(Icons.Default.ArrowDropUp, contentDescription = "Increase hour")
-                        }
-                        Text(
-                            text = String.format("%02d", selectedHour),
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        IconButton(
-                            onClick = {
-                                selectedHour = (selectedHour - 1 + 24) % 24
-                            }
-                        ) {
-                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Decrease hour")
-                        }
-                    }
-
-                    Text(":", fontSize = 32.sp, modifier = Modifier.padding(horizontal = 8.dp))
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        IconButton(
-                            onClick = {
-                                selectedMinute = (selectedMinute + 5) % 60
-                            }
-                        ) {
-                            Icon(Icons.Default.ArrowDropUp, contentDescription = "Increase minute")
-                        }
-                        Text(
-                            text = String.format("%02d", selectedMinute),
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        IconButton(
-                            onClick = {
-                                selectedMinute = (selectedMinute - 5 + 60) % 60
-                            }
-                        ) {
-                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Decrease minute")
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = "Selected: ${String.format("%02d:%02d", selectedHour, selectedMinute)}",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+    // Add Slot Dialog
+    if (showAddSlotDialog) {
+        AddTimeSlotDialog(
+            selectedDate = selectedDate,
+            startTime = startTime,
+            endTime = endTime,
+            selectedDuration = selectedDuration,
+            onDateChange = { selectedDate = it },
+            onStartTimeChange = { startTime = it },
+            onEndTimeChange = { endTime = it },
+            onDurationChange = { selectedDuration = it },
+            onConfirm = {
+                // Generate time slots based on start, end, and duration
+                val slots = generateTimeSlots(
+                    doctorId = doctorId,
+                    date = selectedDate,
+                    startTime = startTime,
+                    endTime = endTime,
+                    duration = selectedDuration
                 )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = { onConfirm(selectedHour, selectedMinute) }
-            ) {
-                Text("OK")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onCancel) {
-                Text("Cancel")
-            }
-        }
-    )
+
+                if (slots.isEmpty()) {
+                    Toast.makeText(
+                        context,
+                        "Invalid time range. Please check your inputs.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@AddTimeSlotDialog
+                }
+
+                // FIXED: Match current ViewModel signature
+                slots.forEach { slot ->
+                    viewModel.addSlot(
+                        date = slot.date,
+                        startTime = slot.startTime,
+                        endTime = slot.endTime
+                    )
+                }
+
+                Toast.makeText(
+                    context,
+                    "${slots.size} time slots added successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
+                showAddSlotDialog = false
+            },
+            onDismiss = { showAddSlotDialog = false }
+        )
+    }
 }
 
 @Composable
-fun TimeSlotCard(
+fun TimeSlotItem(
     slot: TimeSlot,
     onDelete: () -> Unit
 ) {
+    // Calculate duration if not available
+    val duration = try {
+        slot.duration ?: calculateDuration(slot.startTime, slot.endTime)
+    } catch (e: Exception) {
+        30 // default
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (slot.isAvailable)
-                MaterialTheme.colorScheme.surface
-            else
-                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-        )
+            containerColor = if (slot.isBooked) Color.LightGray else Color.White
+        ),
+        elevation = CardDefaults.cardElevation(2.dp),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(
-                    text = slot.day,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.AccessTime,
+                    contentDescription = null,
+                    tint = if (slot.isBooked) Color.Gray else SageGreen,
+                    modifier = Modifier.size(24.dp)
                 )
-                Text(
-                    text = "${slot.startTime} - ${slot.endTime}",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+
+                Column {
+                    Text(
+                        text = "${slot.startTime} - ${slot.endTime}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (slot.isBooked) Color.Gray else Color(0xFF2C3E50)
+                    )
+                    Text(
+                        text = "$duration minutes • ${if (slot.isBooked) "Booked" else "Available"}",
+                        fontSize = 13.sp,
+                        color = Color.Gray
+                    )
+                }
             }
 
-            Row {
-                if (!slot.isAvailable) {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-                        Text("Unavailable", fontSize = 12.sp)
-                    }
-                }
-
-                IconButton(
-                    onClick = onDelete,
-                    modifier = Modifier.size(40.dp)
-                ) {
+            if (!slot.isBooked) {
+                IconButton(onClick = onDelete) {
                     Icon(
                         Icons.Default.Delete,
                         contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.error
+                        tint = Color.Red
                     )
                 }
             }
@@ -482,49 +284,266 @@ fun TimeSlotCard(
     }
 }
 
+// Helper function to calculate duration
+fun calculateDuration(startTime: String, endTime: String): Int {
+    return try {
+        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val start = sdf.parse(startTime)
+        val end = sdf.parse(endTime)
+
+        if (start != null && end != null) {
+            val diffInMillis = end.time - start.time
+            (diffInMillis / (1000 * 60)).toInt()
+        } else {
+            30 // default
+        }
+    } catch (e: Exception) {
+        30 // default
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DayDropdownMenu(
-    selectedDay: String,
-    onDaySelected: (String) -> Unit,
-    days: List<String>,
-    modifier: Modifier = Modifier
+fun AddTimeSlotDialog(
+    selectedDate: String,
+    startTime: String,
+    endTime: String,
+    selectedDuration: Int,
+    onDateChange: (String) -> Unit,
+    onStartTimeChange: (String) -> Unit,
+    onEndTimeChange: (String) -> Unit,
+    onDurationChange: (Int) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    val dates = remember {
+        (0..30).map { daysAhead ->
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_MONTH, daysAhead)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            dateFormat.format(calendar.time) to DateTimeUtils.formatDateForDisplay(dateFormat.format(calendar.time))
+        }
+    }
 
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-        modifier = modifier
-    ) {
-        TextField(
-            value = selectedDay,
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(),
-            shape = RoundedCornerShape(8.dp)
-        )
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showStartTimePicker by remember { mutableStateOf(false) }
+    var showEndTimePicker by remember { mutableStateOf(false) }
 
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            days.forEach { day ->
-                DropdownMenuItem(
-                    text = { Text(day) },
-                    onClick = {
-                        onDaySelected(day)
-                        expanded = false
-                    },
-                    modifier = Modifier.padding(horizontal = 8.dp)
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Add Time Slots",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Date Selection
+                OutlinedButton(
+                    onClick = { showDatePicker = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.CalendarMonth, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(DateTimeUtils.formatDateForDisplay(selectedDate))
+                }
+
+                // Start Time
+                OutlinedButton(
+                    onClick = { showStartTimePicker = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.AccessTime, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Start: $startTime")
+                }
+
+                // End Time
+                OutlinedButton(
+                    onClick = { showEndTimePicker = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(Icons.Default.AccessTime, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("End: $endTime")
+                }
+
+                // Duration Selection
+                Text(
+                    text = "Slot Duration",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
                 )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    AppConstants.SLOT_DURATIONS.forEach { duration ->
+                        FilterChip(
+                            selected = selectedDuration == duration,
+                            onClick = { onDurationChange(duration) },
+                            label = { Text("$duration min") },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = onConfirm,
+                colors = ButtonDefaults.buttonColors(containerColor = SageGreen)
+            ) {
+                Text("Add Slots")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        },
+        containerColor = Color.White,
+        shape = RoundedCornerShape(16.dp)
+    )
+
+    // Date Picker Dialog
+    if (showDatePicker) {
+        AlertDialog(
+            onDismissRequest = { showDatePicker = false },
+            title = { Text("Select Date") },
+            text = {
+                LazyColumn {
+                    items(dates) { (date, displayDate) ->
+                        TextButton(
+                            onClick = {
+                                onDateChange(date)
+                                showDatePicker = false
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(displayDate)
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            containerColor = Color.White
+        )
+    }
+
+    // Start Time Picker Dialog
+    if (showStartTimePicker) {
+        TimePickerDialog(
+            title = "Select Start Time",
+            onTimeSelected = {
+                onStartTimeChange(it)
+                showStartTimePicker = false
+            },
+            onDismiss = { showStartTimePicker = false }
+        )
+    }
+
+    // End Time Picker Dialog
+    if (showEndTimePicker) {
+        TimePickerDialog(
+            title = "Select End Time",
+            onTimeSelected = {
+                onEndTimeChange(it)
+                showEndTimePicker = false
+            },
+            onDismiss = { showEndTimePicker = false }
+        )
+    }
+}
+
+@Composable
+fun TimePickerDialog(
+    title: String,
+    onTimeSelected: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val times = remember {
+        (6..21).flatMap { hour ->
+            listOf(0, 30).map { minute ->
+                String.format("%02d:%02d", hour, minute)
             }
         }
     }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            LazyColumn {
+                items(times) { time ->
+                    TextButton(
+                        onClick = { onTimeSelected(time) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(time)
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+        containerColor = Color.White
+    )
+}
+
+// Helper function to generate time slots
+fun generateTimeSlots(
+    doctorId: String,
+    date: String,
+    startTime: String,
+    endTime: String,
+    duration: Int
+): List<TimeSlot> {
+    val slots = mutableListOf<TimeSlot>()
+    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+    try {
+        val start = sdf.parse(startTime)
+        val end = sdf.parse(endTime)
+
+        if (start != null && end != null) {
+            val calendar = Calendar.getInstance()
+            calendar.time = start
+
+            while (calendar.time.before(end)) {
+                val slotStart = sdf.format(calendar.time)
+                calendar.add(Calendar.MINUTE, duration)
+
+                if (calendar.time.after(end)) break
+
+                val slotEnd = sdf.format(calendar.time)
+                val dayOfWeek = DateTimeUtils.getDayOfWeek(date)
+
+                slots.add(
+                    TimeSlot(
+                        id = UUID.randomUUID().toString(),
+                        doctorId = doctorId,
+                        date = date,
+                        day = dayOfWeek,
+                        startTime = slotStart,
+                        endTime = slotEnd,
+                        duration = duration,
+                        isAvailable = true,
+                        isBooked = false,
+                        appointmentId = ""
+                    )
+                )
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return slots
 }

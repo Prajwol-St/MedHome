@@ -7,12 +7,12 @@ import com.example.medhomeapp.utils.LanguageManager
 
 open class BaseActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // this will help Language  applied automatically
+    override fun attachBaseContext(newBase: Context) {
+        val context = LanguageManager.applyLanguage(newBase)
+        super.attachBaseContext(context)
     }
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LanguageManager.applyLanguage(newBase))
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 }

@@ -74,8 +74,6 @@ class UserRepoImpl : UserRepo {
                 }
             }
     }
-
-    // FIXED: Using .get() for one-time read instead of addValueEventListener
     override fun getUserByID(
         userId: String,
         callback: (Boolean, String, UserModel?) -> Unit
@@ -148,6 +146,38 @@ class UserRepoImpl : UserRepo {
                     callback(true, "Account deleted successfully")
                 } else {
                     callback(false, task.exception?.message ?: "Failed to delete account")
+                }
+            }
+    }
+
+    override fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        callback: (Boolean, String) -> Unit
+    ) {
+        val user = auth.currentUser
+        val email = user?.email
+
+        if (user == null || email == null) {
+            callback(false, "User not found")
+            return
+        }
+
+        val credential = com.google.firebase.auth.EmailAuthProvider.getCredential(email, currentPassword)
+
+        user.reauthenticate(credential)
+            .addOnCompleteListener { reauth ->
+                if (reauth.isSuccessful) {
+                    user.updatePassword(newPassword)
+                        .addOnCompleteListener { update ->
+                            if (update.isSuccessful) {
+                                callback(true, "Password changed successfully")
+                            } else {
+                                callback(false, update.exception?.message ?: "Failed to update password")
+                            }
+                        }
+                } else {
+                    callback(false, "Current password is incorrect")
                 }
             }
     }

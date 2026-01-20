@@ -1,7 +1,5 @@
 package com.example.medhomeapp.view
 
-
-
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,33 +19,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medhomeapp.model.UserModel
-import com.example.medhomeapp.ui.theme.Blue10
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.example.medhomeapp.ui.theme.BackgroundCream
+import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.R
 
 @Composable
-fun DoctorHomeScreen(user: UserModel,
-                     onSetAvailabilityClick: () -> Unit
-) {
+fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
+
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Blue10),
-            elevation = CardDefaults.cardElevation(4.dp),
-            shape = RoundedCornerShape(12.dp)
+                .padding(20.dp),
+            colors = CardDefaults.cardColors(containerColor = SageGreen),
+            elevation = CardDefaults.cardElevation(6.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -57,30 +61,44 @@ fun DoctorHomeScreen(user: UserModel,
             ) {
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(56.dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.3f)),
+                        .background(Color.White.copy(alpha = 0.25f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = "Doctor",
-                        modifier = Modifier.size(36.dp),
-                        tint = Color.White
-                    )
+                    if (!profilePictureUrl.isNullOrEmpty()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(profilePictureUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = "Profile",
+                            modifier = Modifier.size(32.dp),
+                            tint = Color.White
+                        )
+                    }
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(14.dp))
 
                 Column {
                     Text(
-                        text = "Welcome Dr.",
-                        fontSize = 16.sp,
+                        text = stringResource(R.string.doctor_welcome),
+                        fontSize = 13.sp,
                         color = Color.White.copy(alpha = 0.9f)
                     )
                     Text(
-                        text = user.name,
-                        fontSize = 24.sp,
+                        text = doctorName,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -88,45 +106,70 @@ fun DoctorHomeScreen(user: UserModel,
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        // Doctor Features Grid
+        Text(
+            text = stringResource(R.string.doctor_management),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = TextDark,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+        )
+
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(400.dp)
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier.height(700.dp)
         ) {
+
             item {
                 DoctorFeatureCard(
-                    title = "Set Availability",
+                    title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
-                    onClick = onSetAvailabilityClick
+                    color = Color(0xFF6B8E4E),
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, DoctorAvailabilityActivity::class.java)
+                        )
+                    }
                 )
             }
+
             item {
                 DoctorFeatureCard(
-                    title = "Messages",
-                    icon = Icons.Default.Chat,
+                    title = stringResource(R.string.doctor_messages),
+                    icon = Icons.Default.Message,
+                    color = Color(0xFF87A96B),
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
-                    title = "Patient Records",
+                    title = stringResource(R.string.doctor_messages),
                     icon = Icons.Default.Description,
+                    color = Color(0xFF6B8E4E),
                     onClick = { }
                 )
             }
+
             item {
                 DoctorFeatureCard(
-                    title = "Health Packages",
+                    title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
-                    onClick = { }
+                    color = Color(0xFF87A96B),
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, HealthPackagesManagementActivity::class.java)
+                        )
+                    }
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -134,39 +177,45 @@ fun DoctorHomeScreen(user: UserModel,
 fun DoctorFeatureCard(
     title: String,
     icon: ImageVector,
+    color: Color,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
+            .height(130.dp)
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(12.dp)
+        elevation = CardDefaults.cardElevation(3.dp),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                icon,
-                contentDescription = title,
-                modifier = Modifier.size(48.dp),
-                tint = Blue10
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color.copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = title,
+                    modifier = Modifier.size(26.dp),
+                    tint = color
+                )
+            }
+
             Text(
-                title,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                text = title,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextDark
             )
         }
     }
 }
-
