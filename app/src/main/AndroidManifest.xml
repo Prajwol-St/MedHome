@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- ===================== -->
     <!-- Permissions -->
     <!-- ===================== -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- Camera is optional -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- Camera is optional -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -25,7 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".view.AiHealthAssistantActivity"
+            android:exported="false"
+            android:label="@string/title_activity_ai_health_assistant"
+            android:theme="@style/Theme.MedHomeApp" />
         <!-- ===================== -->
         <!-- Splash / Launcher -->
         <!-- ===================== -->
@@ -35,63 +36,106 @@
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- ===================== -->
+        </activity> <!-- ===================== -->
         <!-- Authentication -->
         <!-- ===================== -->
-        <activity android:name=".view.LoginActivity" android:exported="false" />
-        <activity android:name=".view.SignupInitialActivity" android:exported="false" />
-        <activity android:name=".view.SignupDetailsActivity" android:exported="false" />
-        <activity android:name=".view.ForgotPasswordActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.SignupInitialActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.SignupDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- Main / Dashboard -->
         <!-- ===================== -->
-        <activity android:name=".view.MainActivity" android:exported="false" />
-        <activity android:name=".view.DashboardActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.DashboardActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- Health / Features -->
         <!-- ===================== -->
-        <activity android:name=".view.CaloriesCalculatorActivity" android:exported="false" />
-        <activity android:name=".view.HealthPackagesActivity" android:exported="false" />
-        <activity android:name=".view.HealthPackageDetailsActivity" android:exported="false" />
-        <activity android:name=".view.MyPackagesActivity" android:exported="false" />
-        <activity android:name=".view.PackageBookingsActivity" android:exported="false" />
-        <activity android:name=".view.CreatePackageActivity" android:exported="false" />
-        <activity android:name=".view.EditPackageActivity" android:exported="false" />
-        <activity android:name=".view.HealthPackagesManagementActivity" android:exported="false" />
-        <activity android:name=".view.HealthRecords" android:exported="false" />
-        <activity android:name=".view.BookConsultationActivity" android:exported="false" />
-        <activity android:name=".view.BloodDonationActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.CaloriesCalculatorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HealthPackagesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HealthPackageDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MyPackagesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.PackageBookingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.CreatePackageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.EditPackageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HealthPackagesManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HealthRecords"
+            android:exported="false" />
+        <activity
+            android:name=".view.BookConsultationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.BloodDonationActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- Profile & Settings -->
         <!-- ===================== -->
-        <activity android:name=".view.SettingsActivity" android:exported="false" />
-        <activity android:name=".view.EditProfileActivity" android:exported="false" />
-        <activity android:name=".view.ChangePasswordActivity" android:exported="false" />
-        <activity android:name=".view.NotificationSettingsActivity" android:exported="false" />
-        <activity android:name=".view.LanguageSelectionActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.NotificationSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LanguageSelectionActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- Help & Legal -->
         <!-- ===================== -->
-        <activity android:name=".view.HelpCenterActivity" android:exported="false" />
-        <activity android:name=".view.PrivacyPolicyActivity" android:exported="false" />
-        <activity android:name=".view.TermsOfServiceActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.HelpCenterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.TermsOfServiceActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- Doctor & QR -->
         <!-- ===================== -->
-        <activity android:name=".view.DoctorAvailabilityActivity" android:exported="false" />
-        <activity android:name=".view.QrActivity" android:exported="false" />
-        <activity android:name=".view.QrScannerActivity" android:exported="false" />
-
-        <!-- ===================== -->
+        <activity
+            android:name=".view.DoctorAvailabilityActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.QrActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.QrScannerActivity"
+            android:exported="false" /> <!-- ===================== -->
         <!-- File Provider (for camera / file sharing) -->
         <!-- ===================== -->
         <provider
@@ -103,7 +147,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

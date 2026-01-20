@@ -65,7 +65,6 @@ class AddDoctorActivity : ComponentActivity() {
                         id = UUID.randomUUID().toString(),
                         name = name,
                         email = email,
-                        contact = contact,
                         role = "doctor",
                         specialization = specialization
                     )

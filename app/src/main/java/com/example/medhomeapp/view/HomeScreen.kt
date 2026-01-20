@@ -38,6 +38,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
     val BackgroundTint = Color(0xFFF1FBF9)
     val TextMain = Color(0xFF2C3E50)
 
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -170,7 +172,11 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     title = stringResource(R.string.ai_health_assistant),
                     icon = Icons.Default.Chat,
                     color = Color(0xFF9575CD),
-                    onClick = { }
+                    onClick = {
+                        val intent = Intent(context, AiHealthAssistantActivity::class.java)
+                        context.startActivity(intent)
+                    }
+
                 )
             }
             item {
