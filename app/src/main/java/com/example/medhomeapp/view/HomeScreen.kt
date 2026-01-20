@@ -44,6 +44,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
             .background(BackgroundTint)
             .verticalScroll(scrollState)
     ) {
+        // Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -129,6 +130,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                 }
             }
         }
+
+        // Services Section
         Text(
             text = "Services",
             fontSize = 18.sp,
@@ -136,6 +139,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
             color = TextMain,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
+
+        // Services Grid - FIXED: Added click handlers
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
@@ -143,6 +148,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
             modifier = Modifier.height(700.dp)
         ) {
+            // 1. Health Records
             item {
                 FeatureCard(
                     title = stringResource(R.string.health_records),
@@ -154,6 +160,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     }
                 )
             }
+
+            // 2. Book Consultation
             item {
                 FeatureCard(
                     title = stringResource(R.string.book_consultation),
@@ -165,6 +173,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     }
                 )
             }
+
+            // 3. AI Health Assistant
             item {
                 FeatureCard(
                     title = stringResource(R.string.ai_health_assistant),
@@ -173,22 +183,34 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     onClick = { }
                 )
             }
+
+            // 4. Past Bookings - FIXED
             item {
                 FeatureCard(
                     title = stringResource(R.string.past_bookings),
                     icon = Icons.Default.Event,
                     color = Color(0xFFA5D6A7),
-                    onClick = { }
+                    onClick = {
+                        val intent = Intent(context, PastBookingsActivity::class.java)
+                        context.startActivity(intent)
+                    }
                 )
             }
+
+            // 5. Appointments - FIXED
             item {
                 FeatureCard(
                     title = stringResource(R.string.appointments),
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF4DB6AC),
-                    onClick = { }
+                    onClick = {
+                        val intent = Intent(context, MyAppointmentsActivity::class.java)
+                        context.startActivity(intent)
+                    }
                 )
             }
+
+            // 6. Calories Calculator
             item {
                 FeatureCard(
                     title = stringResource(R.string.calories_calculator),
@@ -200,6 +222,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     }
                 )
             }
+
+            // 7. Blood Donation
             item {
                 FeatureCard(
                     title = stringResource(R.string.blood_donation),
@@ -211,6 +235,8 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     }
                 )
             }
+
+            // 8. Health Packages
             item {
                 FeatureCard(
                     title = stringResource(R.string.health_packages),
