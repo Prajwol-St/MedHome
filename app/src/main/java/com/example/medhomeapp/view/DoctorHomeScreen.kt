@@ -113,15 +113,28 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // Grid Menu - FIXED: Added missing cards
+        // Grid Menu - UPDATED with Notifications
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier.height(850.dp)
         ) {
-            // 1. Set Availability
+            // 1. Notifications - NEW
+            item {
+                DoctorFeatureCard(
+                    title = "Notifications",
+                    icon = Icons.Default.Notifications,
+                    color = Color(0xFFFF9800),
+                    onClick = {
+                        val intent = Intent(context, NotificationHistoryActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+            }
+
+            // 2. Set Availability
             item {
                 DoctorFeatureCard(
                     title = "Set Availability",
@@ -135,7 +148,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                 )
             }
 
-            // 2. My Appointments - NEW
+            // 3. My Appointments
             item {
                 DoctorFeatureCard(
                     title = "My Appointments",
@@ -149,7 +162,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                 )
             }
 
-            // 3. Manage Leaves - NEW
+            // 4. Manage Leaves
             item {
                 DoctorFeatureCard(
                     title = "Manage Leaves",
@@ -163,6 +176,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                 )
             }
 
+            // 5. Health Packages
             item {
                 DoctorFeatureCard(
                     title = "Health Packages",

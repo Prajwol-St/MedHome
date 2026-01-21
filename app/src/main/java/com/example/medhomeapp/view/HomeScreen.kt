@@ -140,13 +140,13 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // Services Grid - FIXED: Added click handlers
+        // Services Grid - Updated order
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier.height(850.dp)
         ) {
             // 1. Health Records
             item {
@@ -184,7 +184,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                 )
             }
 
-            // 4. Past Bookings - FIXED
+            // 4. Past Bookings
             item {
                 FeatureCard(
                     title = stringResource(R.string.past_bookings),
@@ -197,7 +197,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                 )
             }
 
-            // 5. Appointments - FIXED
+            // 5. Appointments
             item {
                 FeatureCard(
                     title = stringResource(R.string.appointments),
@@ -244,6 +244,32 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     color = Color(0xFF64B5F6),
                     onClick = {
                         val intent = Intent(context, HealthPackagesActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+            }
+
+            // 9. Pharmacy
+            item {
+                FeatureCard(
+                    title = "Pharmacy",
+                    icon = Icons.Default.LocalPharmacy,
+                    color = Color(0xFF00BCD4),
+                    onClick = {
+                        val intent = Intent(context, PharmacyActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+            }
+
+            // 10. Medicine Reminders
+            item {
+                FeatureCard(
+                    title = "Medicine Reminders",
+                    icon = Icons.Default.Medication,
+                    color = Color(0xFF9C27B0),
+                    onClick = {
+                        val intent = Intent(context, MedicineReminderActivity::class.java)
                         context.startActivity(intent)
                     }
                 )
