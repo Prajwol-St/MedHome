@@ -10,7 +10,7 @@ data class DoctorModel(
     val profileImage: String = "",
     val specialization: String = "",
     val subSpecialization: String = "",
-    val type: String = "", // Specialist, General Practitioner
+    val type: String = "",
     val experience: Int = 0, // years
     val qualifications: String = "",
     val about: String = "",

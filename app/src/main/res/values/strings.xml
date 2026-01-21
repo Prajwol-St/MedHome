@@ -193,5 +193,9 @@
     <string name="title_activity_doctor_appointments">DoctorAppointmentsActivity</string>
     <string name="title_activity_past_bookings">PastBookingsActivity</string>
     <string name="title_activity_my_appointments">MyAppointmentsActivity</string>
+    <string name="title_activity_medicine_reminder">MedicineReminderActivity</string>
+    <string name="title_activity_add_edit_medicine">AddEditMedicineActivity</string>
+    <string name="title_activity_notification_history">NotificationHistoryActivity</string>
+    <string name="title_activity_pharmacy">PharmacyActivity</string>
 
 </resources>
