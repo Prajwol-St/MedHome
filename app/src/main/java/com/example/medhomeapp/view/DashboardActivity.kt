@@ -91,7 +91,7 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> "Pharmacy"
+                            1 -> "Notifications"
                             4 -> "My Orders"
                             3 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
@@ -123,8 +123,8 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_local_pharmacy_24), stringResource(R.string.reminder)) },
-                    label = { Text("Pharmacy", fontSize = 11.sp) },
+                    icon = { Icon(Icons.Default.Notifications, "Notifications") },
+                    label = { Text("Notifications", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = SageGreen,
                         selectedTextColor = SageGreen,
@@ -136,7 +136,7 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 4,
                     onClick = { selectedTab = 4 },
-                    icon = { Icon(painterResource(R.drawable.baseline_shopping_cart_24), stringResource(R.string.notifications)) },
+                    icon = { Icon(painterResource(R.drawable.baseline_shopping_cart_24), "My Orders") },
                     label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MintGreen,
@@ -209,8 +209,7 @@ fun DashboardScaffold() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        PharmacyScreen()  // ← Now it matches
-
+                        NotificationHistoryScreenContent()
                     }
                 }
                 2 -> {
@@ -246,7 +245,7 @@ fun DashboardScaffold() {
                 }
 
                 4 -> {
-                    MyOrdersScreen()  // ← Now it matches
+                    MyOrdersScreen()
                 }
             }
         }
