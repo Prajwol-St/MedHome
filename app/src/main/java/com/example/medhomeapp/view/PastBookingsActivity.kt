@@ -55,7 +55,7 @@ fun PastBookingsScreen() {
     val activity = context as? BaseActivity
 
     val patientId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-    val appointmentRepo = AppointmentManagementRepoImpl()
+    val appointmentRepo = AppointmentManagementRepoImpl(context)
     val ratingRepo = RatingRepoImpl()
 
     val appointmentsViewModel: PatientAppointmentsViewModel = viewModel(
