@@ -14,10 +14,7 @@ class NotificationHistoryViewModel(
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf<String?>(null)
 
-    /**
-     * Load all notifications for a user
-     */
-    fun loadNotifications(userId: String) {
+        fun loadNotifications(userId: String) {
         isLoading.value = true
         errorMessage.value = null
 
@@ -33,13 +30,10 @@ class NotificationHistoryViewModel(
         }
     }
 
-    /**
-     * Mark a single notification as read
-     */
-    fun markAsRead(userId: String, notificationId: String) {
+        fun markAsRead(userId: String, notificationId: String) {
         repository.markNotificationAsRead(userId, notificationId) { success, message ->
             if (success) {
-                // Update local list optimistically
+                // Update local list immediately for better UX
                 notifications.value = notifications.value.map { notification ->
                     if (notification.notificationId == notificationId) {
                         notification.copy(isRead = true)
@@ -47,18 +41,17 @@ class NotificationHistoryViewModel(
                         notification
                     }
                 }
-                // Update unread count
-                unreadCount.value = maxOf(0, unreadCount.value - 1)
+                // Decrease unread count
+                if (unreadCount.value > 0) {
+                    unreadCount.value = unreadCount.value - 1
+                }
             } else {
                 errorMessage.value = message
             }
         }
     }
 
-    /**
-     * Mark all notifications as read
-     */
-    fun markAllAsRead(userId: String) {
+        fun markAllAsRead(userId: String) {
         repository.markAllNotificationsAsRead(userId) { success, message ->
             if (success) {
                 // Update local list
@@ -70,10 +63,7 @@ class NotificationHistoryViewModel(
         }
     }
 
-    /**
-     * Delete a notification
-     */
-    fun deleteNotification(userId: String, notificationId: String) {
+        fun deleteNotification(userId: String, notificationId: String) {
         repository.deleteNotificationFromHistory(userId, notificationId) { success, message ->
             if (success) {
                 // Remove from local list
@@ -90,31 +80,19 @@ class NotificationHistoryViewModel(
         }
     }
 
-    /**
-     * Get notifications by type
-     */
-    fun getNotificationsByType(type: String): List<NotificationHistoryModel> {
+        fun getNotificationsByType(type: String): List<NotificationHistoryModel> {
         return notifications.value.filter { it.type == type }
     }
 
-    /**
-     * Get unread notifications
-     */
-    fun getUnreadNotifications(): List<NotificationHistoryModel> {
+        fun getUnreadNotifications(): List<NotificationHistoryModel> {
         return notifications.value.filter { !it.isRead }
     }
 
-    /**
-     * Get read notifications
-     */
-    fun getReadNotifications(): List<NotificationHistoryModel> {
+        fun getReadNotifications(): List<NotificationHistoryModel> {
         return notifications.value.filter { it.isRead }
     }
 
-    /**
-     * Get notifications from today
-     */
-    fun getTodaysNotifications(): List<NotificationHistoryModel> {
+        fun getTodaysNotifications(): List<NotificationHistoryModel> {
         val startOfDay = java.util.Calendar.getInstance().apply {
             set(java.util.Calendar.HOUR_OF_DAY, 0)
             set(java.util.Calendar.MINUTE, 0)
@@ -125,10 +103,7 @@ class NotificationHistoryViewModel(
         return notifications.value.filter { it.timestamp >= startOfDay }
     }
 
-    /**
-     * Clear error message
-     */
-    fun clearError() {
+        fun clearError() {
         errorMessage.value = null
     }
 }

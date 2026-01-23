@@ -1,5 +1,8 @@
 package com.example.medhomeapp.utils
 
+import com.example.medhomeapp.model.AppointmentModel
+import java.util.concurrent.TimeUnit
+
 object NotificationConstants {
 
     // ============ Notification Types ============
@@ -75,31 +78,74 @@ object NotificationConstants {
 object NotificationMessages {
 
     // ============ Appointment Notifications ============
+
     fun appointment24HourTitle() = "Appointment Tomorrow"
-    fun appointment24HourMessage(doctorName: String, time: String) =
-        "You have an appointment with Dr. $doctorName tomorrow at $time"
+
+    fun appointment24HourMessage(appointment: AppointmentModel): String {
+        val displayDate = DateTimeUtils.formatDateForDisplay(appointment.date)
+        val displayTime = DateTimeUtils.formatTimeForDisplay(appointment.time)
+        return "You have an appointment with Dr. ${appointment.doctorName} on $displayDate at $displayTime"
+    }
 
     fun appointment1HourTitle() = "Appointment Soon"
-    fun appointment1HourMessage(doctorName: String, time: String) =
-        "Your appointment with Dr. $doctorName is in 1 hour at $time"
+
+    fun appointment1HourMessage(appointment: AppointmentModel): String {
+        val displayTime = DateTimeUtils.formatTimeForDisplay(appointment.time)
+        return "Your appointment with Dr. ${appointment.doctorName} starts in 1 hour at $displayTime"
+    }
 
     fun bookingConfirmationTitle() = "Appointment Confirmed"
-    fun bookingConfirmationMessage(doctorName: String, date: String, time: String) =
-        "Your appointment with Dr. $doctorName on $date at $time has been confirmed"
+
+    fun bookingConfirmationMessage(appointment: AppointmentModel): String {
+        val displayDate = DateTimeUtils.formatDateForDisplay(appointment.date)
+        val displayTime = DateTimeUtils.formatTimeForDisplay(appointment.time)
+        return "Your appointment with Dr. ${appointment.doctorName} on $displayDate at $displayTime has been confirmed"
+    }
 
     fun appointmentCancelledTitle() = "Appointment Cancelled"
-    fun appointmentCancelledMessage(doctorName: String, date: String, time: String) =
-        "Your appointment with Dr. $doctorName on $date at $time has been cancelled"
+
+    fun appointmentCancelledMessage(doctorName: String, date: String, time: String): String {
+        val displayDate = DateTimeUtils.formatDateForDisplay(date)
+        val displayTime = DateTimeUtils.formatTimeForDisplay(time)
+        return "Your appointment with Dr. $doctorName on $displayDate at $displayTime has been cancelled"
+    }
 
     fun appointmentRescheduledTitle() = "Appointment Rescheduled"
-    fun appointmentRescheduledMessage(doctorName: String, newDate: String, newTime: String) =
-        "Your appointment with Dr. $doctorName has been rescheduled to $newDate at $newTime"
+
+    fun appointmentRescheduledMessage(doctorName: String, newDate: String, newTime: String): String {
+        val displayDate = DateTimeUtils.formatDateForDisplay(newDate)
+        val displayTime = DateTimeUtils.formatTimeForDisplay(newTime)
+        return "Your appointment with Dr. $doctorName has been rescheduled to $displayDate at $displayTime"
+    }
 
     // ============ Medicine Notifications ============
-    fun medicineReminderTitle() = "Time to Take Medicine"
-    fun medicineReminderMessage(medicineName: String, dosage: String) =
-        "Time to take $medicineName - $dosage"
 
-    fun medicineReminderWithInstructions(medicineName: String, dosage: String, instructions: String) =
-        "Time to take $medicineName - $dosage. $instructions"
+    fun medicineReminderTitle() = "Time to Take Medicine"
+
+    fun medicineReminderMessage(medicineName: String, dosage: String): String {
+        return "Time to take $medicineName - $dosage"
+    }
+
+    fun medicineReminderWithInstructions(medicineName: String, dosage: String, instructions: String): String {
+        return "Time to take $medicineName - $dosage. $instructions"
+    }
+
+    // ============ Helper to get relative time ============
+
+    fun getRelativeTimeDescription(appointmentDate: String, appointmentTime: String): String {
+        val now = System.currentTimeMillis()
+        val appointmentTimeMillis = DateTimeUtils.parseDateTime(appointmentDate, appointmentTime)
+
+        val diffMillis = appointmentTimeMillis - now
+        val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
+        val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
+
+        return when {
+            days > 1 -> "in $days days"
+            days == 1L -> "tomorrow"
+            hours > 1 -> "in $hours hours"
+            hours == 1L -> "in 1 hour"
+            else -> "soon"
+        }
+    }
 }

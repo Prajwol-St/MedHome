@@ -59,6 +59,11 @@ class NotificationRepositoryImpl : NotificationRepository {
         medicineReminder: MedicineReminderModel,
         callback: (Boolean, String) -> Unit
     ) {
+        android.util.Log.d("MedicineDebug", "=== REPOSITORY ADD ===")
+        android.util.Log.d("MedicineDebug", "Medicine: ${medicineReminder.medicineName}")
+        android.util.Log.d("MedicineDebug", "Times: ${medicineReminder.reminderTimes}")
+        android.util.Log.d("MedicineDebug", "UserId: ${medicineReminder.userId}")
+
         val medicineId = medicineReminder.medicineId.ifEmpty {
             medicineRemindersRef.child(medicineReminder.userId).push().key ?: UUID.randomUUID().toString()
         }
@@ -69,13 +74,16 @@ class NotificationRepositoryImpl : NotificationRepository {
             updatedAt = System.currentTimeMillis()
         )
 
+        android.util.Log.d("MedicineDebug", "Saving to path: medicineReminders/${medicineReminder.userId}/$medicineId")
+
         medicineRemindersRef.child(medicineReminder.userId).child(medicineId)
             .setValue(reminderWithId.toMap())
             .addOnSuccessListener {
-                // TODO: Schedule WorkManager tasks for this medicine
+                android.util.Log.d("MedicineDebug", "✅ Firebase save SUCCESS")
                 callback(true, "Medicine reminder added successfully")
             }
             .addOnFailureListener { exception ->
+                android.util.Log.e("MedicineDebug", "❌ Firebase save FAILED: ${exception.message}")
                 callback(false, exception.message ?: "Failed to add medicine reminder")
             }
     }
@@ -91,7 +99,6 @@ class NotificationRepositoryImpl : NotificationRepository {
         medicineRemindersRef.child(medicineReminder.userId).child(medicineReminder.medicineId)
             .setValue(updatedReminder.toMap())
             .addOnSuccessListener {
-                // TODO: Cancel old WorkManager tasks and schedule new ones
                 callback(true, "Medicine reminder updated successfully")
             }
             .addOnFailureListener { exception ->
@@ -107,7 +114,6 @@ class NotificationRepositoryImpl : NotificationRepository {
         medicineRemindersRef.child(userId).child(medicineId)
             .removeValue()
             .addOnSuccessListener {
-                // TODO: Cancel WorkManager tasks for this medicine
                 callback(true, "Medicine reminder deleted successfully")
             }
             .addOnFailureListener { exception ->
@@ -127,7 +133,6 @@ class NotificationRepositoryImpl : NotificationRepository {
                 medicineRemindersRef.child(userId).child(medicineId).child("updatedAt")
                     .setValue(System.currentTimeMillis())
 
-                // TODO: Cancel or reschedule WorkManager tasks based on isEnabled
                 callback(true, if (isEnabled) "Reminder enabled" else "Reminder disabled")
             }
             .addOnFailureListener { exception ->
@@ -184,7 +189,6 @@ class NotificationRepositoryImpl : NotificationRepository {
                 notificationPreferencesRef.child(userId).child("updatedAt")
                     .setValue(System.currentTimeMillis())
 
-                // TODO: Cancel or reschedule all medicine WorkManager tasks
                 callback(true, "Medicine reminders ${if (isEnabled) "enabled" else "disabled"}")
             }
             .addOnFailureListener { exception ->
@@ -360,9 +364,6 @@ class NotificationRepositoryImpl : NotificationRepository {
                 return@areAppointmentRemindersEnabled
             }
 
-            // TODO: Schedule WorkManager tasks for 24h and 1h reminders
-            // This will be implemented when we create WorkManager Workers
-
             callback(true, "Appointment reminders scheduled")
         }
     }
@@ -371,9 +372,6 @@ class NotificationRepositoryImpl : NotificationRepository {
         appointmentId: String,
         callback: (Boolean, String) -> Unit
     ) {
-        // TODO: Cancel WorkManager tasks for this appointment
-        // This will be implemented when we create WorkManager Workers
-
         callback(true, "Appointment reminders cancelled")
     }
 
@@ -392,7 +390,6 @@ class NotificationRepositoryImpl : NotificationRepository {
 
         addNotificationToHistory(notification) { success, message ->
             if (success) {
-                // TODO: Show actual notification using NotificationManager
                 callback(true, "Booking confirmation sent")
             } else {
                 callback(false, message)

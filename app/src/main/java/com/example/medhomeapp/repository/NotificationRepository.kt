@@ -48,10 +48,7 @@ interface NotificationRepository {
         callback: (Boolean, String) -> Unit
     )
 
-    /**
-     * Toggle appointment reminders globally
-     */
-    fun toggleAppointmentRemindersGlobally(
+        fun toggleAppointmentRemindersGlobally(
         userId: String,
         isEnabled: Boolean,
         callback: (Boolean, String) -> Unit

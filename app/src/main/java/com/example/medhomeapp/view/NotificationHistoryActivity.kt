@@ -172,14 +172,14 @@ fun NotificationHistoryScreen() {
                         notification = notification,
                         onRead = {
                             if (!notification.isRead) {
-                                userId?.let {
-                                    viewModel.markAsRead(it, notification.notificationId)
+                                userId?.let { uid ->
+                                    viewModel.markAsRead(uid, notification.notificationId)
                                 }
                             }
                         },
                         onDelete = {
-                            userId?.let {
-                                viewModel.deleteNotification(it, notification.notificationId)
+                            userId?.let { uid ->
+                                viewModel.deleteNotification(uid, notification.notificationId)
                             }
                         }
                     )
@@ -189,16 +189,11 @@ fun NotificationHistoryScreen() {
     }
 }
 
-// New composable without header for inline use
 @Composable
 fun NotificationHistoryScreenContent() {
     val context = LocalContext.current
-    val sharedPrefs = try {
-        (context as? BaseActivity)?.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-    } catch (e: Exception) {
-        context.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-    }
-    val userId = sharedPrefs?.getString("user_id", null)
+    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = sharedPrefs.getString("user_id", null)
 
     val viewModel = remember { NotificationHistoryViewModel(NotificationRepositoryImpl()) }
 
@@ -215,31 +210,14 @@ fun NotificationHistoryScreenContent() {
             .fillMaxSize()
             .background(BackgroundCream)
     ) {
-        // Header without back button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.Transparent)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (unreadCount > 0) {
-                    Badge(
-                        containerColor = Color(0xFFFF5722),
-                        contentColor = Color.White
-                    ) {
-                        Text(
-                            text = unreadCount.toString(),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-            }
-
-            if (unreadCount > 0) {
+        // Mark all read button
+        if (unreadCount > 0) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
                 TextButton(
                     onClick = {
                         userId?.let { viewModel.markAllAsRead(it) }
@@ -306,14 +284,14 @@ fun NotificationHistoryScreenContent() {
                         notification = notification,
                         onRead = {
                             if (!notification.isRead) {
-                                userId?.let {
-                                    viewModel.markAsRead(it, notification.notificationId)
+                                userId?.let { uid ->
+                                    viewModel.markAsRead(uid, notification.notificationId)
                                 }
                             }
                         },
                         onDelete = {
-                            userId?.let {
-                                viewModel.deleteNotification(it, notification.notificationId)
+                            userId?.let { uid ->
+                                viewModel.deleteNotification(uid, notification.notificationId)
                             }
                         }
                     )
