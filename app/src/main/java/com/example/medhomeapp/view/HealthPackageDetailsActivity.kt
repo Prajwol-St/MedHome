@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +33,7 @@ import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.example.medhomeapp.R
 
 class HealthPackageDetailsActivity : BaseActivity() {
 
@@ -95,7 +97,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Package Details", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.package_details), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = SageGreen,
                     titleContentColor = Color.White
@@ -104,7 +106,11 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     IconButton(onClick = {
                         (context as? HealthPackageDetailsActivity)?.finish()
                     }) {
-                        Icon(Icons.Default.ArrowBack, "Back", tint = Color.White)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            stringResource(R.string.back),
+                            tint = Color.White
+                        )
                     }
                 }
             )
@@ -137,7 +143,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        "Package not found",
+                        stringResource(R.string.package_not_found),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextDark
@@ -149,14 +155,14 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     contentPadding = PaddingValues(bottom = 80.dp)
                 ) {
                     item {
-                        // Package Image
+
                         if (packageModel!!.imageUrl.isNotEmpty()) {
                             AsyncImage(
                                 model = ImageRequest.Builder(context)
                                     .data(packageModel!!.imageUrl)
                                     .crossfade(true)
                                     .build(),
-                                contentDescription = "Package Image",
+                                contentDescription = stringResource(R.string.package_image),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(250.dp),
@@ -181,7 +187,6 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     }
 
                     item {
-                        // Package Info Card
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -229,15 +234,18 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                 ) {
                                     InfoColumn(
                                         icon = Icons.Default.Person,
-                                        label = "Doctor",
+                                        label = stringResource(R.string.doctor),
                                         value = packageModel!!.doctorName
                                     )
 
                                     if (daysRemaining != null) {
                                         InfoColumn(
                                             icon = Icons.Default.Schedule,
-                                            label = "Validity",
-                                            value = if (daysRemaining > 0) "$daysRemaining days left" else "Expired"
+                                            label = stringResource(R.string.validity),
+                                            value = if (daysRemaining > 0)
+                                                stringResource(R.string.days_left, daysRemaining)
+                                            else
+                                                stringResource(R.string.expired)
                                         )
                                     }
                                 }
@@ -246,7 +254,6 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     }
 
                     item {
-                        // Description Card
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -261,7 +268,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                     .padding(16.dp)
                             ) {
                                 Text(
-                                    "Description",
+                                    stringResource(R.string.description),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = TextDark
@@ -280,7 +287,6 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     }
 
                     item {
-                        // Included Services Card
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -295,7 +301,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                     .padding(16.dp)
                             ) {
                                 Text(
-                                    "Included Services",
+                                    stringResource(R.string.included_services),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = TextDark
@@ -329,7 +335,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                     }
                 }
 
-                // Book Now Button
+
                 if (daysRemaining != null && daysRemaining > 0) {
                     Surface(
                         modifier = Modifier
@@ -346,7 +352,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column {
-                                Text("Total Price", fontSize = 12.sp, color = Color.Gray)
+                                Text(stringResource(R.string.total_price), fontSize = 12.sp, color = Color.Gray)
                                 Text(
                                     "NPR ${packageModel!!.price}",
                                     fontSize = 24.sp,
@@ -361,10 +367,14 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier.height(56.dp)
                             ) {
-                                Icon(Icons.Default.ShoppingCart, "Book", tint = Color.White)
+                                Icon(
+                                    Icons.Default.ShoppingCart,
+                                    stringResource(R.string.book_now),
+                                    tint = Color.White
+                                )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    "Book Now",
+                                    stringResource(R.string.book_now),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
@@ -376,20 +386,28 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
             }
         }
 
-        // Booking Confirmation Dialog
+
         if (showBookingDialog && packageModel != null) {
             AlertDialog(
                 onDismissRequest = { showBookingDialog = false },
-                title = { Text("Confirm Booking") },
+                title = { Text((stringResource(R.string.confirm_booking))) },
                 text = {
                     Column {
-                        Text("Package: ${packageModel!!.packageName}")
-                        Text("Price: NPR ${packageModel!!.price}")
+                        Text(
+                            stringResource(R.string.package_label) +
+                                    " ${packageModel!!.packageName}"
+                        )
+                        Text(
+                            stringResource(R.string.price_label) +
+                                    " NPR ${packageModel!!.price}"
+                        )
                         if (daysRemaining != null) {
-                            Text("Valid for: $daysRemaining days")
+                            Text(
+                                stringResource(R.string.valid_for_days, daysRemaining)
+                            )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("Are you sure you want to book this package?")
+                        Text(stringResource(R.string.confirm_booking_message))
                     }
                 },
                 confirmButton = {
@@ -433,21 +451,32 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
 
                             viewModel.createBooking(booking) { success, message ->
                                 if (success) {
-                                    Toast.makeText(context, "Package booked successfully!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.package_booked_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     (context as? HealthPackageDetailsActivity)?.finish()
                                 } else {
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                             showBookingDialog = false
                         }
                     ) {
-                        Text("Confirm", fontWeight = FontWeight.Bold, color = SageGreen)
+                        Text(
+                            stringResource(R.string.confirm),
+                            fontWeight = FontWeight.Bold,
+                            color = SageGreen
+                        )
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showBookingDialog = false }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             )

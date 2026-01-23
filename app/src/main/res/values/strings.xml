@@ -232,6 +232,76 @@
 
     <string name="change_picture">Change Picture</string>
 
+    <!-- ===================== -->
+    <!-- Health Packages Management -->
+    <!-- ===================== -->
+
+    <string name="my_health_packages">My Health Packages</string>
+    <string name="insights">Insights</string>
+    <string name="create_package">Create Package</string>
+
+    <string name="no_packages_title">No packages yet</string>
+    <string name="no_packages_subtitle">Create your first health package</string>
+
+    <string name="delete_package_title">Delete Package?</string>
+    <string name="delete_package_message">
+    Are you sure you want to delete “%1$s”? This action cannot be undone.
+</string>
+
+
+    <string name="package_deleted">Package deleted</string>
+
+    <string name="package_image">Package Image</string>
+
+    <string name="edit">Edit</string>
+    <string name="price">Price</string>
+
+    <string name="expired">Expired</string>
+    <string name="one_day_left">1 day left</string>
+    <string name="days_left">%1$d days left</string>
+
+    <!-- ===================== -->
+    <!-- Health Packages (Patient List) -->
+    <!-- ===================== -->
+
+    <string name="health_packages_title">Health Packages</string>
+    <string name="my_packages">My Packages</string>
+
+    <string name="category">Category</string>
+    <string name="all">All</string>
+
+    <string name="no_packages_available">No packages available</string>
+    <string name="check_back_later">Check back later for new packages</string>
+    <string name="more_services">+%1$d more services</string>
+
+    <!-- ===================== -->
+    <!-- Health Package Details -->
+    <!-- ===================== -->
+
+    <string name="package_details">Package Details</string>
+    <string name="package_not_found">Package not found</string>
+
+
+    <string name="validity">Validity</string>
+
+    <string name="description">Description</string>
+    <string name="included_services">Included Services</string>
+
+    <string name="total_price">Total Price</string>
+    <string name="book_now">Book Now</string>
+
+    <string name="confirm_booking">Confirm Booking</string>
+    <string name="package_label">Package:</string>
+    <string name="price_label">Price:</string>
+    <string name="valid_for_days">Valid for: %1$d days</string>
+    <string name="confirm_booking_message">Are you sure you want to book this package?</string>
+    <string name="package_booked_success">Package booked successfully!</string>
+    <string name="confirm">Confirm</string>
+
+
+
+
+
 
 
     <!-- ===================== -->
