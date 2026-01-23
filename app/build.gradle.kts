@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime.livedata)
     // In your app/build.gradle
     implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     //  REQUIRED FOR ICONS
     implementation("androidx.compose.material:material-icons-extended")
