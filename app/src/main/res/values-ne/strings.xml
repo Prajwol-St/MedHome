@@ -157,6 +157,58 @@
     <string name="title_activity_privacy_policy">गोपनीयता नीति</string>
     <string name="title_activity_terms_of_service">सेवाका सर्तहरू</string>
     <string name="title_activity_doctor_availability">डाक्टर उपलब्धता</string>
+
+    <!-- ===================== -->
+    <!-- Edit Profile Screen -->
+    <!-- ===================== -->
+
+    <string name="edit_profile_title">प्रोफाइल सम्पादन</string>
+
+    <string name="personal_information">व्यक्तिगत जानकारी</string>
+    <string name="full_name">पूरा नाम</string>
+    <string name="enter_full_name">आफ्नो पूरा नाम लेख्नुहोस्</string>
+
+    <string name="contact_number">सम्पर्क नम्बर</string>
+    <string name="phone_number_hint">१० अंकको फोन नम्बर</string>
+
+    <string name="gender">लिङ्ग</string>
+    <string name="select_gender">लिङ्ग चयन गर्नुहोस्</string>
+    <string name="male">पुरुष</string>
+    <string name="female">महिला</string>
+    <string name="other">अन्य</string>
+
+    <string name="date_of_birth">जन्म मिति</string>
+    <string name="select_date">मिति चयन गर्नुहोस्</string>
+
+    <string name="blood_group">रक्त समूह</string>
+    <string name="select_blood_group">रक्त समूह चयन गर्नुहोस्</string>
+
+    <string name="emergency_contact">आपतकालीन सम्पर्क</string>
+    <string name="emergency_contact_number">आपतकालीन सम्पर्क नम्बर</string>
+    <string name="emergency_phone_hint">१० अंकको नम्बर</string>
+
+    <string name="address">ठेगाना</string>
+    <string name="enter_address">आफ्नो ठेगाना लेख्नुहोस्</string>
+
+    <string name="remove_photo">फोटो हटाउनुहोस्</string>
+    <string name="remove_profile_picture">प्रोफाइल फोटो हटाउनुहोस्</string>
+    <string name="remove_profile_picture_confirm">
+    के तपाईं आफ्नो प्रोफाइल फोटो हटाउन चाहनुहुन्छ?
+</string>
+
+    <string name="save_changes">परिवर्तन सुरक्षित गर्नुहोस्</string>
+
+    <string name="name_empty_error">नाम खाली हुन सक्दैन</string>
+    <string name="profile_update_success">प्रोफाइल सफलतापूर्वक अपडेट भयो!</string>
+    <string name="image_uploaded">फोटो सफलतापूर्वक अपलोड भयो!</string>
+    <string name="photo_removed">फोटो हटाइयो</string>
+
+    <string name="choose_photo_source">फोटोको स्रोत चयन गर्नुहोस्</string>
+    <string name="take_photo">फोटो खिच्नुहोस्</string>
+    <string name="choose_from_gallery">ग्यालरीबाट छान्नुहोस्</string>
+    <string name="change_picture">फोटो परिवर्तन गर्नुहोस्</string>
+
+
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
 
 </resources>
