@@ -34,7 +34,6 @@ import com.example.medhomeapp.view.ui.theme.*
 fun HomeScreen(userName: String, profilePictureUrl: String?) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-
     val BackgroundTint = Color(0xFFF1FBF9)
     val TextMain = Color(0xFF2C3E50)
 

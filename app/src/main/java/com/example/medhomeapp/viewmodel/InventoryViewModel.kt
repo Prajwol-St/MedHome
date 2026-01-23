@@ -21,10 +21,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
     private val _allInventory = MutableLiveData<List<InventoryModel>>()
     val allInventory: LiveData<List<InventoryModel>> get() = _allInventory
 
-    /**
-     * Create a new inventory item
-     */
-    fun createInventory(inventory: InventoryModel) {
+        fun createInventory(inventory: InventoryModel) {
         _loading.postValue(true)
         repo.createInventory(inventory) { success, message ->
             _loading.postValue(false)
@@ -37,10 +34,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Upload image for inventory
-     */
-    fun uploadInventoryImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
+        fun uploadInventoryImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
         _loading.postValue(true)
         repo.uploadInventoryImage(imageUri) { success, message, imageUrl ->
             _loading.postValue(false)
@@ -49,10 +43,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Create inventory with image
-     */
-    fun createInventoryWithImage(
+        fun createInventoryWithImage(
         medicineName: String,
         description: String,
         price: String,
@@ -93,10 +84,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Get all inventory items
-     */
-    fun getAllInventory() {
+        fun getAllInventory() {
         _loading.postValue(true)
         repo.getAllInventory { success, message, inventoryList ->
             _loading.postValue(false)
@@ -109,10 +97,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Get current user's inventory
-     */
-    fun getCurrentUserInventory() {
+        fun getCurrentUserInventory() {
         _loading.postValue(true)
         repo.getInventoryByCurrentUser { success, message, inventoryList ->
             _loading.postValue(false)
@@ -125,10 +110,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Update inventory item
-     */
-    fun updateInventory(inventoryId: String, updatedInventory: InventoryModel) {
+        fun updateInventory(inventoryId: String, updatedInventory: InventoryModel) {
         _loading.postValue(true)
         repo.updateInventory(inventoryId, updatedInventory) { success, message ->
             _loading.postValue(false)
@@ -141,10 +123,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Update inventory with new image
-     */
-    fun updateInventoryWithImage(
+        fun updateInventoryWithImage(
         inventoryId: String,
         currentInventory: InventoryModel,
         medicineName: String,
@@ -186,10 +165,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Delete inventory item
-     */
-    fun deleteInventory(inventoryId: String) {
+        fun deleteInventory(inventoryId: String) {
         _loading.postValue(true)
         repo.deleteInventory(inventoryId) { success, message ->
             _loading.postValue(false)
@@ -202,10 +178,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Search inventory
-     */
-    fun searchInventory(query: String) {
+        fun searchInventory(query: String) {
         _loading.postValue(true)
         repo.searchInventory(query) { success, message, inventoryList ->
             _loading.postValue(false)
@@ -218,38 +191,26 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-    /**
-     * Listen to real-time inventory updates
-     */
-    fun listenToInventoryUpdates() {
+        fun listenToInventoryUpdates() {
         repo.listenToAllInventory { inventoryList ->
             _allInventory.postValue(inventoryList)
             Log.d("InventoryViewModel", "Real-time inventory update: ${inventoryList.size} items")
         }
     }
 
-    /**
-     * Listen to user-specific inventory updates
-     */
-    fun listenToUserInventoryUpdates(userID: String) {
+        fun listenToUserInventoryUpdates(userID: String) {
         repo.listenToUserInventory(userID) { inventoryList ->
             _allInventory.postValue(inventoryList)
             Log.d("InventoryViewModel", "Real-time user inventory update: ${inventoryList.size} items")
         }
     }
 
-    /**
-     * Stop listening to real-time updates
-     */
-    fun stopListening() {
+        fun stopListening() {
         repo.stopListening()
         Log.d("InventoryViewModel", "Stopped listening to inventory updates")
     }
 
-    /**
-     * Clear status for UI management
-     */
-    fun clearStatus() {
+        fun clearStatus() {
         _inventoryStatus.postValue(Pair(false, ""))
     }
 
