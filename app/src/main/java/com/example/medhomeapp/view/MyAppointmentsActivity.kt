@@ -53,7 +53,7 @@ fun MyAppointmentsScreen() {
     val activity = context as? BaseActivity
 
     val patientId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-    val repo = AppointmentManagementRepoImpl()
+    val repo = AppointmentManagementRepoImpl(context)
     val viewModel: PatientAppointmentsViewModel = viewModel(
         factory = PatientAppointmentsViewModelFactory(repo, patientId)
     )
