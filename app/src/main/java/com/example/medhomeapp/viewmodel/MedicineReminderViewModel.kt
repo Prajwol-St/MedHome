@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.medhomeapp.model.MedicineReminderModel
 import com.example.medhomeapp.repository.NotificationRepository
 import java.util.UUID
-import kotlin.collections.filter
 
 class MedicineReminderViewModel(
     private val repository: NotificationRepository
@@ -17,10 +16,7 @@ class MedicineReminderViewModel(
     val errorMessage = mutableStateOf<String?>(null)
     val successMessage = mutableStateOf<String?>(null)
 
-    /**
-     * Load all medicine reminders for a user
-     */
-    fun loadMedicineReminders(userId: String) {
+        fun loadMedicineReminders(userId: String) {
         isLoading.value = true
         errorMessage.value = null
 
@@ -30,10 +26,7 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Get a specific medicine reminder
-     */
-    fun getMedicineById(userId: String, medicineId: String) {
+        fun getMedicineById(userId: String, medicineId: String) {
         isLoading.value = true
         errorMessage.value = null
 
@@ -43,10 +36,8 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Add a new medicine reminder
-     */
-    fun addMedicineReminder(
+        fun addMedicineReminder(
+        context: android.content.Context,
         userId: String,
         medicineName: String,
         dosage: String,
@@ -99,6 +90,8 @@ class MedicineReminderViewModel(
 
             if (success) {
                 successMessage.value = "Medicine reminder added successfully"
+                // Schedule notifications
+                com.example.medhomeapp.utils.MedicineNotificationIntegration.onMedicineAdded(context, medicine)
                 loadMedicineReminders(userId) // Refresh the list
                 onComplete(true)
             } else {
@@ -108,10 +101,8 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Update an existing medicine reminder
-     */
-    fun updateMedicineReminder(
+        fun updateMedicineReminder(
+        context: android.content.Context,
         medicine: MedicineReminderModel,
         medicineName: String,
         dosage: String,
@@ -160,6 +151,8 @@ class MedicineReminderViewModel(
 
             if (success) {
                 successMessage.value = "Medicine reminder updated successfully"
+                // Update scheduled notifications
+                com.example.medhomeapp.utils.MedicineNotificationIntegration.onMedicineUpdated(context, updatedMedicine)
                 loadMedicineReminders(medicine.userId)
                 onComplete(true)
             } else {
@@ -169,10 +162,8 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Delete a medicine reminder
-     */
-    fun deleteMedicineReminder(
+        fun deleteMedicineReminder(
+        context: android.content.Context,
         userId: String,
         medicineId: String,
         onComplete: (Boolean) -> Unit = {}
@@ -186,6 +177,8 @@ class MedicineReminderViewModel(
 
             if (success) {
                 successMessage.value = "Medicine reminder deleted successfully"
+                // Cancel scheduled notifications
+                com.example.medhomeapp.utils.MedicineNotificationIntegration.onMedicineDeleted(context, medicineId)
                 loadMedicineReminders(userId)
                 onComplete(true)
             } else {
@@ -195,10 +188,8 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Toggle medicine reminder on/off
-     */
-    fun toggleMedicineReminder(
+        fun toggleMedicineReminder(
+        context: android.content.Context,
         userId: String,
         medicineId: String,
         isEnabled: Boolean
@@ -208,13 +199,24 @@ class MedicineReminderViewModel(
         repository.toggleMedicineReminder(userId, medicineId, isEnabled) { success, message ->
             if (success) {
                 // Update local list optimistically
-                medicineList.value = medicineList.value.map { medicine ->
-                    if (medicine.medicineId == medicineId) {
-                        medicine.copy(isEnabled = isEnabled)
+                val medicine = medicineList.value.find { it.medicineId == medicineId }
+                medicineList.value = medicineList.value.map { med ->
+                    if (med.medicineId == medicineId) {
+                        med.copy(isEnabled = isEnabled)
                     } else {
-                        medicine
+                        med
                     }
                 }
+
+                // Update scheduled notifications
+                medicine?.let {
+                    com.example.medhomeapp.utils.MedicineNotificationIntegration.onMedicineToggled(
+                        context,
+                        it.copy(isEnabled = isEnabled),
+                        isEnabled
+                    )
+                }
+
                 successMessage.value = if (isEnabled) "Reminder enabled" else "Reminder disabled"
             } else {
                 errorMessage.value = message
@@ -224,24 +226,15 @@ class MedicineReminderViewModel(
         }
     }
 
-    /**
-     * Get active (enabled) medicine reminders
-     */
-    fun getActiveMedicines(): List<MedicineReminderModel> {
+        fun getActiveMedicines(): List<MedicineReminderModel> {
         return medicineList.value.filter { it.isEnabled }
     }
 
-    /**
-     * Get inactive (disabled) medicine reminders
-     */
-    fun getInactiveMedicines(): List<MedicineReminderModel> {
+        fun getInactiveMedicines(): List<MedicineReminderModel> {
         return medicineList.value.filter { !it.isEnabled }
     }
 
-    /**
-     * Check if a medicine is currently active (within start/end date and enabled)
-     */
-    fun isMedicineActive(medicine: MedicineReminderModel): Boolean {
+        fun isMedicineActive(medicine: MedicineReminderModel): Boolean {
         val now = System.currentTimeMillis()
 
         if (!medicine.isEnabled) return false
@@ -251,26 +244,22 @@ class MedicineReminderViewModel(
         return true
     }
 
-
-    fun getTodaysMedicines(): List<MedicineReminderModel> {
+        fun getTodaysMedicines(): List<MedicineReminderModel> {
         return medicineList.value.filter { medicine ->
             isMedicineActive(medicine) && medicine.frequency == "daily"
         }
     }
 
-
-    fun clearMessages() {
+        fun clearMessages() {
         errorMessage.value = null
         successMessage.value = null
     }
 
-
-    fun clearSelectedMedicine() {
+        fun clearSelectedMedicine() {
         selectedMedicine.value = null
     }
 
-
-    fun isValidTimeFormat(time: String): Boolean {
+        fun isValidTimeFormat(time: String): Boolean {
         return try {
             val parts = time.split(":")
             if (parts.size != 2) return false
@@ -284,8 +273,7 @@ class MedicineReminderViewModel(
         }
     }
 
-
-    fun sortReminderTimes(times: List<String>): List<String> {
+        fun sortReminderTimes(times: List<String>): List<String> {
         return times.sortedBy { time ->
             val parts = time.split(":")
             val hour = parts[0].toInt()

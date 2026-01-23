@@ -2,6 +2,7 @@ package com.example.medhomeapp
 
 import android.app.Application
 import com.example.medhomeapp.utils.LanguageManager
+import com.example.medhomeapp.utils.NotificationHelper
 
 class MyApplication : Application() {
 
@@ -11,5 +12,6 @@ class MyApplication : Application() {
         //this applies saved language when app starts
         val languageCode = LanguageManager.getLanguage(this)
         LanguageManager.setLanguage(this, languageCode)
+        NotificationHelper.createNotificationChannels(this)
     }
 }
