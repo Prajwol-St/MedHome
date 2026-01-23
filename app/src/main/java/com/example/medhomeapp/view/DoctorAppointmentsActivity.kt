@@ -56,9 +56,9 @@ fun DoctorAppointmentsScreen() {
     val activity = context as? BaseActivity
 
     val doctorId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-    val repo = AppointmentManagementRepoImpl()
+
     val viewModel: DoctorAppointmentsViewModel = viewModel(
-        factory = DoctorAppointmentsViewModelFactory(repo, doctorId)
+        factory = DoctorAppointmentsViewModelFactory(context, doctorId)
     )
 
     val todayAppointments by viewModel.todayAppointments.collectAsState()
