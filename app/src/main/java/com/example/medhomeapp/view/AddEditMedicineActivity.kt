@@ -292,6 +292,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
                         viewModel.clearMessages()
                         if (isEditMode && selectedMedicine != null) {
                             viewModel.updateMedicineReminder(
+                                context = context,
                                 medicine = selectedMedicine!!,
                                 medicineName = medicineName,
                                 dosage = dosage,
@@ -307,6 +308,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
                             }
                         } else {
                             viewModel.addMedicineReminder(
+                                context = context,
                                 userId = uid,
                                 medicineName = medicineName,
                                 dosage = dosage,
