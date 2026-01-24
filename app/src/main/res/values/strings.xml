@@ -206,8 +206,7 @@
     <string name="enter_address">Enter your address</string>
     <string name="remove_photo">Remove Photo</string>
     <string name="remove_profile_picture">Remove Profile Picture</string>
-    <string name="remove_profile_picture_confirm">
-    Are you sure you want to remove your profile picture?</string>
+    <string name="remove_profile_picture_confirm">Are you sure you want to remove your profile picture?</string>
     <string name="save_changes">Save Changes</string>
     <string name="name_empty_error">Name cannot be empty</string>
     <string name="profile_update_success">Profile updated successfully!</string>
@@ -227,8 +226,7 @@
     <string name="no_packages_title">No packages yet</string>
     <string name="no_packages_subtitle">Create your first health package</string>
     <string name="delete_package_title">Delete Package?</string>
-    <string name="delete_package_message">
-    Are you sure you want to delete “%1$s”? This action cannot be undone.</string>
+    <string name="delete_package_message">Are you sure you want to delete "%1$s"? This action cannot be undone.</string>
     <string name="package_deleted">Package deleted</string>
 
     <string name="package_image">Package Image</string>
@@ -397,7 +395,30 @@
     <string name="password_requirements">Password Requirements</string>
     <string name="password_rules">• Minimum 6 characters\n• Use a strong, unique password\n• Don\'t reuse old passwords</string>
 
-
+    <!-- ===================== -->
+    <!-- Privacy Policy -->
+    <!-- ===================== -->
+    <string name="title_privacy_policy">Privacy Policy</string>
+    <string name="last_updated">Last Updated: January 12, 2026</string>
+    <string name="policy_section_1_title">1. Information We Collect</string>
+    <string name="policy_section_1_content">We collect information you provide directly to us, including:\n\n• Personal information (name, email, phone number, date of birth)\n• Health information (medical records, prescriptions, blood group)\n• Emergency contact details\n• Location data for emergency services\n• Usage data and app interactions</string>
+    <string name="policy_section_2_title">2. How We Use Your Information</string>
+    <string name="policy_section_2_content">We use the collected information to:\n\n• Provide and maintain our healthcare services\n• Process appointments and consultations\n• Store and manage your health records securely\n• Send medication reminders and notifications\n• Improve our app features and user experience\n• Comply with legal obligations</string>
+    <string name="policy_section_3_title">3. Data Security</string>
+    <string name="policy_section_3_content">We take your data security seriously:\n\n• All data is encrypted in transit and at rest\n• We use industry-standard security protocols\n• Regular security audits and updates\n• Secure cloud storage infrastructure (Firebase)\n• Limited access to authorized personnel only</string>
+    <string name="policy_section_4_title">4. Data Sharing</string>
+    <string name="policy_section_4_content">We do not sell your personal information. We may share data with:\n\n• Healthcare providers you have authorized\n• Emergency services when necessary\n• Service providers who assist our operations\n• Legal authorities when required by law</string>
+    <string name="policy_section_5_title">5. Your Rights</string>
+    <string name="policy_section_5_content">You have the right to:\n\n• Access your personal data\n• Correct inaccurate information\n• Request deletion of your data\n• Opt out of marketing communications\n• Download your health records\n• Withdraw consent at any time</string>
+    <string name="policy_section_6_title">6. Data Retention</string>
+    <string name="policy_section_6_content">We retain your data for as long as your account is active or as needed to provide services. Medical records are retained according to healthcare regulations and legal requirements in Nepal.</string>
+    <string name="policy_section_7_title">7. Children Privacy</string>
+    <string name="policy_section_7_content">Our service is not intended for users under 18 years of age. We do not knowingly collect information from children. If you believe we have collected information from a child, please contact us immediately.</string>
+    <string name="policy_section_8_title">8. Third Party Services</string>
+    <string name="policy_section_8_content">We use third party services for:\n\n• Authentication and database (Firebase)\n• Cloud storage and hosting\n• Payment processing\n• Analytics and crash reporting\n\nThese services have their own privacy policies.</string>
+    <string name="policy_section_9_title">9. Contact Us</string>
+    <string name="policy_section_9_content">If you have questions about this Privacy Policy, contact us at:\n\nEmail: medhome0001@gmail.com\nAddress: Kathmandu, Nepal</string>
+    <string name="policy_footer">By using MedHome, you agree to this Privacy Policy. We may update this policy periodically, and changes will be posted in the app.</string>
 
 
 
