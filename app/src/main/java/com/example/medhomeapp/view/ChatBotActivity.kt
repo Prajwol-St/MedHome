@@ -2,7 +2,6 @@ package com.example.medhomeapp.view
 
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,8 +11,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -90,7 +91,11 @@ class ChatbotActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                ChatScreen(groqApiService, tts)
+                ChatScreen(
+                    api = groqApiService,
+                    tts = tts,
+                    onBack = { finish() }
+                )
             }
         }
     }
@@ -103,10 +108,12 @@ class ChatbotActivity : ComponentActivity() {
 
 // ---------------- UI ----------------
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     api: GroqApiService,
-    tts: TextToSpeech
+    tts: TextToSpeech,
+    onBack: () -> Unit
 ) {
     val systemPrompt =
         "You are MedGuide, an AI medical assistant. Always remind users you are not a doctor."
@@ -162,10 +169,7 @@ fun ChatScreen(
                     }
                 } else {
                     messages.add(
-                        GroqMessage(
-                            "assistant",
-                            "⚠️ ${response.code()} — Invalid request"
-                        )
+                        GroqMessage("assistant", "⚠️ ${response.code()} — Invalid request")
                     )
                 }
             } catch (e: Exception) {
@@ -181,40 +185,68 @@ fun ChatScreen(
     }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("MedGuide", fontWeight = FontWeight.SemiBold) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        },
+
+        // ✅ BOTTOM SCAFFOLDING (NOT NAV BAR)
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Surface(
+                tonalElevation = 6.dp,
+                shadowElevation = 10.dp
             ) {
-                OutlinedTextField(
-                    value = input,
-                    onValueChange = { input = it },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text("Ask a medical question…") },
-                    shape = RoundedCornerShape(28.dp)
-                )
-                Spacer(Modifier.width(8.dp))
-                IconButton(
-                    onClick = { send() },
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = Color(0xFF1976D2),
-                        contentColor = Color.White
-                    )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.Send, contentDescription = "Send")
+                    OutlinedTextField(
+                        value = input,
+                        onValueChange = { input = it },
+                        modifier = Modifier.weight(1f),
+                        placeholder = { Text("Ask a medical question…") },
+                        shape = RoundedCornerShape(24.dp),
+                        maxLines = 4
+                    )
+
+                    Spacer(Modifier.width(10.dp))
+
+                    IconButton(
+                        onClick = { send() },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(
+                                color = MaterialTheme.colorScheme.primary,
+                                shape = CircleShape
+                            ),
+                        enabled = !loading
+                    ) {
+                        Icon(
+                            Icons.Default.Send,
+                            contentDescription = "Send",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
     ) { padding ->
+
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .background(Color(0xFFF2F6FA)),
+                .background(Color(0xFFF4F7FB)),
             state = listState,
-            contentPadding = PaddingValues(12.dp)
+            contentPadding = PaddingValues(14.dp)
         ) {
             items(messages) { msg ->
                 ChatBubble(msg)
@@ -224,8 +256,8 @@ fun ChatScreen(
                 AnimatedVisibility(loading) {
                     Text(
                         "MedGuide is typing…",
-                        modifier = Modifier.padding(8.dp),
-                        color = Color.Gray
+                        color = Color.Gray,
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
             }
@@ -243,18 +275,20 @@ fun ChatBubble(message: GroqMessage) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (isUser) Arrangement.End else Arrangement.Start
     ) {
-        Box(
-            modifier = Modifier
-                .padding(vertical = 6.dp)
-                .background(
-                    color = if (isUser) Color(0xFFBBDEFB) else Color.White,
-                    shape = RoundedCornerShape(18.dp)
-                )
-                .padding(14.dp)
-                .widthIn(max = 300.dp)
+        Surface(
+            color = if (isUser) Color(0xFF1976D2) else Color.White,
+            shape = RoundedCornerShape(
+                topStart = 18.dp,
+                topEnd = 18.dp,
+                bottomEnd = if (isUser) 4.dp else 18.dp,
+                bottomStart = if (isUser) 18.dp else 4.dp
+            ),
+            tonalElevation = 2.dp
         ) {
             Text(
                 text = message.content,
+                modifier = Modifier.padding(14.dp).widthIn(max = 300.dp),
+                color = if (isUser) Color.White else Color.Black,
                 fontWeight = if (isUser) FontWeight.Medium else FontWeight.Normal
             )
         }

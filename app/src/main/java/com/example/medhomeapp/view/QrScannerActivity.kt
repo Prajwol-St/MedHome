@@ -12,8 +12,9 @@ import androidx.annotation.OptIn
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,26 +37,30 @@ class QrScannerActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedHomeAppTheme {
-                ScannerScreen()
+                ScannerScreen(
+                    onBack = { finish() }
+                )
             }
         }
     }
 }
 
+
+@kotlin.OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScannerScreen() {
+fun ScannerScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     var scannedUid by remember { mutableStateOf<String?>(null) }
     var viewerRole by remember { mutableStateOf<String?>(null) }
     var loading by remember { mutableStateOf(true) }
 
-    // 🔐 Get logged-in user role
+    // 🔥 FIXED ROLE FETCH (lowercase + trim)
     LaunchedEffect(Unit) {
         val authUid = FirebaseAuth.getInstance().currentUser?.uid
 
         if (authUid == null) {
-            loading = false
             viewerRole = "patient"
+            loading = false
             return@LaunchedEffect
         }
 
@@ -64,8 +69,12 @@ fun ScannerScreen() {
             .child(authUid)
             .child("role")
             .get()
-            .addOnSuccessListener {
-                viewerRole = it.value?.toString() ?: "patient"
+            .addOnSuccessListener { snapshot ->
+                viewerRole = snapshot.value
+                    ?.toString()
+                    ?.lowercase()
+                    ?.trim()
+                    ?: "patient"
                 loading = false
             }
             .addOnFailureListener {
@@ -74,22 +83,51 @@ fun ScannerScreen() {
             }
     }
 
-    if (loading) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(if (scannedUid == null) "Scan QR Code" else "User Info")
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            if (scannedUid != null) {
+                                scannedUid = null // go back to scanner
+                            } else {
+                                onBack()
+                            }
+                        }
+                    ) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
         }
-        return
-    }
+    ) { padding ->
 
-    if (scannedUid == null) {
-        CameraPreview { uid ->
-            scannedUid = uid
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+
+            if (loading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                return@Box
+            }
+
+            if (scannedUid == null) {
+                CameraPreview { uid ->
+                    scannedUid = uid
+                }
+            } else {
+                UserInfoScreen(
+                    uid = scannedUid!!,
+                    viewerRole = viewerRole!!   // doctor / patient
+                )
+            }
         }
-    } else {
-        UserInfoScreen(
-            uid = scannedUid!!,
-            viewerRole = viewerRole!!   // 🔥 THIS FIXES SECURITY
-        )
     }
 }
 
