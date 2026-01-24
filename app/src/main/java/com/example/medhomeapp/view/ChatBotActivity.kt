@@ -29,9 +29,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 import java.util.Locale
 
 // ---------------- DATA ----------------
@@ -58,6 +56,8 @@ data class Choice(
 // ---------------- API ----------------
 
 interface GroqApiService {
+
+    @Headers("Content-Type: application/json")
     @POST("openai/v1/chat/completions")
     suspend fun getChatCompletion(
         @Header("Authorization") authorization: String,
@@ -127,7 +127,6 @@ fun ChatScreen(
     }
 
     fun send() {
-        Log.d("GROQ_KEY_RUNTIME", "KEY=${BuildConfig.GROQ_API_KEY.take(8)}****")
         if (input.isBlank() || loading) return
 
         val userText = input.trim()
@@ -138,8 +137,10 @@ fun ChatScreen(
         scope.launch(Dispatchers.IO) {
             try {
                 val request = GroqChatCompletionRequest(
-                    model = "llama3-8b-8192",
-                    messages = listOf(GroqMessage("system", systemPrompt)) + messages
+                    model = "llama-3.1-8b-instant",
+                    messages = listOf(
+                        GroqMessage("system", systemPrompt)
+                    ) + messages
                 )
 
                 val response = api.getChatCompletion(
@@ -163,14 +164,12 @@ fun ChatScreen(
                     messages.add(
                         GroqMessage(
                             "assistant",
-                            "⚠️ Error ${response.code()}: Invalid request"
+                            "⚠️ ${response.code()} — Invalid request"
                         )
                     )
                 }
             } catch (e: Exception) {
-                messages.add(
-                    GroqMessage("assistant", "⚠️ Network error")
-                )
+                messages.add(GroqMessage("assistant", "⚠️ Network error"))
             } finally {
                 loading = false
             }
