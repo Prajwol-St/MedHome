@@ -25,21 +25,34 @@ import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
+    private var currentLanguage: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentLanguage = LanguageManager.getLanguage(this)
         enableEdgeToEdge()
         setContent {
             DashboardScaffold()
         }
     }
+    override fun onResume() {
+        super.onResume()
+        val savedLanguage = LanguageManager.getLanguage(this)
+        if (savedLanguage != currentLanguage) {
+            recreate()
+        }
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
+
 fun DashboardScaffold() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }

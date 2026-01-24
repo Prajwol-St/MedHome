@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthPackageModel
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
@@ -81,7 +83,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Health Packages", fontWeight = FontWeight.Bold) },
+                title = { Text( stringResource(R.string.my_health_packages), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = SageGreen,
                     titleContentColor = Color.White
@@ -90,7 +92,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                     IconButton(onClick = {
                         (context as? HealthPackagesManagementActivity)?.finish()
                     }) {
-                        Icon(Icons.Default.ArrowBack, "Back", tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, stringResource(R.string.back), tint = Color.White)
                     }
                 },
                 actions = {
@@ -98,7 +100,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                         val intent = Intent(context, PackageBookingsActivity::class.java)
                         context.startActivity(intent)
                     }) {
-                        Icon(Icons.Default.Assessment, "Insights", tint = Color.White)
+                        Icon(Icons.Default.Assessment, stringResource(R.string.insights), tint = Color.White)
                     }
                 }
             )
@@ -111,7 +113,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                 },
                 containerColor = SageGreen
             ) {
-                Icon(Icons.Default.Add, "Create Package", tint = Color.White)
+                Icon(Icons.Default.Add, stringResource(R.string.create_package), tint = Color.White)
             }
         }
     ) { padding ->
@@ -142,13 +144,13 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        "No packages yet",
+                        stringResource(R.string.no_packages_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextDark
                     )
                     Text(
-                        "Create your first health package",
+                        stringResource(R.string.no_packages_subtitle),
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -185,18 +187,31 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
         if (showDeleteDialog && packageToDelete != null) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text("Delete Package?") },
-                text = { Text("Are you sure you want to delete '${packageToDelete?.packageName}'? This action cannot be undone.") },
+                title = { Text((stringResource(R.string.delete_package_title))) },
+                text = { Text(
+                    stringResource(
+                        R.string.delete_package_message,
+                        packageToDelete?.packageName ?: ""
+                    )
+                )
+                },
                 confirmButton = {
                     TextButton(
                         onClick = {
                             packageToDelete?.let { pkg ->
                                 viewModel.deletePackage(pkg.id) { success, message ->
                                     if (success) {
-                                        Toast.makeText(context, "Package deleted", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.package_deleted),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         viewModel.getPackagesByDoctor(doctorId)
                                     } else {
-                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(context,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
                             }
@@ -366,13 +381,13 @@ fun DoctorPackageCard(
                         )
                     }
 
-                    // Days Remaining Badge
+
                     if (daysRemaining != null) {
                         Surface(
                             shape = RoundedCornerShape(8.dp),
                             color = when {
-                                daysRemaining <= 0 -> Color(0xFFF44336).copy(alpha = 0.1f) // Red - Expired
-                                daysRemaining <= 7 -> Color(0xFFFF9800).copy(alpha = 0.1f) // Orange - Expiring Soon
+                                daysRemaining <= 0 -> Color(0xFFF44336).copy(alpha = 0.1f)
+                                daysRemaining <= 7 -> Color(0xFFFF9800).copy(alpha = 0.1f)
                                 else -> SageGreen.copy(alpha = 0.1f) // Green - Good
                             }
                         ) {
@@ -393,9 +408,9 @@ fun DoctorPackageCard(
                                 )
                                 Text(
                                     when {
-                                        daysRemaining <= 0 -> "Expired"
-                                        daysRemaining == 1 -> "1 day left"
-                                        else -> "$daysRemaining days left"
+                                        daysRemaining <= 0 -> stringResource(R.string.expired)
+                                        daysRemaining == 1 -> stringResource(R.string.one_day_left)
+                                        else -> stringResource(R.string.days_left, daysRemaining)
                                     },
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,

@@ -31,7 +31,6 @@
     <string name="complete_profile">कृपया आफ्नो प्रोफाइल पूरा गर्नुहोस्</string>
     <string name="email_label">इमेल</string>
 
-
     <!-- Signup -->
     <string name="create_account">खाता सिर्जना गर्नुहोस्</string>
     <string name="signup_subtitle">स्वास्थ्य यात्राको सुरुवात गर्न साइन अप गर्नुहोस्।</string>
@@ -96,16 +95,13 @@
     <string name="preferences">प्राथमिकताहरू</string>
     <string name="help_and_support">मद्दत तथा समर्थन</string>
     <string name="danger_zone">जोखिम क्षेत्र</string>
-
     <string name="edit_profile">प्रोफाइल सम्पादन गर्नुहोस्</string>
     <string name="update_personal_info">व्यक्तिगत जानकारी अद्यावधिक गर्नुहोस्</string>
     <string name="change_password">पासवर्ड परिवर्तन गर्नुहोस्</string>
     <string name="update_password">पासवर्ड अद्यावधिक गर्नुहोस्</string>
-
     <string name="notifications">सूचनाहरू</string>
     <string name="manage_notifications">सूचना व्यवस्थापन</string>
     <string name="language">भाषा</string>
-
     <string name="help_center">मद्दत केन्द्र</string>
     <string name="get_help">मद्दत प्राप्त गर्नुहोस्</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
@@ -114,11 +110,9 @@
     <string name="read_terms">सर्तहरू पढ्नुहोस्</string>
     <string name="about">बारेमा</string>
     <string name="version">संस्करण</string>
-
     <string name="logout">लगआउट</string>
     <string name="sign_out">खाताबाट बाहिर निस्कनुहोस्</string>
     <string name="logout_confirmation">के तपाईं लगआउट गर्न चाहनुहुन्छ?</string>
-
     <string name="delete_account">खाता मेटाउनुहोस्</string>
     <string name="permanently_delete">खाता स्थायी रूपमा मेटाउनुहोस्</string>
     <string name="delete_confirmation">यो कार्य फिर्ता गर्न सकिँदैन।</string>
@@ -138,7 +132,6 @@
     <!-- Roles -->
     <string name="patient">बिरामी</string>
     <string name="doctor">डाक्टर</string>
-
     <string name="doctor_welcome">डाक्टरज्यू, स्वागत छ</string>
     <string name="doctor_management">व्यवस्थापन</string>
 
@@ -157,6 +150,195 @@
     <string name="title_activity_privacy_policy">गोपनीयता नीति</string>
     <string name="title_activity_terms_of_service">सेवाका सर्तहरू</string>
     <string name="title_activity_doctor_availability">डाक्टर उपलब्धता</string>
+
+    <!-- ===================== -->
+    <!-- Edit Profile Screen -->
+    <!-- ===================== -->
+    <string name="edit_profile_title">प्रोफाइल सम्पादन</string>
+    <string name="personal_information">व्यक्तिगत जानकारी</string>
+    <string name="full_name">पूरा नाम</string>
+    <string name="enter_full_name">आफ्नो पूरा नाम लेख्नुहोस्</string>
+    <string name="contact_number">सम्पर्क नम्बर</string>
+    <string name="phone_number_hint">१० अंकको फोन नम्बर</string>
+    <string name="gender">लिङ्ग</string>
+    <string name="select_gender">लिङ्ग चयन गर्नुहोस्</string>
+    <string name="male">पुरुष</string>
+    <string name="female">महिला</string>
+    <string name="other">अन्य</string>
+    <string name="date_of_birth">जन्म मिति</string>
+    <string name="select_date">मिति चयन गर्नुहोस्</string>
+    <string name="blood_group">रक्त समूह</string>
+    <string name="select_blood_group">रक्त समूह चयन गर्नुहोस्</string>
+    <string name="emergency_contact">आपतकालीन सम्पर्क</string>
+    <string name="emergency_contact_number">आपतकालीन सम्पर्क नम्बर</string>
+    <string name="emergency_phone_hint">१० अंकको नम्बर</string>
+    <string name="address">ठेगाना</string>
+    <string name="enter_address">आफ्नो ठेगाना लेख्नुहोस्</string>
+    <string name="remove_photo">फोटो हटाउनुहोस्</string>
+    <string name="remove_profile_picture">प्रोफाइल फोटो हटाउनुहोस्</string>
+    <string name="remove_profile_picture_confirm">के तपाईं आफ्नो प्रोफाइल फोटो हटाउन चाहनुहुन्छ?</string>
+    <string name="save_changes">परिवर्तन सुरक्षित गर्नुहोस्</string>
+    <string name="name_empty_error">नाम खाली हुन सक्दैन</string>
+    <string name="profile_update_success">प्रोफाइल सफलतापूर्वक अपडेट भयो!</string>
+    <string name="image_uploaded">फोटो सफलतापूर्वक अपलोड भयो!</string>
+    <string name="photo_removed">फोटो हटाइयो</string>
+    <string name="choose_photo_source">फोटोको स्रोत चयन गर्नुहोस्</string>
+    <string name="take_photo">फोटो खिच्नुहोस्</string>
+    <string name="choose_from_gallery">ग्यालरीबाट छान्नुहोस्</string>
+    <string name="change_picture">फोटो परिवर्तन गर्नुहोस्</string>
+
+    <!-- ===================== -->
+    <!-- Health Packages Management -->
+    <!-- ===================== -->
+    <string name="my_health_packages">मेरो स्वास्थ्य प्याकेजहरू</string>
+    <string name="insights">इनसाइट्स</string>
+    <string name="create_package">प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="no_packages_title">कुनै प्याकेज छैन</string>
+    <string name="no_packages_subtitle">आफ्नो पहिलो स्वास्थ्य प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="delete_package_title">प्याकेज मेटाउने?</string>
+    <string name="delete_package_message">के तपाईं “%1$s” मेटाउन चाहनुहुन्छ? यो कार्य फिर्ता गर्न सकिँदैन।</string>
+    <string name="package_deleted">प्याकेज मेटाइयो</string>
+    <string name="package_image">प्याकेज तस्वीर</string>
+    <string name="edit">सम्पादन</string>
+    <string name="price">मूल्य</string>
+    <string name="expired">समय सकियो</string>
+    <string name="one_day_left">१ दिन बाँकी</string>
+    <string name="days_left">%1$d दिन बाँकी</string>
+
+    <!-- ===================== -->
+    <!-- Health Packages (Patient List) -->
+    <!-- ===================== -->
+    <string name="health_packages_title">स्वास्थ्य प्याकेजहरू</string>
+    <string name="my_packages">मेरो प्याकेजहरू</string>
+    <string name="category">श्रेणी</string>
+    <string name="all">सबै</string>
+    <string name="no_packages_available">कुनै प्याकेज उपलब्ध छैन</string>
+    <string name="check_back_later">नयाँ प्याकेजहरूको लागि पछि पुनः जाँच गर्नुहोस्</string>
+    <string name="more_services">+%1$d थप सेवाहरू</string>
+
+    <!-- ===================== -->
+    <!-- Health Package Details -->
+    <!-- ===================== -->
+    <string name="package_details">प्याकेज विवरण</string>
+    <string name="package_not_found">प्याकेज फेला परेन</string>
+    <string name="validity">मान्य अवधि</string>
+    <string name="description">विवरण</string>
+    <string name="included_services">समावेश गरिएका सेवाहरू</string>
+    <string name="total_price">कुल मूल्य</string>
+    <string name="book_now">अहिले बुक गर्नुहोस्</string>
+    <string name="confirm_booking">बुकिङ पुष्टि गर्नुहोस्</string>
+    <string name="package_label">प्याकेज:</string>
+    <string name="price_label">मूल्य:</string>
+    <string name="valid_for_days">मान्य अवधि: %1$d दिन</string>
+    <string name="confirm_booking_message">के तपाईं यो प्याकेज बुक गर्न चाहनुहुन्छ?</string>
+    <string name="package_booked_success">प्याकेज सफलतापूर्वक बुक गरियो!</string>
+    <string name="confirm">पुष्टि गर्नुहोस्</string>
+
+    <!-- ===================== -->
+    <!-- Help Center -->
+    <!-- ===================== -->
+
+    <string name="help_center_title">मद्दत केन्द्र</string>
+    <string name="contact_support">समर्थन सम्पर्क</string>
+    <string name="email_support">इमेल समर्थन</string>
+    <string name="report_bug">समस्या रिपोर्ट गर्नुहोस्</string>
+    <string name="send_feedback">प्रतिक्रिया पठाउनुहोस्</string>
+    <string name="help_improve_app">एप सुधार गर्न मद्दत गर्नुहोस्</string>
+    <string name="share_suggestions">तपाईंका सुझाव साझा गर्नुहोस्</string>
+    <string name="support_email_subject">MedHome सहायता अनुरोध</string>
+    <string name="bug_report_subject">बग रिपोर्ट - MedHome</string>
+    <string name="feedback_subject">प्रतिक्रिया - MedHome</string>
+    <string name="faq_title">बारम्बार सोधिने प्रश्नहरू</string>
+    <string name="collapse">लुकाउनुहोस्</string>
+    <string name="expand">देखाउनुहोस्</string>
+    <string name="faq_q1">म परामर्श कसरी बुक गर्न सक्छु?</string>
+    <string name="faq_a1">ड्यासबोर्डमा गएर "परामर्श बुक गर्नुहोस्" ट्याप गर्नुहोस्। आफ्नो चाहेको डाक्टर, मिति र समय छानेर बुकिङ पूरा गर्नुहोस्।</string>
+    <string name="faq_q2">म आफ्ना स्वास्थ्य अभिलेख कसरी हेर्न सक्छु?</string>
+    <string name="faq_a2">ड्यासबोर्डबाट "स्वास्थ्य अभिलेख" मा जानुहोस्। तपाईंले अपलोड गरेका सबै कागजात, प्रेस्क्रिप्सन र रिपोर्टहरू त्यहाँ उपलब्ध हुन्छन्।</string>
+    <string name="faq_q3">QR कोड सुविधा के हो?</string>
+    <string name="faq_a3">QR कोडले आपतकालीन अवस्थामा स्वास्थ्यकर्मीलाई तपाईंको स्वास्थ्य जानकारी छिटो पहुँच गर्न सहयोग गर्छ। यो ड्यासबोर्डमा उपलब्ध हुन्छ।</string>
+    <string name="faq_q4">म औषधि रिमाइन्डर कसरी सेट गर्न सक्छु?</string>
+    <string name="faq_a4">तलको नेभिगेसनमा रहेको "रिमाइन्डर" ट्याब प्रयोग गरेर औषधि रिमाइन्डर बनाउन र व्यवस्थापन गर्न सक्नुहुन्छ।</string>
+    <string name="faq_q5">के म आफ्नो प्रोफाइल जानकारी परिवर्तन गर्न सक्छु?</string>
+    <string name="faq_a5">हो। सेटिङ्समा गएर प्रोफाइल सम्पादन विकल्प प्रयोग गरी व्यक्तिगत जानकारी, सम्पर्क विवरण र आपतकालीन सम्पर्क अद्यावधिक गर्न सक्नुहुन्छ।</string>
+    <string name="faq_q6">म पासवर्ड कसरी रिसेट गर्न सक्छु?</string>
+    <string name="faq_a6">सेटिङ्समा गएर पासवर्ड परिवर्तन विकल्प प्रयोग गर्नुहोस्। पहिले हालको पासवर्ड हाल्नुपर्ने हुन्छ, त्यसपछि नयाँ पासवर्ड सेट गर्न सक्नुहुन्छ।</string>
+    <string name="faq_q7">मेरो स्वास्थ्य डेटा सुरक्षित छ?</string>
+    <string name="faq_a7">हो। तपाईंको सबै डेटा सुरक्षित रूपमा इन्क्रिप्ट गरिएको हुन्छ। हामी कडा स्वास्थ्य डेटा सुरक्षा मापदण्ड पालना गर्छौं। थप जानकारीका लागि गोपनीयता नीति हेर्नुहोस्।</string>
+    <string name="faq_q8">म परामर्श कसरी रद्द गर्न सक्छु?</string>
+    <string name="faq_a8">आफ्नो परामर्श इतिहासमा गएर रद्द गर्न चाहेको अपोइन्टमेन्ट छान्नुहोस् र "अपोइन्टमेन्ट रद्द गर्नुहोस्" ट्याप गर्नुहोस्। रद्द गर्ने नियम लागू हुन सक्छ।</string>
+    <string name="faq_q9">के म आफ्नै मेडिकल कागजात अपलोड गर्न सक्छु?</string>
+    <string name="faq_a9">हो। स्वास्थ्य अभिलेख भागबाट PDF, JPG वा PNG फाइलहरू अपलोड गर्न सक्नुहुन्छ।</string>
+    <string name="faq_q10">कुन भुक्तानी विधिहरू स्वीकार गरिन्छ?</string>
+    <string name="faq_a10">हामी डेबिट कार्ड, क्रेडिट कार्ड, मोबाइल वालेट र अनलाइन बैंकिङ भुक्तानी स्वीकार गर्छौं।</string>
+
+    <!-- ===================== -->
+    <!-- स्वास्थ्य प्याकेज सिर्जना -->
+    <!-- ===================== -->
+    <string name="title_create_package">स्वास्थ्य प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="uploading_image">तस्बिर अपलोड हुँदैछ...</string>
+    <string name="tap_change_image">तस्बिर परिवर्तन गर्न ट्याप गर्नुहोस्</string>
+    <string name="tap_upload_image">प्याकेजको तस्बिर अपलोड गर्न ट्याप गर्नुहोस्</string>
+    <string name="optional">(वैकल्पिक)</string>
+    <string name="label_package_name">प्याकेज नाम</string>
+    <string name="hint_package_name">सम्पूर्ण स्वास्थ्य जाँच</string>
+    <string name="label_category">श्रेणी</string>
+    <string name="label_short_description">छोटो विवरण</string>
+    <string name="hint_short_description">संक्षिप्त विवरण</string>
+    <string name="char_limit">अधिकतम १०० अक्षर</string>
+    <string name="label_full_description">पूरा विवरण</string>
+    <string name="hint_full_description">विस्तृत विवरण</string>
+    <string name="label_price">मूल्य (NPR)</string>
+    <string name="hint_price">१०००</string>
+    <string name="label_validity_period">मान्यताको अवधि</string>
+    <string name="label_select_validity">प्याकेजको मान्य मिति छान्नुहोस्</string>
+    <string name="label_start_date">सुरु मिति</string>
+    <string name="label_end_date">समाप्त मिति</string>
+    <string name="label_included_services">समावेश सेवाहरू</string>
+    <string name="hint_included_services">रगत परीक्षण, BP जाँच, परामर्श</string>
+    <string name="services_helper">अल्पविराम प्रयोग गरेर छुट्याउनुहोस्</string>
+    <string name="label_package_status">प्याकेज स्थिति</string>
+    <string name="status_visible">प्रयोगकर्तालाई देखिने</string>
+    <string name="status_hidden">प्रयोगकर्ताबाट लुकाइएको</string>
+    <string name="btn_create_package">प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="err_package_name">कृपया प्याकेज नाम लेख्नुहोस्</string>
+    <string name="err_short_description">कृपया छोटो विवरण लेख्नुहोस्</string>
+    <string name="err_full_description">कृपया पूरा विवरण लेख्नुहोस्</string>
+    <string name="err_price">कृपया मूल्य लेख्नुहोस्</string>
+    <string name="err_dates">कृपया मान्य मिति छान्नुहोस्</string>
+    <string name="err_services">कृपया समावेश सेवाहरू लेख्नुहोस्</string>
+    <string name="msg_image_uploaded">तस्बिर सफलतापूर्वक अपलोड भयो</string>
+    <string name="msg_package_created">प्याकेज सफलतापूर्वक सिर्जना भयो</string>
+    <string name="msg_upload_failed">अपलोड असफल भयो</string>
+    <string name="err_validity_dates">मान्य मिति छान्नुहोस्</string>
+    <string name="err_included_services">समावेश गरिएका सेवाहरू लेख्नुहोस्</string>
+    <string name="validity_period">मान्य अवधि</string>
+    <string name="select_validity_dates">प्याकेजको मान्य मिति छान्नुहोस्</string>
+    <string name="cat_general_checkup">सामान्य स्वास्थ्य जाँच</string>
+    <string name="cat_diabetes">मधुमेह हेरचाह</string>
+    <string name="cat_heart">मुटु स्वास्थ्य</string>
+    <string name="cat_wellness">स्वास्थ्य तथा फिटनेस</string>
+    <string name="cat_womens_health">महिला स्वास्थ्य</string>
+    <string name="cat_senior">जेष्ठ नागरिक हेरचाह</string>
+    <string name="cat_preventive">निवारक स्वास्थ्य सेवा</string>
+    <string name="cat_chronic">दीर्घकालीन रोग व्यवस्थापन</string>
+    <string name="package_name">प्याकेजको नाम</string>
+    <string name="package_name_placeholder">पूर्ण स्वास्थ्य जाँच</string>
+    <string name="short_description">छोटो विवरण</string>
+    <string name="short_description_placeholder">संक्षिप्त विवरण</string>
+    <string name="full_description">विस्तृत विवरण</string>
+    <string name="full_description_placeholder">विस्तृत जानकारी लेख्नुहोस्</string>
+    <string name="upload_failed">अपलोड असफल भयो: %1$s</string>
+    <string name="package_created_success">प्याकेज सफलतापूर्वक सिर्जना भयो!</string>
+    <string name="err_upload_failed">अपलोड असफल भयो: %1$s</string>
+    <string name="placeholder_package_name">पूर्ण स्वास्थ्य जाँच</string>
+    <string name="placeholder_included_services">रगत परीक्षण, बीपी जाँच, परामर्श</string>
+    <string name="helper_separate_commas">अल्पविरामले छुट्याउनुहोस्</string>
+    <string name="placeholder_short_description">संक्षिप्त विवरण</string>
+    <string name="placeholder_full_description">विस्तृत विवरण</string>
+
+
+
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
 
 </resources>

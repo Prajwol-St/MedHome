@@ -1,5 +1,4 @@
 package com.example.medhomeapp.view
-
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -18,12 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthPackageModel
 import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
@@ -45,13 +46,13 @@ class CreatePackageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize ImageUtils
+
         imageUtils = ImageUtils(this, this)
 
         setContent {
             var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
-            // Register launchers inside setContent WITH NAMED PARAMETER
+
             LaunchedEffect(Unit) {
                 imageUtils.registerLaunchers(
                     onImageSelected = { uri ->
@@ -69,7 +70,6 @@ class CreatePackageActivity : BaseActivity() {
     }
 }
 
-// Rest of the file stays the same...
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,7 +126,7 @@ fun CreatePackageScreen(
 
     val dateFormatter = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
 
-    // Upload image when selectedImageUri changes
+
     LaunchedEffect(selectedImageUri) {
         if (selectedImageUri != null) {
             isUploadingImage = true
@@ -140,9 +140,17 @@ fun CreatePackageScreen(
                 if (success && imageUrl != null) {
                     uploadedImageUrl = imageUrl
                     uploadedImagePublicId = publicId ?: ""
-                    Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.msg_image_uploaded),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(context, "Upload failed: $message", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.err_upload_failed, message),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -151,7 +159,7 @@ fun CreatePackageScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Create Health Package", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.title_create_package), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = SageGreen,
                     titleContentColor = Color.White
@@ -178,7 +186,7 @@ fun CreatePackageScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(20.dp)
             ) {
-                // Image Upload Section
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -201,7 +209,7 @@ fun CreatePackageScreen(
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     CircularProgressIndicator(color = SageGreen)
                                     Spacer(modifier = Modifier.height(8.dp))
-                                    Text("Uploading image...", color = Color.Gray, fontSize = 14.sp)
+                                    Text(stringResource(R.string.uploading_image), color = Color.Gray, fontSize = 14.sp)
                                 }
                             }
                             uploadedImageUrl.isNotEmpty() -> {
@@ -232,7 +240,7 @@ fun CreatePackageScreen(
                                                 tint = Color.White
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
-                                            Text("Tap to change image", color = Color.White, fontSize = 14.sp)
+                                            Text(stringResource(R.string.tap_change_image), color = Color.White, fontSize = 14.sp)
                                         }
                                     }
                                 }
@@ -246,8 +254,8 @@ fun CreatePackageScreen(
                                         tint = SageGreen
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
-                                    Text("Tap to upload package image", color = Color.Gray, fontSize = 14.sp)
-                                    Text("(Optional)", color = Color.Gray, fontSize = 12.sp)
+                                    Text(stringResource(R.string.tap_upload_image), color = Color.Gray, fontSize = 14.sp)
+                                    Text(stringResource(R.string.optional), color = Color.Gray, fontSize = 12.sp)
                                 }
                             }
                         }
@@ -256,12 +264,12 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Package Name
+
                 OutlinedTextField(
                     value = packageName,
                     onValueChange = { packageName = it },
-                    label = { Text("Package Name") },
-                    placeholder = { Text("Complete Health Checkup") },
+                    label = { Text(stringResource(R.string.label_package_name)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_package_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -276,7 +284,7 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Category Dropdown
+
                 ExposedDropdownMenuBox(
                     expanded = showCategoryDropdown,
                     onExpandedChange = { showCategoryDropdown = !showCategoryDropdown }
@@ -320,12 +328,12 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Short Description
+
                 OutlinedTextField(
                     value = shortDescription,
                     onValueChange = { shortDescription = it },
-                    label = { Text("Short Description") },
-                    placeholder = { Text("Brief description") },
+                    label = { Text(stringResource(R.string.label_short_description)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_short_description)) },
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 2,
                     supportingText = { Text("${shortDescription.length}/100", fontSize = 12.sp) },
@@ -341,12 +349,12 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Full Description
+
                 OutlinedTextField(
                     value = fullDescription,
                     onValueChange = { fullDescription = it },
-                    label = { Text("Full Description") },
-                    placeholder = { Text("Detailed description") },
+                    label = { Text(stringResource(R.string.label_full_description)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_full_description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
@@ -363,7 +371,7 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Price
+
                 OutlinedTextField(
                     value = price,
                     onValueChange = { if (it.isEmpty() || it.all { char -> char.isDigit() || char == '.' }) price = it },
@@ -384,10 +392,17 @@ fun CreatePackageScreen(
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-
-                // Validity Period
-                Text("Validity Period", fontSize = 14.sp, color = TextDark, fontWeight = FontWeight.Medium)
-                Text("Select package validity dates", fontSize = 12.sp, color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.validity_period),
+                    fontSize = 14.sp,
+                    color = TextDark,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = stringResource(R.string.select_validity_dates),
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
@@ -446,7 +461,7 @@ fun CreatePackageScreen(
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                if (endDate != null) dateFormatter.format(Date(endDate!!)) else "Select date",
+                                if (endDate != null) dateFormatter.format(Date(endDate!!)) else stringResource(R.string.select_date),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = if (endDate != null) TextDark else Color.Gray
@@ -457,17 +472,16 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Included Services
                 OutlinedTextField(
                     value = includedServices,
                     onValueChange = { includedServices = it },
-                    label = { Text("Included Services") },
-                    placeholder = { Text("Blood Test, BP Check, Consultation") },
+                    label = { Text(stringResource(R.string.label_included_services)) },
+                    placeholder = { Text(stringResource(R.string.placeholder_included_services)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
                     maxLines = 4,
-                    supportingText = { Text("Separate with commas", fontSize = 12.sp) },
+                    supportingText = { Text(stringResource(R.string.helper_separate_commas), fontSize = 12.sp) },
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = SageGreen,
                         focusedLabelColor = SageGreen,
@@ -480,7 +494,7 @@ fun CreatePackageScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Active Status
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -494,9 +508,17 @@ fun CreatePackageScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text("Package Status", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = TextDark)
                             Text(
-                                if (isActive) "Visible to patients" else "Hidden from patients",
+                                stringResource(R.string.label_package_status),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = TextDark
+                            )
+                            Text(
+                                if (isActive)
+                                    stringResource(R.string.status_visible)
+                                else
+                                    stringResource(R.string.status_hidden),
                                 fontSize = 12.sp,
                                 color = Color.Gray
                             )
@@ -513,28 +535,55 @@ fun CreatePackageScreen(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
-
-                // Create Button
                 Button(
                     onClick = {
                         when {
                             packageName.isBlank() -> {
-                                Toast.makeText(context, "Please enter package name", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_package_name),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+
                             shortDescription.isBlank() -> {
-                                Toast.makeText(context, "Please enter short description", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_short_description),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+
                             fullDescription.isBlank() -> {
-                                Toast.makeText(context, "Please enter full description", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_full_description),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+
                             price.isBlank() -> {
-                                Toast.makeText(context, "Please enter price", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_price),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+
                             startDate == null || endDate == null -> {
-                                Toast.makeText(context, "Please select validity dates", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_validity_dates),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+
                             includedServices.isBlank() -> {
-                                Toast.makeText(context, "Please enter included services", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.err_included_services),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                             else -> {
                                 val servicesList = includedServices.split(",").map { it.trim() }.filter { it.isNotEmpty() }
@@ -561,10 +610,14 @@ fun CreatePackageScreen(
 
                                 viewModel.createPackage(newPackage) { success, message ->
                                     if (success) {
-                                        Toast.makeText(context, "Package created successfully!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.package_created_success),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        (context as? CreatePackageActivity)?.recreate()
                                         (context as? CreatePackageActivity)?.finish()
-                                    } else {
-                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             }
@@ -586,7 +639,7 @@ fun CreatePackageScreen(
                     } else {
                         Icon(Icons.Default.Save, null, modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Create Package", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_create_package), fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
@@ -594,7 +647,7 @@ fun CreatePackageScreen(
             }
         }
 
-        // Date Pickers
+
         if (showStartDatePicker) {
             DatePickerDialog(
                 onDismissRequest = { showStartDatePicker = false },
