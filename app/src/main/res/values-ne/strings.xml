@@ -502,6 +502,36 @@ MedHome जस्ताको तस्तै प्रदान गरिएक
 MedHome प्रयोग गरेर तपाईंले यी सेवाका सर्तहरू पढेको र स्वीकार गरेको पुष्टि गर्नुहुन्छ।
 </string>
 
+    <!-- Manage Leaves -->
+    <string name="title_manage_leaves">बिदा व्यवस्थापन</string>
+    <string name="add_leave">बिदा थप्नुहोस्</string>
+    <string name="no_leaves">कुनै बिदा तालिकाबद्ध गरिएको छैन</string>
+    <string name="no_leaves_hint">बिदा थप्न तलको बटन थिच्नुहोस्</string>
+    <string name="active_upcoming_leaves">सक्रिय र आउँदै गरेका बिदाहरू</string>
+    <string name="past_leaves">अघिल्ला बिदाहरू</string>
+
+    <!-- Leave dialog -->
+    <string name="leave_type">बिदाको प्रकार</string>
+    <string name="leave_personal">व्यक्तिगत</string>
+    <string name="leave_medical">स्वास्थ्य</string>
+    <string name="leave_conference">सम्मेलन</string>
+    <string name="leave_vacation">विदा</string>
+    <string name="reason_optional">कारण (वैकल्पिक)</string>
+    <string name="char_count">%1$d/200</string>
+
+    <!-- Dates -->
+    <string name="start_date_format">सुरु: %1$s</string>
+    <string name="end_date_format">अन्त्य: %1$s</string>
+    <string name="select_start_date">सुरु मिति छान्नुहोस्</string>
+    <string name="select_end_date">अन्त्य मिति छान्नुहोस्</string>
+
+    <!-- Common -->
+    <string name="cd_add">थप्नुहोस्</string>
+
+
+
+
+
 
 
 

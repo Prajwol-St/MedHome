@@ -536,6 +536,33 @@ Address: Kathmandu, Nepal
 By using MedHome, you acknowledge that you have read and agreed to these Terms of Service.
 </string>
 
+    <!-- Manage Leaves -->
+    <string name="title_manage_leaves">Manage Leaves</string>
+    <string name="add_leave">Add Leave</string>
+    <string name="no_leaves">No leaves scheduled</string>
+    <string name="no_leaves_hint">Tap the button below to add a leave</string>
+    <string name="active_upcoming_leaves">Active &amp; Upcoming Leaves</string>
+    <string name="past_leaves">Past Leaves</string>
+
+    <!-- Leave dialog -->
+    <string name="leave_type">Leave Type</string>
+    <string name="leave_personal">Personal</string>
+    <string name="leave_medical">Medical</string>
+    <string name="leave_conference">Conference</string>
+    <string name="leave_vacation">Vacation</string>
+    <string name="reason_optional">Reason (Optional)</string>
+    <string name="char_count">%1$d/200</string>
+
+    <!-- Dates -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">End: %1$s</string>
+    <string name="select_start_date">Select Start Date</string>
+    <string name="select_end_date">Select End Date</string>
+
+    <!-- Common -->
+    <string name="cd_add">Add</string>
+
+
 
 
 
