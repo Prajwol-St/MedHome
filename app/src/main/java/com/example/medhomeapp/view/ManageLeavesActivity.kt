@@ -58,7 +58,6 @@ class ManageLeavesActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Recreate the activity when returning from settings if language changed
         val currentLanguage = LanguageManager.getLanguage(this)
         val savedLanguage = intent.getStringExtra("current_language")
 

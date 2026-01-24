@@ -528,6 +528,39 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <!-- Common -->
     <string name="cd_add">थप्नुहोस्</string>
 
+        <!-- Appointment Booking -->
+        <string name="title_book_appointment">अपोइन्टमेन्ट बुक गर्नुहोस्</string>
+        <string name="consultation_fee">परामर्श शुल्क</string>
+
+
+        <!-- Doctor Card -->
+
+        <string name="specialization">विशेषज्ञता</string>
+
+        <!-- Date & Time -->
+
+        <string name="available_time_slots">उपलब्ध समय स्लॉटहरू</string>
+        <string name="no_slots_available">यो मितिका लागि कुनै समय उपलब्ध छैन</string>
+
+        <!-- Notes -->
+        <string name="reason_for_visit_optional">भेटको कारण (वैकल्पिक)</string>
+        <string name="notes_placeholder">लक्षण वा परामर्शको कारण लेख्नुहोस्</string>
+        <string name="char_count_500">%1$d/500</string>
+
+        <!-- Confirmation Dialog -->
+        <string name="date">मिति</string>
+        <string name="time">समय</string>
+        <string name="duration">अवधि</string>
+        <string name="minutes">मिनेट</string>
+        <string name="fee">शुल्क</string>
+        <string name="notes">टिप्पणी</string>
+
+        <!-- Common -->
+
+        <string name="currency_npr">नेरु %1$d</string>
+
+
+
 
 
 

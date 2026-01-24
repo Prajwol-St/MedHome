@@ -564,6 +564,37 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
 
 
 
+        <!-- Appointment Booking -->
+        <string name="title_book_appointment">Book Appointment</string>
+        <string name="consultation_fee">Consultation Fee</string>
+
+        <!-- Doctor Card -->
+        <string name="specialization">Specialization</string>
+
+        <!-- Date & Time -->
+        <string name="available_time_slots">Available Time Slots</string>
+        <string name="no_slots_available">No slots available for this date</string>
+
+        <!-- Notes -->
+        <string name="reason_for_visit_optional">Reason for Visit (Optional)</string>
+        <string name="notes_placeholder">Describe your symptoms or reason for consultation</string>
+        <string name="char_count_500">%1$d/500</string>
+
+        <!-- Confirmation Dialog -->
+        <string name="date">Date</string>
+        <string name="time">Time</string>
+        <string name="duration">Duration</string>
+        <string name="minutes">minutes</string>
+        <string name="fee">Fee</string>
+        <string name="notes">Notes</string>
+
+        <!-- Common -->
+        <string name="currency_npr">NPR %1$d</string>
+
+
+
+
+
 
 
 
