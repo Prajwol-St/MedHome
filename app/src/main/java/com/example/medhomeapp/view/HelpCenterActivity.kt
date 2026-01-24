@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -66,12 +67,12 @@ fun HelpCenterScreen() {
             IconButton(onClick = { (context as ComponentActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = Color.White
                 )
             }
             Text(
-                text = "Help Center",
+                text = stringResource(R.string.help_center_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -81,7 +82,7 @@ fun HelpCenterScreen() {
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = "Contact Support",
+            text = stringResource(R.string.contact_support),
             style = TextStyle(
                 color = TextDark,
                 fontWeight = FontWeight.Bold,
@@ -92,12 +93,15 @@ fun HelpCenterScreen() {
 
         ContactCard(
             icon = Icons.Default.Email,
-            title = "Email Support",
+            title = stringResource(R.string.email_support),
             subtitle = "medhome0001@gmail.com",
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:medhome0001@gmail.com")
-                    putExtra(Intent.EXTRA_SUBJECT, "MedHome Support Request")
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        context.getString(R.string.support_email_subject)
+                    )
                 }
                 context.startActivity(intent)
             }
@@ -105,12 +109,15 @@ fun HelpCenterScreen() {
 
         ContactCard(
             icon = Icons.Default.BugReport,
-            title = "Report a Bug",
-            subtitle = "Help us improve the app",
+            title = stringResource(R.string.report_bug),
+            subtitle = stringResource(R.string.help_improve_app),
             onClick = {
                 val intent = Intent(Intent.ACTION_SENDTO).apply {
                     data = Uri.parse("mailto:medhome0001@gmail.com")
-                    putExtra(Intent.EXTRA_SUBJECT, "Bug Report - MedHome")
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        context.getString(R.string.bug_report_subject)
+                    )
                 }
                 context.startActivity(intent)
             }
@@ -118,12 +125,16 @@ fun HelpCenterScreen() {
 
         ContactCard(
             icon = Icons.Default.Feedback,
-            title = "Send Feedback",
-            subtitle = "Share your suggestions",
+            title = stringResource(R.string.send_feedback),
+            subtitle = stringResource(R.string.share_suggestions),
             onClick = {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                val intent = Intent(Intent.ACTION_SENDTO
+                ).apply {
                     data = Uri.parse("mailto:medhome0001@gmail.com")
-                    putExtra(Intent.EXTRA_SUBJECT, "Feedback - MedHome")
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                        context.getString(R.string.support_email_subject)
+                    )
                 }
                 context.startActivity(intent)
             }
@@ -132,7 +143,7 @@ fun HelpCenterScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Frequently Asked Questions",
+            text = stringResource(R.string.faq_title),
             style = TextStyle(
                 color = TextDark,
                 fontWeight = FontWeight.Bold,
@@ -142,16 +153,16 @@ fun HelpCenterScreen() {
         )
 
         val faqs = listOf(
-            "How do I book a consultation?" to "Go to the Dashboard and tap 'Book Consultation'. Select your preferred doctor, date, and time slot to complete your booking.",
-            "How can I view my health records?" to "Navigate to 'Health Records' from the Dashboard. All your uploaded documents, prescriptions, and reports will be available there.",
-            "What is the QR code feature?" to "The QR code allows healthcare providers to quickly access your medical information during emergencies. You can find it on the Dashboard.",
-            "How do I set medication reminders?" to "Tap the 'Reminder' tab in the bottom navigation to create and manage your medication reminders.",
-            "Can I change my profile information?" to "Yes! Go to Settings > Edit Profile to update your personal information, contact details, and emergency contacts.",
-            "How do I reset my password?" to "Go to Settings > Change Password. You'll need to enter your current password and then set a new one.",
-            "Is my health data secure?" to "Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details.",
-            "How do I cancel a consultation?" to "Go to your consultation history, select the appointment you want to cancel, and tap 'Cancel Appointment'. Please note cancellation policies may apply.",
-            "Can I upload my own medical documents?" to "Yes, you can upload medical documents through the Health Records section. Supported formats include PDF, JPG, and PNG.",
-            "What payment methods are accepted?" to "We accept all major credit/debit cards, mobile wallets, and online banking for consultation payments."
+            stringResource(R.string.faq_q1) to stringResource(R.string.faq_a1),
+            stringResource(R.string.faq_q2) to stringResource(R.string.faq_a2),
+            stringResource(R.string.faq_q3) to stringResource(R.string.faq_a3),
+            stringResource(R.string.faq_q4) to stringResource(R.string.faq_a4),
+            stringResource(R.string.faq_q5) to stringResource(R.string.faq_a5),
+            stringResource(R.string.faq_q6) to stringResource(R.string.faq_a6),
+            stringResource(R.string.faq_q7) to stringResource(R.string.faq_a7),
+            stringResource(R.string.faq_q8) to stringResource(R.string.faq_a8),
+            stringResource(R.string.faq_q9) to stringResource(R.string.faq_a9),
+            stringResource(R.string.faq_q10) to stringResource(R.string.faq_a10)
         )
 
         faqs.forEachIndexed { index, (question, answer) ->
@@ -276,7 +287,9 @@ fun FaqItem(
                         if (isExpanded) R.drawable.baseline_expand_less_24
                         else R.drawable.baseline_expand_more_24
                     ),
-                    contentDescription = if (isExpanded) "Collapse" else "Expand",
+                    contentDescription = stringResource(
+                        if (isExpanded) R.string.collapse else R.string.expand
+                    ),
                     tint = SageGreen,
                     modifier = Modifier.size(24.dp)
                 )

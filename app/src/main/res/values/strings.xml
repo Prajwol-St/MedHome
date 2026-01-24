@@ -298,6 +298,81 @@
     <string name="package_booked_success">Package booked successfully!</string>
     <string name="confirm">Confirm</string>
 
+    <!-- ===================== -->
+    <!-- Help Center -->
+    <!-- ===================== -->
+
+    <string name="help_center_title">Help Center</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="email_support">Email Support</string>
+    <string name="report_bug">Report a Bug</string>
+    <string name="send_feedback">Send Feedback</string>
+
+    <string name="help_improve_app">Help us improve the app</string>
+    <string name="share_suggestions">Share your suggestions</string>
+
+    <string name="support_email_subject">MedHome Support Request</string>
+    <string name="bug_report_subject">Bug Report - MedHome</string>
+    <string name="feedback_subject">Feedback - MedHome</string>
+
+    <string name="faq_title">Frequently Asked Questions</string>
+
+    <string name="collapse">Collapse</string>
+    <string name="expand">Expand</string>
+
+    <string name="faq_q1">How do I book a consultation?</string>
+    <string name="faq_a1">
+Go to the Dashboard and tap "Book Consultation". Select your preferred doctor, date, and time slot to complete your booking.
+</string>
+
+    <string name="faq_q2">How can I view my health records?</string>
+    <string name="faq_a2">
+Navigate to "Health Records" from the Dashboard. All your uploaded documents, prescriptions, and reports will be available there.
+</string>
+
+    <string name="faq_q3">What is the QR code feature?</string>
+    <string name="faq_a3">
+The QR code allows healthcare providers to quickly access your medical information during emergencies. You can find it on the Dashboard.
+</string>
+
+    <string name="faq_q4">How do I set medication reminders?</string>
+    <string name="faq_a4">
+Tap the "Reminder" tab in the bottom navigation to create and manage your medication reminders.
+</string>
+
+    <string name="faq_q5">Can I change my profile information?</string>
+    <string name="faq_a5">
+Yes. Go to Settings and then Edit Profile to update your personal information, contact details, and emergency contacts.
+</string>
+
+    <string name="faq_q6">How do I reset my password?</string>
+    <string name="faq_a6">
+Go to Settings and then Change Password. You will need to enter your current password and then set a new one.
+</string>
+
+    <string name="faq_q7">Is my health data secure?</string>
+    <string name="faq_a7">
+Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details.
+</string>
+
+    <string name="faq_q8">How do I cancel a consultation?</string>
+    <string name="faq_a8">
+Go to your consultation history, select the appointment you want to cancel, and tap "Cancel Appointment". Cancellation policies may apply.
+</string>
+
+    <string name="faq_q9">Can I upload my own medical documents?</string>
+    <string name="faq_a9">
+Yes, you can upload medical documents through the Health Records section. Supported formats include PDF, JPG, and PNG.
+</string>
+
+    <string name="faq_q10">What payment methods are accepted?</string>
+    <string name="faq_a10">
+We accept major debit cards, credit cards, mobile wallets, and online banking for consultation payments.
+</string>
+
+
+
+
 
 
 
