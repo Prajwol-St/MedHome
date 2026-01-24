@@ -10,7 +10,7 @@ data class DoctorModel(
     val profileImage: String = "",
     val specialization: String = "",
     val subSpecialization: String = "",
-    val type: String = "", // Specialist, General Practitioner
+    val type: String = "",
     val experience: Int = 0, // years
     val qualifications: String = "",
     val about: String = "",
@@ -26,7 +26,7 @@ data class DoctorModel(
     val isVerified: Boolean = false,
     val isAvailableToday: Boolean = false,
     val languages: String = "", // "English, Nepali, Hindi"
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: String = System.currentTimeMillis().toString()
 ) {
     fun toMap(): Map<String, Any?> = mapOf(
         "id" to id,

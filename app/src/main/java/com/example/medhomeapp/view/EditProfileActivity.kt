@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -110,7 +111,12 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             }
                             profilePictureUrl = url
                             profilePicturePublicId = publicId ?: ""
-                            Toast.makeText(context, "Image uploaded!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.image_uploaded),
+                                Toast.LENGTH_SHORT
+                            ).show()
+
                         } else {
                             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                         }
@@ -168,12 +174,12 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 IconButton(onClick = { (context as BaseActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         tint = Color.White
                     )
                 }
                 Text(
-                    text = "Edit Profile",
+                    text = stringResource(R.string.edit_profile_title),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -220,8 +226,8 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         } else if (profilePictureUrl.isNotEmpty()) {
                             AsyncImage(
                                 model = profilePictureUrl,
-                                contentDescription = "Profile Picture",
-                                modifier = Modifier
+                                contentDescription = stringResource(R.string.profile_picture),
+                                        modifier = Modifier
                                     .fillMaxSize()
                                     .clip(CircleShape),
                                 contentScale = ContentScale.Crop
@@ -229,7 +235,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         } else {
                             Icon(
                                 Icons.Default.Person,
-                                contentDescription = "Profile",
+                                contentDescription = stringResource(R.string.profile),
                                 modifier = Modifier.size(60.dp),
                                 tint = SageGreen
                             )
@@ -249,7 +255,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_camera_alt_24),
-                                contentDescription = "Change Picture",
+                                contentDescription = stringResource(R.string.change_picture),
                                 tint = Color.White,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -261,7 +267,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     Spacer(modifier = Modifier.height(12.dp))
                     TextButton(onClick = { showDeleteDialog = true }) {
                         Text(
-                            "Remove Photo",
+                            stringResource(R.string.remove_photo),
                             color = Color(0xFFD32F2F),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
@@ -272,7 +278,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Personal Information",
+                    text = stringResource(R.string.personal_information),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -284,7 +290,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Full Name",
+                    text = stringResource(R.string.full_name),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -298,7 +304,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    placeholder = { Text("Enter your full name", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.enter_full_name), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -317,7 +323,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Contact Number",
+                    text = stringResource(R.string.contact_number),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -331,7 +337,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 OutlinedTextField(
                     value = contact,
                     onValueChange = { contact = it },
-                    placeholder = { Text("10-digit phone number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(stringResource(R.string.phone_number_hint))
+                    },
                     enabled = !isLoading,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -349,7 +357,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Gender",
+                    text = stringResource(R.string.gender),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -361,8 +369,11 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 )
 
                 var expandedGender by remember { mutableStateOf(false) }
-                val genderOptions = listOf("Male", "Female", "Other")
-
+                val genderOptions = listOf(
+                    stringResource(R.string.male),
+                    stringResource(R.string.female),
+                    stringResource(R.string.other)
+                )
                 ExposedDropdownMenuBox(
                     expanded = expandedGender,
                     onExpandedChange = { expandedGender = !expandedGender },
@@ -422,7 +433,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Date of Birth",
+                    text = stringResource(R.string.date_of_birth),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -436,7 +447,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 OutlinedTextField(
                     value = dateOfBirth,
                     onValueChange = { },
-                    placeholder = { Text("Select date", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(stringResource(R.string.select_date))
+                    },
                     enabled = !isLoading,
                     readOnly = true,
                     modifier = Modifier
@@ -447,7 +460,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         IconButton(onClick = { showDatePicker = true }) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_calendar_month_24),
-                                contentDescription = "Select Date",
+                                contentDescription = stringResource(R.string.select_date),
                                 tint = SageGreen
                             )
                         }
@@ -467,7 +480,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Blood Group",
+                    text = stringResource(R.string.blood_group),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -490,7 +503,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         value = bloodGroup,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text("Select blood group", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        placeholder = {
+                            Text(stringResource(R.string.select_blood_group))
+                        },
                         enabled = !isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -540,7 +555,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Emergency Contact",
+                    text = stringResource(R.string.emergency_contact),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -552,7 +567,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Emergency Contact Number",
+                    text = stringResource(R.string.emergency_contact_number),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -566,7 +581,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 OutlinedTextField(
                     value = emergencyContact,
                     onValueChange = { emergencyContact = it },
-                    placeholder = { Text("10-digit number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = {
+                        Text(stringResource(R.string.emergency_phone_hint))
+                    },
                     enabled = !isLoading,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -584,7 +601,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Address",
+                    text = stringResource(R.string.address),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -598,7 +615,8 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
-                    placeholder = { Text("Enter your address", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.enter_address),
+                        color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -621,7 +639,11 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Button(
                     onClick = {
                         if (name.isBlank()) {
-                            Toast.makeText(context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.name_empty_error),
+                                Toast.LENGTH_SHORT
+                            ).show()
                             return@Button
                         }
 
@@ -643,10 +665,18 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             viewModel.editProfile(userId, updatedUser) { success, message ->
                                 isLoading = false
                                 if (success) {
-                                    Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.profile_update_success),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
                                     (context as BaseActivity).finish()
                                 } else {
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }
@@ -669,7 +699,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         )
                     } else {
                         Text(
-                            "Save Changes",
+                            stringResource(R.string.save_changes),
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -726,8 +756,8 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Remove Profile Picture", fontWeight = FontWeight.Bold) },
-            text = { Text("Are you sure you want to remove your profile picture?") },
+            title = { Text(stringResource(R.string.remove_profile_picture), fontWeight = FontWeight.Bold) },
+            text = { Text(stringResource(R.string.remove_profile_picture_confirm)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -736,9 +766,17 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 if (success) {
                                     profilePictureUrl = ""
                                     profilePicturePublicId = ""
-                                    Toast.makeText(context, "Photo removed", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.photo_removed),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
                                 } else {
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context,
+                                        message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
                         }
@@ -756,13 +794,13 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
             shape = RoundedCornerShape(16.dp)
         )
     }
-    // Image Source Selection Dialog
+
     if (showImageSourceDialog) {
         AlertDialog(
             onDismissRequest = { showImageSourceDialog = false },
             title = {
                 Text(
-                    "Choose Photo Source",
+                    stringResource(R.string.choose_photo_source)  ,
                     fontWeight = FontWeight.Bold,
                     color = TextDark
                 )
@@ -771,7 +809,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Camera Option
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -797,7 +835,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
-                                "Take Photo",
+                                stringResource(R.string.take_photo),
                                 fontSize = 16.sp,
                                 color = TextDark,
                                 fontWeight = FontWeight.Medium
@@ -807,7 +845,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Gallery Option
+
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -833,7 +871,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
-                                "Choose from Gallery",
+                                stringResource(R.string.choose_from_gallery),
                                 fontSize = 16.sp,
                                 color = TextDark,
                                 fontWeight = FontWeight.Medium

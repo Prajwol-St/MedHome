@@ -25,21 +25,34 @@ import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
+    private var currentLanguage: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentLanguage = LanguageManager.getLanguage(this)
         enableEdgeToEdge()
         setContent {
             DashboardScaffold()
         }
     }
+    override fun onResume() {
+        super.onResume()
+        val savedLanguage = LanguageManager.getLanguage(this)
+        if (savedLanguage != currentLanguage) {
+            recreate()
+        }
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
+
 fun DashboardScaffold() {
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
@@ -91,8 +104,9 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> stringResource(R.string.reminder)
-                            2 -> stringResource(R.string.scan)
+                            1 -> "Notifications"
+                            4 -> "My Orders"
+                            3 -> stringResource(R.string.scan)
                             else -> stringResource(R.string.settings)
                         },
                         fontWeight = FontWeight.Bold,
@@ -122,8 +136,8 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(painterResource(R.drawable.baseline_access_time_filled_24), stringResource(R.string.reminder)) },
-                    label = { Text("Pharmacy", fontSize = 11.sp) },
+                    icon = { Icon(Icons.Default.Notifications, "Notifications") },
+                    label = { Text("Notifications", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = SageGreen,
                         selectedTextColor = SageGreen,
@@ -135,7 +149,7 @@ fun DashboardScaffold() {
                 NavigationBarItem(
                     selected = selectedTab == 4,
                     onClick = { selectedTab = 4 },
-                    icon = { Icon(Icons.Default.Notifications, stringResource(R.string.notifications)) },
+                    icon = { Icon(painterResource(R.drawable.baseline_shopping_cart_24), "My Orders") },
                     label = { Text(text="MyOrders", fontSize = 11.sp) },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MintGreen,
@@ -208,8 +222,7 @@ fun DashboardScaffold() {
                     if (isDoctor) {
                         DoctorScheduleScreen()
                     } else {
-                        NotificationScreen()  // ← Now it matches
-
+                        NotificationHistoryScreenContent()
                     }
                 }
                 2 -> {
@@ -245,7 +258,7 @@ fun DashboardScaffold() {
                 }
 
                 4 -> {
-                    MyOrdersScreen()  // ← Now it matches
+                    MyOrdersScreen()
                 }
             }
         }

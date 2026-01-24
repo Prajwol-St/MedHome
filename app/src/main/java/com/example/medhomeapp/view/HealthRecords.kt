@@ -257,7 +257,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
             }
         }
 
-
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
@@ -315,7 +314,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(20.dp))
 
-
                     Text(
                         text = "Title",
                         fontSize = 14.sp,
@@ -331,7 +329,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                     Spacer(Modifier.height(16.dp))
 
-
                     Text(
                         text = "Date",
                         fontSize = 14.sp,
@@ -345,7 +342,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     )
 
                     Spacer(Modifier.height(16.dp))
-
 
                     if (selectedRecord?.description?.isNotEmpty() == true) {
                         Text(
@@ -364,7 +360,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     }
 
                     if (selectedRecord?.fileName?.isNotEmpty() == true &&
-                        selectedRecord?.fileUrl?.isNotEmpty() == true) {
+                        selectedRecord?.fileUrl?.isNotEmpty() == true
+                    ) {
                         Text(
                             text = "Attached File",
                             fontSize = 14.sp,
@@ -381,117 +378,125 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                         try {
                                             val intent = Intent(Intent.ACTION_VIEW).apply {
                                                 setDataAndType(Uri.parse(url), "*/*")
-                                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                             }
                                             context.startActivity(intent)
                                         } catch (e: Exception) {
-                                            Toast.makeText(
-                                                context,
-                                                "Unable to open file",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            Toast.makeText(context, "Cannot open file", Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 },
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color(0xFFF1FBF9)
-                            )
+                            shape = RoundedCornerShape(8.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF1FBF9))
                         ) {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
+                                modifier = Modifier.padding(12.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
                                     painter = painterResource(R.drawable.outline_attach_file_24),
                                     contentDescription = null,
-                                    tint = MintGreen,
-                                    modifier = Modifier.size(32.dp)
+                                    tint = MintGreen
                                 )
-                                Spacer(Modifier.width(12.dp))
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = selectedRecord?.fileName ?: "",
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Medium
-                                    )
-                                    Spacer(Modifier.height(4.dp))
-                                    Text(
-                                        text = "Tap to open",
-                                        fontSize = 12.sp,
-                                        color = Color.Gray
-                                    )
-                                }
-                                Icon(
-                                    painter = painterResource(R.drawable.baseline_arrow_forward_ios_24),
-                                    contentDescription = null,
-                                    tint = MintGreen,
-                                    modifier = Modifier.size(20.dp)
+                                Spacer(Modifier.width(8.dp))
+                                Text(
+                                    text = selectedRecord?.fileName ?: "",
+                                    fontSize = 14.sp,
+                                    color = Color.DarkGray
                                 )
                             }
                         }
-                        Spacer(Modifier.height(16.dp))
                     }
 
-                    Spacer(Modifier.height(20.dp))
+                    Spacer(Modifier.height(24.dp))
                 }
             }
         }
-
 
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
                 sheetState = sheetState
             ) {
-                Column(Modifier.padding(16.dp)) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     Text(
-                        text = if (editingRecord == null) "Add Medical Record" else "Edit Medical Record",
-                        fontSize = 22.sp,
+                        text = if (editingRecord == null) "Add New Record" else "Edit Record",
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(Modifier.height(12.dp))
+
+                    Spacer(Modifier.height(20.dp))
 
                     OutlinedTextField(
                         value = recordTitle,
                         onValueChange = { recordTitle = it },
-                        label = { Text("Title") },
-                        modifier = Modifier.fillMaxWidth()
+                        label = { Text("Title *") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
                     )
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(16.dp))
 
                     OutlinedTextField(
                         value = selectedDate,
                         onValueChange = {},
-                        label = { Text("Date") },
-                        modifier = Modifier.fillMaxWidth().clickable { datepicker.show() },
-                        enabled = false
+                        label = { Text("Date *") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { datepicker.show() },
+                        enabled = false,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                            disabledBorderColor = MaterialTheme.colorScheme.outline,
+                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     )
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(16.dp))
 
                     OutlinedTextField(
                         value = recordDescription,
                         onValueChange = { recordDescription = it },
-                        label = { Text("Description") },
-                        modifier = Modifier.fillMaxWidth().height(120.dp)
-                    )
-
-                    Spacer(Modifier.height(12.dp))
-
-                    Box(
+                        label = { Text("Description (Optional)") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
-                            .border(1.dp, Color.Gray, RoundedCornerShape(12.dp))
-                            .clickable { filePickerLauncher.launch("*/*") }
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center
+                            .height(120.dp),
+                        maxLines = 5
+                    )
+
+                    Spacer(Modifier.height(16.dp))
+
+                    OutlinedButton(
+                        onClick = { filePickerLauncher.launch("*/*") },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MintGreen
+                        ),
+                        border = ButtonDefaults.outlinedButtonBorder.copy(width = 1.dp)
                     ) {
-                        Text(selectedFileName ?: "Tap to upload file", color = Color.Gray)
+                        Icon(
+                            painter = painterResource(R.drawable.outline_attach_file_24),
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(if (selectedFileName != null) "Change File" else "Attach File")
+                    }
+
+                    if (selectedFileName != null) {
+                        Spacer(Modifier.height(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFFF1FBF9), RoundedCornerShape(8.dp))
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(selectedFileName ?: "Tap to upload file", color = Color.Gray)
+                        }
                     }
 
                     Spacer(Modifier.height(20.dp))
@@ -516,7 +521,11 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
 
                                 showBottomSheet = false
                             } else {
-                                Toast.makeText(context, "Title & Date required", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Title & Date required",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -597,11 +606,17 @@ fun HealthRecordCard(
                     ) {
                         DropdownMenuItem(
                             text = { Text("Edit") },
-                            onClick = { showMenu = false; onEditClick(record) }
+                            onClick = {
+                                showMenu = false
+                                onEditClick(record)
+                            }
                         )
                         DropdownMenuItem(
                             text = { Text("Delete", color = Color.Red) },
-                            onClick = { showMenu = false; onDeleteClick(record) }
+                            onClick = {
+                                showMenu = false
+                                onDeleteClick(record)
+                            }
                         )
                     }
                 }

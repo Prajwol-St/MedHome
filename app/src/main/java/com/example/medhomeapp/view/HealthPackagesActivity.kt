@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.BaseActivity
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthPackageModel
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
@@ -98,7 +100,10 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Health Packages", fontWeight = FontWeight.Bold) },
+                title = { Text(
+                    stringResource(R.string.health_packages_title),
+                    fontWeight = FontWeight.Bold
+                ) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = SageGreen,
                     titleContentColor = Color.White
@@ -107,7 +112,11 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     IconButton(onClick = {
                         (context as? HealthPackagesActivity)?.finish()
                     }) {
-                        Icon(Icons.Default.ArrowBack, "Back", tint = Color.White)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            stringResource(R.string.back),
+                            tint = Color.White
+                        )
                     }
                 },
                 actions = {
@@ -115,7 +124,11 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                         val intent = Intent(context, MyPackagesActivity::class.java)
                         context.startActivity(intent)
                     }) {
-                        Icon(Icons.Default.ShoppingBag, "My Packages", tint = Color.White)
+                        Icon(
+                            Icons.Default.ShoppingBag,
+                            stringResource(R.string.my_packages),
+                            tint = Color.White
+                        )
                     }
                 }
             )
@@ -127,7 +140,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                 .padding(padding)
                 .background(BackgroundCream)
         ) {
-            // Category Filter
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,7 +163,11 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     ) {
                         Icon(Icons.Default.FilterList, null, tint = SageGreen)
                         Column {
-                            Text("Category", fontSize = 12.sp, color = Color.Gray)
+                            Text(
+                                stringResource(R.string.category),
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
                             Text(
                                 selectedCategory,
                                 fontSize = 16.sp,
@@ -183,7 +200,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                 }
             }
 
-            // Packages List
+
             if (isLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -207,13 +224,13 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        "No packages available",
+                        stringResource(R.string.no_packages_available),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextDark
                     )
                     Text(
-                        "Check back later for new packages",
+                        stringResource(R.string.check_back_later) ,
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -273,7 +290,7 @@ fun PatientPackageCard(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            // Package Image
+
             Box {
                 if (packageModel.imageUrl.isNotEmpty()) {
                     AsyncImage(
@@ -281,7 +298,7 @@ fun PatientPackageCard(
                             .data(packageModel.imageUrl)
                             .crossfade(true)
                             .build(),
-                        contentDescription = "Package Image",
+                        contentDescription = stringResource(R.string.package_image),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp)
@@ -317,7 +334,7 @@ fun PatientPackageCard(
                         }
                     ) {
                         Text(
-                            "$daysRemaining days left",
+                            stringResource(R.string.days_left, daysRemaining),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -386,10 +403,13 @@ fun PatientPackageCard(
                             }
                         }
 
-                        // Show "+X more" if there are more services
+
                         if (packageModel.includedServices.size > 3) {
                             Text(
-                                "+${packageModel.includedServices.size - 3} more services",
+                                stringResource(
+                                    R.string.more_services,
+                                    packageModel.includedServices.size - 3
+                                ),
                                 fontSize = 12.sp,
                                 color = SageGreen,
                                 fontWeight = FontWeight.Medium,

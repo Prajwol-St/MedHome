@@ -1,17 +1,21 @@
 package com.example.medhomeapp.repository
 
+import android.content.Context
 import com.example.medhomeapp.model.AppointmentModel
 import com.example.medhomeapp.model.DoctorModel
 import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.utils.AppConstants
+import com.example.medhomeapp.utils.AppointmentNotificationIntegration
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 
-class AppointmentBookingRepoImpl : AppointmentBookingRepo {
+class AppointmentBookingRepoImpl(
+    private val context: Context  // ADD THIS: Pass context for notifications
+) : AppointmentBookingRepo {
 
     private val db = FirebaseDatabase.getInstance()
     private val availabilityRef = db.getReference("doctor_availability")
@@ -102,7 +106,15 @@ class AppointmentBookingRepoImpl : AppointmentBookingRepo {
                             .addOnSuccessListener {
                                 // Create indexes for quick queries
                                 createAppointmentIndexes(appointmentId, patient.id, slot.doctorId)
-                                callback(true, "Appointment booked successfully!")
+
+                                // ✅ Send booking confirmation and schedule reminders
+                                AppointmentNotificationIntegration.onAppointmentBooked(
+                                    context = context,
+                                    appointment = appointment
+                                ) { notifSuccess, notifMessage ->
+                                    // Always return success for appointment booking
+                                    callback(true, "Appointment booked successfully!")
+                                }
                             }
                             .addOnFailureListener { exception ->
                                 // Rollback slot booking
