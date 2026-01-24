@@ -337,6 +337,31 @@
     <string name="placeholder_short_description">संक्षिप्त विवरण</string>
     <string name="placeholder_full_description">विस्तृत विवरण</string>
 
+    <!-- ===================== -->
+    <!-- पासवर्ड परिवर्तन -->
+    <!-- ===================== -->
+    <string name="cd_back">पछाडि</string>
+    <string name="title_change_password">पासवर्ड परिवर्तन</string>
+    <string name="security">सुरक्षा</string>
+    <string name="security_desc">आफ्नो खाता सुरक्षित राख्न पासवर्ड अपडेट गर्नुहोस्</string>
+    <string name="label_current_password">हालको पासवर्ड</string>
+    <string name="label_new_password">नयाँ पासवर्ड</string>
+    <string name="label_confirm_new_password">नयाँ पासवर्ड पुष्टि गर्नुहोस्</string>
+    <string name="ph_current_password">हालको पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="ph_new_password">कम्तिमा ६ अक्षर</string>
+    <string name="ph_confirm_password">नयाँ पासवर्ड पुनः प्रविष्ट गर्नुहोस्</string>
+    <string name="show_password">पासवर्ड देखाउनुहोस्</string>
+    <string name="hide_password">पासवर्ड लुकाउनुहोस्</string>
+    <string name="btn_change_password">पासवर्ड परिवर्तन गर्नुहोस्</string>
+    <string name="err_current_password">कृपया हालको पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="err_new_password">कृपया नयाँ पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="err_password_length">पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ</string>
+    <string name="err_password_mismatch">पासवर्ड मिलेन</string>
+    <string name="err_same_password">नयाँ पासवर्ड पुरानो भन्दा फरक हुनुपर्छ</string>
+    <string name="password_requirements">पासवर्ड आवश्यकताहरू</string>
+    <string name="password_rules">• कम्तिमा ६ अक्षर\n• बलियो र फरक पासवर्ड प्रयोग गर्नुहोस्\n• पुरानो पासवर्ड पुनः प्रयोग नगर्नुहोस्</string>
+
+
 
 
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>

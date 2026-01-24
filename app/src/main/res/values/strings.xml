@@ -373,6 +373,31 @@
     <string name="placeholder_included_services">Blood Test, BP Check, Consultation</string>
     <string name="helper_separate_commas">Separate with commas</string>
 
+    <!-- ===================== -->
+    <!-- Change Password -->
+    <!-- ===================== -->
+    <string name="cd_back">Back</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="security">Security</string>
+    <string name="security_desc">Update your password to keep your account secure</string>
+    <string name="label_current_password">Current Password</string>
+    <string name="label_new_password">New Password</string>
+    <string name="label_confirm_new_password">Confirm New Password</string>
+    <string name="ph_current_password">Enter current password</string>
+    <string name="ph_new_password">At least 6 characters</string>
+    <string name="ph_confirm_password">Re-enter new password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="btn_change_password">Change Password</string>
+    <string name="err_current_password">Please enter your current password</string>
+    <string name="err_new_password">Please enter a new password</string>
+    <string name="err_password_length">Password must be at least 6 characters</string>
+    <string name="err_password_mismatch">Passwords don\'t match</string>
+    <string name="err_same_password">New password must be different from current password</string>
+    <string name="password_requirements">Password Requirements</string>
+    <string name="password_rules">• Minimum 6 characters\n• Use a strong, unique password\n• Don\'t reuse old passwords</string>
+
+
 
 
 
