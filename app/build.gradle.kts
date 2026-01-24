@@ -17,6 +17,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "GROQ_API_KEY",
+            "\"${project.properties["GROQ_API_KEY"]}\""
+        )
+
     }
 
     buildTypes {
@@ -40,6 +47,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -67,6 +75,12 @@ dependencies {
 
     implementation("com.google.android.material:material:1.11.0")
 
+    //google-gemine
+
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
 
     implementation("com.cloudinary:cloudinary-android:2.1.0")
 
@@ -78,10 +92,12 @@ dependencies {
 
 
     //  FIREBASE
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+
+
 
     //  GOOGLE AUTH
     implementation("com.google.android.gms:play-services-auth:21.4.0")
@@ -103,6 +119,7 @@ dependencies {
 
     //  UTIL
     implementation(libs.guava)
+    implementation(libs.generativeai)
 
     //  TESTING
     testImplementation(libs.junit)
@@ -115,8 +132,14 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+
+
     // Cloudinary
     implementation("com.cloudinary:cloudinary-android:3.0.2")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
 }

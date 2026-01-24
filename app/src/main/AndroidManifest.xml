@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- Camera is optional -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -22,11 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
-        <activity
-            android:name=".view.AiHealthAssistantActivity"
-            android:exported="false"
-            android:label="@string/title_activity_ai_health_assistant"
-            android:theme="@style/Theme.MedHomeApp" />
         <!-- ===================== -->
         <!-- Splash / Launcher -->
         <!-- ===================== -->
@@ -60,10 +57,16 @@
             android:name=".view.MainActivity"
             android:exported="false" />
         <activity
+            android:name=".view.ChatbotActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.DashboardActivity"
             android:exported="false" /> <!-- ===================== -->
         <!-- Health / Features -->
         <!-- ===================== -->
+
+
+
         <activity
             android:name=".view.CaloriesCalculatorActivity"
             android:exported="false" />

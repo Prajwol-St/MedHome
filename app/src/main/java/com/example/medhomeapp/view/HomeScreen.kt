@@ -173,7 +173,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                     icon = Icons.Default.Chat,
                     color = Color(0xFF9575CD),
                     onClick = {
-                        val intent = Intent(context, AiHealthAssistantActivity::class.java)
+                        val intent = Intent(context, ChatbotActivity::class.java)
                         context.startActivity(intent)
                     }
 
