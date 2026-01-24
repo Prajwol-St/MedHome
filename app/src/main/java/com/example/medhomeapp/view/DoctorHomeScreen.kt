@@ -28,9 +28,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
-import com.example.medhomeapp.R
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 @Composable
 fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
@@ -43,13 +42,12 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
             .background(BackgroundCream)
             .verticalScroll(scrollState)
     ) {
-
-
+        // Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            colors = CardDefaults.cardColors(containerColor = SageGreen),
+            colors = CardDefaults.cardColors(containerColor = MintGreen),
             elevation = CardDefaults.cardElevation(6.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
@@ -92,7 +90,7 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
                 Column {
                     Text(
-                        text = stringResource(R.string.doctor_welcome),
+                        text = "Welcome Dr.",
                         fontSize = 13.sp,
                         color = Color.White.copy(alpha = 0.9f)
                     )
@@ -106,27 +104,40 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
             }
         }
 
-
+        // Section Title
         Text(
-            text = stringResource(R.string.doctor_management),
+            text = "Management",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = TextDark,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-
+        // Grid Menu - UPDATED with Notifications
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier.height(850.dp)
         ) {
-
+            // 1. Notifications - NEW
             item {
                 DoctorFeatureCard(
-                    title = stringResource(R.string.doctor_set_availability),
+                    title = "Notifications",
+                    icon = Icons.Default.Notifications,
+                    color = Color(0xFFFF9800),
+                    onClick = {
+                        val intent = Intent(context, NotificationHistoryActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                )
+            }
+
+            // 2. Set Availability
+            item {
+                DoctorFeatureCard(
+                    title = "Set Availability",
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF6B8E4E),
                     onClick = {
@@ -137,27 +148,38 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                 )
             }
 
+            // 3. My Appointments
             item {
                 DoctorFeatureCard(
-                    title = stringResource(R.string.doctor_messages),
-                    icon = Icons.Default.Message,
+                    title = "My Appointments",
+                    icon = Icons.Default.EventNote,
                     color = Color(0xFF87A96B),
-                    onClick = { }
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, DoctorAppointmentsActivity::class.java)
+                        )
+                    }
                 )
             }
 
+            // 4. Manage Leaves
             item {
                 DoctorFeatureCard(
-                    title = stringResource(R.string.doctor_messages),
-                    icon = Icons.Default.Description,
+                    title = "Manage Leaves",
+                    icon = Icons.Default.BeachAccess,
                     color = Color(0xFF6B8E4E),
-                    onClick = { }
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, ManageLeavesActivity::class.java)
+                        )
+                    }
                 )
             }
 
+            // 5. Health Packages
             item {
                 DoctorFeatureCard(
-                    title = stringResource(R.string.doctor_health_packages),
+                    title = "Health Packages",
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
                     onClick = {

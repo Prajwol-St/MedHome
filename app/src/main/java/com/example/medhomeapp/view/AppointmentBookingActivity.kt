@@ -69,11 +69,11 @@ fun BookAppointmentScreen(doctorId: String) {
 
     val doctorRepo = DoctorRepoImpl()
     val availabilityRepo = DoctorAvailabilityRepoImpl()
-    val appointmentRepo = AppointmentBookingRepoImpl()
+
     val userRepo = UserRepoImpl()
 
     val bookingViewModel: AppointmentBookingViewModel = viewModel(
-        factory = AppointmentBookingViewModelFactory(appointmentRepo)
+        factory = AppointmentBookingViewModelFactory(context)
     )
 
     val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""

@@ -5,10 +5,12 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -17,6 +19,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -28,9 +32,9 @@ import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModel
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -69,37 +73,50 @@ fun DoctorAvailabilityScreen() {
     var endTime by remember { mutableStateOf("17:00") }
     var selectedDuration by remember { mutableStateOf(30) }
 
-    // Group slots by date
     val groupedSlots = timeSlots.groupBy { it.date }.toSortedMap()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Set Availability") },
+                title = {
+                    Text(
+                        "Set Availability",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(
+                        onClick = { activity?.finish() },
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(40.dp)
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = "Back",
                             tint = Color.White
                         )
                     }
-                }
+                },
+                modifier = Modifier.shadow(4.dp)
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { showAddSlotDialog = true },
-                containerColor = SageGreen,
-                contentColor = Color.White
+                containerColor = MintGreen,
+                contentColor = Color.White,
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Time Slots")
+                Text("Add Time Slots", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
             }
         }
     ) { paddingValues ->
@@ -107,28 +124,49 @@ fun DoctorAvailabilityScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFF8FAFB),
+                                Color(0xFFE8F5F2)
+                            )
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    modifier = Modifier.padding(32.dp)
                 ) {
-                    Icon(
-                        Icons.Default.EventBusy,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = Color.Gray
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .background(
+                                color = MintGreen.copy(alpha = 0.1f),
+                                shape = CircleShape
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.EventBusy,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MintGreen
+                        )
+                    }
                     Text(
                         text = "No time slots added",
-                        fontSize = 16.sp,
-                        color = Color.Gray
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF2C3E50)
                     )
                     Text(
-                        text = "Tap the button below to add availability",
+                        text = "Tap the button below to add your availability\nand start accepting appointments",
                         fontSize = 14.sp,
-                        color = Color.LightGray
+                        color = Color(0xFF7F8C8D),
+                        lineHeight = 20.sp
                     )
                 }
             }
@@ -137,26 +175,54 @@ fun DoctorAvailabilityScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .background(Color(0xFFF5F5F5)),
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFF8FAFB),
+                                Color(0xFFE8F5F2)
+                            )
+                        )
+                    ),
                 contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 groupedSlots.forEach { (date, slots) ->
                     item {
-                        Text(
-                            text = DateTimeUtils.formatDateForDisplay(date),
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF2C3E50),
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MintGreen.copy(alpha = 0.15f)
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = CardDefaults.cardElevation(0.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Icon(
+                                    Icons.Default.CalendarToday,
+                                    contentDescription = null,
+                                    tint = MintGreen,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = DateTimeUtils.formatDateForDisplay(date),
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF2C3E50)
+                                )
+                            }
+                        }
                     }
 
                     items(slots) { slot ->
                         TimeSlotItem(
                             slot = slot,
                             onDelete = {
-                                // FIXED: Match current ViewModel signature
                                 viewModel.deleteSlot(slot.date, slot.id)
                                 Toast.makeText(context, "Slot deleted", Toast.LENGTH_SHORT).show()
                             }
@@ -167,7 +233,6 @@ fun DoctorAvailabilityScreen() {
         }
     }
 
-    // Add Slot Dialog
     if (showAddSlotDialog) {
         AddTimeSlotDialog(
             selectedDate = selectedDate,
@@ -179,7 +244,6 @@ fun DoctorAvailabilityScreen() {
             onEndTimeChange = { endTime = it },
             onDurationChange = { selectedDuration = it },
             onConfirm = {
-                // Generate time slots based on start, end, and duration
                 val slots = generateTimeSlots(
                     doctorId = doctorId,
                     date = selectedDate,
@@ -197,7 +261,6 @@ fun DoctorAvailabilityScreen() {
                     return@AddTimeSlotDialog
                 }
 
-                // FIXED: Match current ViewModel signature
                 slots.forEach { slot ->
                     viewModel.addSlot(
                         date = slot.date,
@@ -223,60 +286,108 @@ fun TimeSlotItem(
     slot: TimeSlot,
     onDelete: () -> Unit
 ) {
-    // Calculate duration if not available
     val duration = try {
         slot.duration ?: calculateDuration(slot.startTime, slot.endTime)
     } catch (e: Exception) {
-        30 // default
+        30
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(2.dp, RoundedCornerShape(16.dp)),
         colors = CardDefaults.cardColors(
-            containerColor = if (slot.isBooked) Color.LightGray else Color.White
+            containerColor = if (slot.isBooked) Color(0xFFF0F0F0) else Color.White
         ),
-        elevation = CardDefaults.cardElevation(2.dp),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(16.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
             ) {
-                Icon(
-                    Icons.Default.AccessTime,
-                    contentDescription = null,
-                    tint = if (slot.isBooked) Color.Gray else SageGreen,
-                    modifier = Modifier.size(24.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(
+                            color = if (slot.isBooked) Color(0xFFE0E0E0) else MintGreen.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(12.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.AccessTime,
+                        contentDescription = null,
+                        tint = if (slot.isBooked) Color.Gray else MintGreen,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
 
-                Column {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     Text(
                         text = "${slot.startTime} - ${slot.endTime}",
-                        fontSize = 16.sp,
+                        fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
                         color = if (slot.isBooked) Color.Gray else Color(0xFF2C3E50)
                     )
-                    Text(
-                        text = "$duration minutes • ${if (slot.isBooked) "Booked" else "Available"}",
-                        fontSize = 13.sp,
-                        color = Color.Gray
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "$duration min",
+                            fontSize = 13.sp,
+                            color = Color(0xFF7F8C8D),
+                            fontWeight = FontWeight.Medium
+                        )
+                        Text(
+                            text = "•",
+                            fontSize = 13.sp,
+                            color = Color(0xFF7F8C8D)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = if (slot.isBooked) Color(0xFFFFB74D).copy(alpha = 0.2f) else MintGreen.copy(alpha = 0.2f),
+                                    shape = RoundedCornerShape(6.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 2.dp)
+                        ) {
+                            Text(
+                                text = if (slot.isBooked) "Booked" else "Available",
+                                fontSize = 12.sp,
+                                color = if (slot.isBooked) Color(0xFFFF9800) else MintGreen,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                    }
                 }
             }
 
             if (!slot.isBooked) {
-                IconButton(onClick = onDelete) {
+                IconButton(
+                    onClick = onDelete,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(
+                            color = Color(0xFFFFEBEE),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                ) {
                     Icon(
                         Icons.Default.Delete,
                         contentDescription = "Delete",
-                        tint = Color.Red
+                        tint = Color(0xFFE53935),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
@@ -284,7 +395,6 @@ fun TimeSlotItem(
     }
 }
 
-// Helper function to calculate duration
 fun calculateDuration(startTime: String, endTime: String): Int {
     return try {
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -295,10 +405,10 @@ fun calculateDuration(startTime: String, endTime: String): Int {
             val diffInMillis = end.time - start.time
             (diffInMillis / (1000 * 60)).toInt()
         } else {
-            30 // default
+            30
         }
     } catch (e: Exception) {
-        30 // default
+        30
     }
 }
 
@@ -332,10 +442,29 @@ fun AddTimeSlotDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = "Add Time Slots",
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(MintGreen.copy(alpha = 0.15f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.EventAvailable,
+                        contentDescription = null,
+                        tint = MintGreen,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Text(
+                    text = "Add Time Slots",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
         },
         text = {
             Column(
@@ -344,54 +473,103 @@ fun AddTimeSlotDialog(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Date Selection
                 OutlinedButton(
                     onClick = { showDatePicker = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MintGreen.copy(alpha = 0.05f)
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, MintGreen.copy(alpha = 0.3f))
                 ) {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(DateTimeUtils.formatDateForDisplay(selectedDate))
+                    Icon(Icons.Default.CalendarMonth, contentDescription = null, tint = MintGreen)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        DateTimeUtils.formatDateForDisplay(selectedDate),
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF2C3E50)
+                    )
                 }
 
-                // Start Time
                 OutlinedButton(
                     onClick = { showStartTimePicker = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MintGreen.copy(alpha = 0.05f)
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, MintGreen.copy(alpha = 0.3f))
                 ) {
-                    Icon(Icons.Default.AccessTime, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("Start: $startTime")
+                    Icon(Icons.Default.AccessTime, contentDescription = null, tint = MintGreen)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        "Start: $startTime",
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF2C3E50)
+                    )
                 }
 
-                // End Time
                 OutlinedButton(
                     onClick = { showEndTimePicker = true },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MintGreen.copy(alpha = 0.05f)
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(1.5.dp, MintGreen.copy(alpha = 0.3f))
                 ) {
-                    Icon(Icons.Default.AccessTime, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text("End: $endTime")
+                    Icon(Icons.Default.AccessTime, contentDescription = null, tint = MintGreen)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        "End: $endTime",
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF2C3E50)
+                    )
                 }
 
-                // Duration Selection
-                Text(
-                    text = "Slot Duration",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "Slot Duration",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF2C3E50)
+                    )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    AppConstants.SLOT_DURATIONS.forEach { duration ->
-                        FilterChip(
-                            selected = selectedDuration == duration,
-                            onClick = { onDurationChange(duration) },
-                            label = { Text("$duration min") },
-                            modifier = Modifier.weight(1f)
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        AppConstants.SLOT_DURATIONS.forEach { duration ->
+                            FilterChip(
+                                selected = selectedDuration == duration,
+                                onClick = { onDurationChange(duration) },
+                                label = {
+                                    Text(
+                                        "$duration min",
+                                        fontWeight = if (selectedDuration == duration) FontWeight.Bold else FontWeight.Normal
+                                    )
+                                },
+                                modifier = Modifier.weight(1f),
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = MintGreen,
+                                    selectedLabelColor = Color.White,
+                                    containerColor = Color(0xFFF5F5F5)
+                                ),
+                                shape = RoundedCornerShape(10.dp),
+                                border = FilterChipDefaults.filterChipBorder(
+                                    enabled = true,
+                                    selected = selectedDuration == duration,
+                                    borderColor = if (selectedDuration == duration) MintGreen else Color.Transparent,
+                                    borderWidth = 2.dp
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -399,46 +577,65 @@ fun AddTimeSlotDialog(
         confirmButton = {
             Button(
                 onClick = onConfirm,
-                colors = ButtonDefaults.buttonColors(containerColor = SageGreen)
+                colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.height(48.dp)
             ) {
-                Text("Add Slots")
+                Text("Add Slots", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
+            TextButton(
+                onClick = onDismiss,
+                modifier = Modifier.height(48.dp)
+            ) {
+                Text("Cancel", color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
             }
         },
         containerColor = Color.White,
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(20.dp)
     )
 
-    // Date Picker Dialog
     if (showDatePicker) {
         AlertDialog(
             onDismissRequest = { showDatePicker = false },
-            title = { Text("Select Date") },
+            title = {
+                Text(
+                    "Select Date",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            },
             text = {
-                LazyColumn {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     items(dates) { (date, displayDate) ->
                         TextButton(
                             onClick = {
                                 onDateChange(date)
                                 showDatePicker = false
                             },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp),
+                            shape = RoundedCornerShape(10.dp)
                         ) {
-                            Text(displayDate)
+                            Text(
+                                displayDate,
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFF2C3E50)
+                            )
                         }
                     }
                 }
             },
             confirmButton = {},
-            containerColor = Color.White
+            containerColor = Color.White,
+            shape = RoundedCornerShape(20.dp)
         )
     }
 
-    // Start Time Picker Dialog
     if (showStartTimePicker) {
         TimePickerDialog(
             title = "Select Start Time",
@@ -450,7 +647,6 @@ fun AddTimeSlotDialog(
         )
     }
 
-    // End Time Picker Dialog
     if (showEndTimePicker) {
         TimePickerDialog(
             title = "Select End Time",
@@ -479,25 +675,41 @@ fun TimePickerDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(title) },
+        title = {
+            Text(
+                title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+        },
         text = {
-            LazyColumn {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 items(times) { time ->
                     TextButton(
                         onClick = { onTimeSelected(time) },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(10.dp)
                     ) {
-                        Text(time)
+                        Text(
+                            time,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp,
+                            color = Color(0xFF2C3E50)
+                        )
                     }
                 }
             }
         },
         confirmButton = {},
-        containerColor = Color.White
+        containerColor = Color.White,
+        shape = RoundedCornerShape(20.dp)
     )
 }
 
-// Helper function to generate time slots
 fun generateTimeSlots(
     doctorId: String,
     date: String,

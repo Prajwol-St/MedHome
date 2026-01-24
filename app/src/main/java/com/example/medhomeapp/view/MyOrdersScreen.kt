@@ -1,9 +1,12 @@
 package com.example.medhomeapp.view
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,18 +18,20 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.medhomeapp.model.OrderModel
 import com.example.medhomeapp.repository.OrderRepoImpl
 import com.example.medhomeapp.viewmodel.OrderViewModel
 import android.widget.Toast
-import androidx.compose.foundation.lazy.LazyRow
 import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,19 +51,17 @@ fun MyOrdersScreen() {
     var showCancelDialog by remember { mutableStateOf(false) }
     var orderToCancel by remember { mutableStateOf<OrderModel?>(null) }
 
-    // Filter options
-    val filterOptions = listOf("All", "Pending", "Completed")
+    val filterOptions = listOf("All", "Pending", "Processing", "Completed", "Cancelled")
 
-    // Filtered orders based on selected status
     val filteredOrders = remember(ordersList, selectedFilter) {
         if (selectedFilter == "All") {
-            ordersList
+            ordersList.sortedByDescending { it.timestamp }
         } else {
             ordersList.filter { it.orderStatus.equals(selectedFilter, ignoreCase = true) }
+                .sortedByDescending { it.timestamp }
         }
     }
 
-    // Handle order status changes (for cancellation)
     LaunchedEffect(orderStatus) {
         orderStatus?.let { (success, message) ->
             if (message.isNotEmpty()) {
@@ -72,132 +75,87 @@ fun MyOrdersScreen() {
         }
     }
 
-    // UPDATED: Set up real-time listener for instant updates
     LaunchedEffect(Unit) {
         val auth = FirebaseAuth.getInstance()
         val currentUserId = auth.currentUser?.uid
 
         if (currentUserId != null) {
-            // Use real-time listener instead of one-time fetch
             orderViewModel.listenToUserOrders(currentUserId)
         } else {
             Toast.makeText(context, "Please login to view orders", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // ADDED: Clean up listener when screen is removed
     DisposableEffect(Unit) {
         onDispose {
             orderViewModel.stopListening()
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "My Orders",
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFF8F9FA),
+                        Color(0xFFE9ECEF)
                     )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF4A6741),
-                    titleContentColor = Color.White
                 )
             )
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF5F5F5))
-                .padding(paddingValues)
-        ) {
-            if (isLoading) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Filter Chips
+            AnimatedVisibility(
+                visible = ordersList.isNotEmpty(),
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    CircularProgressIndicator(color = Color(0xFF4A6741))
-                }
-            } else {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    // Filter Chips
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(filterOptions.size) { index ->
-                            val filter = filterOptions[index]
-                            FilterChip(
-                                selected = selectedFilter == filter,
-                                onClick = { selectedFilter = filter },
-                                label = {
-                                    Text(
-                                        text = filter,
-                                        fontWeight = if (selectedFilter == filter) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    selectedContainerColor = Color(0xFF4A6741),
-                                    selectedLabelColor = Color.White,
-                                    containerColor = Color.White
-                                )
-                            )
+                    items(filterOptions.size) { index ->
+                        val filter = filterOptions[index]
+                        val count = if (filter == "All") {
+                            ordersList.size
+                        } else {
+                            ordersList.count { it.orderStatus.equals(filter, ignoreCase = true) }
                         }
-                    }
 
-                    // Order count
-                    if (filteredOrders.isNotEmpty()) {
-                        Text(
-                            text = "${filteredOrders.size} order${if (filteredOrders.size != 1) "s" else ""}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                        FilterChipEnhanced(
+                            label = filter,
+                            count = count,
+                            selected = selectedFilter == filter,
+                            onClick = { selectedFilter = filter }
                         )
                     }
+                }
+            }
 
-                    // Orders List
-                    if (filteredOrders.isEmpty()) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Icon(
-                                    Icons.Default.ShoppingBag,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(80.dp),
-                                    tint = Color.Gray.copy(alpha = 0.5f)
-                                )
-                                Text(
-                                    text = if (selectedFilter == "All") "No orders yet" else "No $selectedFilter orders",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = Color.Gray,
-                                    fontWeight = FontWeight.Medium
-                                )
-                                Text(
-                                    text = "Your orders will appear here instantly",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.Gray
-                                )
-                            }
-                        }
-                    } else {
+            // Orders List
+            Box(modifier = Modifier.fillMaxSize()) {
+                when {
+                    isLoading -> {
+                        LoadingState()
+                    }
+                    filteredOrders.isEmpty() -> {
+                        EmptyState(selectedFilter = selectedFilter)
+                    }
+                    else -> {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            items(filteredOrders, key = { it.orderID }) { order ->
-                                OrderCard(
+                            items(
+                                items = filteredOrders,
+                                key = { it.orderID }
+                            ) { order ->
+                                OrderCardEnhanced(
                                     order = order,
                                     onViewDetails = {
                                         selectedOrder = order
@@ -213,48 +171,181 @@ fun MyOrdersScreen() {
                     }
                 }
             }
+        }
 
-            // Order Details Dialog
-            if (showOrderDetailsDialog && selectedOrder != null) {
-                OrderDetailsDialog(
-                    order = selectedOrder!!,
-                    onDismiss = {
-                        showOrderDetailsDialog = false
-                        selectedOrder = null
-                    }
-                )
-            }
+        // Order Details Dialog
+        if (showOrderDetailsDialog && selectedOrder != null) {
+            OrderDetailsDialogEnhanced(
+                order = selectedOrder!!,
+                onDismiss = {
+                    showOrderDetailsDialog = false
+                    selectedOrder = null
+                }
+            )
+        }
 
-            // Cancel Order Confirmation Dialog
-            if (showCancelDialog && orderToCancel != null) {
-                CancelOrderDialog(
-                    order = orderToCancel!!,
-                    onConfirm = {
-                        orderViewModel.cancelOrder(orderToCancel!!.orderID)
-                    },
-                    onDismiss = {
-                        showCancelDialog = false
-                        orderToCancel = null
-                    }
-                )
+        // Cancel Order Confirmation Dialog
+        if (showCancelDialog && orderToCancel != null) {
+            CancelOrderDialogEnhanced(
+                order = orderToCancel!!,
+                onConfirm = {
+                    orderViewModel.cancelOrder(orderToCancel!!.orderID)
+                },
+                onDismiss = {
+                    showCancelDialog = false
+                    orderToCancel = null
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun FilterChipEnhanced(
+    label: String,
+    count: Int,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (selected) Color(0xFF4A6741) else Color.White,
+        animationSpec = tween(300)
+    )
+
+    val contentColor by animateColorAsState(
+        targetValue = if (selected) Color.White else Color(0xFF4A6741),
+        animationSpec = tween(300)
+    )
+
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = backgroundColor,
+        shadowElevation = if (selected) 4.dp else 0.dp,
+        border = if (!selected) androidx.compose.foundation.BorderStroke(
+            1.dp,
+            Color(0xFF4A6741).copy(alpha = 0.3f)
+        ) else null,
+        modifier = Modifier.animateContentSize()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = label,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                color = contentColor,
+                fontSize = 14.sp
+            )
+            if (count > 0) {
+                Surface(
+                    shape = CircleShape,
+                    color = if (selected)
+                        Color.White.copy(alpha = 0.3f)
+                    else
+                        Color(0xFF4A6741).copy(alpha = 0.15f)
+                ) {
+                    Text(
+                        text = count.toString(),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = contentColor,
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun OrderCard(
+fun LoadingState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            CircularProgressIndicator(
+                color = Color(0xFF4A6741),
+                strokeWidth = 3.dp,
+                modifier = Modifier.size(48.dp)
+            )
+            Text(
+                text = "Loading your orders...",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+        }
+    }
+}
+
+@Composable
+fun EmptyState(selectedFilter: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(40.dp)
+        ) {
+            Surface(
+                shape = CircleShape,
+                color = Color(0xFF4A6741).copy(alpha = 0.1f),
+                modifier = Modifier.size(120.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        Icons.Default.ShoppingBag,
+                        contentDescription = null,
+                        modifier = Modifier.size(60.dp),
+                        tint = Color(0xFF4A6741).copy(alpha = 0.6f)
+                    )
+                }
+            }
+            Text(
+                text = if (selectedFilter == "All") "No orders yet" else "No $selectedFilter orders",
+                style = MaterialTheme.typography.titleLarge,
+                color = Color(0xFF2D3436),
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Your orders will appear here instantly",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Gray
+            )
+        }
+    }
+}
+
+@Composable
+fun OrderCardEnhanced(
     order: OrderModel,
     onViewDetails: () -> Unit,
     onCancelOrder: () -> Unit
 ) {
+    var isPressed by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onViewDetails() },
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            .shadow(
+                elevation = if (isPressed) 2.dp else 6.dp,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable {
+                isPressed = true
+                onViewDetails()
+            },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Header: Order ID & Status
@@ -263,20 +354,40 @@ fun OrderCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Order #${order.orderID.take(8)}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                OrderStatusBadge(status = order.orderStatus)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = Color(0xFF4A6741).copy(alpha = 0.1f),
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Default.Receipt,
+                                contentDescription = null,
+                                tint = Color(0xFF4A6741),
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                    Text(
+                        text = "#${order.orderID.take(8).uppercase()}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF2D3436)
+                    )
+                }
+                OrderStatusBadgeEnhanced(status = order.orderStatus)
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Medicine Info
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 // Medicine Image
                 if (order.imageUrl.isNotEmpty()) {
@@ -284,22 +395,31 @@ fun OrderCard(
                         model = order.imageUrl,
                         contentDescription = order.medicineName,
                         modifier = Modifier
-                            .size(60.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color.Gray.copy(alpha = 0.1f)),
+                            .size(80.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color.Gray.copy(alpha = 0.05f)),
                         contentScale = ContentScale.Crop
                     )
                 } else {
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
-                            .background(Color.Gray.copy(alpha = 0.1f), RoundedCornerShape(8.dp)),
+                            .size(80.dp)
+                            .background(
+                                Brush.linearGradient(
+                                    colors = listOf(
+                                        Color(0xFF4A6741).copy(alpha = 0.1f),
+                                        Color(0xFF4A6741).copy(alpha = 0.05f)
+                                    )
+                                ),
+                                RoundedCornerShape(12.dp)
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             Icons.Default.Medication,
                             contentDescription = null,
-                            tint = Color.Gray
+                            tint = Color(0xFF4A6741),
+                            modifier = Modifier.size(32.dp)
                         )
                     }
                 }
@@ -307,75 +427,112 @@ fun OrderCard(
                 // Medicine Details
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
                         text = order.medicineName,
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "Quantity: ${order.quantity}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = "₹${"%.2f".format(order.totalAmount)}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF4A6741)
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color(0xFF2D3436)
                     )
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            Icons.Default.Inventory,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = Color.Gray
+                        )
+                        Text(
+                            text = "Qty: ${order.quantity}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                    }
+
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = Color(0xFF4A6741).copy(alpha = 0.1f)
+                    ) {
+                        Text(
+                            text = "₹${"%.2f".format(order.totalAmount)}",
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF4A6741)
+                        )
+                    }
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Divider(color = Color.Gray.copy(alpha = 0.2f))
+
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Delivery Info
+            // Delivery Info & Time
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     Icons.Default.LocationOn,
                     contentDescription = null,
-                    tint = Color.Gray,
-                    modifier = Modifier.size(16.dp)
+                    tint = Color(0xFF4A6741),
+                    modifier = Modifier.size(18.dp)
                 )
                 Text(
                     text = order.deliveryAddress,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF636E72),
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Time & Actions
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Icon(
+                    Icons.Default.AccessTime,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(16.dp)
+                )
                 Text(
                     text = order.getFormattedTime(),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    modifier = Modifier.weight(1f)
                 )
 
                 // Cancel button (only for Pending/Processing orders)
                 if (order.orderStatus.equals("Pending", ignoreCase = true) ||
                     order.orderStatus.equals("Processing", ignoreCase = true)
                 ) {
-                    TextButton(
+                    OutlinedButton(
                         onClick = onCancelOrder,
-                        colors = ButtonDefaults.textButtonColors(
+                        colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
-                        )
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.error
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
                     ) {
                         Icon(
                             Icons.Default.Cancel,
@@ -383,7 +540,7 @@ fun OrderCard(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Cancel", fontWeight = FontWeight.SemiBold)
+                        Text("Cancel", fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
                     }
                 }
             }
@@ -392,113 +549,127 @@ fun OrderCard(
 }
 
 @Composable
-fun OrderStatusBadge(status: String) {
-    val (backgroundColor, textColor, icon, text) = when (status.lowercase()) {
-        "pending" -> Tuple4(
+fun OrderStatusBadgeEnhanced(status: String) {
+    val (backgroundColor, textColor, icon) = when (status.lowercase()) {
+        "pending" -> Triple(
             Color(0xFFFFF3CD),
             Color(0xFF856404),
-            "⏳",
-            "Pending"
+            Icons.Default.HourglassEmpty
         )
-        "processing" -> Tuple4(
-            Color(0xFFCCE5FF),
-            Color(0xFF004085),
-            "📦",
-            "Processing"
+        "processing" -> Triple(
+            Color(0xFFD1ECF1),
+            Color(0xFF0C5460),
+            Icons.Default.LocalShipping
         )
-        "completed" -> Tuple4(
+        "completed" -> Triple(
             Color(0xFFD4EDDA),
             Color(0xFF155724),
-            "✅",
-            "Completed"
+            Icons.Default.CheckCircle
         )
-        "cancelled" -> Tuple4(
+        "cancelled" -> Triple(
             Color(0xFFF8D7DA),
             Color(0xFF721C24),
-            "❌",
-            "Cancelled"
+            Icons.Default.Cancel
         )
-        else -> Tuple4(
+        else -> Triple(
             Color.Gray.copy(alpha = 0.2f),
             Color.DarkGray,
-            "•",
-            status
+            Icons.Default.FiberManualRecord
         )
     }
 
     Surface(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         color = backgroundColor
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = icon,
-                style = MaterialTheme.typography.bodySmall
+            Icon(
+                icon,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = textColor
             )
             Text(
-                text = text,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.SemiBold,
+                text = status.replaceFirstChar { it.uppercase() },
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
                 color = textColor
             )
         }
     }
 }
 
-data class Tuple4<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
-
 @Composable
-fun OrderDetailsDialog(
+fun OrderDetailsDialogEnhanced(
     order: OrderModel,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Column {
-                Text(
-                    text = "Order Details",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "#${order.orderID.take(12)}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray
-                )
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = Color(0xFF4A6741).copy(alpha = 0.1f),
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Default.Receipt,
+                                contentDescription = null,
+                                tint = Color(0xFF4A6741),
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+                    Column {
+                        Text(
+                            text = "Order Details",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = "#${order.orderID.take(12).uppercase()}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Gray
+                        )
+                    }
+                }
             }
         },
         text = {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 item {
-                    // Status
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Status:", fontWeight = FontWeight.SemiBold)
-                        OrderStatusBadge(status = order.orderStatus)
+                        Text("Status:", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                        OrderStatusBadgeEnhanced(status = order.orderStatus)
                     }
                 }
 
                 item {
-                    // Medicine Image
                     if (order.imageUrl.isNotEmpty()) {
                         AsyncImage(
                             model = order.imageUrl,
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(RoundedCornerShape(12.dp))
+                                .height(200.dp)
+                                .clip(RoundedCornerShape(16.dp))
                                 .background(Color.Gray.copy(alpha = 0.1f)),
                             contentScale = ContentScale.Crop
                         )
@@ -506,77 +677,94 @@ fun OrderDetailsDialog(
                 }
 
                 item {
-                    // Medicine Details
-                    DetailRow("Medicine", order.medicineName)
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFF8F9FA)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text(
+                                "Product Details",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                            DetailRowEnhanced("Medicine", order.medicineName)
+                            DetailRowEnhanced("Price per unit", "₹${order.price}")
+                            DetailRowEnhanced("Quantity", "${order.quantity}")
+                            Divider(color = Color.Gray.copy(alpha = 0.3f))
+                            DetailRowEnhanced(
+                                "Total Amount",
+                                "₹${"%.2f".format(order.totalAmount)}",
+                                highlight = true
+                            )
+                        }
+                    }
                 }
 
                 item {
-                    DetailRow("Price per unit", "₹${order.price}")
-                }
-
-                item {
-                    DetailRow("Quantity", "${order.quantity}")
-                }
-
-                item {
-                    DetailRow("Total Amount", "₹${"%.2f".format(order.totalAmount)}", highlight = true)
-                }
-
-                item {
-                    Divider()
-                }
-
-                item {
-                    // Delivery Info
-                    Text("Delivery Information", fontWeight = FontWeight.Bold)
-                }
-
-                item {
-                    DetailRow("Address", order.deliveryAddress)
-                }
-
-                item {
-                    DetailRow("Phone", order.phoneNumber)
-                }
-
-                item {
-                    DetailRow("Order Time", order.getFormattedTime())
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFF8F9FA)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            Text(
+                                "Delivery Information",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                            DetailRowEnhanced("Address", order.deliveryAddress)
+                            DetailRowEnhanced("Phone", order.phoneNumber)
+                            DetailRowEnhanced("Order Time", order.getFormattedTime())
+                        }
+                    }
                 }
             }
         },
         confirmButton = {
             Button(
                 onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A6741))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A6741)),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("CLOSE")
+                Text("CLOSE", fontWeight = FontWeight.Bold)
             }
         }
     )
 }
 
 @Composable
-fun DetailRow(label: String, value: String, highlight: Boolean = false) {
+fun DetailRowEnhanced(label: String, value: String, highlight: Boolean = false) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = "$label:",
             style = MaterialTheme.typography.bodyMedium,
-            color = if (highlight) Color.Black else Color.Gray
+            color = if (highlight) Color.Black else Color.Gray,
+            fontWeight = if (highlight) FontWeight.SemiBold else FontWeight.Normal
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = if (highlight) FontWeight.Bold else FontWeight.Normal,
-            color = if (highlight) Color(0xFF4A6741) else Color.Black
+            color = if (highlight) Color(0xFF4A6741) else Color(0xFF2D3436),
+            modifier = Modifier.weight(1f, fill = false),
+            maxLines = if (highlight) 1 else 3,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
 
 @Composable
-fun CancelOrderDialog(
+fun CancelOrderDialogEnhanced(
     order: OrderModel,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
@@ -584,36 +772,75 @@ fun CancelOrderDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
-            Icon(
-                Icons.Default.Warning,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(48.dp)
-            )
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                modifier = Modifier.size(80.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        Icons.Default.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
+            }
         },
         title = {
             Text(
                 text = "Cancel Order?",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF2D3436)
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Are you sure you want to cancel this order?",
-                    style = MaterialTheme.typography.bodyMedium
+                    text = "Are you sure you want to cancel this order? This action cannot be undone.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF636E72)
                 )
-                Text(
-                    text = order.medicineName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = "Order #${order.orderID.take(8)}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
+
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = Color(0xFFF8F9FA)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                Icons.Default.Medication,
+                                contentDescription = null,
+                                tint = Color(0xFF4A6741),
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Text(
+                                text = order.medicineName,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2D3436)
+                            )
+                        }
+                        Text(
+                            text = "Order #${order.orderID.take(8).uppercase()}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color.Gray
+                        )
+                        Text(
+                            text = "Amount: ₹${"%.2f".format(order.totalAmount)}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF4A6741)
+                        )
+                    }
+                }
             }
         },
         confirmButton = {
@@ -621,14 +848,34 @@ fun CancelOrderDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
-                )
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("YES, CANCEL")
+                Icon(
+                    Icons.Default.Cancel,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("YES, CANCEL ORDER", fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("NO, KEEP IT")
+            OutlinedButton(
+                onClick = onDismiss,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.5.dp,
+                    Color(0xFF4A6741)
+                )
+            ) {
+                Text(
+                    "NO, KEEP IT",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4A6741)
+                )
             }
         }
     )

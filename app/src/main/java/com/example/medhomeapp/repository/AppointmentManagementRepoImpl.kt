@@ -1,10 +1,14 @@
 package com.example.medhomeapp.repository
 
+import android.content.Context
 import com.example.medhomeapp.model.AppointmentModel
 import com.example.medhomeapp.utils.AppConstants
+import com.example.medhomeapp.utils.AppointmentNotificationIntegration
 import com.google.firebase.database.*
 
-class AppointmentManagementRepoImpl : AppointmentManagementRepo {
+class AppointmentManagementRepoImpl(
+    private val context: Context  // ADD THIS: Pass context for notifications
+) : AppointmentManagementRepo {
 
     private val db = FirebaseDatabase.getInstance()
     private val appointmentRef = db.getReference("appointments")
@@ -193,6 +197,12 @@ class AppointmentManagementRepoImpl : AppointmentManagementRepo {
                                 appointment.time
                             )
 
+                            // ✅ NEW: Cancel scheduled reminders
+                            AppointmentNotificationIntegration.onAppointmentCancelled(
+                                context = context,
+                                appointmentId = appointmentId
+                            )
+
                             callback(true, "Appointment cancelled successfully")
                         }
                         .addOnFailureListener {
@@ -251,6 +261,21 @@ class AppointmentManagementRepoImpl : AppointmentManagementRepo {
                                 // Book new slot
                                 bookTimeSlot(appointment.doctorId, newDate, newSlotId, appointmentId)
 
+                                // ✅ NEW: Reschedule notifications
+                                // Create updated appointment object
+                                val updatedAppointment = appointment.copy(
+                                    date = newDate,
+                                    time = newTime
+                                )
+
+                                AppointmentNotificationIntegration.onAppointmentRescheduled(
+                                    context = context,
+                                    oldAppointmentId = appointmentId,
+                                    newAppointment = updatedAppointment
+                                ) { _, _ ->
+                                    // Rescheduling succeeded regardless of notification status
+                                }
+
                                 callback(true, "Appointment rescheduled successfully")
                             }
                             .addOnFailureListener {
@@ -291,6 +316,13 @@ class AppointmentManagementRepoImpl : AppointmentManagementRepo {
                             "upcoming",
                             "past"
                         )
+
+                        // ✅ NEW: Cancel reminders (appointment is completed)
+                        AppointmentNotificationIntegration.onAppointmentCancelled(
+                            context = context,
+                            appointmentId = appointmentId
+                        )
+
                         callback(true, "Appointment marked as completed")
                     }
                     .addOnFailureListener {
@@ -327,6 +359,13 @@ class AppointmentManagementRepoImpl : AppointmentManagementRepo {
                             "upcoming",
                             "past"
                         )
+
+                        // ✅ NEW: Cancel reminders (appointment is no-show)
+                        AppointmentNotificationIntegration.onAppointmentCancelled(
+                            context = context,
+                            appointmentId = appointmentId
+                        )
+
                         callback(true, "Appointment marked as no-show")
                     }
                     .addOnFailureListener {

@@ -1,5 +1,6 @@
 package com.example.medhomeapp.view
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
+import com.example.medhomeapp.repository.NotificationRepositoryImpl
+import com.example.medhomeapp.viewmodel.NotificationSettingsViewModel
 
 class NotificationSettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +40,22 @@ fun NotificationSettingsScreen() {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    var pushNotifications by remember { mutableStateOf(true) }
-    var emailNotifications by remember { mutableStateOf(true) }
-    var appointmentReminders by remember { mutableStateOf(true) }
-    var medicationReminders by remember { mutableStateOf(true) }
-    var healthTips by remember { mutableStateOf(false) }
+    // Get userId from SharedPreferences
+    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = sharedPrefs.getString("user_id", null)
+
+    // Initialize ViewModel
+    val viewModel = remember { NotificationSettingsViewModel(NotificationRepositoryImpl()) }
+
+    // Load preferences when screen opens
+    LaunchedEffect(userId) {
+        userId?.let { viewModel.loadPreferences(it) }
+    }
+
+    // Observe preferences from ViewModel
+    val preferences by viewModel.preferences
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.errorMessage
 
     Column(
         modifier = Modifier
@@ -72,52 +86,104 @@ fun NotificationSettingsScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Manage Notifications",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color(0xFF648DDB),
-            modifier = Modifier.padding(horizontal = 24.dp)
-        )
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = Color(0xFF648DDB))
+            }
+        } else {
+            Text(
+                text = "Manage Notifications",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF648DDB),
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        NotificationToggleItem(
-            title = "Push Notifications",
-            description = "Receive push notifications",
-            checked = pushNotifications,
-            onCheckedChange = { pushNotifications = it }
-        )
+            // Show error message if any
+            errorMessage?.let { error ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp, vertical = 8.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
+                ) {
+                    Text(
+                        text = error,
+                        color = Color(0xFFD32F2F),
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
 
-        NotificationToggleItem(
-            title = "Email Notifications",
-            description = "Receive email updates",
-            checked = emailNotifications,
-            onCheckedChange = { emailNotifications = it }
-        )
+            preferences?.let { prefs ->
+                NotificationToggleItem(
+                    title = "Appointment Reminders",
+                    description = "Get notified 24h and 1h before appointments",
+                    checked = prefs.appointmentRemindersEnabled,
+                    onCheckedChange = { enabled ->
+                        userId?.let { viewModel.toggleAppointmentReminders(it, enabled) }
+                    }
+                )
 
-        NotificationToggleItem(
-            title = "Appointment Reminders",
-            description = "Get notified about upcoming appointments",
-            checked = appointmentReminders,
-            onCheckedChange = { appointmentReminders = it }
-        )
+                NotificationToggleItem(
+                    title = "Medicine Reminders",
+                    description = "Daily reminders to take your medications",
+                    checked = prefs.medicineRemindersEnabled,
+                    onCheckedChange = { enabled ->
+                        userId?.let { viewModel.toggleMedicineReminders(it, enabled) }
+                    }
+                )
 
-        NotificationToggleItem(
-            title = "Medication Reminders",
-            description = "Reminders to take your medications",
-            checked = medicationReminders,
-            onCheckedChange = { medicationReminders = it }
-        )
+                NotificationToggleItem(
+                    title = "Booking Confirmations",
+                    description = "Get notified when appointments are confirmed",
+                    checked = prefs.bookingConfirmationsEnabled,
+                    onCheckedChange = { enabled ->
+                        userId?.let { viewModel.toggleBookingConfirmations(it, enabled) }
+                    }
+                )
 
-        NotificationToggleItem(
-            title = "Health Tips",
-            description = "Receive daily health tips and advice",
-            checked = healthTips,
-            onCheckedChange = { healthTips = it }
-        )
+                Spacer(modifier = Modifier.height(24.dp))
 
-        Spacer(modifier = Modifier.height(80.dp))
+                Text(
+                    text = "Notification Sound & Vibration",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0xFF648DDB),
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                NotificationToggleItem(
+                    title = "Sound",
+                    description = "Play sound for notifications",
+                    checked = prefs.reminderSound,
+                    onCheckedChange = { enabled ->
+                        userId?.let { viewModel.toggleReminderSound(it, enabled) }
+                    }
+                )
+
+                NotificationToggleItem(
+                    title = "Vibration",
+                    description = "Vibrate on notifications",
+                    checked = prefs.vibration,
+                    onCheckedChange = { enabled ->
+                        userId?.let { viewModel.toggleVibration(it, enabled) }
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(80.dp))
+        }
     }
 }
 

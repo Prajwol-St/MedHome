@@ -26,10 +26,9 @@ import com.example.medhomeapp.repository.OrderRepoImpl
 import com.example.medhomeapp.viewmodel.InventoryViewModel
 import com.example.medhomeapp.viewmodel.OrderViewModel
 import android.widget.Toast
-import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-fun NotificationScreen(
+fun PharmacyScreen(
     onNavigateToMyOrders: () -> Unit = {} // Add navigation callback
 ) {
     val context = LocalContext.current
