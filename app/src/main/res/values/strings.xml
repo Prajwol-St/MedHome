@@ -184,71 +184,51 @@
     <!-- Accessibility -->
     <!-- ===================== -->
     <string name="profile_picture">Profile Picture</string>
-
     <string name="edit_profile_title">Edit Profile</string>
-
     <string name="personal_information">Personal Information</string>
     <string name="full_name">Full Name</string>
     <string name="enter_full_name">Enter your full name</string>
-
     <string name="contact_number">Contact Number</string>
     <string name="phone_number_hint">10-digit phone number</string>
-
     <string name="gender">Gender</string>
     <string name="select_gender">Select gender</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
-
     <string name="date_of_birth">Date of Birth</string>
     <string name="select_date">Select date</string>
-
     <string name="blood_group">Blood Group</string>
     <string name="select_blood_group">Select blood group</string>
-
     <string name="emergency_contact">Emergency Contact</string>
     <string name="emergency_contact_number">Emergency Contact Number</string>
     <string name="emergency_phone_hint">10-digit number</string>
-
     <string name="address">Address</string>
     <string name="enter_address">Enter your address</string>
-
     <string name="remove_photo">Remove Photo</string>
     <string name="remove_profile_picture">Remove Profile Picture</string>
     <string name="remove_profile_picture_confirm">
-    Are you sure you want to remove your profile picture?
-</string>
-
+    Are you sure you want to remove your profile picture?</string>
     <string name="save_changes">Save Changes</string>
-
     <string name="name_empty_error">Name cannot be empty</string>
     <string name="profile_update_success">Profile updated successfully!</string>
     <string name="image_uploaded">Image uploaded!</string>
     <string name="photo_removed">Photo removed</string>
-
     <string name="choose_photo_source">Choose Photo Source</string>
     <string name="take_photo">Take Photo</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
-
     <string name="change_picture">Change Picture</string>
 
     <!-- ===================== -->
     <!-- Health Packages Management -->
     <!-- ===================== -->
-
     <string name="my_health_packages">My Health Packages</string>
     <string name="insights">Insights</string>
     <string name="create_package">Create Package</string>
-
     <string name="no_packages_title">No packages yet</string>
     <string name="no_packages_subtitle">Create your first health package</string>
-
     <string name="delete_package_title">Delete Package?</string>
     <string name="delete_package_message">
-    Are you sure you want to delete “%1$s”? This action cannot be undone.
-</string>
-
-
+    Are you sure you want to delete “%1$s”? This action cannot be undone.</string>
     <string name="package_deleted">Package deleted</string>
 
     <string name="package_image">Package Image</string>
@@ -263,13 +243,10 @@
     <!-- ===================== -->
     <!-- Health Packages (Patient List) -->
     <!-- ===================== -->
-
     <string name="health_packages_title">Health Packages</string>
     <string name="my_packages">My Packages</string>
-
     <string name="category">Category</string>
     <string name="all">All</string>
-
     <string name="no_packages_available">No packages available</string>
     <string name="check_back_later">Check back later for new packages</string>
     <string name="more_services">+%1$d more services</string>
@@ -280,16 +257,11 @@
 
     <string name="package_details">Package Details</string>
     <string name="package_not_found">Package not found</string>
-
-
     <string name="validity">Validity</string>
-
     <string name="description">Description</string>
     <string name="included_services">Included Services</string>
-
     <string name="total_price">Total Price</string>
     <string name="book_now">Book Now</string>
-
     <string name="confirm_booking">Confirm Booking</string>
     <string name="package_label">Package:</string>
     <string name="price_label">Price:</string>
@@ -307,73 +279,99 @@
     <string name="email_support">Email Support</string>
     <string name="report_bug">Report a Bug</string>
     <string name="send_feedback">Send Feedback</string>
-
     <string name="help_improve_app">Help us improve the app</string>
     <string name="share_suggestions">Share your suggestions</string>
-
     <string name="support_email_subject">MedHome Support Request</string>
     <string name="bug_report_subject">Bug Report - MedHome</string>
     <string name="feedback_subject">Feedback - MedHome</string>
-
     <string name="faq_title">Frequently Asked Questions</string>
-
     <string name="collapse">Collapse</string>
     <string name="expand">Expand</string>
-
     <string name="faq_q1">How do I book a consultation?</string>
-    <string name="faq_a1">
-Go to the Dashboard and tap "Book Consultation". Select your preferred doctor, date, and time slot to complete your booking.
-</string>
-
+    <string name="faq_a1">Go to the Dashboard and tap "Book Consultation". Select your preferred doctor, date, and time slot to complete your booking.</string>
     <string name="faq_q2">How can I view my health records?</string>
-    <string name="faq_a2">
-Navigate to "Health Records" from the Dashboard. All your uploaded documents, prescriptions, and reports will be available there.
-</string>
-
+    <string name="faq_a2">Navigate to "Health Records" from the Dashboard. All your uploaded documents, prescriptions, and reports will be available there.</string>
     <string name="faq_q3">What is the QR code feature?</string>
-    <string name="faq_a3">
-The QR code allows healthcare providers to quickly access your medical information during emergencies. You can find it on the Dashboard.
-</string>
-
+    <string name="faq_a3">The QR code allows healthcare providers to quickly access your medical information during emergencies. You can find it on the Dashboard.</string>
     <string name="faq_q4">How do I set medication reminders?</string>
-    <string name="faq_a4">
-Tap the "Reminder" tab in the bottom navigation to create and manage your medication reminders.
-</string>
-
+    <string name="faq_a4">Tap the "Reminder" tab in the bottom navigation to create and manage your medication reminders.</string>
     <string name="faq_q5">Can I change my profile information?</string>
-    <string name="faq_a5">
-Yes. Go to Settings and then Edit Profile to update your personal information, contact details, and emergency contacts.
-</string>
-
+    <string name="faq_a5">Yes. Go to Settings and then Edit Profile to update your personal information, contact details, and emergency contacts.</string>
     <string name="faq_q6">How do I reset my password?</string>
-    <string name="faq_a6">
-Go to Settings and then Change Password. You will need to enter your current password and then set a new one.
-</string>
-
+    <string name="faq_a6">Go to Settings and then Change Password. You will need to enter your current password and then set a new one.</string>
     <string name="faq_q7">Is my health data secure?</string>
-    <string name="faq_a7">
-Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details.
-</string>
-
+    <string name="faq_a7">Yes, all your data is encrypted and stored securely. We follow strict healthcare data protection standards. Read our Privacy Policy for more details.</string>
     <string name="faq_q8">How do I cancel a consultation?</string>
-    <string name="faq_a8">
-Go to your consultation history, select the appointment you want to cancel, and tap "Cancel Appointment". Cancellation policies may apply.
-</string>
-
+    <string name="faq_a8">Go to your consultation history, select the appointment you want to cancel, and tap "Cancel Appointment". Cancellation policies may apply.</string>
     <string name="faq_q9">Can I upload my own medical documents?</string>
-    <string name="faq_a9">
-Yes, you can upload medical documents through the Health Records section. Supported formats include PDF, JPG, and PNG.
-</string>
-
+    <string name="faq_a9">Yes, you can upload medical documents through the Health Records section. Supported formats include PDF, JPG, and PNG.</string>
     <string name="faq_q10">What payment methods are accepted?</string>
-    <string name="faq_a10">
-We accept major debit cards, credit cards, mobile wallets, and online banking for consultation payments.
-</string>
+    <string name="faq_a10">We accept major debit cards, credit cards, mobile wallets, and online banking for consultation payments.</string>
 
-
-
-
-
+    <!-- ===================== -->
+    <!-- Create Health Package -->
+    <!-- ===================== -->
+    <string name="title_create_package">Create Health Package</string>
+    <string name="uploading_image">Uploading image...</string>
+    <string name="tap_change_image">Tap to change image</string>
+    <string name="tap_upload_image">Tap to upload package image</string>
+    <string name="optional">(Optional)</string>
+    <string name="label_package_name">Package Name</string>
+    <string name="hint_package_name">Complete Health Checkup</string>
+    <string name="label_category">Category</string>
+    <string name="label_short_description">Short Description</string>
+    <string name="hint_short_description">Brief description</string>
+    <string name="char_limit">100 characters maximum</string>
+    <string name="label_full_description">Full Description</string>
+    <string name="hint_full_description">Detailed description</string>
+    <string name="label_price">Price (NPR)</string>
+    <string name="hint_price">1000</string>
+    <string name="label_validity_period">Validity Period</string>
+    <string name="label_select_validity">Select package validity dates</string>
+    <string name="label_start_date">Start Date</string>
+    <string name="label_end_date">End Date</string>
+    <string name="label_included_services">Included Services</string>
+    <string name="hint_included_services">Blood Test, BP Check, Consultation</string>
+    <string name="services_helper">Separate with commas</string>
+    <string name="label_package_status">Package Status</string>
+    <string name="status_visible">Visible to patients</string>
+    <string name="status_hidden">Hidden from patients</string>
+    <string name="btn_create_package">Create Package</string>
+    <string name="err_package_name">Please enter package name</string>
+    <string name="err_short_description">Please enter short description</string>
+    <string name="err_full_description">Please enter full description</string>
+    <string name="err_price">Please enter price</string>
+    <string name="err_dates">Please select validity dates</string>
+    <string name="err_services">Please enter included services</string>
+    <string name="msg_image_uploaded">Image uploaded</string>
+    <string name="msg_package_created">Package created successfully</string>
+    <string name="msg_upload_failed">Upload failed</string>
+    <string name="err_validity_dates">Please select validity dates</string>
+    <string name="err_included_services">Please enter included services</string>
+    <string name="validity_period">Validity Period</string>
+    <string name="select_validity_dates">Select package validity dates</string>
+    <string name="cat_general_checkup">General Checkup</string>
+    <string name="cat_diabetes">Diabetes Care</string>
+    <string name="cat_heart">Heart Health</string>
+    <string name="cat_wellness">Wellness and Fitness</string>
+    <string name="cat_womens_health">Women Health</string>
+    <string name="cat_senior">Senior Care</string>
+    <string name="cat_preventive">Preventive Care</string>
+    <string name="cat_chronic">Chronic Disease Management</string>
+    <string name="package_name">Package Name</string>
+    <string name="package_name_placeholder">Complete Health Checkup</string>
+    <string name="short_description">Short Description</string>
+    <string name="short_description_placeholder">Brief description</string>
+    <string name="full_description">Full Description</string>
+    <string name="full_description_placeholder">Detailed description</string>
+    <string name="upload_failed">Upload failed: %1$s</string>
+    <string name="package_created_success">Package created successfully!</string>
+    <string name="err_upload_failed">Upload failed: %1$s</string>
+    <string name="placeholder_package_name">Complete Health Checkup</string>
+    <string name="placeholder_short_description">Brief description</string>
+    <string name="placeholder_full_description">Detailed description</string>
+    <string name="placeholder_included_services">Blood Test, BP Check, Consultation</string>
+    <string name="helper_separate_commas">Separate with commas</string>
 
 
 
