@@ -8,5 +8,6 @@ data class HealthRecordsModel(
     val description: String="",
     val fileUrl : String ="",
     val fileName: String ="",
+    val publicId: String = "",
     val timestamp: Long = System.currentTimeMillis()
 )

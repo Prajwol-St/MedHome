@@ -6,12 +6,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.medhomeapp.model.HealthRecordsModel
+import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.HealthRecordsRepo
 import com.example.medhomeapp.repository.HealthRecordsRepoImpl
 
-class  HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
+class HealthRecordsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository: HealthRecordsRepo = HealthRecordsRepoImpl(application.applicationContext)
+
+    private val repository: HealthRecordsRepo = HealthRecordsRepoImpl(
+        application.applicationContext,
+        CommonRepoImpl()
+    )
 
     private val _healthRecords = MutableLiveData<List<HealthRecordsModel>>()
     val healthRecords: LiveData<List<HealthRecordsModel>> = _healthRecords
@@ -75,11 +80,11 @@ class  HealthRecordsViewModel(application: Application): AndroidViewModel(applic
         )
     }
 
-    fun deleteHealthRecord(recordId: String, fileUrl: String) {
+    fun deleteHealthRecord(recordId: String, publicId: String) {
         _isLoading.value = true
         repository.deleteHealthRecord(
             recordId = recordId,
-            fileUrl = fileUrl,
+            publicId = publicId, // CHANGED: from fileUrl to publicId
             onSuccess = {
                 _successMessage.value = "Record deleted successfully"
                 _isLoading.value = false

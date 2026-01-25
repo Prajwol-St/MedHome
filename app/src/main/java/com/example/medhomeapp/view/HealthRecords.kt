@@ -376,10 +376,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 .clickable {
                                     selectedRecord?.fileUrl?.let { url ->
                                         try {
-                                            val intent = Intent(Intent.ACTION_VIEW).apply {
-                                                setDataAndType(Uri.parse(url), "*/*")
-                                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                            }
+                                            // CHANGED: Open Cloudinary URL in browser
+                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                                             context.startActivity(intent)
                                         } catch (e: Exception) {
                                             Toast.makeText(context, "Cannot open file", Toast.LENGTH_SHORT).show()
@@ -511,7 +509,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                     date = selectedDate,
                                     description = recordDescription,
                                     fileName = selectedFileName ?: editingRecord?.fileName ?: "",
-                                    fileUrl = editingRecord?.fileUrl ?: ""
+                                    fileUrl = editingRecord?.fileUrl ?: "",
+                                    publicId = editingRecord?.publicId ?: "" // ADDED: Include publicId
                                 )
 
                                 if (editingRecord == null)
@@ -549,7 +548,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                 confirmButton = {
                     TextButton(onClick = {
                         recordToDelete?.let {
-                            viewModel.deleteHealthRecord(it.id, it.fileUrl)
+                            // CHANGED: Pass publicId instead of fileUrl
+                            viewModel.deleteHealthRecord(it.id, it.publicId)
                         }
                         showDeleteDialog = false
                         recordToDelete = null
