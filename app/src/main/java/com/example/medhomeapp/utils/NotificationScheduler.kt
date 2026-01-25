@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 object NotificationScheduler {
 
-        fun scheduleAppointmentReminders(
+    fun scheduleAppointmentReminders(
         context: Context,
         appointment: AppointmentModel
     ): Pair<UUID, UUID> {
@@ -53,7 +53,7 @@ object NotificationScheduler {
         return Pair(work24h.id, work1h.id)
     }
 
-        private fun createAppointmentReminderWork(
+    private fun createAppointmentReminderWork(
         appointment: AppointmentModel,
         type: String,
         delay: Long
@@ -76,14 +76,14 @@ object NotificationScheduler {
             .build()
     }
 
-        fun cancelAppointmentReminders(context: Context, appointmentId: String) {
+    fun cancelAppointmentReminders(context: Context, appointmentId: String) {
         WorkManager.getInstance(context).apply {
             cancelUniqueWork("${NotificationConstants.WORK_TAG_APPOINTMENT_24H}_${appointmentId}")
             cancelUniqueWork("${NotificationConstants.WORK_TAG_APPOINTMENT_1H}_${appointmentId}")
         }
     }
 
-        fun scheduleMedicineReminders(
+    fun scheduleMedicineReminders(
         context: Context,
         medicine: MedicineReminderModel
     ): List<UUID> {
@@ -97,7 +97,7 @@ object NotificationScheduler {
         return workIds
     }
 
-        private fun scheduleMedicineReminderForTime(
+    private fun scheduleMedicineReminderForTime(
         context: Context,
         medicine: MedicineReminderModel,
         time: String
@@ -124,52 +124,39 @@ object NotificationScheduler {
             .putString(NotificationConstants.WORK_DATA_TYPE, NotificationConstants.MEDICINE_REMINDER)
             .build()
 
-        val workRequest = if (medicine.frequency == NotificationConstants.FREQUENCY_DAILY) {
-            // Daily recurring reminder
-            PeriodicWorkRequestBuilder<MedicineReminderWorker>(24, TimeUnit.HOURS)
-                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                .setInputData(inputData)
-                .addTag("${NotificationConstants.WORK_TAG_MEDICINE}_${medicine.medicineId}")
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiresBatteryNotLow(false)
-                        .build()
-                )
-                .build()
-        } else {
-            // One-time reminder (for as-needed medicines)
-            OneTimeWorkRequestBuilder<MedicineReminderWorker>()
-                .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-                .setInputData(inputData)
-                .addTag("${NotificationConstants.WORK_TAG_MEDICINE}_${medicine.medicineId}")
-                .setConstraints(
-                    Constraints.Builder()
-                        .setRequiresBatteryNotLow(false)
-                        .build()
-                )
-                .build()
-        }
+        // Use OneTimeWorkRequest instead of Periodic
+        // Worker will reschedule itself for daily reminders
+        val workRequest = OneTimeWorkRequestBuilder<MedicineReminderWorker>()
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
+            .setInputData(inputData)
+            .addTag("${NotificationConstants.WORK_TAG_MEDICINE}_${medicine.medicineId}")
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiresBatteryNotLow(false)
+                    .build()
+            )
+            .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             "${NotificationConstants.WORK_TAG_MEDICINE}_${medicine.medicineId}_${time}",
             ExistingWorkPolicy.REPLACE,
-            workRequest as OneTimeWorkRequest
+            workRequest
         )
 
         return workRequest.id
     }
 
-        fun cancelMedicineReminders(context: Context, medicineId: String) {
+    fun cancelMedicineReminders(context: Context, medicineId: String) {
         WorkManager.getInstance(context)
             .cancelAllWorkByTag("${NotificationConstants.WORK_TAG_MEDICINE}_${medicineId}")
     }
 
-        fun cancelAllMedicineReminders(context: Context) {
+    fun cancelAllMedicineReminders(context: Context) {
         WorkManager.getInstance(context)
             .cancelAllWorkByTag(NotificationConstants.WORK_TAG_MEDICINE)
     }
 
-        fun cancelAllAppointmentReminders(context: Context) {
+    fun cancelAllAppointmentReminders(context: Context) {
         WorkManager.getInstance(context).apply {
             cancelAllWorkByTag(NotificationConstants.WORK_TAG_APPOINTMENT_24H)
             cancelAllWorkByTag(NotificationConstants.WORK_TAG_APPOINTMENT_1H)
