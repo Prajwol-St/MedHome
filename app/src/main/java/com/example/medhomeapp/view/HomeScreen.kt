@@ -28,21 +28,26 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.R
-import com.example.medhomeapp.view.ui.theme.*
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 @Composable
-fun HomeScreen(userName: String, profilePictureUrl: String?) {
+fun HomeScreen(
+    userName: String,
+    profilePictureUrl: String?
+) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val BackgroundTint = Color(0xFFF1FBF9)
-    val TextMain = Color(0xFF2C3E50)
+
+    val backgroundTint = Color(0xFFF1FBF9)
+    val textMain = Color(0xFF2C3E50)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundTint)
+            .background(backgroundTint)
             .verticalScroll(scrollState)
     ) {
+
         // Welcome Card
         Card(
             modifier = Modifier
@@ -59,6 +64,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.weight(1f)
@@ -98,8 +104,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                         Text(
                             text = stringResource(R.string.welcome),
                             fontSize = 13.sp,
-                            color = Color.White.copy(alpha = 0.9f),
-                            fontWeight = FontWeight.Normal
+                            color = Color.White.copy(alpha = 0.9f)
                         )
                         Text(
                             text = userName,
@@ -112,8 +117,9 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
 
                 IconButton(
                     onClick = {
-                        val intent = Intent(context, QrActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(
+                            Intent(context, QrActivity::class.java)
+                        )
                     },
                     modifier = Modifier
                         .size(48.dp)
@@ -122,7 +128,7 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
                 ) {
                     Icon(
                         Icons.Default.QrCode,
-                        contentDescription = "QR Code",
+                        contentDescription = "QR",
                         modifier = Modifier.size(26.dp),
                         tint = Color.White
                     )
@@ -130,148 +136,142 @@ fun HomeScreen(userName: String, profilePictureUrl: String?) {
             }
         }
 
-        // Services Section
+        // Services title
         Text(
-            text = "Services",
+            text = stringResource(R.string.services),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = TextMain,
+            color = textMain,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // Services Grid - Updated order
+        // Services Grid
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(850.dp)
+            modifier = Modifier.height(700.dp)
         ) {
-            // 1. Health Records
+
             item {
                 FeatureCard(
-                    title = stringResource(R.string.health_records),
-                    icon = Icons.Default.Description,
-                    color = Color(0xFF4DB6AC),
-                    onClick = {
-                        val intent = Intent(context, HealthRecords::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.health_records),
+                    Icons.Default.Description,
+                    Color(0xFF4DB6AC)
+                ) {
+                    context.startActivity(
+                        Intent(context, HealthRecords::class.java)
+                    )
+                }
             }
 
-            // 2. Book Consultation
             item {
                 FeatureCard(
-                    title = stringResource(R.string.book_consultation),
-                    icon = Icons.Default.VideoCall,
-                    color = Color(0xFF81D4FA),
-                    onClick = {
-                        val intent = Intent(context, BookConsultationActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.book_consultation),
+                    Icons.Default.VideoCall,
+                    Color(0xFF81D4FA)
+                ) {
+                    context.startActivity(
+                        Intent(context, BookConsultationActivity::class.java)
+                    )
+                }
             }
 
-            // 3. AI Health Assistant
             item {
                 FeatureCard(
-                    title = stringResource(R.string.ai_health_assistant),
-                    icon = Icons.Default.Chat,
-                    color = Color(0xFF9575CD),
-                    onClick = { }
-                )
+                    stringResource(R.string.ai_health_assistant),
+                    Icons.Default.Chat,
+                    Color(0xFF9575CD)
+                ) {
+                    context.startActivity(
+                        Intent(context, ChatbotActivity::class.java)
+                    )
+                }
             }
 
-            // 4. Past Bookings
             item {
                 FeatureCard(
-                    title = stringResource(R.string.past_bookings),
-                    icon = Icons.Default.Event,
-                    color = Color(0xFFA5D6A7),
-                    onClick = {
-                        val intent = Intent(context, PastBookingsActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.past_bookings),
+                    Icons.Default.Event,
+                    Color(0xFFA5D6A7)
+                ) {
+                    context.startActivity(
+                        Intent(context, PastBookingsActivity::class.java)
+                    )
+                }
             }
 
-            // 5. Appointments
             item {
                 FeatureCard(
-                    title = stringResource(R.string.appointments),
-                    icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF4DB6AC),
-                    onClick = {
-                        val intent = Intent(context, MyAppointmentsActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.appointments),
+                    Icons.Default.CalendarMonth,
+                    Color(0xFF4DB6AC)
+                ) {
+                    context.startActivity(
+                        Intent(context, MyAppointmentsActivity::class.java)
+                    )
+                }
             }
 
-            // 6. Calories Calculator
             item {
                 FeatureCard(
-                    title = stringResource(R.string.calories_calculator),
-                    icon = Icons.Default.FitnessCenter,
-                    color = Color(0xFFFFB74D),
-                    onClick = {
-                        val intent = Intent(context, CaloriesCalculatorActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.calories_calculator),
+                    Icons.Default.FitnessCenter,
+                    Color(0xFFFFB74D)
+                ) {
+                    context.startActivity(
+                        Intent(context, CaloriesCalculatorActivity::class.java)
+                    )
+                }
             }
 
-            // 7. Blood Donation
             item {
                 FeatureCard(
-                    title = stringResource(R.string.blood_donation),
-                    icon = Icons.Default.Favorite,
-                    color = Color(0xFFFF8A80),
-                    onClick = {
-                        val intent = Intent(context, BloodDonationActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.blood_donation),
+                    Icons.Default.Favorite,
+                    Color(0xFFFF8A80)
+                ) {
+                    context.startActivity(
+                        Intent(context, BloodDonationActivity::class.java)
+                    )
+                }
             }
 
-            // 8. Health Packages
             item {
                 FeatureCard(
-                    title = stringResource(R.string.health_packages),
-                    icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF64B5F6),
-                    onClick = {
-                        val intent = Intent(context, HealthPackagesActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    stringResource(R.string.health_packages),
+                    Icons.Default.LocalShipping,
+                    Color(0xFF64B5F6)
+                ) {
+                    context.startActivity(
+                        Intent(context, HealthPackagesActivity::class.java)
+                    )
+                }
             }
 
-            // 9. Pharmacy
             item {
                 FeatureCard(
-                    title = "Pharmacy",
-                    icon = Icons.Default.LocalPharmacy,
-                    color = Color(0xFF00BCD4),
-                    onClick = {
-                        val intent = Intent(context, PharmacyActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    "Pharmacy",
+                    Icons.Default.LocalPharmacy,
+                    Color(0xFF00BCD4)
+                ) {
+                    context.startActivity(
+                        Intent(context, PharmacyActivity::class.java)
+                    )
+                }
             }
 
-            // 10. Medicine Reminders
             item {
                 FeatureCard(
-                    title = "Medicine Reminders",
-                    icon = Icons.Default.Medication,
-                    color = Color(0xFF9C27B0),
-                    onClick = {
-                        val intent = Intent(context, MedicineReminderActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
+                    "Medicine Reminders",
+                    Icons.Default.Medication,
+                    Color(0xFF9C27B0)
+                ) {
+                    context.startActivity(
+                        Intent(context, MedicineReminderActivity::class.java)
+                    )
+                }
             }
         }
 
@@ -286,7 +286,7 @@ fun FeatureCard(
     color: Color,
     onClick: () -> Unit
 ) {
-    val TextMain = Color(0xFF2C3E50)
+    val textMain = Color(0xFF2C3E50)
 
     Card(
         modifier = Modifier
@@ -301,7 +301,6 @@ fun FeatureCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
@@ -320,10 +319,10 @@ fun FeatureCard(
             }
 
             Text(
-                title,
+                text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = TextMain,
+                color = textMain,
                 lineHeight = 16.sp
             )
         }

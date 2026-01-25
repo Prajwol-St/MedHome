@@ -227,7 +227,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             AsyncImage(
                                 model = profilePictureUrl,
                                 contentDescription = stringResource(R.string.profile_picture),
-                                        modifier = Modifier
+                                modifier = Modifier
                                     .fillMaxSize()
                                     .clip(CircleShape),
                                 contentScale = ContentScale.Crop

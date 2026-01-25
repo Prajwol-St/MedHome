@@ -21,7 +21,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
     private val _allInventory = MutableLiveData<List<InventoryModel>>()
     val allInventory: LiveData<List<InventoryModel>> get() = _allInventory
 
-        fun createInventory(inventory: InventoryModel) {
+    fun createInventory(inventory: InventoryModel) {
         _loading.postValue(true)
         repo.createInventory(inventory) { success, message ->
             _loading.postValue(false)
@@ -34,7 +34,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun uploadInventoryImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
+    fun uploadInventoryImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
         _loading.postValue(true)
         repo.uploadInventoryImage(imageUri) { success, message, imageUrl ->
             _loading.postValue(false)
@@ -43,7 +43,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun createInventoryWithImage(
+    fun createInventoryWithImage(
         medicineName: String,
         description: String,
         price: String,
@@ -84,7 +84,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun getAllInventory() {
+    fun getAllInventory() {
         _loading.postValue(true)
         repo.getAllInventory { success, message, inventoryList ->
             _loading.postValue(false)
@@ -97,7 +97,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun getCurrentUserInventory() {
+    fun getCurrentUserInventory() {
         _loading.postValue(true)
         repo.getInventoryByCurrentUser { success, message, inventoryList ->
             _loading.postValue(false)
@@ -110,7 +110,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun updateInventory(inventoryId: String, updatedInventory: InventoryModel) {
+    fun updateInventory(inventoryId: String, updatedInventory: InventoryModel) {
         _loading.postValue(true)
         repo.updateInventory(inventoryId, updatedInventory) { success, message ->
             _loading.postValue(false)
@@ -123,7 +123,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun updateInventoryWithImage(
+    fun updateInventoryWithImage(
         inventoryId: String,
         currentInventory: InventoryModel,
         medicineName: String,
@@ -165,7 +165,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun deleteInventory(inventoryId: String) {
+    fun deleteInventory(inventoryId: String) {
         _loading.postValue(true)
         repo.deleteInventory(inventoryId) { success, message ->
             _loading.postValue(false)
@@ -178,7 +178,7 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun searchInventory(query: String) {
+    fun searchInventory(query: String) {
         _loading.postValue(true)
         repo.searchInventory(query) { success, message, inventoryList ->
             _loading.postValue(false)
@@ -191,26 +191,26 @@ class InventoryViewModel(private val repo: InventoryRepo) : ViewModel() {
         }
     }
 
-        fun listenToInventoryUpdates() {
+    fun listenToInventoryUpdates() {
         repo.listenToAllInventory { inventoryList ->
             _allInventory.postValue(inventoryList)
             Log.d("InventoryViewModel", "Real-time inventory update: ${inventoryList.size} items")
         }
     }
 
-        fun listenToUserInventoryUpdates(userID: String) {
+    fun listenToUserInventoryUpdates(userID: String) {
         repo.listenToUserInventory(userID) { inventoryList ->
             _allInventory.postValue(inventoryList)
             Log.d("InventoryViewModel", "Real-time user inventory update: ${inventoryList.size} items")
         }
     }
 
-        fun stopListening() {
+    fun stopListening() {
         repo.stopListening()
         Log.d("InventoryViewModel", "Stopped listening to inventory updates")
     }
 
-        fun clearStatus() {
+    fun clearStatus() {
         _inventoryStatus.postValue(Pair(false, ""))
     }
 

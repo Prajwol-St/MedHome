@@ -377,10 +377,12 @@
 
 
 
+
     <!-- ===================== -->
     <!-- Google Sign-In -->
     <!-- ===================== -->
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
     <string name="title_activity_manage_leaves">ManageLeavesActivity</string>
     <string name="title_activity_doctor_appointments">DoctorAppointmentsActivity</string>
     <string name="title_activity_past_bookings">PastBookingsActivity</string>
@@ -389,5 +391,7 @@
     <string name="title_activity_add_edit_medicine">AddEditMedicineActivity</string>
     <string name="title_activity_notification_history">NotificationHistoryActivity</string>
     <string name="title_activity_pharmacy">PharmacyActivity</string>
+
+    <string name="title_activity_ai_health_assistant">AiHealthAssistantActivity</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.medhomeapp
 
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,6 +9,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+
 import com.example.medhomeapp.utils.LanguageManager
 
 open class BaseActivity : ComponentActivity() {
@@ -32,5 +34,6 @@ open class BaseActivity : ComponentActivity() {
                 )
             }
         }
+
     }
 }
