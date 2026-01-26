@@ -615,6 +615,36 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <!-- Appointment Card -->
     <string name="label_cancellation_reason">Cancellation Reason:</string>
 
+    <string name="notes_char_count">%1$d/500</string>
+
+    <!-- Confirm Booking Dialog -->
+    <string name="confirm_booking_title">Confirm Booking</string>
+    <string name="duration_min">%1$d min</string>
+    <string name="duration_minutes">%1$d minutes</string>
+
+
+    <!-- Doctor Appointments -->
+    <string name="tab_today">Today</string>
+    <string name="tab_upcoming_short">Upcoming</string>
+    <string name="tab_past_short">Past</string>
+
+    <string name="empty_today">No appointments for today</string>
+    <string name="empty_subtitle">Your appointments will appear here</string>
+
+    <string name="manage_appointment">Manage Appointment</string>
+    <string name="appointment_details">Appointment Details</string>
+    <string name="phone">Phone</string>
+    <string name="time_duration_format">%1$s (%2$d min)</string>
+
+    <string name="patient_reason">Patient\'s Reason</string>
+    <string name="doctor_notes">Doctor Notes</string>
+    <string name="notes_count">%1$d/500</string>
+
+    <string name="btn_mark_complete">Mark Complete</string>
+    <string name="btn_mark_no_show">Mark No-Show</string>
+    <string name="btn_close">Close</string>
+
+    <string name="label_cancellation_reason_short">Cancellation Reason</string>
 
 
 

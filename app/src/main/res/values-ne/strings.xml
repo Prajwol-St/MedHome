@@ -583,6 +583,37 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <!-- Appointment Card -->
     <string name="label_cancellation_reason">रद्द गर्ने कारण:</string>
+    <string name="notes_char_count">%1$d/500</string>
+
+    <!-- Confirm Booking Dialog -->
+    <string name="confirm_booking_title">बुकिङ पुष्टि गर्नुहोस्</string>
+
+    <string name="duration_min">%1$d मिनेट</string>
+    <string name="duration_minutes">%1$d मिनेट</string>
+
+    <!-- Doctor Appointments -->
+    <string name="tab_today">आज</string>
+    <string name="tab_upcoming_short">आउँदै</string>
+    <string name="tab_past_short">भइसकेका</string>
+
+    <string name="empty_today">आजको लागि कुनै अपोइन्टमेन्ट छैन</string>
+    <string name="empty_subtitle">तपाईंको अपोइन्टमेन्टहरू यहाँ देखिनेछ</string>
+
+    <string name="manage_appointment">अपोइन्टमेन्ट व्यवस्थापन गर्नुहोस्</string>
+    <string name="appointment_details">अपोइन्टमेन्ट विवरण</string>
+    <string name="phone">फोन</string>
+    <string name="time_duration_format">%1$s (%2$d मिनेट)</string>
+
+    <string name="patient_reason">बिरामीको कारण</string>
+    <string name="doctor_notes">डाक्टर टिप्पणीहरू</string>
+    <string name="notes_count">%1$d/500</string>
+
+    <string name="btn_mark_complete">पूर्ण भएको चिन्ह लगाउनुहोस्</string>
+    <string name="btn_mark_no_show">उपस्थित नभएको चिन्ह लगाउनुहोस्</string>
+    <string name="btn_close">बन्द गर्नुहोस्</string>
+
+    <string name="label_cancellation_reason_short">रद्द गर्ने कारण</string>
+
 
 
 

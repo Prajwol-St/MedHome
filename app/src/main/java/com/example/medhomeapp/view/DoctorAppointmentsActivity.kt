@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +34,7 @@ import com.example.medhomeapp.repository.AppointmentManagementRepoImpl
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.viewmodel.DoctorAppointmentsViewModel
 import com.example.medhomeapp.viewmodel.DoctorAppointmentsViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -43,8 +45,24 @@ class DoctorAppointmentsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            DoctorAppointmentsScreen()
+            key(language) {
+                DoctorAppointmentsScreen()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val currentLanguage = LanguageManager.getLanguage(this)
+        val savedLanguage = intent.getStringExtra("current_language")
+
+        if (savedLanguage != null && savedLanguage != currentLanguage) {
+            recreate()
+        } else if (savedLanguage == null) {
+            intent.putExtra("current_language", currentLanguage)
         }
     }
 }
@@ -87,7 +105,7 @@ fun DoctorAppointmentsScreen() {
                 ),
                 title = {
                     Text(
-                        "My Appointments",
+                        stringResource(R.string.title_my_appointments),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -101,7 +119,7 @@ fun DoctorAppointmentsScreen() {
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -123,7 +141,6 @@ fun DoctorAppointmentsScreen() {
                     )
                 )
         ) {
-            // Enhanced Tabs
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,7 +173,7 @@ fun DoctorAppointmentsScreen() {
                             modifier = Modifier.padding(vertical = 12.dp)
                         ) {
                             Text(
-                                "Today",
+                                stringResource(R.string.tab_today),
                                 fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Medium,
                                 fontSize = 14.sp
                             )
@@ -188,7 +205,7 @@ fun DoctorAppointmentsScreen() {
                             modifier = Modifier.padding(vertical = 12.dp)
                         ) {
                             Text(
-                                "Upcoming",
+                                stringResource(R.string.tab_upcoming_short),
                                 fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Medium,
                                 fontSize = 14.sp
                             )
@@ -220,7 +237,7 @@ fun DoctorAppointmentsScreen() {
                             modifier = Modifier.padding(vertical = 12.dp)
                         ) {
                             Text(
-                                "Past",
+                                stringResource(R.string.tab_past_short),
                                 fontWeight = if (selectedTab == 2) FontWeight.Bold else FontWeight.Medium,
                                 fontSize = 14.sp
                             )
@@ -245,7 +262,6 @@ fun DoctorAppointmentsScreen() {
                 }
             }
 
-            // Content
             if (isLoading) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -257,7 +273,7 @@ fun DoctorAppointmentsScreen() {
                 when (selectedTab) {
                     0 -> AppointmentList(
                         appointments = todayAppointments,
-                        emptyMessage = "No appointments for today",
+                        emptyMessage = stringResource(R.string.empty_today),
                         showActions = true,
                         onAppointmentClick = {
                             selectedAppointment = it
@@ -266,7 +282,7 @@ fun DoctorAppointmentsScreen() {
                     )
                     1 -> AppointmentList(
                         appointments = upcomingAppointments,
-                        emptyMessage = "No upcoming appointments",
+                        emptyMessage = stringResource(R.string.empty_upcoming),
                         showActions = false,
                         onAppointmentClick = {
                             selectedAppointment = it
@@ -275,7 +291,7 @@ fun DoctorAppointmentsScreen() {
                     )
                     2 -> AppointmentList(
                         appointments = pastAppointments,
-                        emptyMessage = "No past appointments",
+                        emptyMessage = stringResource(R.string.empty_past),
                         showActions = false,
                         onAppointmentClick = {
                             selectedAppointment = it
@@ -347,7 +363,7 @@ fun AppointmentList(
                     color = Color(0xFF2C3E50)
                 )
                 Text(
-                    text = "Your appointments will appear here",
+                    text = stringResource(R.string.empty_subtitle),
                     fontSize = 14.sp,
                     color = Color(0xFF7F8C8D)
                 )
@@ -387,7 +403,6 @@ fun DoctorAppointmentCard(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            // Header with patient info
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -442,7 +457,6 @@ fun DoctorAppointmentCard(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Date & Time Info
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -465,7 +479,7 @@ fun DoctorAppointmentCard(
                         )
                         Column {
                             Text(
-                                text = "Date",
+                                text = stringResource(R.string.date),
                                 fontSize = 11.sp,
                                 color = Color(0xFF7F8C8D),
                                 fontWeight = FontWeight.Medium
@@ -498,7 +512,7 @@ fun DoctorAppointmentCard(
                         )
                         Column {
                             Text(
-                                text = "Time",
+                                text = stringResource(R.string.time),
                                 fontSize = 11.sp,
                                 color = Color(0xFF7F8C8D),
                                 fontWeight = FontWeight.Medium
@@ -514,7 +528,6 @@ fun DoctorAppointmentCard(
                 }
             }
 
-            // Patient Notes
             if (appointment.patientNotes.isNotBlank()) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Box(
@@ -535,7 +548,7 @@ fun DoctorAppointmentCard(
                                 tint = Color(0xFFFFA000)
                             )
                             Text(
-                                text = "Reason for Visit",
+                                text = stringResource(R.string.patient_reason),
                                 fontSize = 12.sp,
                                 color = Color(0xFFFFA000),
                                 fontWeight = FontWeight.Bold
@@ -551,7 +564,6 @@ fun DoctorAppointmentCard(
                 }
             }
 
-            // Actions
             if (showActions && appointment.status in listOf(AppConstants.STATUS_PENDING, AppConstants.STATUS_CONFIRMED)) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
@@ -570,7 +582,7 @@ fun DoctorAppointmentCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        "Manage Appointment",
+                        stringResource(R.string.manage_appointment),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp
                     )
@@ -650,18 +662,23 @@ fun AppointmentActionDialog(
                             modifier = Modifier.size(24.dp)
                         )
                     }
-                    Text("Cancel Appointment", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(stringResource(R.string.dialog_cancel_title), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 }
             },
             text = {
                 OutlinedTextField(
                     value = cancellationReason,
                     onValueChange = { if (it.length <= 200) cancellationReason = it },
-                    label = { Text("Cancellation Reason") },
+                    label = { Text(stringResource(R.string.label_cancellation_reason_short)) },
                     maxLines = 4,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    supportingText = { Text("${cancellationReason.length}/200", fontSize = 12.sp) }
+                    supportingText = {
+                        Text(
+                            stringResource(R.string.char_count, cancellationReason.length),
+                            fontSize = 12.sp
+                        )
+                    }
                 )
             },
             confirmButton = {
@@ -675,7 +692,7 @@ fun AppointmentActionDialog(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.height(48.dp)
                 ) {
-                    Text("Cancel Appointment", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.btn_cancel_appointment), fontWeight = FontWeight.SemiBold)
                 }
             },
             dismissButton = {
@@ -683,7 +700,7 @@ fun AppointmentActionDialog(
                     onClick = { showCancelDialog = false },
                     modifier = Modifier.height(48.dp)
                 ) {
-                    Text("Back", color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
+                    Text(stringResource(R.string.btn_back), color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
                 }
             },
             containerColor = Color.White,
@@ -711,7 +728,7 @@ fun AppointmentActionDialog(
                         )
                     }
                     Text(
-                        text = "Appointment Details",
+                        text = stringResource(R.string.appointment_details),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp
                     )
@@ -722,7 +739,6 @@ fun AppointmentActionDialog(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Patient Info Card
                     Card(
                         colors = CardDefaults.cardColors(containerColor = MintGreen.copy(alpha = 0.08f)),
                         shape = RoundedCornerShape(12.dp)
@@ -731,10 +747,13 @@ fun AppointmentActionDialog(
                             modifier = Modifier.padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            AppointmentDetailRow("Patient", appointment.patientName)
-                            AppointmentDetailRow("Phone", appointment.patientPhone)
-                            AppointmentDetailRow("Date", DateTimeUtils.formatDateForDisplay(appointment.date))
-                            AppointmentDetailRow("Time", "${appointment.time} (${appointment.duration} min)")
+                            AppointmentDetailRow(stringResource(R.string.patient), appointment.patientName)
+                            AppointmentDetailRow(stringResource(R.string.phone), appointment.patientPhone)
+                            AppointmentDetailRow(stringResource(R.string.date), DateTimeUtils.formatDateForDisplay(appointment.date))
+                            AppointmentDetailRow(
+                                stringResource(R.string.time),
+                                stringResource(R.string.time_duration_format, appointment.time, appointment.duration)
+                            )
                         }
                     }
 
@@ -748,7 +767,7 @@ fun AppointmentActionDialog(
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
                                 Text(
-                                    "Patient's Reason",
+                                    stringResource(R.string.patient_reason),
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFFFFA000)
@@ -762,15 +781,19 @@ fun AppointmentActionDialog(
                         }
                     }
 
-                    // Doctor Notes
                     OutlinedTextField(
                         value = doctorNotes,
                         onValueChange = { if (it.length <= 500) doctorNotes = it },
-                        label = { Text("Doctor Notes") },
+                        label = { Text(stringResource(R.string.doctor_notes)) },
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 5,
                         shape = RoundedCornerShape(12.dp),
-                        supportingText = { Text("${doctorNotes.length}/500", fontSize = 12.sp) }
+                        supportingText = {
+                            Text(
+                                stringResource(R.string.notes_count, doctorNotes.length),
+                                fontSize = 12.sp
+                            )
+                        }
                     )
                 }
             },
@@ -790,7 +813,7 @@ fun AppointmentActionDialog(
                         ) {
                             Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text("Mark Complete", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                            Text(stringResource(R.string.btn_mark_complete), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                         }
 
                         OutlinedButton(
@@ -803,7 +826,7 @@ fun AppointmentActionDialog(
                         ) {
                             Icon(Icons.Default.PersonOff, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text("Mark No-Show", fontWeight = FontWeight.Medium, fontSize = 15.sp)
+                            Text(stringResource(R.string.btn_mark_no_show), fontWeight = FontWeight.Medium, fontSize = 15.sp)
                         }
 
                         OutlinedButton(
@@ -816,7 +839,7 @@ fun AppointmentActionDialog(
                         ) {
                             Icon(Icons.Default.Cancel, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text("Cancel Appointment", fontWeight = FontWeight.Medium, fontSize = 15.sp)
+                            Text(stringResource(R.string.btn_cancel_appointment), fontWeight = FontWeight.Medium, fontSize = 15.sp)
                         }
                     }
                 } else {
@@ -824,7 +847,7 @@ fun AppointmentActionDialog(
                         onClick = onDismiss,
                         modifier = Modifier.height(48.dp)
                     ) {
-                        Text("Close", color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
+                        Text(stringResource(R.string.btn_close), color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
                     }
                 }
             },
@@ -834,7 +857,7 @@ fun AppointmentActionDialog(
                         onClick = onDismiss,
                         modifier = Modifier.height(48.dp)
                     ) {
-                        Text("Close", color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
+                        Text(stringResource(R.string.btn_close), color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
                     }
                 }
             },

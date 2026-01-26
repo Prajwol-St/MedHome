@@ -41,6 +41,7 @@ import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.*
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.AppointmentBookingViewModel
 import com.example.medhomeapp.viewmodel.AppointmentBookingViewModelFactory
@@ -56,8 +57,27 @@ class AppointmentBookingActivity : BaseActivity() {
 
         val doctorId = intent.getStringExtra("DOCTOR_ID") ?: ""
 
+        // Get current language and use it as a key to force recomposition
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            BookAppointmentScreen(doctorId = doctorId)
+            // The key ensures the entire composition is recreated when language changes
+            key(language) {
+                BookAppointmentScreen(doctorId = doctorId)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Recreate the activity when returning from settings if language changed
+        val currentLanguage = LanguageManager.getLanguage(this)
+        val savedLanguage = intent.getStringExtra("current_language")
+
+        if (savedLanguage != null && savedLanguage != currentLanguage) {
+            recreate()
+        } else if (savedLanguage == null) {
+            intent.putExtra("current_language", currentLanguage)
         }
     }
 }
@@ -141,7 +161,7 @@ fun BookAppointmentScreen(doctorId: String) {
                     IconButton(onClick = { activity?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -358,7 +378,7 @@ fun BookAppointmentScreen(doctorId: String) {
             )
 
             Text(
-                text = "${patientNotes.length}/500",
+                text = stringResource(R.string.notes_char_count, patientNotes.length),
                 fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
@@ -498,7 +518,7 @@ fun TimeSlotCard(
                 }
             )
             Text(
-                text = "${slot.duration} min",
+                text = stringResource(R.string.duration_min, slot.duration),
                 fontSize = 11.sp,
                 color = when {
                     isSelected -> Color.White.copy(alpha = 0.8f)
@@ -509,6 +529,7 @@ fun TimeSlotCard(
         }
     }
 }
+
 @Composable
 fun ConfirmBookingDialog(
     doctor: DoctorModel,
@@ -530,7 +551,7 @@ fun ConfirmBookingDialog(
         },
         title = {
             Text(
-                text = "Confirm Booking",
+                text = stringResource(R.string.confirm_booking_title),
                 fontWeight = FontWeight.Bold
             )
         },
@@ -542,7 +563,7 @@ fun ConfirmBookingDialog(
                 DetailItem(stringResource(R.string.time), slot.startTime)
                 DetailItem(
                     stringResource(R.string.duration),
-                    "${slot.duration} ${stringResource(R.string.minutes)}"
+                    stringResource(R.string.duration_minutes, slot.duration)
                 )
                 DetailItem(
                     stringResource(R.string.fee),
@@ -558,7 +579,7 @@ fun ConfirmBookingDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(containerColor = MintGreen)
             ) {
-                stringResource(R.string.confirm)
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
@@ -570,6 +591,7 @@ fun ConfirmBookingDialog(
         shape = RoundedCornerShape(16.dp)
     )
 }
+
 @Composable
 fun DetailItem(label: String, value: String) {
     Row(
