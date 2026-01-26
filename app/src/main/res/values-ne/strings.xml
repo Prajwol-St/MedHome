@@ -559,6 +559,32 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
         <string name="currency_npr">नेरु %1$d</string>
 
+    <!-- My Appointments -->
+    <string name="title_my_appointments">मेरो अपोइन्टमेन्टहरू</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">आउँदै गरेका (%1$d)</string>
+    <string name="tab_past">भइसकेका (%1$d)</string>
+    <string name="tab_cancelled">रद्द गरिएका (%1$d)</string>
+
+    <!-- Empty States -->
+    <string name="empty_upcoming">कुनै आउँदै गरेको अपोइन्टमेन्ट छैन</string>
+    <string name="empty_past">कुनै पुरानो अपोइन्टमेन्ट छैन</string>
+    <string name="empty_cancelled">कुनै रद्द गरिएको अपोइन्टमेन्ट छैन</string>
+
+    <!-- Cancel Dialog -->
+    <string name="dialog_cancel_title">अपोइन्टमेन्ट रद्द गर्नुहोस्</string>
+    <string name="dialog_cancel_message">
+    के तपाईं यो अपोइन्टमेन्ट रद्द गर्न चाहनुहुन्छ?
+</string>
+    <string name="label_reason">कारण</string>
+    <string name="btn_cancel_appointment">अपोइन्टमेन्ट रद्द गर्नुहोस्</string>
+    <string name="btn_back">पछाडि</string>
+
+    <!-- Appointment Card -->
+    <string name="label_cancellation_reason">रद्द गर्ने कारण:</string>
+
+
 
 
 

@@ -592,6 +592,31 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
         <string name="currency_npr">NPR %1$d</string>
 
 
+    <!-- My Appointments -->
+    <string name="title_my_appointments">My Appointments</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">Upcoming (%1$d)</string>
+    <string name="tab_past">Past (%1$d)</string>
+    <string name="tab_cancelled">Cancelled (%1$d)</string>
+
+    <!-- Empty States -->
+    <string name="empty_upcoming">No upcoming appointments</string>
+    <string name="empty_past">No past appointments</string>
+    <string name="empty_cancelled">No cancelled appointments</string>
+
+    <!-- Cancel Dialog -->
+    <string name="dialog_cancel_title">Cancel Appointment</string>
+    <string name="dialog_cancel_message">Are you sure you want to cancel this appointment?</string>
+    <string name="label_reason">Reason</string>
+    <string name="btn_cancel_appointment">Cancel Appointment</string>
+    <string name="btn_back">Back</string>
+
+    <!-- Appointment Card -->
+    <string name="label_cancellation_reason">Cancellation Reason:</string>
+
+
+
 
 
 
