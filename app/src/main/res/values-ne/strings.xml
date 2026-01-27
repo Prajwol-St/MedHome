@@ -662,6 +662,33 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="label_price_npr">रु. %1$s</string>
 
+    <!-- Health Package Details Activity -->
+    <string name="title_package_details">प्याकेज विवरण</string>
+
+    <string name="error_package_not_found">प्याकेज फेला परेन</string>
+
+
+
+    <string name="label_doctor">डाक्टर</string>
+
+    <string name="label_days_remaining">%1$d दिन बाँकी</string>
+
+    <string name="label_description">विवरण</string>
+
+
+    <string name="label_total_price">कुल मूल्य</string>
+    <string name="btn_book_now">अहिले बुक गर्नुहोस्</string>
+
+    <string name="dialog_confirm_booking_title">बुकिङ पुष्टि गर्नुहोस्</string>
+    <string name="dialog_package_label">प्याकेज: %1$s</string>
+    <string name="dialog_price_label">मूल्य: रु. %1$s</string>
+    <string name="dialog_valid_for_days">वैधता: %1$d दिन</string>
+    <string name="dialog_confirm_booking_message">यो बुकिङ जारी राख्ने?</string>
+
+    <string name="btn_confirm">पुष्टि गर्नुहोस्</string>
+
+    <string name="toast_package_booked_success">प्याकेज सफलतापूर्वक बुक गरियो!</string>
+
 
 
 

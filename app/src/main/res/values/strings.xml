@@ -699,6 +699,33 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="label_price_npr">NPR %1$s</string>
 
 
+    <string name="title_package_details">Package Details</string>
+
+    <string name="error_package_not_found">Package not found</string>
+
+
+
+    <string name="label_doctor">Doctor</string>
+
+    <string name="label_days_remaining">%1$d days left</string>
+
+    <string name="label_description">Description</string>
+
+
+    <string name="label_total_price">Total Price</string>
+    <string name="btn_book_now">Book Now</string>
+
+    <string name="dialog_confirm_booking_title">Confirm Booking</string>
+    <string name="dialog_package_label">Package: %1$s</string>
+    <string name="dialog_price_label">Price: NPR %1$s</string>
+    <string name="dialog_valid_for_days">Valid for: %1$d days</string>
+    <string name="dialog_confirm_booking_message">Proceed with this booking?</string>
+
+    <string name="btn_confirm">Confirm</string>
+
+    <string name="toast_package_booked_success">Package booked successfully!</string>
+
+
 
 
 
