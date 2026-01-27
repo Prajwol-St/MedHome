@@ -614,6 +614,59 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="label_cancellation_reason_short">रद्द गर्ने कारण</string>
 
+    <!-- My Packages -->
+    <string name="title_my_packages">मेरो प्याकेजहरू</string>
+
+    <!-- Empty state -->
+    <string name="empty_packages_title">अहिलेसम्म कुनै प्याकेज बुक गरिएको छैन</string>
+    <string name="empty_packages_subtitle">सुरु गर्न प्याकेजहरू हेर्नुहोस्</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_booking_title">बुकिङ रद्द गर्नुहुन्छ?</string>
+    <string name="dialog_cancel_booking_message">
+    के तपाईं “%1$s” प्याकेज रद्द गर्न चाहनुहुन्छ? यो प्रक्रिया फिर्ता गर्न मिल्दैन।
+</string>
+    <string name="btn_cancel_booking">बुकिङ रद्द गर्नुहोस्</string>
+    <string name="btn_keep_booking">बुकिङ राख्नुहोस्</string>
+
+    <!-- Toasts -->
+    <string name="toast_booking_cancelled">बुकिङ रद्द गरियो</string>
+
+    <!-- Package Card -->
+    <string name="label_doctor_prefix">डा. %1$s</string>
+    <string name="label_booked_on">बुक गरिएको मिति</string>
+    <string name="label_validity">मान्य अवधि</string>
+    <string name="label_price_paid">तिरेको मूल्य</string>
+
+    <!-- Validity text -->
+    <string name="validity_expired">म्याद सकियो</string>
+    <string name="validity_one_day">१ दिन बाँकी</string>
+    <string name="validity_days">%1$d दिन</string>
+
+    <!-- Buttons -->
+    <string name="btn_cancel">रद्द गर्नुहोस्</string>
+
+    <!-- Accessibility -->
+    <string name="cd_package_image">प्याकेज तस्बिर</string>
+
+    <!-- My Packages Activity -->
+
+    <string name="label_doctor_name">डा. %1$s</string>
+
+    <string name="status_active">सक्रिय</string>
+    <string name="status_expired">म्याद सकिएको</string>
+    <string name="status_cancelled">रद्द गरिएको</string>
+
+    <string name="label_one_day_left">१ दिन बाँकी</string>
+    <string name="label_days_left">%1$d दिन</string>
+
+    <string name="label_price_npr">रु. %1$s</string>
+
+
+
+
+
+
 
 
 

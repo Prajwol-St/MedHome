@@ -647,6 +647,62 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="label_cancellation_reason_short">Cancellation Reason</string>
 
 
+    <!-- My Packages -->
+    <string name="title_my_packages">My Packages</string>
+
+    <!-- Empty state -->
+    <string name="empty_packages_title">No packages booked yet</string>
+    <string name="empty_packages_subtitle">Browse packages to get started</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_booking_title">Cancel Booking?</string>
+    <string name="dialog_cancel_booking_message">
+    Are you sure you want to cancel “%1$s”? This action can\'t be undone.
+</string>
+    <string name="btn_cancel_booking">Cancel Booking</string>
+    <string name="btn_keep_booking">Keep Booking</string>
+
+    <!-- Toasts -->
+    <string name="toast_booking_cancelled">Booking cancelled</string>
+
+    <!-- Package Card -->
+    <string name="label_doctor_prefix">Dr. %1$s</string>
+    <string name="label_booked_on">Booked On</string>
+    <string name="label_validity">Validity</string>
+    <string name="label_price_paid">Price Paid</string>
+
+    <!-- Validity text -->
+    <string name="validity_expired">Expired</string>
+    <string name="validity_one_day">1 day left</string>
+    <string name="validity_days">%1$d days</string>
+
+    <!-- Buttons -->
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Accessibility -->
+    <string name="cd_package_image">Package Image</string>
+
+    <!-- My Packages Activity -->
+
+
+    <string name="label_doctor_name">Dr. %1$s</string>
+
+    <string name="status_active">ACTIVE</string>
+    <string name="status_expired">EXPIRED</string>
+    <string name="status_cancelled">CANCELLED</string>
+
+
+    <string name="label_one_day_left">1 day left</string>
+    <string name="label_days_left">%1$d days</string>
+
+
+    <string name="label_price_npr">NPR %1$s</string>
+
+
+
+
+
+
 
 
 
