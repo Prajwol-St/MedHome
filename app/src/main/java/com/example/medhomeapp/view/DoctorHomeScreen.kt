@@ -47,7 +47,7 @@ fun DoctorHomeScreen(
             .verticalScroll(scrollState)
     ) {
 
-        // Header Card
+        // Header Card (without QR Scanner)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -118,27 +118,14 @@ fun DoctorHomeScreen(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
         )
 
-        // Grid Menu
+        // Grid Menu (4 items only)
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier.height(600.dp)
         ) {
-
-            item {
-                DoctorFeatureCard(
-                    title = stringResource(R.string.notifications),
-                    icon = Icons.Default.Notifications,
-                    color = Color(0xFFFF9800),
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, NotificationHistoryActivity::class.java)
-                        )
-                    }
-                )
-            }
 
             item {
                 DoctorFeatureCard(

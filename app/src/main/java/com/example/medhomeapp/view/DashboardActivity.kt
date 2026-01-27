@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -77,12 +78,6 @@ fun DashboardScaffold() {
 
     val isDoctor = userType == "doctor"
 
-    LaunchedEffect(isDoctor) {
-        if (isDoctor && selectedTab == 2) {
-            selectedTab = 0
-        }
-    }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -94,7 +89,7 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> if (isDoctor) "Schedule" else "Notifications"
+                            1 -> if (isDoctor) "Inventory" else "Notifications"
                             2 -> stringResource(R.string.scan)
                             3 -> stringResource(R.string.settings)
                             else -> "My Orders"
@@ -125,14 +120,19 @@ fun DashboardScaffold() {
                     colors = navColors()
                 )
 
-                // NOTIFICATIONS / SCHEDULE
+                // INVENTORY (DOCTOR) / NOTIFICATIONS (PATIENT)
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(Icons.Default.Notifications, "Notifications") },
+                    icon = {
+                        Icon(
+                            if (isDoctor) Icons.Default.Inventory else Icons.Default.Notifications,
+                            if (isDoctor) "Inventory" else "Notifications"
+                        )
+                    },
                     label = {
                         Text(
-                            if (isDoctor) "Schedule" else "Notifications",
+                            if (isDoctor) "Inventory" else "Notifications",
                             fontSize = 11.sp
                         )
                     },
@@ -145,23 +145,21 @@ fun DashboardScaffold() {
                     )
                 )
 
-                // SCAN (PATIENT ONLY)
-                if (!isDoctor) {
-                    NavigationBarItem(
-                        selected = selectedTab == 2,
-                        onClick = { selectedTab = 2 },
-                        icon = {
-                            Icon(
-                                painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                stringResource(R.string.scan),
-                                modifier = Modifier.size(28.dp),
-                                tint = if (selectedTab == 2) MintGreen else TextGray
-                            )
-                        },
-                        label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
-                        colors = navColors()
-                    )
-                }
+                // SCAN (BOTH PATIENT AND DOCTOR)
+                NavigationBarItem(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_qr_code_scanner_24),
+                            stringResource(R.string.scan),
+                            modifier = Modifier.size(28.dp),
+                            tint = if (selectedTab == 2) MintGreen else TextGray
+                        )
+                    },
+                    label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
+                    colors = navColors()
+                )
 
                 // SETTINGS
                 NavigationBarItem(
@@ -216,7 +214,7 @@ fun DashboardScaffold() {
 
                 1 -> {
                     if (isDoctor) {
-                        DoctorScheduleScreen()
+                        InventoryScreen()
                     } else {
                         NotificationHistoryScreenContent()
                     }

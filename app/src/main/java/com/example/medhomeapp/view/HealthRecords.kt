@@ -36,13 +36,23 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.HealthRecordsModel
+import com.example.medhomeapp.repository.CommonRepoImpl
+import com.example.medhomeapp.repository.HealthRecordsRepoImpl
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.HealthRecordsViewModel
+import com.example.medhomeapp.viewmodel.HealthRecordsViewModelFactory
 import java.util.*
 
 class HealthRecords : BaseActivity() {
 
-    private val viewModel: HealthRecordsViewModel by viewModels()
+    private val viewModel: HealthRecordsViewModel by viewModels{
+        HealthRecordsViewModelFactory(
+            HealthRecordsRepoImpl(
+                applicationContext,
+                CommonRepoImpl()
+            )
+        )
+    }
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -58,6 +68,8 @@ class HealthRecords : BaseActivity() {
         setContent {
             HealthRecordsBody(viewModel)
         }
+        viewModel.loadHealthRecords()
+
     }
 
     private fun requestStoragePermissions() {

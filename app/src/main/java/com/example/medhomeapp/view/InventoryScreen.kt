@@ -37,7 +37,7 @@ import com.example.medhomeapp.viewmodel.InventoryViewModel
 import java.io.File
 
 @Composable
-fun DoctorScheduleScreen() {
+fun InventoryScreen() {
     val context = LocalContext.current
     val repo = remember { InventoryRepositoryImpl() }
     val inventoryViewModel = remember { InventoryViewModel(repo) }
