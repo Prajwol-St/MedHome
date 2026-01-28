@@ -910,6 +910,43 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="menu_edit">सम्पादन गर्नुहोस्</string>
     <string name="menu_delete">मेटाउनुहोस्</string>
 
+    <!-- Medicine Inventory Screen -->
+    <string name="title_medicine_inventory">औषधि सूची</string>
+
+    <string name="cd_no_medicines">कुनै औषधि छैन</string>
+    <string name="empty_no_medicines_title">अझैसम्म कुनै औषधि थपिएको छैन</string>
+    <string name="empty_no_medicines_subtitle">सुरु गर्न आफ्नो पहिलो औषधि थप्नुहोस्</string>
+
+    <string name="cd_add_medicine">औषधि थप्नुहोस्</string>
+
+    <string name="dialog_delete_medicine_title">औषधि मेटाउने</string>
+    <string name="dialog_delete_medicine_message">के तपाईं %1$s मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+
+    <string name="label_no_image">तस्बिर छैन</string>
+
+    <string name="label_price_currency">₹%1$s</string>
+    <string name="label_qty">मात्रा: %1$s</string>
+
+    <string name="cd_more_options">थप विकल्पहरू</string>
+
+    <string name="title_edit_medicine">औषधि सम्पादन गर्नुहोस्</string>
+    <string name="title_add_medicine">औषधि थप्नुहोस्</string>
+
+    <string name="cd_close">बन्द गर्नुहोस्</string>
+    <string name="cd_selected_image">चयन गरिएको औषधि तस्बिर</string>
+    <string name="cd_current_image">हालको औषधि तस्बिर</string>
+    <string name="cd_upload_image">तस्बिर अपलोड गर्नुहोस्</string>
+
+    <string name="label_upload_medicine_image">औषधि तस्बिर अपलोड गर्नुहोस्</string>
+
+    <string name="label_medicine_name">औषधिको नाम</string>
+    <string name="label_amount_quantity">मात्रा/परिमाण</string>
+
+    <string name="btn_update_medicine">औषधि अद्यावधिक गर्नुहोस्</string>
+    <string name="btn_save_medicine">औषधि सुरक्षित गर्नुहोस्</string>
+
+
+
 
 
 

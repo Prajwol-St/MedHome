@@ -947,6 +947,43 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
 
+    <!-- Medicine Inventory Screen -->
+    <string name="title_medicine_inventory">Medicine Inventory</string>
+
+    <string name="cd_no_medicines">No medicines</string>
+    <string name="empty_no_medicines_title">No medicines added yet</string>
+    <string name="empty_no_medicines_subtitle">Add your first medicine to get started</string>
+
+    <string name="cd_add_medicine">Add Medicine</string>
+
+    <string name="dialog_delete_medicine_title">Delete Medicine</string>
+    <string name="dialog_delete_medicine_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+
+    <string name="label_no_image">No Image</string>
+
+    <string name="label_price_currency">₹%1$s</string>
+    <string name="label_qty">Qty: %1$s</string>
+
+    <string name="cd_more_options">More options</string>
+
+    <string name="title_edit_medicine">Edit Medicine</string>
+    <string name="title_add_medicine">Add Medicine</string>
+
+    <string name="cd_close">Close</string>
+    <string name="cd_selected_image">Selected Medicine Image</string>
+    <string name="cd_current_image">Current Medicine Image</string>
+    <string name="cd_upload_image">Upload Image</string>
+
+    <string name="label_upload_medicine_image">Upload Medicine Image</string>
+
+    <string name="label_medicine_name">Medicine Name</string>
+    <string name="label_amount_quantity">Amount/Quantity</string>
+
+    <string name="btn_update_medicine">Update Medicine</string>
+    <string name="btn_save_medicine">Save Medicine</string>
+
+
+
 
 
 
