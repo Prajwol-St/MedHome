@@ -1310,6 +1310,9 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="inventory">Inventory</string>
     <string name="my_orders">My Orders</string>
 
+    <string name="my_appointments">My Appointments</string>
+    <string name="manage_leaves">Manage Leaves</string>
+
 
 
 

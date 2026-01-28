@@ -75,7 +75,7 @@ fun DoctorHomeScreen(
                                 .data(profilePictureUrl)
                                 .crossfade(true)
                                 .build(),
-                            contentDescription = "Profile Picture",
+                            contentDescription = stringResource(R.string.profile_picture),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape),
@@ -84,7 +84,7 @@ fun DoctorHomeScreen(
                     } else {
                         Icon(
                             Icons.Default.Person,
-                            contentDescription = "Profile",
+                            contentDescription = stringResource(R.string.profile),
                             modifier = Modifier.size(32.dp),
                             tint = Color.White
                         )
@@ -142,7 +142,7 @@ fun DoctorHomeScreen(
 
             item {
                 DoctorFeatureCard(
-                    title = "My Appointments",
+                    title = stringResource(R.string.my_appointments),
                     icon = Icons.Default.EventNote,
                     color = Color(0xFF87A96B),
                     onClick = {
@@ -155,7 +155,7 @@ fun DoctorHomeScreen(
 
             item {
                 DoctorFeatureCard(
-                    title = "Manage Leaves",
+                    title = stringResource(R.string.manage_leaves),
                     icon = Icons.Default.BeachAccess,
                     color = Color(0xFF6B8E4E),
                     onClick = {
