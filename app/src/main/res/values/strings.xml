@@ -877,6 +877,35 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="toast_account_created">Account created successfully!</string>
     <string name="toast_profile_created">Profile created successfully!</string>
 
+    <!-- Past Bookings Activity -->
+    <string name="title_past_bookings">विगतका बुकिङहरू</string>
+
+    <string name="empty_past_bookings_title">कुनै विगतका बुकिङ छैन</string>
+    <string name="empty_past_bookings_subtitle">तपाईंको पूरा भएका अपोइन्टमेन्टहरू यहाँ देखिनेछ</string>
+
+    <string name="dialog_rate_experience_title">आफ्नो अनुभव मूल्याङ्कन गर्नुहोस्</string>
+    <string name="dialog_already_rated_title">पहिले नै मूल्याङ्कन गरिएको</string>
+
+    <string name="label_rate_experience">आफ्नो अनुभव मूल्याङ्कन गर्नुहोस्</string>
+    <string name="cd_stars">%1$d तारा</string>
+    <string name="label_star_count">%1$d तारा</string>
+
+    <string name="label_write_review">समीक्षा लेख्नुहोस् (वैकल्पिक)</string>
+    <string name="hint_share_experience">आफ्नो अनुभव साझा गर्नुहोस्...</string>
+    <string name="label_char_count">%1$d/500</string>
+
+    <string name="message_already_rated">तपाईंले यो अपोइन्टमेन्टको मूल्याङ्कन पहिले नै गर्नुभएको छ।</string>
+
+    <string name="btn_submit_rating">मूल्याङ्कन पेश गर्नुहोस्</string>
+
+    <string name="status_no_show">उपस्थित भएन</string>
+
+    <string name="label_fee_npr">रु. %1$d</string>
+
+    <string name="label_doctor_notes_colon">डाक्टरको टिप्पणी:</string>
+
+    <string name="btn_rate_doctor">डाक्टरलाई मूल्याङ्कन गर्नुहोस्</string>
+
 
 
 

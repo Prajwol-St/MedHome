@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +30,7 @@ import com.example.medhomeapp.repository.AppointmentManagementRepoImpl
 import com.example.medhomeapp.repository.RatingRepoImpl
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.PatientAppointmentsViewModel
 import com.example.medhomeapp.viewmodel.PatientAppointmentsViewModelFactory
@@ -42,8 +44,23 @@ class PastBookingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            PastBookingsScreen()
+            key(language) {
+                PastBookingsScreen()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val language = LanguageManager.getLanguage(this)
+
+        setContent {
+            key(language) {
+                PastBookingsScreen()
+            }
         }
     }
 }
@@ -96,12 +113,12 @@ fun PastBookingsScreen() {
                     containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Past Bookings") },
+                title = { Text(stringResource(R.string.title_past_bookings)) },
                 navigationIcon = {
                     IconButton(onClick = { activity?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -138,12 +155,12 @@ fun PastBookingsScreen() {
                             tint = Color.Gray
                         )
                         Text(
-                            text = "No past bookings",
+                            text = stringResource(R.string.empty_past_bookings_title),
                             fontSize = 16.sp,
                             color = Color.Gray
                         )
                         Text(
-                            text = "Your completed appointments will appear here",
+                            text = stringResource(R.string.empty_past_bookings_subtitle),
                             fontSize = 14.sp,
                             color = Color.LightGray
                         )
@@ -181,7 +198,7 @@ fun PastBookingsScreen() {
             },
             title = {
                 Text(
-                    text = if (canRate) "Rate Your Experience" else "Already Rated",
+                    text = if (canRate) stringResource(R.string.dialog_rate_experience_title) else stringResource(R.string.dialog_already_rated_title),
                     fontWeight = FontWeight.Bold
                 )
             },
@@ -208,7 +225,7 @@ fun PastBookingsScreen() {
                         // Star Rating
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = "Rate your experience",
+                                text = stringResource(R.string.label_rate_experience),
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )
@@ -222,7 +239,7 @@ fun PastBookingsScreen() {
                                     ) {
                                         Icon(
                                             if (i <= ratingValue) Icons.Default.Star else Icons.Default.StarBorder,
-                                            contentDescription = "$i stars",
+                                            contentDescription = stringResource(R.string.cd_stars, i),
                                             modifier = Modifier.size(32.dp),
                                             tint = if (i <= ratingValue) Color(0xFFFFB300) else Color.Gray
                                         )
@@ -231,7 +248,7 @@ fun PastBookingsScreen() {
                             }
                             if (ratingValue > 0) {
                                 Text(
-                                    text = "${ratingValue.toInt()} star${if (ratingValue > 1) "s" else ""}",
+                                    text = stringResource(R.string.label_star_count, ratingValue.toInt()),
                                     fontSize = 14.sp,
                                     color = MintGreen,
                                     fontWeight = FontWeight.Medium
@@ -244,14 +261,14 @@ fun PastBookingsScreen() {
                             value = reviewText,
                             onValueChange = { if (it.length <= 500) ratingViewModel.setReview(it) },
                             modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Write a review (optional)") },
-                            placeholder = { Text("Share your experience...") },
+                            label = { Text(stringResource(R.string.label_write_review)) },
+                            placeholder = { Text(stringResource(R.string.hint_share_experience)) },
                             maxLines = 4,
-                            supportingText = { Text("${reviewText.length}/500") }
+                            supportingText = { Text(stringResource(R.string.label_char_count, reviewText.length)) }
                         )
                     }
                 } else {
-                    Text("You have already rated this appointment.")
+                    Text(stringResource(R.string.message_already_rated))
                 }
             },
             confirmButton = {
@@ -271,7 +288,7 @@ fun PastBookingsScreen() {
                         enabled = ratingValue > 0,
                         colors = ButtonDefaults.buttonColors(containerColor = MintGreen)
                     ) {
-                        Text("Submit Rating")
+                        Text(stringResource(R.string.btn_submit_rating))
                     }
                 } else {
                     TextButton(
@@ -280,7 +297,7 @@ fun PastBookingsScreen() {
                             ratingViewModel.clearForm()
                         }
                     ) {
-                        Text("Close")
+                        Text(stringResource(R.string.btn_close))
                     }
                 }
             },
@@ -292,7 +309,7 @@ fun PastBookingsScreen() {
                             ratingViewModel.clearForm()
                         }
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.btn_cancel))
                     }
                 }
             },
@@ -349,8 +366,8 @@ fun PastBookingCard(
                 ) {
                     Text(
                         text = when (appointment.status) {
-                            AppConstants.STATUS_COMPLETED -> "Completed"
-                            AppConstants.STATUS_NO_SHOW -> "No Show"
+                            AppConstants.STATUS_COMPLETED -> stringResource(R.string.status_completed)
+                            AppConstants.STATUS_NO_SHOW -> stringResource(R.string.status_no_show)
                             else -> appointment.status.replaceFirstChar { it.uppercase() }
                         },
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
@@ -418,7 +435,7 @@ fun PastBookingCard(
                         tint = MintGreen
                     )
                     Text(
-                        text = "NPR ${appointment.consultationFee.toInt()}",
+                        text = stringResource(R.string.label_fee_npr, appointment.consultationFee.toInt()),
                         fontSize = 13.sp,
                         color = Color.Gray
                     )
@@ -438,7 +455,7 @@ fun PastBookingCard(
                             .padding(8.dp)
                     ) {
                         Text(
-                            text = "Doctor's Notes:",
+                            text = stringResource(R.string.label_doctor_notes_colon),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color(0xFF2C3E50)
@@ -470,7 +487,7 @@ fun PastBookingCard(
                         modifier = Modifier.size(18.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Rate Doctor")
+                    Text(stringResource(R.string.btn_rate_doctor))
                 }
             }
         }
