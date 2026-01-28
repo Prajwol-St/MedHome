@@ -945,6 +945,125 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="btn_update_medicine">औषधि अद्यावधिक गर्नुहोस्</string>
     <string name="btn_save_medicine">औषधि सुरक्षित गर्नुहोस्</string>
 
+    <!-- Blood Donation Activity -->
+
+    <string name="guideline_wait_90_days">दानहरू बीच ९० दिन पर्खनुहोस्</string>
+    <string name="guideline_stay_healthy">स्वस्थ र हाइड्रेटेड रहनुहोस्</string>
+    <string name="guideline_save_lives">प्रत्येक दानले ३ जीवनसम्म बचाउन सक्छ</string>
+
+    <!-- Blood Donation Activity -->
+    <string name="blood_donation_title">रगत दान</string>
+    <string name="history">इतिहास</string>
+    <string name="nearby_blood_requests">नजिकैका रगत अनुरोधहरू</string>
+    <string name="no_blood_requests">कुनै रगत अनुरोध उपलब्ध छैन</string>
+    <string name="error_occurred">त्रुटि भयो</string>
+
+    <!-- Blood Groups -->
+    <string name="all_blood_groups">सबै</string>
+
+    <!-- Blood Request Card -->
+    <string name="anonymous">गुमनाम</string>
+    <string name="unit_needed">%1$s युनिट चाहिन्छ</string>
+    <string name="units_needed">%1$s युनिटहरू चाहिन्छ</string>
+    <string name="contact">सम्पर्क</string>
+
+    <!-- Urgency Levels -->
+    <string name="urgent">अत्यावश्यक</string>
+    <string name="within_24_hours">२४ घण्टा भित्र</string>
+    <string name="within_a_week">एक हप्ता भित्र</string>
+
+    <!-- Time Ago -->
+    <string name="just_now">भर्खरै</string>
+    <string name="minutes_ago">%1$d मिनेट अगाडि</string>
+    <string name="minutes_ago_plural">%1$d मिनेट अगाडि</string>
+    <string name="hours_ago">%1$d घण्टा अगाडि</string>
+    <string name="hours_ago_plural">%1$d घण्टा अगाडि</string>
+    <string name="days_ago">%1$d दिन अगाडि</string>
+    <string name="days_ago_plural">%1$d दिन अगाडि</string>
+    <string name="weeks_ago">%1$d हप्ता अगाडि</string>
+    <string name="weeks_ago_plural">%1$d हप्ता अगाडि</string>
+    <string name="months_ago">%1$d महिना अगाडि</string>
+    <string name="months_ago_plural">%1$d महिना अगाडि</string>
+    <string name="years_ago">%1$d वर्ष अगाडि</string>
+    <string name="years_ago_plural">%1$d वर्ष अगाडि</string>
+
+    <!-- Post Blood Request Screen -->
+    <string name="post_blood_request">रगत अनुरोध पोस्ट गर्नुहोस्</string>
+    <string name="edit_blood_request">रगत अनुरोध सम्पादन गर्नुहोस्</string>
+    <string name="patient_name">बिरामीको नाम</string>
+    <string name="patient_name_hint">बिरामीको नाम प्रविष्ट गर्नुहोस् वा गुमनाम छाड्नुहोस्</string>
+    <string name="required_blood_group">आवश्यक रगत समूह *</string>
+    <string name="units_needed_label">आवश्यक युनिटहरू *</string>
+    <string name="hospital">अस्पताल *</string>
+    <string name="hospital_hint">जस्तै सिटी जनरल अस्पताल</string>
+    <string name="location">स्थान *</string>
+    <string name="location_hint">सातदोबाटो, ललितपुर</string>
+    <string name="contact_number_hint">+९७७ XXXXX XXXXX</string>
+    <string name="urgency_level">अत्यावश्यकता स्तर *</string>
+    <string name="select_urgency">अत्यावश्यकता चयन गर्नुहोस्</string>
+    <string name="additional_notes">थप टिप्पणीहरू</string>
+    <string name="additional_notes_hint">कुनै थप जानकारी...</string>
+    <string name="update_blood_request">रगत अनुरोध अपडेट गर्नुहोस्</string>
+
+    <!-- History Screen -->
+    <string name="my_requests">मेरा अनुरोधहरू</string>
+    <string name="donor_profile">दाताको प्रोफाइल</string>
+    <string name="no_blood_requests_yet">अहिलेसम्म कुनै रगत अनुरोध छैन</string>
+    <string name="posted_requests_appear_here">तपाईंले पोस्ट गर्नुभएका रगत अनुरोधहरू यहाँ देखा पर्नेछ</string>
+
+    <!-- Donor Profile -->
+    <string name="not_registered_as_donor">दाताको रूपमा दर्ता गरिएको छैन</string>
+    <string name="join_donor_list">जीवन बचाउन मद्दत गर्न दाता सूचीमा सामेल हुनुहोस्</string>
+    <string name="availability_status">उपलब्धता स्थिति</string>
+    <string name="available">उपलब्ध</string>
+    <string name="not_available">उपलब्ध छैन</string>
+    <string name="emergency_available">आपतकालीन उपलब्ध</string>
+    <string name="yes">हो</string>
+    <string name="no">होइन</string>
+    <string name="total_donations">कुल दानहरू</string>
+    <string name="last_donation">अन्तिम दान</string>
+    <string name="can_donate_again_in">तपाईं %1$d दिनमा फेरि दान गर्न सक्नुहुन्छ</string>
+    <string name="eligible_to_donate">तपाईं अहिले दान गर्न योग्य हुनुहुन्छ!</string>
+    <string name="registered">दर्ता गरिएको</string>
+    <string name="thank_you_donor">दाता हुनुभएकोमा धन्यवाद!</string>
+    <string name="generosity_saves_lives">तपाईंको उदारताले जीवन बचाउन सक्छ</string>
+    <string name="donations">दानहरू</string>
+    <string name="lives_saved">जीवन बचाइएको</string>
+
+    <!-- Donation Guidelines -->
+    <string name="donation_guidelines">दान दिशानिर्देशहरू</string>
+
+    <!-- Blood Request Details Screen (unique strings only) -->
+    <string name="request_details">अनुरोध विवरण</string>
+    <string name="patient_information">बिरामी जानकारी</string>
+    <string name="units_needed_value">%1$s युनिट(हरू)</string>
+    <string name="hospital_information">अस्पताल जानकारी</string>
+    <string name="contact_information">सम्पर्क जानकारी</string>
+    <string name="status_information">स्थिति जानकारी</string>
+    <string name="time_ago_label">समय अगाडि</string>
+    <string name="additional_notes_title">थप टिप्पणीहरू</string>
+    <string name="manage_request">अनुरोध व्यवस्थापन</string>
+    <string name="mark_as_fulfilled">पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+    <string name="cancel_request">अनुरोध रद्द गर्नुहोस्</string>
+    <string name="reactivate_request">अनुरोध पुन: सक्रिय गर्नुहोस्</string>
+    <string name="request_fulfilled_message">यो अनुरोध पूरा भएको छ। तपाईंको योगदानको लागि धन्यवाद!</string>
+    <string name="call_contact">%1$s लाई कल गर्नुहोस्</string>
+
+    <!-- Delete Blood Request Dialog -->
+    <string name="delete_blood_request">रगत अनुरोध मेटाउनुहोस्</string>
+    <string name="delete_blood_request_confirmation">के तपाईं यो रगत अनुरोध मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+
+    <!-- Fulfill Dialog -->
+    <string name="mark_fulfilled_title">पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+    <string name="fulfill_confirmation">के तपाईंले आवश्यक रगत दान प्राप्त गर्नुभयो? यसले अनुरोधलाई पूरा भएको रूपमा चिन्ह लगाउनेछ।</string>
+    <string name="yes_mark_fulfilled">हो, पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+
+    <string name="status_fulfilled">पूरा भयो</string>
+    <string name="posted">पोस्ट गरिएको</string>
+    <string name="status">स्थिति</string>
+
+
+
 
 
 

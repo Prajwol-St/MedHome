@@ -982,6 +982,126 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="btn_update_medicine">Update Medicine</string>
     <string name="btn_save_medicine">Save Medicine</string>
 
+    <!-- Blood Donation Activity -->
+    <string name="blood_donation_title">Blood Donation</string>
+    <string name="history">History</string>
+    <string name="nearby_blood_requests">Nearby Blood Requests</string>
+    <string name="no_blood_requests">No blood requests available</string>
+    <string name="error_occurred">An error occurred</string>
+
+    <!-- Blood Groups -->
+    <string name="all_blood_groups">All</string>
+
+    <!-- Blood Request Card -->
+    <string name="anonymous">Anonymous</string>
+    <string name="unit_needed">%1$s unit needed</string>
+    <string name="units_needed">%1$s units needed</string>
+    <string name="contact">Contact</string>
+
+    <!-- Urgency Levels -->
+    <string name="urgent">Urgent</string>
+    <string name="within_24_hours">Within 24 hours</string>
+    <string name="within_a_week">Within a week</string>
+
+    <!-- Time Ago -->
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%1$d min ago</string>
+    <string name="minutes_ago_plural">%1$d mins ago</string>
+    <string name="hours_ago">%1$d hr ago</string>
+    <string name="hours_ago_plural">%1$d hrs ago</string>
+    <string name="days_ago">%1$d day ago</string>
+    <string name="days_ago_plural">%1$d days ago</string>
+    <string name="weeks_ago">%1$d week ago</string>
+    <string name="weeks_ago_plural">%1$d weeks ago</string>
+    <string name="months_ago">%1$d month ago</string>
+    <string name="months_ago_plural">%1$d months ago</string>
+    <string name="years_ago">%1$d year ago</string>
+    <string name="years_ago_plural">%1$d years ago</string>
+
+    <!-- Post Blood Request Screen -->
+    <string name="post_blood_request">Post Blood Request</string>
+    <string name="edit_blood_request">Edit Blood Request</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="patient_name_hint">Enter patient name or leave anonymous</string>
+    <string name="required_blood_group">Required Blood Group *</string>
+    <string name="units_needed_label">Units Needed *</string>
+    <string name="hospital">Hospital *</string>
+    <string name="hospital_hint">e.g. City General Hospital</string>
+    <string name="location">Location *</string>
+    <string name="location_hint">Satdobato, Lalitpur</string>
+    <string name="contact_number_hint">+977 XXXXX XXXXX</string>
+    <string name="urgency_level">Urgency Level *</string>
+    <string name="select_urgency">Select urgency</string>
+    <string name="additional_notes">Additional Notes</string>
+    <string name="additional_notes_hint">Any additional information...</string>
+    <string name="update_blood_request">Update Blood Request</string>
+
+    <!-- History Screen -->
+    <string name="my_requests">My Requests</string>
+    <string name="donor_profile">Donor Profile</string>
+    <string name="no_blood_requests_yet">No blood requests yet</string>
+    <string name="posted_requests_appear_here">Your posted blood requests will appear here</string>
+
+    <!-- Donor Profile -->
+    <string name="not_registered_as_donor">Not registered as a donor</string>
+    <string name="join_donor_list">Join the donor list to help save lives</string>
+    <string name="availability_status">Availability Status</string>
+    <string name="available">Available</string>
+    <string name="not_available">Not Available</string>
+    <string name="emergency_available">Emergency Available</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="total_donations">Total Donations</string>
+    <string name="last_donation">Last Donation</string>
+    <string name="can_donate_again_in">You can donate again in %1$d days</string>
+    <string name="eligible_to_donate">You are eligible to donate now!</string>
+    <string name="registered">Registered</string>
+    <string name="thank_you_donor">Thank you for being a donor!</string>
+    <string name="generosity_saves_lives">Your generosity can save lives</string>
+    <string name="donations">Donations</string>
+    <string name="lives_saved">Lives Saved</string>
+
+    <!-- Donation Guidelines -->
+    <string name="donation_guidelines">Donation Guidelines</string>
+    <string name="guideline_wait_90_days">Wait 90 days between donations</string>
+    <string name="guideline_stay_healthy">Stay healthy and hydrated</string>
+    <string name="guideline_save_lives">Each donation can save up to 3 lives</string>
+
+    <!-- Blood Donation Activity -->
+
+    <!-- Blood Request Details Screen (unique strings only) -->
+    <string name="request_details">Request Details</string>
+    <string name="patient_information">Patient Information</string>
+    <string name="units_needed_value">%1$s unit(s)</string>
+    <string name="hospital_information">Hospital Information</string>
+    <string name="contact_information">Contact Information</string>
+    <string name="status_information">Status Information</string>
+    <string name="time_ago_label">Time Ago</string>
+    <string name="additional_notes_title">Additional Notes</string>
+    <string name="manage_request">Manage Request</string>
+    <string name="mark_as_fulfilled">Mark as Fulfilled</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="reactivate_request">Reactivate Request</string>
+    <string name="request_fulfilled_message">This request has been fulfilled. Thank you for your contribution!</string>
+    <string name="call_contact">Call %1$s</string>
+
+    <!-- Delete Blood Request Dialog -->
+    <string name="delete_blood_request">Delete Blood Request</string>
+    <string name="delete_blood_request_confirmation">Are you sure you want to delete this blood request? This action cannot be undone.</string>
+
+    <!-- Fulfill Dialog -->
+    <string name="mark_fulfilled_title">Mark as Fulfilled</string>
+    <string name="fulfill_confirmation">Have you received the required blood donation? This will mark the request as fulfilled.</string>
+    <string name="yes_mark_fulfilled">Yes, Mark as Fulfilled</string>
+
+    <string name="status_fulfilled">Fulfilled</string>
+
+    <string name="posted">Posted</string>
+    <string name="status">Status</string>
+
+
+
+
 
 
 
