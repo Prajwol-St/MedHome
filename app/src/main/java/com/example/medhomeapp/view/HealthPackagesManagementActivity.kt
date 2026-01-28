@@ -36,6 +36,7 @@ import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
+import com.example.medhomeapp.utils.LanguageManager
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -51,13 +52,23 @@ class HealthPackagesManagementActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val language = LanguageManager.getLanguage(this)
         setContent {
-            HealthPackagesManagementScreen(viewModel)
+            key(language) {
+                HealthPackagesManagementScreen(viewModel)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        val language = LanguageManager.getLanguage(this)
+        setContent {
+            key(language) {
+                HealthPackagesManagementScreen(viewModel)
+            }
+        }
+
         val sharedPrefs = getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
         val doctorId = sharedPrefs.getString("user_id", "") ?: ""
         viewModel.getPackagesByDoctor(doctorId)
@@ -83,7 +94,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text( stringResource(R.string.my_health_packages), fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.title_my_health_packages), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = SageGreen,
                     titleContentColor = Color.White
@@ -92,7 +103,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                     IconButton(onClick = {
                         (context as? HealthPackagesManagementActivity)?.finish()
                     }) {
-                        Icon(Icons.Default.ArrowBack, stringResource(R.string.back), tint = Color.White)
+                        Icon(Icons.Default.ArrowBack, stringResource(R.string.cd_back), tint = Color.White)
                     }
                 },
                 actions = {
@@ -100,7 +111,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                         val intent = Intent(context, PackageBookingsActivity::class.java)
                         context.startActivity(intent)
                     }) {
-                        Icon(Icons.Default.Assessment, stringResource(R.string.insights), tint = Color.White)
+                        Icon(Icons.Default.Assessment, stringResource(R.string.cd_insights), tint = Color.White)
                     }
                 }
             )
@@ -113,7 +124,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                 },
                 containerColor = SageGreen
             ) {
-                Icon(Icons.Default.Add, stringResource(R.string.create_package), tint = Color.White)
+                Icon(Icons.Default.Add, stringResource(R.string.cd_create_package), tint = Color.White)
             }
         }
     ) { padding ->
@@ -144,13 +155,13 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        stringResource(R.string.no_packages_title),
+                        stringResource(R.string.empty_packages_mgmt_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextDark
                     )
                     Text(
-                        stringResource(R.string.no_packages_subtitle),
+                        stringResource(R.string.empty_packages_mgmt_subtitle),
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -187,13 +198,14 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
         if (showDeleteDialog && packageToDelete != null) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text((stringResource(R.string.delete_package_title))) },
-                text = { Text(
-                    stringResource(
-                        R.string.delete_package_message,
-                        packageToDelete?.packageName ?: ""
+                title = { Text(stringResource(R.string.dialog_delete_package_title)) },
+                text = {
+                    Text(
+                        stringResource(
+                            R.string.dialog_delete_package_message,
+                            packageToDelete?.packageName ?: ""
+                        )
                     )
-                )
                 },
                 confirmButton = {
                     TextButton(
@@ -203,7 +215,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                                     if (success) {
                                         Toast.makeText(
                                             context,
-                                            context.getString(R.string.package_deleted),
+                                            context.getString(R.string.toast_package_deleted),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         viewModel.getPackagesByDoctor(doctorId)
@@ -219,7 +231,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                             packageToDelete = null
                         }
                     ) {
-                        Text("Delete", color = Color.Red, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_delete), color = Color.Red, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
@@ -227,7 +239,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                         showDeleteDialog = false
                         packageToDelete = null
                     }) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.btn_cancel))
                     }
                 }
             )
@@ -284,7 +296,7 @@ fun DoctorPackageCard(
                         .data(packageModel.imageUrl)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Package Image",
+                    contentDescription = stringResource(R.string.cd_package_image),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
@@ -340,13 +352,13 @@ fun DoctorPackageCard(
                             onClick = onEdit,
                             modifier = Modifier.size(36.dp)
                         ) {
-                            Icon(Icons.Default.Edit, "Edit", tint = SageGreen, modifier = Modifier.size(20.dp))
+                            Icon(Icons.Default.Edit, stringResource(R.string.cd_edit), tint = SageGreen, modifier = Modifier.size(20.dp))
                         }
                         IconButton(
                             onClick = onDelete,
                             modifier = Modifier.size(36.dp)
                         ) {
-                            Icon(Icons.Default.Delete, "Delete", tint = Color.Red, modifier = Modifier.size(20.dp))
+                            Icon(Icons.Default.Delete, stringResource(R.string.cd_delete), tint = Color.Red, modifier = Modifier.size(20.dp))
                         }
                     }
                 }
@@ -369,12 +381,12 @@ fun DoctorPackageCard(
                 ) {
                     Column {
                         Text(
-                            "Price",
+                            stringResource(R.string.label_price),
                             fontSize = 12.sp,
                             color = Color.Gray
                         )
                         Text(
-                            "NPR ${packageModel.price}",
+                            stringResource(R.string.label_price_npr, packageModel.price),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = SageGreen
@@ -408,9 +420,9 @@ fun DoctorPackageCard(
                                 )
                                 Text(
                                     when {
-                                        daysRemaining <= 0 -> stringResource(R.string.expired)
-                                        daysRemaining == 1 -> stringResource(R.string.one_day_left)
-                                        else -> stringResource(R.string.days_left, daysRemaining)
+                                        daysRemaining <= 0 -> stringResource(R.string.status_expired)
+                                        daysRemaining == 1 -> stringResource(R.string.label_one_day_left)
+                                        else -> stringResource(R.string.label_days_left_short, daysRemaining)
                                     },
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,

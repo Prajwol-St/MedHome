@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +35,7 @@ import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.repository.DoctorAvailabilityRepoImpl
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModel
 import com.example.medhomeapp.viewmodel.DoctorAvailabilityViewModelFactory
@@ -47,8 +49,22 @@ class DoctorAvailabilityActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            DoctorAvailabilityScreen()
+            key(language) {
+                DoctorAvailabilityScreen()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val language = LanguageManager.getLanguage(this)
+        setContent {
+            key(language) {
+                DoctorAvailabilityScreen()
+            }
         }
     }
 }
@@ -84,7 +100,7 @@ fun DoctorAvailabilityScreen() {
                 ),
                 title = {
                     Text(
-                        "Set Availability",
+                        stringResource(R.string.title_set_availability),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -98,7 +114,7 @@ fun DoctorAvailabilityScreen() {
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -114,9 +130,9 @@ fun DoctorAvailabilityScreen() {
                 elevation = FloatingActionButtonDefaults.elevation(8.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add", modifier = Modifier.size(24.dp))
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_add), modifier = Modifier.size(24.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Time Slots", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                Text(stringResource(R.string.btn_add_time_slots), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
             }
         }
     ) { paddingValues ->
@@ -157,13 +173,13 @@ fun DoctorAvailabilityScreen() {
                         )
                     }
                     Text(
-                        text = "No time slots added",
+                        text = stringResource(R.string.empty_time_slots_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color(0xFF2C3E50)
                     )
                     Text(
-                        text = "Tap the button below to add your availability\nand start accepting appointments",
+                        text = stringResource(R.string.empty_time_slots_subtitle),
                         fontSize = 14.sp,
                         color = Color(0xFF7F8C8D),
                         lineHeight = 20.sp
@@ -224,7 +240,7 @@ fun DoctorAvailabilityScreen() {
                             slot = slot,
                             onDelete = {
                                 viewModel.deleteSlot(slot.date, slot.id)
-                                Toast.makeText(context, "Slot deleted", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, context.getString(R.string.toast_slot_deleted), Toast.LENGTH_SHORT).show()
                             }
                         )
                     }
@@ -255,7 +271,7 @@ fun DoctorAvailabilityScreen() {
                 if (slots.isEmpty()) {
                     Toast.makeText(
                         context,
-                        "Invalid time range. Please check your inputs.",
+                        context.getString(R.string.toast_invalid_time_range),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@AddTimeSlotDialog
@@ -271,7 +287,7 @@ fun DoctorAvailabilityScreen() {
 
                 Toast.makeText(
                     context,
-                    "${slots.size} time slots added successfully",
+                    context.getString(R.string.toast_slots_added, slots.size),
                     Toast.LENGTH_SHORT
                 ).show()
                 showAddSlotDialog = false
@@ -344,7 +360,7 @@ fun TimeSlotItem(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "$duration min",
+                            text = stringResource(R.string.label_duration_min, duration),
                             fontSize = 13.sp,
                             color = Color(0xFF7F8C8D),
                             fontWeight = FontWeight.Medium
@@ -363,7 +379,7 @@ fun TimeSlotItem(
                                 .padding(horizontal = 8.dp, vertical = 2.dp)
                         ) {
                             Text(
-                                text = if (slot.isBooked) "Booked" else "Available",
+                                text = if (slot.isBooked) stringResource(R.string.status_booked) else stringResource(R.string.status_available),
                                 fontSize = 12.sp,
                                 color = if (slot.isBooked) Color(0xFFFF9800) else MintGreen,
                                 fontWeight = FontWeight.SemiBold
@@ -385,7 +401,7 @@ fun TimeSlotItem(
                 ) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.cd_delete),
                         tint = Color(0xFFE53935),
                         modifier = Modifier.size(20.dp)
                     )
@@ -460,7 +476,7 @@ fun AddTimeSlotDialog(
                     )
                 }
                 Text(
-                    text = "Add Time Slots",
+                    text = stringResource(R.string.dialog_add_time_slots_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
@@ -507,7 +523,7 @@ fun AddTimeSlotDialog(
                     Icon(Icons.Default.AccessTime, contentDescription = null, tint = MintGreen)
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        "Start: $startTime",
+                        stringResource(R.string.label_start_time_value, startTime),
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF2C3E50)
                     )
@@ -527,7 +543,7 @@ fun AddTimeSlotDialog(
                     Icon(Icons.Default.AccessTime, contentDescription = null, tint = MintGreen)
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        "End: $endTime",
+                        stringResource(R.string.label_end_time_value, endTime),
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF2C3E50)
                     )
@@ -535,7 +551,7 @@ fun AddTimeSlotDialog(
 
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
-                        text = "Slot Duration",
+                        text = stringResource(R.string.label_slot_duration),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color(0xFF2C3E50)
@@ -551,7 +567,7 @@ fun AddTimeSlotDialog(
                                 onClick = { onDurationChange(duration) },
                                 label = {
                                     Text(
-                                        "$duration min",
+                                        stringResource(R.string.label_duration_min, duration),
                                         fontWeight = if (selectedDuration == duration) FontWeight.Bold else FontWeight.Normal
                                     )
                                 },
@@ -581,7 +597,7 @@ fun AddTimeSlotDialog(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.height(48.dp)
             ) {
-                Text("Add Slots", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                Text(stringResource(R.string.btn_add_slots), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
             }
         },
         dismissButton = {
@@ -589,7 +605,7 @@ fun AddTimeSlotDialog(
                 onClick = onDismiss,
                 modifier = Modifier.height(48.dp)
             ) {
-                Text("Cancel", color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
+                Text(stringResource(R.string.btn_cancel), color = Color(0xFF7F8C8D), fontWeight = FontWeight.Medium)
             }
         },
         containerColor = Color.White,
@@ -601,7 +617,7 @@ fun AddTimeSlotDialog(
             onDismissRequest = { showDatePicker = false },
             title = {
                 Text(
-                    "Select Date",
+                    stringResource(R.string.dialog_select_date_title),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -638,7 +654,7 @@ fun AddTimeSlotDialog(
 
     if (showStartTimePicker) {
         TimePickerDialog(
-            title = "Select Start Time",
+            title = stringResource(R.string.dialog_select_start_time_title),
             onTimeSelected = {
                 onStartTimeChange(it)
                 showStartTimePicker = false
@@ -649,7 +665,7 @@ fun AddTimeSlotDialog(
 
     if (showEndTimePicker) {
         TimePickerDialog(
-            title = "Select End Time",
+            title = stringResource(R.string.dialog_select_end_time_title),
             onTimeSelected = {
                 onEndTimeChange(it)
                 showEndTimePicker = false

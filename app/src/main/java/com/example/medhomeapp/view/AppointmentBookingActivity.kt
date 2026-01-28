@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +41,7 @@ import com.example.medhomeapp.model.TimeSlot
 import com.example.medhomeapp.model.UserModel
 import com.example.medhomeapp.repository.*
 import com.example.medhomeapp.utils.DateTimeUtils
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.AppointmentBookingViewModel
 import com.example.medhomeapp.viewmodel.AppointmentBookingViewModelFactory
@@ -55,8 +57,27 @@ class AppointmentBookingActivity : BaseActivity() {
 
         val doctorId = intent.getStringExtra("DOCTOR_ID") ?: ""
 
+        // Get current language and use it as a key to force recomposition
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            BookAppointmentScreen(doctorId = doctorId)
+            // The key ensures the entire composition is recreated when language changes
+            key(language) {
+                BookAppointmentScreen(doctorId = doctorId)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Recreate the activity when returning from settings if language changed
+        val currentLanguage = LanguageManager.getLanguage(this)
+        val savedLanguage = intent.getStringExtra("current_language")
+
+        if (savedLanguage != null && savedLanguage != currentLanguage) {
+            recreate()
+        } else if (savedLanguage == null) {
+            intent.putExtra("current_language", currentLanguage)
         }
     }
 }
@@ -135,12 +156,12 @@ fun BookAppointmentScreen(doctorId: String) {
                     containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Book Appointment") },
+                title = { Text(stringResource(R.string.title_book_appointment)) },
                 navigationIcon = {
                     IconButton(onClick = { activity?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -164,12 +185,12 @@ fun BookAppointmentScreen(doctorId: String) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Consultation Fee",
+                                text = stringResource(R.string.consultation_fee),
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )
                             Text(
-                                text = "NPR ${doctor!!.consultationFee.toInt()}",
+                                text = stringResource(R.string.currency_npr, doctor!!.consultationFee.toInt()),
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MintGreen
@@ -190,7 +211,7 @@ fun BookAppointmentScreen(doctorId: String) {
                                 )
                             } else {
                                 Text(
-                                    text = "Confirm Booking",
+                                    text = stringResource(R.string.confirm_booking),
                                     fontSize = 16.sp,
                                     modifier = Modifier.padding(vertical = 8.dp)
                                 )
@@ -271,7 +292,7 @@ fun BookAppointmentScreen(doctorId: String) {
 
             // Date Selection
             Text(
-                text = "Select Date",
+                text = stringResource(R.string.select_date),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -284,7 +305,7 @@ fun BookAppointmentScreen(doctorId: String) {
 
             // Time Slots
             Text(
-                text = "Available Time Slots",
+                text = stringResource(R.string.available_time_slots),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -306,7 +327,7 @@ fun BookAppointmentScreen(doctorId: String) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "No slots available for this date",
+                            text = stringResource(R.string.no_slots_available),
                             fontSize = 14.sp,
                             color = Color.Gray
                         )
@@ -334,7 +355,7 @@ fun BookAppointmentScreen(doctorId: String) {
 
             // Notes Section
             Text(
-                text = "Reason for Visit (Optional)",
+                text = stringResource(R.string.reason_for_visit_optional),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -347,7 +368,7 @@ fun BookAppointmentScreen(doctorId: String) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .height(120.dp),
-                placeholder = { Text("Describe your symptoms or reason for consultation") },
+                placeholder = { Text(stringResource(R.string.notes_placeholder)) },
                 maxLines = 4,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -357,7 +378,7 @@ fun BookAppointmentScreen(doctorId: String) {
             )
 
             Text(
-                text = "${patientNotes.length}/500",
+                text = stringResource(R.string.notes_char_count, patientNotes.length),
                 fontSize = 12.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
@@ -497,7 +518,7 @@ fun TimeSlotCard(
                 }
             )
             Text(
-                text = "${slot.duration} min",
+                text = stringResource(R.string.duration_min, slot.duration),
                 fontSize = 11.sp,
                 color = when {
                     isSelected -> Color.White.copy(alpha = 0.8f)
@@ -508,6 +529,7 @@ fun TimeSlotCard(
         }
     }
 }
+
 @Composable
 fun ConfirmBookingDialog(
     doctor: DoctorModel,
@@ -529,20 +551,26 @@ fun ConfirmBookingDialog(
         },
         title = {
             Text(
-                text = "Confirm Booking",
+                text = stringResource(R.string.confirm_booking_title),
                 fontWeight = FontWeight.Bold
             )
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                DetailItem("Doctor", doctor.name)
-                DetailItem("Specialization", doctor.specialization)
-                DetailItem("Date", DateTimeUtils.formatDateForDisplay(date))
-                DetailItem("Time", slot.startTime)
-                DetailItem("Duration", "${slot.duration} minutes")
-                DetailItem("Fee", "NPR ${doctor.consultationFee.toInt()}")
+                DetailItem(stringResource(R.string.doctor), doctor.name)
+                DetailItem(stringResource(R.string.specialization), doctor.specialization)
+                DetailItem(stringResource(R.string.date), DateTimeUtils.formatDateForDisplay(date))
+                DetailItem(stringResource(R.string.time), slot.startTime)
+                DetailItem(
+                    stringResource(R.string.duration),
+                    stringResource(R.string.duration_minutes, slot.duration)
+                )
+                DetailItem(
+                    stringResource(R.string.fee),
+                    stringResource(R.string.currency_npr, doctor.consultationFee.toInt())
+                )
                 if (patientNotes.isNotBlank()) {
-                    DetailItem("Notes", patientNotes)
+                    DetailItem(stringResource(R.string.notes), patientNotes)
                 }
             }
         },
@@ -551,18 +579,19 @@ fun ConfirmBookingDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(containerColor = MintGreen)
             ) {
-                Text("Confirm")
+                Text(stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         },
         containerColor = Color.White,
         shape = RoundedCornerShape(16.dp)
     )
 }
+
 @Composable
 fun DetailItem(label: String, value: String) {
     Row(
