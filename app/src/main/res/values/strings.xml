@@ -1118,6 +1118,30 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="apply">Apply</string>
     <string name="Search">search</string>
 
+    <!-- Add/Edit Medicine Screen -->
+    <string name="edit_medicine">Edit Medicine</string>
+    <string name="add_medicine">Add Medicine</string>
+
+    <!-- Form Fields -->
+    <string name="medicine_name">Medicine Name</string>
+    <string name="medicine_name_hint">e.g., Paracetamol</string>
+    <string name="dosage">Dosage</string>
+    <string name="dosage_hint">e.g., 500mg or 2 tablets</string>
+    <string name="frequency">Frequency</string>
+    <string name="reminder_times">Reminder Times</string>
+    <string name="instructions_optional">Instructions (Optional)</string>
+    <string name="instructions_hint">e.g., Take after meal</string>
+
+    <!-- Frequency Options -->
+    <string name="frequency_daily">Daily</string>
+    <string name="frequency_weekly">Weekly</string>
+    <string name="frequency_as_needed">As Needed</string>
+
+    <!-- Buttons -->
+    <string name="add_reminder_time">Add Reminder Time</string>
+    <string name="update_medicine">Update Medicine</string>
+    <string name="remove">Remove</string>
+
 
 
 
