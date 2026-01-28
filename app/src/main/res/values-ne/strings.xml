@@ -1196,6 +1196,85 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="place_order_button">अर्डर गर्नुहोस्</string>
     <string name="placing_order">अर्डर गर्दै…</string>
 
+    <!-- CaloriesCalculator strings -->
+    <string name="calorie_calculator">क्यालोरी क्याल्कुलेटर</string>
+    <string name="powered_by_usda">USDA खाद्य डाटाबेस द्वारा संचालित</string>
+    <string name="total_calories_today">आज कुल क्यालोरी</string>
+    <string name="daily_goal">दैनिक लक्ष्य: %1$d kcal</string>
+    <string name="remaining">बाँकी: %1$d kcal</string>
+    <string name="protein">प्रोटीन</string>
+    <string name="carbs">कार्बोहाइड्रेट</string>
+    <string name="fat">बोसो</string>
+    <string name="set_daily_goal">दैनिक लक्ष्य सेट गर्नुहोस्</string>
+    <string name="search_usda_database">USDA खाद्य डाटाबेस खोज्नुहोस्</string>
+    <string name="search_food_placeholder">खाना खोज्नुहोस् (जस्तै: स्याउ, भात, कुखुरा)</string>
+    <string name="results_from_usda">USDA FoodData Central बाट परिणामहरू</string>
+    <string name="add_food_manually">म्यानुअल रूपमा खाना थप्नुहोस्</string>
+    <string name="todays_meals">आजका खाना</string>
+    <string name="breakfast">🍳 बिहानको खाना</string>
+    <string name="lunch">🍛 दिउँसोको खाना</string>
+    <string name="dinner">🍽️ बेलुकाको खाना</string>
+    <string name="snacks">🍿 खाजा</string>
+    <string name="no_meals_added">अझै कुनै खाना थपिएको छैन। माथि खोजेर खाना थप्नुहोस्!</string>
+    <string name="view_daily_summary">दैनिक सारांश हेर्नुहोस्</string>
+    <string name="daily_summary_feature">दैनिक सारांश सुविधा</string>
+    <string name="search_from_foods">पूर्ण पोषण डेटा सहित 300,000+ खानाहरूबाट खोज्नुहोस्</string>
+    <string name="search_example">जस्तै: स्याउ, कुखुराको छाती, भात</string>
+    <string name="searching_usda">USDA डाटाबेस खोज्दै…</string>
+    <string name="search_for_food">कुनै पनि खाना वस्तु खोज्नुहोस्</string>
+    <string name="try_examples">प्रयास गर्नुहोस्: स्याउ, भात, कुखुरा, दूध</string>
+    <string name="no_foods_found">\'%1$s\' को लागि कुनै खाना फेला परेन</string>
+    <string name="try_different_search">फरक खोज शब्द प्रयास गर्नुहोस्</string>
+    <string name="found_results">%1$d परिणामहरू फेला पर्यो</string>
+    <string name="add_meal_type">%1$s थप्नुहोस्</string>
+    <string name="add">थप्नुहोस्</string>
+    <string name="enter_food_details">खाना विवरण र पोषण जानकारी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_required">खानाको नाम *</string>
+    <string name="food_name_example">जस्तै: घरमा पकाएको खाना</string>
+    <string name="calories_kcal">क्यालोरी (kcal) *</string>
+    <string name="calories_example">जस्तै: 250</string>
+    <string name="macronutrients_optional">म्याक्रोन्यूट्रिएन्ट्स (ऐच्छिक)</string>
+    <string name="protein_g">प्रोटीन (g)</string>
+    <string name="protein_example">जस्तै: 20</string>
+    <string name="carbohydrates_g">कार्बोहाइड्रेट (g)</string>
+    <string name="carbs_example">जस्तै: 30</string>
+    <string name="fat_g">बोसो (g)</string>
+    <string name="fat_example">जस्तै: 10</string>
+    <string name="serving_amount">सर्भिङ मात्रा</string>
+    <string name="serving_example">जस्तै: 1.5</string>
+    <string name="serving_note">1.0 = 1 सर्भिङ, 1.5 = 1.5 सर्भिङ</string>
+    <string name="meal_type_required">खानाको प्रकार *</string>
+    <string name="add_food">खाना थप्नुहोस्</string>
+    <string name="please_enter_valid_calories">कृपया मान्य क्यालोरी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_calories_required">खानाको नाम र क्यालोरी आवश्यक छ</string>
+    <string name="set_calorie_macro_targets">तपाईंको दैनिक क्यालोरी र म्याक्रो लक्ष्यहरू सेट गर्नुहोस्</string>
+    <string name="daily_calorie_goal">दैनिक क्यालोरी लक्ष्य (kcal) *</string>
+    <string name="calorie_goal_example">जस्तै: 2000</string>
+    <string name="recommended_calories">सिफारिस गरिएको: 1500-2500 kcal/दिन</string>
+    <string name="macro_goals_optional">म्याक्रो लक्ष्यहरू (ऐच्छिक)</string>
+    <string name="protein_goal_g">प्रोटीन लक्ष्य (g)</string>
+    <string name="protein_goal_example">जस्तै: 150</string>
+    <string name="carbohydrates_goal_g">कार्बोहाइड्रेट लक्ष्य (g)</string>
+    <string name="carbs_goal_example">जस्तै: 200</string>
+    <string name="fat_goal_g">बोसो लक्ष्य (g)</string>
+    <string name="fat_goal_example">जस्तै: 50</string>
+    <string name="save_goal">लक्ष्य सुरक्षित गर्नुहोस्</string>
+    <string name="please_enter_valid_calorie_goal">कृपया मान्य क्यालोरी लक्ष्य प्रविष्ट गर्नुहोस्</string>
+    <string name="food_details">खाना विवरण</string>
+    <string name="food_name">खानाको नाम</string>
+    <string name="serving">सर्भिङ</string>
+    <string name="meal_type">खानाको प्रकार</string>
+    <string name="nutrition_information">पोषण जानकारी</string>
+    <string name="calories">क्यालोरी</string>
+    <string name="data_from_usda">USDA FoodData Central बाट डाटा</string>
+    <string name="delete_food_item">खाना मेटाउने?</string>
+    <string name="deletes_confirmation">के तपाईं \'%1$s\' मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="view_details">विवरण हेर्नुहोस्</string>
+    <string name="from_usda_database">USDA डाटाबेसबाट</string>
+    <string name="foundation_food">आधार खाना</string>
+    <string name="standard_reference">मानक सन्दर्भ</string>
+    <string name="branded_food">ब्रान्डेड खाना</string>
+
 
 
 

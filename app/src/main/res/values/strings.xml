@@ -1228,6 +1228,85 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="place_order_button">PLACE ORDER</string>
     <string name="placing_order">Placing Order…</string>
 
+    <!-- CaloriesCalculator strings -->
+    <string name="calorie_calculator">Calorie Calculator</string>
+    <string name="powered_by_usda">Powered by USDA Food Database</string>
+    <string name="total_calories_today">Total Calories Today</string>
+    <string name="daily_goal">Daily Goal: %1$d kcal</string>
+    <string name="remaining">Remaining: %1$d kcal</string>
+    <string name="protein">Protein</string>
+    <string name="carbs">Carbs</string>
+    <string name="fat">Fat</string>
+    <string name="set_daily_goal">Set Daily Goal</string>
+    <string name="search_usda_database">Search USDA Food Database</string>
+    <string name="search_food_placeholder">Search food (e.g., apple, rice, chicken)</string>
+    <string name="results_from_usda">Results from USDA FoodData Central</string>
+    <string name="add_food_manually">Add Food Manually</string>
+    <string name="todays_meals">Today\'s Meals</string>
+    <string name="breakfast">🍳 Breakfast</string>
+    <string name="lunch">🍛 Lunch</string>
+    <string name="dinner">🍽️ Dinner</string>
+    <string name="snacks">🍿 Snacks</string>
+    <string name="no_meals_added">No meals added yet. Search and add food above!</string>
+    <string name="view_daily_summary">View Daily Summary</string>
+    <string name="daily_summary_feature">Daily Summary Feature</string>
+    <string name="search_from_foods">Search from 300,000+ foods with complete nutrition data</string>
+    <string name="search_example">e.g., apple, chicken breast, rice</string>
+    <string name="searching_usda">Searching USDA database…</string>
+    <string name="search_for_food">Search for any food item</string>
+    <string name="try_examples">Try: apple, rice, chicken, milk</string>
+    <string name="no_foods_found">No foods found for \'%1$s\'</string>
+    <string name="try_different_search">Try a different search term</string>
+    <string name="found_results">Found %1$d results</string>
+    <string name="add_meal_type">Add %1$s</string>
+    <string name="add">Add</string>
+    <string name="enter_food_details">Enter food details and nutrition information</string>
+    <string name="food_name_required">Food Name *</string>
+    <string name="food_name_example">e.g., Home-cooked Meal</string>
+    <string name="calories_kcal">Calories (kcal) *</string>
+    <string name="calories_example">e.g., 250</string>
+    <string name="macronutrients_optional">Macronutrients (Optional)</string>
+    <string name="protein_g">Protein (g)</string>
+    <string name="protein_example">e.g., 20</string>
+    <string name="carbohydrates_g">Carbohydrates (g)</string>
+    <string name="carbs_example">e.g., 30</string>
+    <string name="fat_g">Fat (g)</string>
+    <string name="fat_example">e.g., 10</string>
+    <string name="serving_amount">Serving Amount</string>
+    <string name="serving_example">e.g., 1.5</string>
+    <string name="serving_note">1.0 = 1 serving, 1.5 = 1.5 servings</string>
+    <string name="meal_type_required">Meal Type *</string>
+    <string name="add_food">Add Food</string>
+    <string name="please_enter_valid_calories">Please enter valid calories</string>
+    <string name="food_name_calories_required">Food name and calories are required</string>
+    <string name="set_calorie_macro_targets">Set your daily calorie and macro targets</string>
+    <string name="daily_calorie_goal">Daily Calorie Goal (kcal) *</string>
+    <string name="calorie_goal_example">e.g., 2000</string>
+    <string name="recommended_calories">Recommended: 1500-2500 kcal/day</string>
+    <string name="macro_goals_optional">Macro Goals (Optional)</string>
+    <string name="protein_goal_g">Protein Goal (g)</string>
+    <string name="protein_goal_example">e.g., 150</string>
+    <string name="carbohydrates_goal_g">Carbohydrates Goal (g)</string>
+    <string name="carbs_goal_example">e.g., 200</string>
+    <string name="fat_goal_g">Fat Goal (g)</string>
+    <string name="fat_goal_example">e.g., 50</string>
+    <string name="save_goal">Save Goal</string>
+    <string name="please_enter_valid_calorie_goal">Please enter a valid calorie goal</string>
+    <string name="food_details">Food Details</string>
+    <string name="food_name">Food Name</string>
+    <string name="serving">Serving</string>
+    <string name="meal_type">Meal Type</string>
+    <string name="nutrition_information">Nutrition Information</string>
+    <string name="calories">Calories</string>
+    <string name="data_from_usda">Data from USDA FoodData Central</string>
+    <string name="delete_food_item">Delete Food Item?</string>
+    <string name="deletes_confirmation">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
+    <string name="view_details">View Details</string>
+    <string name="from_usda_database">From USDA Database</string>
+    <string name="foundation_food">Foundation Food</string>
+    <string name="standard_reference">Standard Reference</string>
+    <string name="branded_food">Branded Food</string>
+
 
 
 
