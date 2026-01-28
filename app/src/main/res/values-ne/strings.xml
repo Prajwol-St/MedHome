@@ -756,6 +756,26 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="dialog_select_start_time_title">सुरु समय चयन गर्नुहोस्</string>
     <string name="dialog_select_end_time_title">अन्त्य समय चयन गर्नुहोस्</string>
 
+    <!-- User Info Screen -->
+    <string name="error_user_not_found">प्रयोगकर्ता फेला परेन</string>
+
+    <string name="label_unnamed_user">नामविहीन प्रयोगकर्ता</string>
+
+    <string name="section_basic_information">आधारभूत जानकारी</string>
+    <string name="section_sensitive_information">संवेदनशील जानकारी</string>
+
+    <string name="label_email">इमेल</string>
+    <string name="label_contact">सम्पर्क</string>
+    <string name="label_gender">लिङ्ग</string>
+    <string name="label_age">उमेर</string>
+    <string name="label_address">ठेगाना</string>
+    <string name="label_blood_group">रक्त समूह</string>
+    <string name="label_emergency_contact">आपतकालीन सम्पर्क</string>
+
+    <string name="label_not_available">उपलब्ध छैन</string>
+
+    <string name="message_sensitive_info_hidden">संवेदनशील जानकारी लुकाइएको छ</string>
+
 
 
 

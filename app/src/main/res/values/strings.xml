@@ -792,6 +792,26 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="dialog_select_start_time_title">Select Start Time</string>
     <string name="dialog_select_end_time_title">Select End Time</string>
 
+    <!-- User Info Screen -->
+    <string name="error_user_not_found">User not found</string>
+
+    <string name="label_unnamed_user">Unnamed User</string>
+
+    <string name="section_basic_information">Basic Information</string>
+    <string name="section_sensitive_information">Sensitive Information</string>
+
+    <string name="label_email">Email</string>
+    <string name="label_contact">Contact</string>
+    <string name="label_gender">Gender</string>
+    <string name="label_age">Age</string>
+    <string name="label_address">Address</string>
+    <string name="label_blood_group">Blood Group</string>
+    <string name="label_emergency_contact">Emergency Contact</string>
+
+    <string name="label_not_available">N/A</string>
+
+    <string name="message_sensitive_info_hidden">Sensitive information hidden</string>
+
 
 
 
