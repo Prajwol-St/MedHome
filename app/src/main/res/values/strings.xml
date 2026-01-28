@@ -1175,6 +1175,32 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="npr_amount">NPR %d</string>
     <string name="languages">Languages</string>
 
+    <!-- My Orders Screen -->
+    <string name="pending">Pending</string>
+    <string name="processing">Processing</string>
+    <string name="completed">Completed</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="please_login_to_view_orders">Please login to view orders</string>
+    <string name="loading_your_orders">Loading your orders...</string>
+    <string name="no_orders_yet">No orders yet</string>
+    <string name="no_filter_orders">No %s orders</string>
+    <string name="orders_appear_here">Your orders will appear here instantly</string>
+    <string name="qty">Qty: %d</string>
+    <string name="order_details">Order Details</string>
+    <string name="product_details">Product Details</string>
+    <string name="medicine">Medicine</string>
+    <string name="price_per_unit">Price per unit</string>
+    <string name="quantity">Quantity</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="delivery_information">Delivery Information</string>
+    <string name="order_time">Order Time</string>
+    <string name="cancel_order_title">Cancel Order?</string>
+    <string name="cancel_order_message">Are you sure you want to cancel this order? This action cannot be undone.</string>
+    <string name="order_id_short">Order #%s</string>
+    <string name="amount">Amount: ₹%s</string>
+    <string name="yes_cancel_order">YES, CANCEL ORDER</string>
+    <string name="no_keep_it">NO, KEEP IT</string>
+
 
 
 

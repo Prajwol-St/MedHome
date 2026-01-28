@@ -1142,6 +1142,32 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="npr_amount">NPR %d</string>
     <string name="languages">भाषाहरू</string>
 
+    <!-- My Orders Screen -->
+    <string name="pending">पेन्डिङ</string>
+    <string name="processing">प्रशोधन</string>
+    <string name="completed">पूरा भयो</string>
+    <string name="cancelled">रद्द गरियो</string>
+    <string name="please_login_to_view_orders">अर्डर हेर्न लगइन गर्नुहोस्</string>
+    <string name="loading_your_orders">तपाईंका अर्डरहरू लोड गर्दै...</string>
+    <string name="no_orders_yet">अझै कुनै अर्डर छैन</string>
+    <string name="no_filter_orders">%s अर्डरहरू छैनन्</string>
+    <string name="orders_appear_here">तपाईंका अर्डरहरू यहाँ तुरुन्तै देखा पर्नेछन्</string>
+    <string name="qty">मात्रा: %d</string>
+    <string name="order_details">अर्डर विवरण</string>
+    <string name="product_details">उत्पादन विवरण</string>
+    <string name="medicine">औषधि</string>
+    <string name="price_per_unit">प्रति इकाई मूल्य</string>
+    <string name="quantity">मात्रा</string>
+    <string name="total_amount">कुल रकम</string>
+    <string name="delivery_information">डेलिभरी जानकारी</string>
+    <string name="order_time">अर्डर समय</string>
+    <string name="cancel_order_title">अर्डर रद्द गर्ने?</string>
+    <string name="cancel_order_message">के तपाईं यो अर्डर रद्द गर्न निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="order_id_short">अर्डर #%s</string>
+    <string name="amount">रकम: ₹%s</string>
+    <string name="yes_cancel_order">हो, अर्डर रद्द गर्नुहोस्</string>
+    <string name="no_keep_it">होइन, राख्नुहोस्</string>
+
 
 
 
