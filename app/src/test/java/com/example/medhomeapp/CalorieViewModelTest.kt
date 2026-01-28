@@ -25,8 +25,9 @@ class CalorieViewModelTest {
 
     @Test
     fun searchFoods_success_test() {
+        val calorieRepo = mock<CalorieRepository>()
         val nutritionRepo = mock<NutritionRepo>()
-        val viewModel = CalorieViewModel()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val mockResults = listOf(
             FoodSearchResult(
@@ -62,8 +63,9 @@ class CalorieViewModelTest {
 
     @Test
     fun searchFoods_error_test() {
+        val calorieRepo = mock<CalorieRepository>()
         val nutritionRepo = mock<NutritionRepo>()
-        val viewModel = CalorieViewModel()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val errorMsg = "Failed to search foods"
 
@@ -84,7 +86,8 @@ class CalorieViewModelTest {
     @Test
     fun addFoodItem_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val newFood = FoodItemModel(
             name = "Apple",
@@ -117,7 +120,8 @@ class CalorieViewModelTest {
     @Test
     fun addFoodItem_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val newFood = FoodItemModel(
             name = "Apple",
@@ -151,7 +155,8 @@ class CalorieViewModelTest {
     @Test
     fun deleteFoodItem_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val foodItemId = "food123"
 
@@ -172,7 +177,8 @@ class CalorieViewModelTest {
     @Test
     fun deleteFoodItem_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val foodItemId = "food123"
         val errorMsg = "Failed to delete food"
@@ -194,7 +200,8 @@ class CalorieViewModelTest {
     @Test
     fun updateFoodItem_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val foodItemId = "food123"
         val updatedFood = FoodItemModel(
@@ -227,7 +234,8 @@ class CalorieViewModelTest {
     @Test
     fun updateFoodItem_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val foodItemId = "food123"
         val updatedFood = FoodItemModel(
@@ -261,7 +269,8 @@ class CalorieViewModelTest {
     @Test
     fun loadFoodItemsByDate_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val mockFoodItems = listOf(
             FoodItemModel(
@@ -308,7 +317,8 @@ class CalorieViewModelTest {
     @Test
     fun loadFoodItemsByDate_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val errorMsg = "Failed to load food items"
 
@@ -329,7 +339,8 @@ class CalorieViewModelTest {
     @Test
     fun setCalorieGoal_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val goal = CalorieGoalModel(
             targetCalories = 2000.0,
@@ -355,7 +366,8 @@ class CalorieViewModelTest {
     @Test
     fun setCalorieGoal_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val goal = CalorieGoalModel(
             targetCalories = 2000.0,
@@ -382,7 +394,8 @@ class CalorieViewModelTest {
     @Test
     fun updateCalorieGoal_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         doAnswer { invocation ->
             val onSuccess = invocation.getArgument<() -> Unit>(1)
@@ -401,7 +414,8 @@ class CalorieViewModelTest {
     @Test
     fun updateCalorieGoal_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val errorMsg = "Failed to update goal"
 
@@ -422,7 +436,8 @@ class CalorieViewModelTest {
     @Test
     fun loadCalorieGoal_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val mockGoal = CalorieGoalModel(
             targetCalories = 2000.0,
@@ -449,7 +464,8 @@ class CalorieViewModelTest {
     @Test
     fun loadCalorieGoal_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val errorMsg = "Failed to load goal"
 
@@ -470,7 +486,8 @@ class CalorieViewModelTest {
     @Test
     fun loadDailySummary_success_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val mockSummary = DailySummaryModel(
             date = "2024-01-15",
@@ -498,7 +515,8 @@ class CalorieViewModelTest {
     @Test
     fun loadDailySummary_error_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         val errorMsg = "Failed to load summary"
 
@@ -519,7 +537,8 @@ class CalorieViewModelTest {
     @Test
     fun clearMessages_test() {
         val calorieRepo = mock<CalorieRepository>()
-        val viewModel = CalorieViewModel()
+        val nutritionRepo = mock<NutritionRepo>()
+        val viewModel = CalorieViewModel(calorieRepo, nutritionRepo)
 
         doAnswer { invocation ->
             val onSuccess = invocation.getArgument<() -> Unit>(1)

@@ -14,10 +14,10 @@ import com.example.medhomeapp.repository.NutritionRepoImpl
 import com.example.medhomeapp.utils.getCurrentDate
 import com.example.medhomeapp.utils.toFoodItemModel
 
-class CalorieViewModel : ViewModel() {
-
-    private val calorieRepository: CalorieRepository = CalorieRepositoryImpl()
+class CalorieViewModel(
+    private val calorieRepository: CalorieRepository = CalorieRepositoryImpl(),
     private val nutritionRepository: NutritionRepo = NutritionRepoImpl()
+) : ViewModel() {
 
     private val _searchQuery = MutableLiveData<String>("")
     val searchQuery: LiveData<String> = _searchQuery
