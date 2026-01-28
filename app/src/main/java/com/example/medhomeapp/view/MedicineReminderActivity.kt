@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -77,7 +78,7 @@ fun MedicineReminderScreen() {
                 .background(BackgroundCream)
         ) {
 
-                        Box(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -100,11 +101,11 @@ fun MedicineReminderScreen() {
                         onClick = { (context as BaseActivity).finish() },
                         modifier = Modifier
                             .size(40.dp)
-                           
+
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -113,7 +114,7 @@ fun MedicineReminderScreen() {
 
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Medicine Reminders",
+                            text = stringResource(R.string.medicine_reminders),
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -126,7 +127,7 @@ fun MedicineReminderScreen() {
                     }
                 }
             }
-            
+
             // Messages
             successMessage?.let { message ->
                 Card(
@@ -219,14 +220,14 @@ fun MedicineReminderScreen() {
                         }
                         Spacer(modifier = Modifier.height(24.dp))
                         Text(
-                            text = "No Medicine Reminders",
+                            text = stringResource(R.string.no_medicine_reminders),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = TextDark
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Start adding your medications to never miss a dose",
+                            text = stringResource(R.string.start_adding_medications),
                             fontSize = 14.sp,
                             color = TextGray,
                             textAlign = TextAlign.Center,
@@ -286,7 +287,7 @@ fun MedicineReminderScreen() {
             containerColor = MintGreen,
             contentColor = Color.White
         ) {
-            Icon(Icons.Default.Add, contentDescription = "Add Medicine")
+            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_medicine_desc))
         }
     }
 
@@ -294,9 +295,9 @@ fun MedicineReminderScreen() {
     if (showDeleteDialog && medicineToDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Reminder?", fontWeight = FontWeight.Bold) },
+            title = { Text(stringResource(R.string.delete_reminder_title), fontWeight = FontWeight.Bold) },
             text = {
-                Text("Are you sure you want to delete the reminder for ${medicineToDelete!!.medicineName}?")
+                Text(stringResource(R.string.delete_reminder_message, medicineToDelete!!.medicineName))
             },
             confirmButton = {
                 Button(
@@ -316,12 +317,12 @@ fun MedicineReminderScreen() {
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD32F2F))
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.delete))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -464,7 +465,7 @@ fun MedicineReminderCard(
                 }
                 if (medicine.reminderTimes.size > 3) {
                     Text(
-                        text = "+${medicine.reminderTimes.size - 3} more",
+                        text = stringResource(R.string.more_times, medicine.reminderTimes.size - 3),
                         fontSize = 12.sp,
                         color = TextGray,
                         fontWeight = FontWeight.Medium
@@ -531,7 +532,7 @@ fun MedicineReminderCard(
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Edit", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.edit), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
 
                     Button(
@@ -549,7 +550,7 @@ fun MedicineReminderCard(
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Delete", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(stringResource(R.string.delete), fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }

@@ -1119,6 +1119,8 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="Search">search</string>
 
     <!-- Add/Edit Medicine Screen -->
+
+    <!-- Add/Edit Medicine Screen -->
     <string name="edit_medicine">Edit Medicine</string>
     <string name="add_medicine">Add Medicine</string>
 
@@ -1141,6 +1143,20 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="add_reminder_time">Add Reminder Time</string>
     <string name="update_medicine">Update Medicine</string>
     <string name="remove">Remove</string>
+
+    <!-- Medicine Reminder Screen -->
+    <string name="medicine_reminders">Medicine Reminders</string>
+    <string name="no_medicine_reminders">No Medicine Reminders</string>
+    <string name="start_adding_medications">Start adding your medications to never miss a dose</string>
+    <string name="add_medicine_desc">Add Medicine</string>
+    <string name="more_times">+%d more</string>
+
+    <!-- Dialog -->
+    <string name="delete_reminder_title">Delete Reminder?</string>
+    <string name="delete_reminder_message">Are you sure you want to delete the reminder for %s?</string>
+
+
+
 
 
 

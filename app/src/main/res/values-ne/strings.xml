@@ -1106,22 +1106,21 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="update_medicine">औषधि अपडेट गर्नुहोस्</string>
     <string name="remove">हटाउनुहोस्</string>
 
+    <!-- Form Fields -->
+
+    <!-- Frequency Options -->
 
 
+    <!-- Medicine Reminder Screen -->
+    <string name="medicine_reminders">औषधि सम्झनाहरू</string>
+    <string name="no_medicine_reminders">औषधि सम्झनाहरू छैनन्</string>
+    <string name="start_adding_medications">खुराक नछुटाउन आफ्नो औषधिहरू थप्न सुरु गर्नुहोस्</string>
+    <string name="add_medicine_desc">औषधि थप्नुहोस्</string>
+    <string name="more_times">+%d थप</string>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- Dialog -->
+    <string name="delete_reminder_title">सम्झना मेटाउने?</string>
+    <string name="delete_reminder_message">के तपाईं %s को लागि सम्झना मेट्न निश्चित हुनुहुन्छ?</string>
 
 
 
