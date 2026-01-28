@@ -1099,6 +1099,37 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="posted">Posted</string>
     <string name="status">Status</string>
 
+    <string name="find_doctors">Find Doctors</string>
+    <string name="search_by_name_spec">Search by name or specialization</string>
+    <string name="filter">Filter</string>
+    <string name="doctors_found">%1$d doctor found</string>
+    <string name="doctors_found_plural">%1$d doctors found</string>
+    <string name="no_doctors_found">No doctors found</string>
+    <string name="yrs">yrs</string>
+    <string name="filter_and_sort">Filter &amp; Sort</string>
+    <string name="minimum_rating">Minimum Rating: %1$.1f ★</string>
+    <string name="fee_range">Fee Range: NPR %1$d - %2$d</string>
+    <string name="sort_by">Sort By</string>
+    <string name="rating_high_to_low">Rating (High to Low)</string>
+    <string name="fee_low_to_high">Fee (Low to High)</string>
+    <string name="fee_high_to_low">Fee (High to Low)</string>
+    <string name="experience">Experience</string>
+    <string name="clear">Clear</string>
+    <string name="apply">Apply</string>
+    <string name="Search">search</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

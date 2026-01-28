@@ -1062,6 +1062,39 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="posted">पोस्ट गरिएको</string>
     <string name="status">स्थिति</string>
 
+    <!-- Book Consultation / Search Doctors -->
+    <string name="find_doctors">डाक्टर खोज्नुहोस्</string>
+    <string name="search_by_name_spec">नाम वा विशेषज्ञता द्वारा खोज्नुहोस्</string>
+    <string name="filter">फिल्टर</string>
+    <string name="doctors_found">%1$d डाक्टर भेटियो</string>
+    <string name="doctors_found_plural">%1$d डाक्टरहरू भेटिए</string>
+    <string name="no_doctors_found">कुनै डाक्टर भेटिएन</string>
+    <string name="yrs">वर्ष</string>
+    <string name="filter_and_sort">फिल्टर र क्रमबद्ध</string>
+    <string name="minimum_rating">न्यूनतम मूल्याङ्कन: %1$.1f ★</string>
+    <string name="fee_range">शुल्क दायरा: NPR %1$d - %2$d</string>
+    <string name="sort_by">क्रमबद्ध गर्नुहोस्</string>
+    <string name="rating_high_to_low">मूल्याङ्कन (उच्च देखि कम)</string>
+    <string name="fee_low_to_high">शुल्क (कम देखि उच्च)</string>
+    <string name="fee_high_to_low">शुल्क (उच्च देखि कम)</string>
+    <string name="experience">अनुभव</string>
+    <string name="clear">खाली गर्नुहोस्</string>
+    <string name="apply">लागू गर्नुहोस्</string>
+    <string name="Search">खोज</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
