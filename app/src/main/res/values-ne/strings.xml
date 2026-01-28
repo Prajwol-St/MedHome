@@ -870,6 +870,46 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="btn_rate_doctor">डाक्टरलाई मूल्याङ्कन गर्नुहोस्</string>
 
+    <!-- Health Records Activity -->
+    <string name="title_my_records">मेरा रेकर्डहरू</string>
+
+    <string name="hint_search_records">रेकर्डहरू खोज्नुहोस्...</string>
+    <string name="cd_search">खोज्नुहोस्</string>
+
+    <string name="empty_no_records">कुनै रेकर्ड फेला परेन</string>
+    <string name="empty_no_matching_records">मिल्ने रेकर्ड छैन</string>
+
+    <string name="title_record_details">रेकर्ड विवरण</string>
+
+    <string name="label_title">शीर्षक</string>
+    <string name="label_date">मिति</string>
+    <string name="label_attached_file">संलग्न फाइल</string>
+
+    <string name="error_cannot_open_file">फाइल खोल्न सकिएन</string>
+
+    <string name="title_add_new_record">नयाँ रेकर्ड थप्नुहोस्</string>
+    <string name="title_edit_record">रेकर्ड सम्पादन गर्नुहोस्</string>
+
+    <string name="label_title_required">शीर्षक *</string>
+    <string name="label_date_required">मिति *</string>
+    <string name="label_description_optional">विवरण (वैकल्पिक)</string>
+
+    <string name="btn_change_file">फाइल परिवर्तन गर्नुहोस्</string>
+    <string name="btn_attach_file">फाइल संलग्न गर्नुहोस्</string>
+    <string name="hint_tap_to_upload">फाइल अपलोड गर्न ट्याप गर्नुहोस्</string>
+
+    <string name="error_title_date_required">शीर्षक र मिति आवश्यक छ</string>
+
+    <string name="btn_save_record">रेकर्ड सुरक्षित गर्नुहोस्</string>
+    <string name="btn_update_record">रेकर्ड अद्यावधिक गर्नुहोस्</string>
+
+    <string name="dialog_delete_record_title">रेकर्ड मेटाउने?</string>
+    <string name="dialog_delete_record_message">के तपाईं यो रेकर्ड मेटाउन निश्चित हुनुहुन्छ?</string>
+
+    <string name="cd_more">थप विकल्पहरू</string>
+    <string name="menu_edit">सम्पादन गर्नुहोस्</string>
+    <string name="menu_delete">मेटाउनुहोस्</string>
+
 
 
 
