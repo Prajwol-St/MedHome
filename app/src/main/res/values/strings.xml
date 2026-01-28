@@ -1307,6 +1307,9 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="standard_reference">Standard Reference</string>
     <string name="branded_food">Branded Food</string>
 
+    <string name="inventory">Inventory</string>
+    <string name="my_orders">My Orders</string>
+
 
 
 

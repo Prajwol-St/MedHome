@@ -2,6 +2,7 @@ package com.example.medhomeapp.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -25,16 +26,26 @@ import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
-class DashboardActivity : BaseActivity() {
 
+class DashboardActivity : BaseActivity() {
+    private var currentLanguage: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentLanguage = LanguageManager.getLanguage(this)
         enableEdgeToEdge()
         setContent {
             DashboardScaffold()
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        val savedLanguage = LanguageManager.getLanguage(this)
+        if (savedLanguage != currentLanguage) {
+            recreate()
         }
     }
 }
@@ -89,10 +100,10 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> if (isDoctor) "Inventory" else "Notifications"
+                            1 -> if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
                             2 -> stringResource(R.string.scan)
                             3 -> stringResource(R.string.settings)
-                            else -> "My Orders"
+                            else -> stringResource(R.string.my_orders)
                         },
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp
@@ -127,12 +138,12 @@ fun DashboardScaffold() {
                     icon = {
                         Icon(
                             if (isDoctor) Icons.Default.Inventory else Icons.Default.Notifications,
-                            if (isDoctor) "Inventory" else "Notifications"
+                            if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
                         )
                     },
                     label = {
                         Text(
-                            if (isDoctor) "Inventory" else "Notifications",
+                            if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications),
                             fontSize = 11.sp
                         )
                     },
@@ -182,10 +193,10 @@ fun DashboardScaffold() {
                     icon = {
                         Icon(
                             painterResource(R.drawable.baseline_shopping_cart_24),
-                            "My Orders"
+                            stringResource(R.string.my_orders)
                         )
                     },
-                    label = { Text("My Orders", fontSize = 11.sp) },
+                    label = { Text(stringResource(R.string.my_orders), fontSize = 11.sp) },
                     colors = navColors()
                 )
             }
