@@ -70,7 +70,6 @@ class AppointmentBookingViewModelTest {
 
         viewModel.loadSlot(doctorId, date, slotId)
 
-        // Wait a bit for async operations
         Thread.sleep(100)
 
         val slot = viewModel.slot.first()
@@ -103,7 +102,6 @@ class AppointmentBookingViewModelTest {
 
         viewModel.loadSlot(doctorId, date, slotId)
 
-        // Wait a bit for async operations
         Thread.sleep(100)
 
         val slot = viewModel.slot.first()
