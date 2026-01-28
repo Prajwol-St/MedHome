@@ -128,7 +128,7 @@ fun HomeScreen(
                 ) {
                     Icon(
                         Icons.Default.QrCode,
-                        contentDescription = "QR",
+                        contentDescription = stringResource(R.string.qr_code),
                         modifier = Modifier.size(26.dp),
                         tint = Color.White
                     )
@@ -252,7 +252,7 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    "Pharmacy",
+                    stringResource(R.string.pharmacy),
                     Icons.Default.LocalPharmacy,
                     Color(0xFF00BCD4)
                 ) {
@@ -264,7 +264,7 @@ fun HomeScreen(
 
             item {
                 FeatureCard(
-                    "Medicine Reminders",
+                    stringResource(R.string.medicine_reminders),
                     Icons.Default.Medication,
                     Color(0xFF9C27B0)
                 ) {
