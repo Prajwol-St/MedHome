@@ -725,6 +725,74 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
 
     <string name="toast_package_booked_success">Package booked successfully!</string>
 
+    <!-- Health Packages Management Activity -->
+    <string name="title_my_health_packages">My Health Packages</string>
+
+    <string name="cd_insights">View Insights</string>
+    <string name="cd_create_package">Create Package</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_delete">Delete</string>
+
+    <string name="empty_packages_mgmt_title">No Packages Created</string>
+    <string name="empty_packages_mgmt_subtitle">Create your first health package</string>
+
+    <string name="label_days_left_short">%1$d days</string>
+
+    <string name="dialog_delete_package_title">Delete Package?</string>
+    <string name="dialog_delete_package_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+    <string name="btn_delete">Delete</string>
+
+    <string name="toast_package_deleted">Package deleted successfully</string>
+
+    <!-- My Appointments Activity -->
+
+    <string name="tab_upcoming_with_count">Upcoming (%1$d)</string>
+    <string name="tab_past_with_count">Past (%1$d)</string>
+    <string name="tab_cancelled_with_count">Cancelled (%1$d)</string>
+
+    <string name="empty_upcoming_appointments">No upcoming appointments</string>
+    <string name="empty_past_appointments">No past appointments</string>
+    <string name="empty_cancelled_appointments">No cancelled appointments</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_completed">Completed</string>
+
+    <string name="dialog_cancel_appointment_title">Cancel Appointment?</string>
+    <string name="dialog_cancel_appointment_message">Please provide a reason for cancelling this appointment:</string>
+    <string name="char_count_format">%1$d/200</string>
+
+    <string name="btn_cancel_appointment_confirm">Cancel Appointment</string>
+    <string name="btn_go_back">Go Back</string>
+
+    <!-- Doctor Availability Activity -->
+    <string name="title_set_availability">Set Availability</string>
+
+    <string name="btn_add_time_slots">Add Time Slots</string>
+
+    <string name="empty_time_slots_title">No time slots added</string>
+    <string name="empty_time_slots_subtitle">Tap the button below to add your availability\nand start accepting appointments</string>
+
+    <string name="label_duration_min">%1$d min</string>
+
+    <string name="status_booked">Booked</string>
+    <string name="status_available">Available</string>
+
+    <string name="toast_slot_deleted">Slot deleted</string>
+    <string name="toast_invalid_time_range">Invalid time range. Please check your inputs.</string>
+    <string name="toast_slots_added">%1$d time slots added successfully</string>
+
+    <string name="dialog_add_time_slots_title">Add Time Slots</string>
+    <string name="label_start_time_value">Start: %1$s</string>
+    <string name="label_end_time_value">End: %1$s</string>
+    <string name="label_slot_duration">Slot Duration</string>
+    <string name="btn_add_slots">Add Slots</string>
+
+    <string name="dialog_select_date_title">Select Date</string>
+    <string name="dialog_select_start_time_title">Select Start Time</string>
+    <string name="dialog_select_end_time_title">Select End Time</string>
+
+
 
 
 

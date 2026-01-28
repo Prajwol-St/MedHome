@@ -689,6 +689,74 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="toast_package_booked_success">प्याकेज सफलतापूर्वक बुक गरियो!</string>
 
+    <!-- Health Packages Management Activity -->
+    <string name="title_my_health_packages">मेरा स्वास्थ्य प्याकेजहरू</string>
+
+    <string name="cd_insights">अन्तर्दृष्टि हेर्नुहोस्</string>
+    <string name="cd_create_package">प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="cd_edit">सम्पादन गर्नुहोस्</string>
+    <string name="cd_delete">मेटाउनुहोस्</string>
+
+    <string name="empty_packages_mgmt_title">कुनै प्याकेज सिर्जना गरिएको छैन</string>
+    <string name="empty_packages_mgmt_subtitle">आफ्नो पहिलो स्वास्थ्य प्याकेज सिर्जना गर्नुहोस्</string>
+
+    <string name="label_days_left_short">%1$d दिन</string>
+
+    <string name="dialog_delete_package_title">प्याकेज मेटाउने?</string>
+    <string name="dialog_delete_package_message">के तपाईं %1$s मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="btn_delete">मेटाउनुहोस्</string>
+
+    <string name="toast_package_deleted">प्याकेज सफलतापूर्वक मेटाइयो</string>
+
+    <!-- My Appointments Activity -->
+
+
+    <string name="tab_upcoming_with_count">Upcoming (%1$d)</string>
+    <string name="tab_past_with_count">Past (%1$d)</string>
+    <string name="tab_cancelled_with_count">Cancelled (%1$d)</string>
+
+    <string name="empty_upcoming_appointments">No upcoming appointments</string>
+    <string name="empty_past_appointments">No past appointments</string>
+    <string name="empty_cancelled_appointments">No cancelled appointments</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_completed">Completed</string>
+
+    <string name="dialog_cancel_appointment_title">Cancel Appointment?</string>
+    <string name="dialog_cancel_appointment_message">Please provide a reason for cancelling this appointment:</string>
+    <string name="char_count_format">%1$d/200</string>
+
+    <string name="btn_cancel_appointment_confirm">Cancel Appointment</string>
+    <string name="btn_go_back">Go Back</string>
+
+    <!-- Doctor Availability Activity -->
+    <string name="title_set_availability">उपलब्धता सेट गर्नुहोस्</string>
+    <string name="btn_add_time_slots">समय स्लटहरू थप्नुहोस्</string>
+
+    <string name="empty_time_slots_title">कुनै समय स्लट थपिएको छैन</string>
+    <string name="empty_time_slots_subtitle">आफ्नो उपलब्धता थप्न तलको बटनमा ट्याप गर्नुहोस्\nर अपोइन्टमेन्टहरू स्वीकार गर्न सुरु गर्नुहोस्</string>
+
+    <string name="label_duration_min">%1$d मिनेट</string>
+
+    <string name="status_booked">बुक गरिएको</string>
+    <string name="status_available">उपलब्ध</string>
+
+    <string name="toast_slot_deleted">स्लट मेटाइयो</string>
+    <string name="toast_invalid_time_range">अमान्य समय दायरा। कृपया आफ्नो इनपुटहरू जाँच गर्नुहोस्।</string>
+    <string name="toast_slots_added">%1$d समय स्लटहरू सफलतापूर्वक थपियो</string>
+
+    <string name="dialog_add_time_slots_title">समय स्लटहरू थप्नुहोस्</string>
+    <string name="label_start_time_value">सुरु: %1$s</string>
+    <string name="label_end_time_value">अन्त्य: %1$s</string>
+    <string name="label_slot_duration">स्लट अवधि</string>
+    <string name="btn_add_slots">स्लटहरू थप्नुहोस्</string>
+
+    <string name="dialog_select_date_title">मिति चयन गर्नुहोस्</string>
+    <string name="dialog_select_start_time_title">सुरु समय चयन गर्नुहोस्</string>
+    <string name="dialog_select_end_time_title">अन्त्य समय चयन गर्नुहोस्</string>
+
+
 
 
 

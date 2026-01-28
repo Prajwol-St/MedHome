@@ -133,21 +133,21 @@ fun MyAppointmentsScreen() {
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
                     text = {
-                        Text(stringResource(R.string.tab_upcoming, upcomingAppointments.size))
+                        Text(stringResource(R.string.tab_upcoming_with_count, upcomingAppointments.size))
                     }
                 )
                 Tab(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     text = {
-                        Text(stringResource(R.string.tab_past, pastAppointments.size))
+                        Text(stringResource(R.string.tab_past_with_count, pastAppointments.size))
                     }
                 )
                 Tab(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
                     text = {
-                        Text(stringResource(R.string.tab_cancelled, cancelledAppointments.size))
+                        Text(stringResource(R.string.tab_cancelled_with_count, cancelledAppointments.size))
                     }
                 )
             }
@@ -164,7 +164,7 @@ fun MyAppointmentsScreen() {
                 when (selectedTab) {
                     0 -> PatientAppointmentList(
                         appointments = upcomingAppointments,
-                        emptyMessage = stringResource(R.string.empty_upcoming),
+                        emptyMessage = stringResource(R.string.empty_upcoming_appointments),
                         showCancelButton = true,
                         onCancel = { appointment ->
                             selectedAppointment = appointment
@@ -174,14 +174,14 @@ fun MyAppointmentsScreen() {
 
                     1 -> PatientAppointmentList(
                         appointments = pastAppointments,
-                        emptyMessage = stringResource(R.string.empty_past),
+                        emptyMessage = stringResource(R.string.empty_past_appointments),
                         showCancelButton = false,
                         onCancel = {}
                     )
 
                     2 -> PatientAppointmentList(
                         appointments = cancelledAppointments,
-                        emptyMessage = stringResource(R.string.empty_cancelled),
+                        emptyMessage = stringResource(R.string.empty_cancelled_appointments),
                         showCancelButton = false,
                         onCancel = {}
                     )
@@ -195,19 +195,19 @@ fun MyAppointmentsScreen() {
         AlertDialog(
             onDismissRequest = { showCancelDialog = false },
             title = {
-                Text(stringResource(R.string.dialog_cancel_title))
+                Text(stringResource(R.string.dialog_cancel_appointment_title))
             },
             text = {
                 Column {
-                    Text(stringResource(R.string.dialog_cancel_message))
+                    Text(stringResource(R.string.dialog_cancel_appointment_message))
                     Spacer(modifier = Modifier.height(16.dp))
                     OutlinedTextField(
                         value = cancellationReason,
                         onValueChange = { if (it.length <= 200) cancellationReason = it },
-                        label = { Text(stringResource(R.string.label_reason)) },
+                        label = { Text(stringResource(R.string.label_cancellation_reason)) },
                         maxLines = 3,
                         supportingText = {
-                            Text(stringResource(R.string.char_count, cancellationReason.length))
+                            Text(stringResource(R.string.char_count_format, cancellationReason.length))
                         }
                     )
                 }
@@ -222,12 +222,12 @@ fun MyAppointmentsScreen() {
                     enabled = cancellationReason.isNotBlank(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text(stringResource(R.string.btn_cancel_appointment))
+                    Text(stringResource(R.string.btn_cancel_appointment_confirm))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showCancelDialog = false }) {
-                    Text(stringResource(R.string.btn_back))
+                    Text(stringResource(R.string.btn_go_back))
                 }
             }
         )
@@ -285,6 +285,8 @@ fun PatientAppointmentCard(
     showCancelButton: Boolean,
     onCancel: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -328,7 +330,13 @@ fun PatientAppointmentCard(
                     }
                 ) {
                     Text(
-                        text = appointment.status.replaceFirstChar { it.uppercase() },
+                        text = when (appointment.status) {
+                            AppConstants.STATUS_PENDING -> stringResource(R.string.status_pending)
+                            AppConstants.STATUS_CONFIRMED -> stringResource(R.string.status_confirmed)
+                            AppConstants.STATUS_COMPLETED -> stringResource(R.string.status_completed)
+                            AppConstants.STATUS_CANCELLED -> stringResource(R.string.status_cancelled)
+                            else -> appointment.status.replaceFirstChar { it.uppercase() }
+                        },
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
