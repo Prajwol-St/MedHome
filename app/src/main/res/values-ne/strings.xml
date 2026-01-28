@@ -776,6 +776,70 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="message_sensitive_info_hidden">संवेदनशील जानकारी लुकाइएको छ</string>
 
+    <!-- Signup Details Activity -->
+    <string name="title_complete_profile">प्रोफाइल पूरा गर्नुहोस्</string>
+    <string name="subtitle_fill_details">जारी राख्न आफ्नो विवरण भर्नुहोस्</string>
+
+    <string name="label_full_name">पूरा नाम</string>
+    <string name="hint_full_name">आफ्नो पूरा नाम प्रविष्ट गर्नुहोस्</string>
+
+    <string name="hint_email">इमेल ठेगाना</string>
+
+    <string name="label_contact_number">सम्पर्क नम्बर</string>
+    <string name="hint_contact_number">१० अंकको फोन नम्बर</string>
+
+    <string name="hint_gender">पुरुष/महिला/अन्य</string>
+
+    <string name="gender_male">पुरुष</string>
+    <string name="gender_female">महिला</string>
+    <string name="gender_other">अन्य</string>
+
+    <string name="label_date_of_birth">जन्म मिति</string>
+    <string name="hint_date_format">दिन/महिना/वर्ष</string>
+    <string name="cd_select_date">मिति चयन गर्नुहोस्</string>
+
+    <string name="hint_blood_group">A+, B+, O+, आदि</string>
+
+    <string name="hint_emergency_contact">आपतकालीन सम्पर्क नम्बर</string>
+
+    <string name="hint_address">आफ्नो ठेगाना प्रविष्ट गर्नुहोस्</string>
+
+    <string name="hint_password_min">कम्तिमा ६ अक्षर</string>
+
+    <string name="label_confirm_password">पासवर्ड पुष्टि गर्नुहोस्</string>
+    <string name="hint_reenter_password">पासवर्ड पुन: प्रविष्ट गर्नुहोस्</string>
+
+    <string name="text_agree_to">म सहमत छु </string>
+    <string name="text_terms_conditions">नियम र सर्तहरू</string>
+
+    <string name="btn_complete_profile">प्रोफाइल पूरा गर्नुहोस्</string>
+    <string name="btn_create_account">खाता सिर्जना गर्नुहोस्</string>
+
+    <string name="text_already_have_account">पहिले नै खाता छ? </string>
+
+    <string name="btn_ok">ठीक छ</string>
+
+    <string name="btn_login">लगइन गर्नुहोस्</string>
+    <string name="label_password">पासवर्ड</string>
+
+    <!-- Error Messages -->
+    <string name="error_name_required">कृपया आफ्नो नाम प्रविष्ट गर्नुहोस्</string>
+    <string name="error_contact_required">कृपया सम्पर्क नम्बर प्रविष्ट गर्नुहोस्</string>
+    <string name="error_contact_10_digits">सम्पर्क नम्बर १० अंकको हुनुपर्छ</string>
+    <string name="error_gender_required">कृपया लिङ्ग चयन गर्नुहोस्</string>
+    <string name="error_dob_required">कृपया जन्म मिति चयन गर्नुहोस्</string>
+    <string name="error_blood_group_required">कृपया रक्त समूह चयन गर्नुहोस्</string>
+    <string name="error_emergency_contact_required">कृपया आपतकालीन सम्पर्क प्रविष्ट गर्नुहोस्</string>
+    <string name="error_address_required">कृपया ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="error_password_required">कृपया पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="error_password_min_length">पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ</string>
+    <string name="error_passwords_no_match">पासवर्डहरू मेल खाँदैनन्</string>
+    <string name="error_accept_terms">कृपया नियम र सर्तहरू स्वीकार गर्नुहोस्</string>
+
+    <!-- Toast Messages -->
+    <string name="toast_account_created">खाता सफलतापूर्वक सिर्जना गरियो!</string>
+    <string name="toast_profile_created">प्रोफाइल सफलतापूर्वक सिर्जना गरियो!</string>
+
 
 
 
