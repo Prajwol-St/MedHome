@@ -1201,6 +1201,15 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="yes_cancel_order">YES, CANCEL ORDER</string>
     <string name="no_keep_it">NO, KEEP IT</string>
 
+    <!-- Notification History Screen -->
+    <string name="mark_all_read">Mark all read</string>
+    <string name="no_notifications">No Notifications</string>
+    <string name="all_caught_up">You\'re all caught up!</string>
+    <string name="delete_notification_title">Delete Notification</string>
+    <string name="delete_notification_message">Are you sure you want to delete this notification?</string>
+
+    <string name="pharmacy_title">Pharmacy</string>
+
 
 
 

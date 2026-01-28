@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +42,7 @@ fun PharmacyActivityScreen() {
                 ),
                 title = {
                     Text(
-                        text = "Pharmacy",
+                        text = stringResource(R.string.pharmacy_title),
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp
                     )
@@ -50,7 +51,7 @@ fun PharmacyActivityScreen() {
                     IconButton(onClick = { (context as BaseActivity).finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -65,7 +66,6 @@ fun PharmacyActivityScreen() {
         ) {
             PharmacyScreen(
                 onNavigateToMyOrders = {
-                    // Close this activity and return
                     (context as BaseActivity).finish()
                 }
             )

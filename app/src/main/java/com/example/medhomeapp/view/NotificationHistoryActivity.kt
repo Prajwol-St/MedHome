@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,12 +82,12 @@ fun NotificationHistoryScreen() {
                 IconButton(onClick = { (context as BaseActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         tint = Color.White
                     )
                 }
                 Text(
-                    text = "Notifications",
+                    text = stringResource(R.string.notifications),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -113,7 +114,7 @@ fun NotificationHistoryScreen() {
                     }
                 ) {
                     Text(
-                        text = "Mark all read",
+                        text = stringResource(R.string.mark_all_read),
                         color = Color.White,
                         fontSize = 13.sp
                     )
@@ -147,14 +148,14 @@ fun NotificationHistoryScreen() {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No Notifications",
+                        text = stringResource(R.string.no_notifications),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = TextDark
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "You're all caught up!",
+                        text = stringResource(R.string.all_caught_up),
                         fontSize = 14.sp,
                         color = TextGray,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -224,7 +225,7 @@ fun NotificationHistoryScreenContent() {
                     }
                 ) {
                     Text(
-                        text = "Mark all read",
+                        text = stringResource(R.string.mark_all_read),
                         color = MintGreen,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold
@@ -259,14 +260,14 @@ fun NotificationHistoryScreenContent() {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "No Notifications",
+                        text = stringResource(R.string.no_notifications),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = TextDark
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "You're all caught up!",
+                        text = stringResource(R.string.all_caught_up),
                         fontSize = 14.sp,
                         color = TextGray,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -307,6 +308,7 @@ fun NotificationCard(
     onRead: () -> Unit,
     onDelete: () -> Unit
 ) {
+    val context = LocalContext.current
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Card(
@@ -397,7 +399,7 @@ fun NotificationCard(
                     ) {
                         Icon(
                             Icons.Default.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(R.string.delete),
                             tint = TextGray.copy(alpha = 0.5f),
                             modifier = Modifier.size(18.dp)
                         )
@@ -411,8 +413,8 @@ fun NotificationCard(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Notification", fontWeight = FontWeight.Bold) },
-            text = { Text("Are you sure you want to delete this notification?") },
+            title = { Text(stringResource(R.string.delete_notification_title), fontWeight = FontWeight.Bold) },
+            text = { Text(stringResource(R.string.delete_notification_message)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -420,12 +422,12 @@ fun NotificationCard(
                         showDeleteDialog = false
                     }
                 ) {
-                    Text("Delete", color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.delete), color = Color(0xFFD32F2F), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel", color = TextGray)
+                    Text(stringResource(R.string.cancel), color = TextGray)
                 }
             },
             shape = RoundedCornerShape(16.dp)

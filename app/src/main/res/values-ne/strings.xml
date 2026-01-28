@@ -1168,6 +1168,15 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="yes_cancel_order">हो, अर्डर रद्द गर्नुहोस्</string>
     <string name="no_keep_it">होइन, राख्नुहोस्</string>
 
+    <!-- Notification History Screen -->
+    <string name="mark_all_read">सबै पढिएको चिन्ह लगाउनुहोस्</string>
+    <string name="no_notifications">कुनै सूचना छैन</string>
+    <string name="all_caught_up">तपाईं सबै अद्यावधिक हुनुहुन्छ!</string>
+    <string name="delete_notification_title">सूचना मेटाउनुहोस्</string>
+    <string name="delete_notification_message">के तपाईं यो सूचना मेट्न निश्चित हुनुहुन्छ?</string>
+
+    <string name="pharmacy_title">औषधि पसल</string>
+
 
 
 
