@@ -1155,28 +1155,25 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="delete_reminder_title">Delete Reminder?</string>
     <string name="delete_reminder_message">Are you sure you want to delete the reminder for %s?</string>
 
+    <!-- Doctor Detail Screen -->
+    <string name="doctor_profile">Doctor Profile</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="failed_to_load_doctor">Failed to load doctor details</string>
+    <string name="ratings_count">(%d ratings)</string>
 
+    <string name="years">%d Years</string>
+    <string name="patients">Patients</string>
+    <string name="patients_count">%d+</string>
+    <string name="verified">Verified</string>
 
+    <string name="no_information_available">No information available</string>
+    <string name="qualifications">Qualifications</string>
+    <string name="not_specified">Not specified</string>
+    <string name="clinic_information">Clinic Information</string>
+    <string name="clinic_name">Clinic Name</string>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="npr_amount">NPR %d</string>
+    <string name="languages">Languages</string>
 
 
 

@@ -1122,6 +1122,26 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="delete_reminder_title">सम्झना मेटाउने?</string>
     <string name="delete_reminder_message">के तपाईं %s को लागि सम्झना मेट्न निश्चित हुनुहुन्छ?</string>
 
+    <!-- Doctor Detail Screen -->
+    <string name="doctor_profile">डाक्टर प्रोफाइल</string>
+    <string name="book_appointment">अपोइन्टमेन्ट बुक गर्नुहोस्</string>
+    <string name="failed_to_load_doctor">डाक्टर विवरण लोड गर्न असफल</string>
+    <string name="ratings_count">(%d मूल्याङ्कनहरू)</string>
+
+    <string name="years">%d वर्ष</string>
+    <string name="patients">बिरामीहरू</string>
+    <string name="patients_count">%d+</string>
+    <string name="verified">प्रमाणित</string>
+
+    <string name="no_information_available">कुनै जानकारी उपलब्ध छैन</string>
+    <string name="qualifications">योग्यताहरू</string>
+    <string name="not_specified">उल्लेख गरिएको छैन</string>
+    <string name="clinic_information">क्लिनिक जानकारी</string>
+    <string name="clinic_name">क्लिनिकको नाम</string>
+
+    <string name="npr_amount">NPR %d</string>
+    <string name="languages">भाषाहरू</string>
+
 
 
 
