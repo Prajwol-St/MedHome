@@ -1178,6 +1178,25 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="pharmacy_title">औषधि पसल</string>
 
 
+    <!-- PharmacyScreen strings -->
+    <string name="search_medicines">औषधि खोज्नुहोस्…</string>
+    <string name="no_medicines_found">\"%1$s\" को लागि कुनै औषधि फेला परेन</string>
+    <string name="no_medicines_available">कुनै औषधि उपलब्ध छैन</string>
+    <string name="medicines_found">%1$d औषधि%2$s फेला पर्यो</string>
+    <string name="stock">स्टक: %1$s</string>
+    <string name="place_order">अर्डर गर्नुहोस्</string>
+    <string name="decrease">घटाउनुहोस्</string>
+    <string name="increase">बढाउनुहोस्</string>
+    <string name="delivery_address">डेलिभरी ठेगाना *</string>
+    <string name="enter_full_address">तपाईंको पूरा ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="address_required">ठेगाना आवश्यक छ</string>
+    <string name="phone_number">फोन नम्बर *</string>
+    <string name="ten_digit_mobile">१० अंकको मोबाइल नम्बर</string>
+    <string name="valid_phone_required">मान्य १० अंकको फोन नम्बर आवश्यक छ</string>
+    <string name="place_order_button">अर्डर गर्नुहोस्</string>
+    <string name="placing_order">अर्डर गर्दै…</string>
+
+
 
 
 

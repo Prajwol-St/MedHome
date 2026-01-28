@@ -1210,6 +1210,25 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
 
     <string name="pharmacy_title">Pharmacy</string>
 
+    <!-- PharmacyScreen strings -->
+    <string name="search_medicines">Search medicines…</string>
+    <string name="no_medicines_found">No medicines found for \"%1$s\"</string>
+    <string name="no_medicines_available">No medicines available</string>
+    <string name="medicines_found">%1$d medicine%2$s found</string>
+    <string name="stock">Stock: %1$s</string>
+    <string name="place_order">Place Order</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
+    <string name="delivery_address">Delivery Address *</string>
+    <string name="enter_full_address">Enter your full address</string>
+    <string name="address_required">Address is required</string>
+    <string name="phone_number">Phone Number *</string>
+    <string name="ten_digit_mobile">10-digit mobile number</string>
+    <string name="valid_phone_required">Valid 10-digit phone number required</string>
+    <string name="place_order_button">PLACE ORDER</string>
+    <string name="placing_order">Placing Order…</string>
+
+
 
 
 
