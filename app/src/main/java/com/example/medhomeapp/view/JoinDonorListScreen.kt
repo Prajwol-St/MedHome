@@ -13,10 +13,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 
@@ -26,6 +29,7 @@ fun JoinDonorListScreen(
     viewModel: BloodDonationViewModel,
     onBackClick: () -> Unit
 ) {
+    val context = LocalContext.current
     var bloodGroup by remember { mutableStateOf("") }
     var isAvailable by remember { mutableStateOf(false) }
     var isEmergencyAvailable by remember { mutableStateOf(false) }
@@ -62,12 +66,12 @@ fun JoinDonorListScreen(
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                 ),
-                title = { Text("Join Donor List", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.join_donor_list), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -105,7 +109,7 @@ fun JoinDonorListScreen(
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
-                            text = "Join our donor community and help save lives. Your information will be visible to those in need.",
+                            text = stringResource(R.string.donor_community_info),
                             fontSize = 14.sp,
                             color = Color(0xFF1976D2),
                             modifier = Modifier.weight(1f)
@@ -137,7 +141,7 @@ fun JoinDonorListScreen(
                             IconButton(onClick = { viewModel.clearError() }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Close",
+                                    contentDescription = stringResource(R.string.close),
                                     tint = Color(0xFFD32F2F)
                                 )
                             }
@@ -159,7 +163,7 @@ fun JoinDonorListScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = "Donor Information",
+                            text = stringResource(R.string.donor_information),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2D3436)
@@ -168,7 +172,7 @@ fun JoinDonorListScreen(
                         Divider()
 
                         // Blood Group Selection
-                        Text("Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                        Text(stringResource(R.string.blood_group_required), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                         var expanded by remember { mutableStateOf(false) }
                         ExposedDropdownMenuBox(
                             expanded = expanded,
@@ -178,7 +182,7 @@ fun JoinDonorListScreen(
                                 value = bloodGroup,
                                 onValueChange = {},
                                 readOnly = true,
-                                placeholder = { Text("Select your blood group") },
+                                placeholder = { Text(stringResource(R.string.select_blood_group)) },
                                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -207,7 +211,7 @@ fun JoinDonorListScreen(
                         Divider()
 
                         Text(
-                            text = "Availability",
+                            text = stringResource(R.string.availability),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2D3436)
@@ -236,13 +240,13 @@ fun JoinDonorListScreen(
                                 )
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "Currently Available to Donate",
+                                        text = stringResource(R.string.currently_available),
                                         fontWeight = FontWeight.Medium,
                                         fontSize = 14.sp,
                                         color = Color(0xFF2D3436)
                                     )
                                     Text(
-                                        text = "You can be contacted for regular donations",
+                                        text = stringResource(R.string.regular_donations_contact),
                                         fontSize = 12.sp,
                                         color = Color.Gray
                                     )
@@ -273,13 +277,13 @@ fun JoinDonorListScreen(
                                 )
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = "Available for Emergency Calls",
+                                        text = stringResource(R.string.emergency_available),
                                         fontWeight = FontWeight.Medium,
                                         fontSize = 14.sp,
                                         color = Color(0xFF2D3436)
                                     )
                                     Text(
-                                        text = "You can be contacted for urgent cases",
+                                        text = stringResource(R.string.urgent_cases_contact),
                                         fontSize = 12.sp,
                                         color = Color.Gray
                                     )
@@ -303,7 +307,7 @@ fun JoinDonorListScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            text = "Donation Requirements",
+                            text = stringResource(R.string.donation_requirements),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2D3436)
@@ -311,11 +315,11 @@ fun JoinDonorListScreen(
 
                         Divider()
 
-                        RequirementItem(requirement = "Age between 18-65 years")
-                        RequirementItem(requirement = "Weight at least 50 kg (110 lbs)")
-                        RequirementItem(requirement = "Good general health condition")
-                        RequirementItem(requirement = "Wait 90 days between donations")
-                        RequirementItem(requirement = "No recent illness or surgery")
+                        RequirementItem(requirement = stringResource(R.string.requirement_age))
+                        RequirementItem(requirement = stringResource(R.string.requirement_weight))
+                        RequirementItem(requirement = stringResource(R.string.requirement_health))
+                        RequirementItem(requirement = stringResource(R.string.requirement_wait))
+                        RequirementItem(requirement = stringResource(R.string.requirement_illness))
                     }
                 }
             }
@@ -332,32 +336,32 @@ fun JoinDonorListScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "Why Donate Blood?",
+                            text = stringResource(R.string.why_donate_blood),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = SageGreen
                         )
 
                         Text(
-                            text = "• Save up to 3 lives with each donation",
+                            text = stringResource(R.string.benefit_save_lives),
                             fontSize = 14.sp,
                             color = Color(0xFF2D3436)
                         )
 
                         Text(
-                            text = "• Free health screening before donation",
+                            text = stringResource(R.string.benefit_health_screening),
                             fontSize = 14.sp,
                             color = Color(0xFF2D3436)
                         )
 
                         Text(
-                            text = "• Helps maintain healthy blood flow",
+                            text = stringResource(R.string.benefit_blood_flow),
                             fontSize = 14.sp,
                             color = Color(0xFF2D3436)
                         )
 
                         Text(
-                            text = "• Join a life-saving community",
+                            text = stringResource(R.string.benefit_community),
                             fontSize = 14.sp,
                             color = Color(0xFF2D3436)
                         )
@@ -394,7 +398,7 @@ fun JoinDonorListScreen(
                         )
                     } else {
                         Text(
-                            text = if (donorProfile != null) "Update Donor Profile" else "Save & Join Donor List",
+                            text = if (donorProfile != null) stringResource(R.string.update_donor_profile) else stringResource(R.string.save_join_donor_list),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -405,7 +409,7 @@ fun JoinDonorListScreen(
             // Privacy Notice
             item {
                 Text(
-                    text = "By joining, you agree to share your blood group and availability status with those seeking blood donors. Your contact information will only be visible when someone needs your blood type.",
+                    text = stringResource(R.string.privacy_notice),
                     fontSize = 12.sp,
                     color = Color.Gray,
                     textAlign = TextAlign.Center,

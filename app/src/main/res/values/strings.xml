@@ -1317,6 +1317,27 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
 
     <string name="qr_code">QR Code</string>
     <string name="pharmacy">Pharmacy</string>
+    <string name="donor_community_info">Join our donor community and help save lives. Your information will be visible to those in need.</string>
+    <string name="donor_information">Donor Information</string>
+    <string name="blood_group_required">Blood Group *</string>
+    <string name="availability">Availability</string>
+    <string name="currently_available">Currently Available to Donate</string>
+    <string name="regular_donations_contact">You can be contacted for regular donations</string>
+    <string name="urgent_cases_contact">You can be contacted for urgent cases</string>
+    <string name="donation_requirements">Donation Requirements</string>
+    <string name="requirement_age">Age between 18-65 years</string>
+    <string name="requirement_weight">Weight at least 50 kg (110 lbs)</string>
+    <string name="requirement_health">Good general health condition</string>
+    <string name="requirement_wait">Wait 90 days between donations</string>
+    <string name="requirement_illness">No recent illness or surgery</string>
+    <string name="why_donate_blood">Why Donate Blood?</string>
+    <string name="benefit_save_lives">• Save up to 3 lives with each donation</string>
+    <string name="benefit_health_screening">• Free health screening before donation</string>
+    <string name="benefit_blood_flow">• Helps maintain healthy blood flow</string>
+    <string name="benefit_community">• Join a life-saving community</string>
+    <string name="update_donor_profile">Update Donor Profile</string>
+    <string name="save_join_donor_list">Save &amp; Join Donor List</string>
+    <string name="privacy_notice">By joining, you agree to share your blood group and availability status with those seeking blood donors. Your contact information will only be visible when someone needs your blood type.</string>
 
 
 

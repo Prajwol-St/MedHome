@@ -1283,24 +1283,26 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
 
     <string name="qr_code">क्यूआर कोड</string>
     <string name="pharmacy">औषधि पसल</string>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="donor_community_info">हाम्रो दाता समुदायमा सामेल हुनुहोस् र जीवन बचाउन मद्दत गर्नुहोस्। तपाईंको जानकारी आवश्यकता पर्नेहरूलाई देखिनेछ।</string>
+    <string name="donor_information">दाता जानकारी</string>
+    <string name="blood_group_required">रक्त समूह *</string>
+    <string name="availability">उपलब्धता</string>
+    <string name="currently_available">हाल दान गर्न उपलब्ध</string>
+    <string name="regular_donations_contact">तपाईंलाई नियमित दानको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="urgent_cases_contact">तपाईंलाई तत्काल मामिलाहरूको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="donation_requirements">दान आवश्यकताहरू</string>
+    <string name="requirement_age">उमेर १८-६५ वर्ष बीच</string>
+    <string name="requirement_weight">कम्तिमा ५० किलो तौल</string>
+    <string name="requirement_health">राम्रो सामान्य स्वास्थ्य अवस्था</string>
+    <string name="requirement_wait">दानहरू बीच ९० दिन प्रतीक्षा गर्नुहोस्</string>
+    <string name="requirement_illness">हालैको कुनै रोग वा शल्यक्रिया छैन</string>
+    <string name="why_donate_blood">रक्तदान किन गर्ने?</string>
+    <string name="benefit_save_lives">• प्रत्येक दानले ३ जनासम्म जीवन बचाउन सक्छ</string>
+    <string name="benefit_health_screening">• दान अघि निःशुल्क स्वास्थ्य जाँच</string>
+    <string name="benefit_blood_flow">• स्वस्थ रक्त प्रवाह कायम राख्न मद्दत गर्छ</string>
+    <string name="benefit_community">• जीवन बचाउने समुदायमा सामेल हुनुहोस्</string>
+    <string name="update_donor_profile">दाता प्रोफाइल अपडेट गर्नुहोस्</string>
+    <string name="save_join_donor_list">सुरक्षित गर्नुहोस् र दाता सूचीमा सामेल हुनुहोस्</string>
+    <string name="privacy_notice">सामेल भएर, तपाईं आफ्नो रक्त समूह र उपलब्धता स्थिति रक्त दाताहरू खोज्नेहरूसँग साझा गर्न सहमत हुनुहुन्छ। तपाईंको सम्पर्क जानकारी तपाईंको रक्त प्रकार आवश्यक पर्दा मात्र देखिनेछ।</string>
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
-
 </resources>
