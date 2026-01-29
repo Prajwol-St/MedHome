@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,13 +47,15 @@ fun HomeScreen(
             .fillMaxSize()
             .background(backgroundTint)
             .verticalScroll(scrollState)
+            .testTag("homeScreen")
     ) {
 
         // Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(20.dp)
+                .testTag("welcomeCard"),
             colors = CardDefaults.cardColors(containerColor = MintGreen),
             elevation = CardDefaults.cardElevation(6.dp),
             shape = RoundedCornerShape(16.dp)
@@ -73,7 +76,8 @@ fun HomeScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.25f)),
+                            .background(Color.White.copy(alpha = 0.25f))
+                            .testTag("profilePictureBox"),
                         contentAlignment = Alignment.Center
                     ) {
                         if (!profilePictureUrl.isNullOrEmpty()) {
@@ -85,14 +89,17 @@ fun HomeScreen(
                                 contentDescription = stringResource(R.string.profile),
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .clip(CircleShape),
+                                    .clip(CircleShape)
+                                    .testTag("profileImage"),
                                 contentScale = ContentScale.Crop
                             )
                         } else {
                             Icon(
                                 Icons.Default.Person,
                                 contentDescription = stringResource(R.string.profile),
-                                modifier = Modifier.size(32.dp),
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .testTag("profileIcon"),
                                 tint = Color.White
                             )
                         }
@@ -104,13 +111,15 @@ fun HomeScreen(
                         Text(
                             text = stringResource(R.string.welcome),
                             fontSize = 13.sp,
-                            color = Color.White.copy(alpha = 0.9f)
+                            color = Color.White.copy(alpha = 0.9f),
+                            modifier = Modifier.testTag("welcomeText")
                         )
                         Text(
                             text = userName,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.White
+                            color = Color.White,
+                            modifier = Modifier.testTag("userNameText")
                         )
                     }
                 }
@@ -125,6 +134,7 @@ fun HomeScreen(
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(Color.White.copy(alpha = 0.2f))
+                        .testTag("qrButton")
                 ) {
                     Icon(
                         Icons.Default.QrCode,
@@ -142,7 +152,9 @@ fun HomeScreen(
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = textMain,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .testTag("servicesTitle")
         )
 
         // Services Grid
@@ -151,14 +163,17 @@ fun HomeScreen(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(700.dp)
+            modifier = Modifier
+                .height(700.dp)
+                .testTag("servicesGrid")
         ) {
 
             item {
                 FeatureCard(
                     stringResource(R.string.health_records),
                     Icons.Default.Description,
-                    Color(0xFF4DB6AC)
+                    Color(0xFF4DB6AC),
+                    "healthRecordsCard"
                 ) {
                     context.startActivity(
                         Intent(context, HealthRecords::class.java)
@@ -170,7 +185,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.book_consultation),
                     Icons.Default.VideoCall,
-                    Color(0xFF81D4FA)
+                    Color(0xFF81D4FA),
+                    "bookConsultationCard"
                 ) {
                     context.startActivity(
                         Intent(context, BookConsultationActivity::class.java)
@@ -182,7 +198,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.ai_health_assistant),
                     Icons.Default.Chat,
-                    Color(0xFF9575CD)
+                    Color(0xFF9575CD),
+                    "aiHealthAssistantCard"
                 ) {
                     context.startActivity(
                         Intent(context, ChatbotActivity::class.java)
@@ -194,7 +211,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.past_bookings),
                     Icons.Default.Event,
-                    Color(0xFFA5D6A7)
+                    Color(0xFFA5D6A7),
+                    "pastBookingsCard"
                 ) {
                     context.startActivity(
                         Intent(context, PastBookingsActivity::class.java)
@@ -206,7 +224,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.appointments),
                     Icons.Default.CalendarMonth,
-                    Color(0xFF4DB6AC)
+                    Color(0xFF4DB6AC),
+                    "appointmentsCard"
                 ) {
                     context.startActivity(
                         Intent(context, MyAppointmentsActivity::class.java)
@@ -218,7 +237,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.calories_calculator),
                     Icons.Default.FitnessCenter,
-                    Color(0xFFFFB74D)
+                    Color(0xFFFFB74D),
+                    "caloriesCalculatorCard"
                 ) {
                     context.startActivity(
                         Intent(context, CaloriesCalculatorActivity::class.java)
@@ -230,7 +250,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.blood_donation),
                     Icons.Default.Favorite,
-                    Color(0xFFFF8A80)
+                    Color(0xFFFF8A80),
+                    "bloodDonationCard"
                 ) {
                     context.startActivity(
                         Intent(context, BloodDonationActivity::class.java)
@@ -242,7 +263,8 @@ fun HomeScreen(
                 FeatureCard(
                     stringResource(R.string.health_packages),
                     Icons.Default.LocalShipping,
-                    Color(0xFF64B5F6)
+                    Color(0xFF64B5F6),
+                    "healthPackagesCard"
                 ) {
                     context.startActivity(
                         Intent(context, HealthPackagesActivity::class.java)
@@ -254,7 +276,8 @@ fun HomeScreen(
                 FeatureCard(
                     "Pharmacy",
                     Icons.Default.LocalPharmacy,
-                    Color(0xFF00BCD4)
+                    Color(0xFF00BCD4),
+                    "pharmacyCard"
                 ) {
                     context.startActivity(
                         Intent(context, PharmacyActivity::class.java)
@@ -266,7 +289,8 @@ fun HomeScreen(
                 FeatureCard(
                     "Medicine Reminders",
                     Icons.Default.Medication,
-                    Color(0xFF9C27B0)
+                    Color(0xFF9C27B0),
+                    "medicineRemindersCard"
                 ) {
                     context.startActivity(
                         Intent(context, MedicineReminderActivity::class.java)
@@ -284,6 +308,7 @@ fun FeatureCard(
     title: String,
     icon: ImageVector,
     color: Color,
+    tag: String,
     onClick: () -> Unit
 ) {
     val textMain = Color(0xFF2C3E50)
@@ -292,7 +317,8 @@ fun FeatureCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .testTag(tag),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(3.dp),
         shape = RoundedCornerShape(14.dp)

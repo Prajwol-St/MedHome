@@ -16,16 +16,16 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="testHealthRecordsScreen_displaysCorrectly()">
+      <SelectionState runConfigName="testScanTab_navigatesToQrScanner()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testSearchButton_togglesSearchMode()">
+      <SelectionState runConfigName="testSettingsTab_navigatesToSettings()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="searchButton_togglesSearchField()">
+      <SelectionState runConfigName="testHomeTab_clickable()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SplashActivity">
+      <SelectionState runConfigName="testNotificationsTab_switchesToNotifications()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

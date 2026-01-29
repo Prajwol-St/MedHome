@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,13 +46,15 @@ fun DoctorHomeScreen(
             .fillMaxSize()
             .background(BackgroundCream)
             .verticalScroll(scrollState)
+            .testTag("doctorHomeScreen")
     ) {
 
         // Header Card (without QR Scanner)
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(20.dp)
+                .testTag("doctorWelcomeCard"),
             colors = CardDefaults.cardColors(containerColor = MintGreen),
             elevation = CardDefaults.cardElevation(6.dp),
             shape = RoundedCornerShape(16.dp)
@@ -66,7 +69,8 @@ fun DoctorHomeScreen(
                     modifier = Modifier
                         .size(56.dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.25f)),
+                        .background(Color.White.copy(alpha = 0.25f))
+                        .testTag("doctorProfilePictureBox"),
                     contentAlignment = Alignment.Center
                 ) {
                     if (!profilePictureUrl.isNullOrEmpty()) {
@@ -78,14 +82,17 @@ fun DoctorHomeScreen(
                             contentDescription = "Profile Picture",
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clip(CircleShape),
+                                .clip(CircleShape)
+                                .testTag("doctorProfileImage"),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Icon(
                             Icons.Default.Person,
                             contentDescription = "Profile",
-                            modifier = Modifier.size(32.dp),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .testTag("doctorProfileIcon"),
                             tint = Color.White
                         )
                     }
@@ -97,13 +104,15 @@ fun DoctorHomeScreen(
                     Text(
                         text = stringResource(R.string.doctor_welcome),
                         fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.9f)
+                        color = Color.White.copy(alpha = 0.9f),
+                        modifier = Modifier.testTag("doctorWelcomeText")
                     )
                     Text(
                         text = doctorName,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        modifier = Modifier.testTag("doctorNameText")
                     )
                 }
             }
@@ -115,7 +124,9 @@ fun DoctorHomeScreen(
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = TextDark,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .testTag("doctorManagementTitle")
         )
 
         // Grid Menu (4 items only)
@@ -124,7 +135,9 @@ fun DoctorHomeScreen(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(600.dp)
+            modifier = Modifier
+                .height(600.dp)
+                .testTag("doctorServicesGrid")
         ) {
 
             item {
@@ -132,6 +145,7 @@ fun DoctorHomeScreen(
                     title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
                     color = Color(0xFF6B8E4E),
+                    tag = "setAvailabilityCard",
                     onClick = {
                         context.startActivity(
                             Intent(context, DoctorAvailabilityActivity::class.java)
@@ -145,6 +159,7 @@ fun DoctorHomeScreen(
                     title = "My Appointments",
                     icon = Icons.Default.EventNote,
                     color = Color(0xFF87A96B),
+                    tag = "myAppointmentsCard",
                     onClick = {
                         context.startActivity(
                             Intent(context, DoctorAppointmentsActivity::class.java)
@@ -158,6 +173,7 @@ fun DoctorHomeScreen(
                     title = "Manage Leaves",
                     icon = Icons.Default.BeachAccess,
                     color = Color(0xFF6B8E4E),
+                    tag = "manageLeavesCard",
                     onClick = {
                         context.startActivity(
                             Intent(context, ManageLeavesActivity::class.java)
@@ -171,6 +187,7 @@ fun DoctorHomeScreen(
                     title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
                     color = Color(0xFF87A96B),
+                    tag = "healthPackagesCard",
                     onClick = {
                         context.startActivity(
                             Intent(context, HealthPackagesManagementActivity::class.java)
@@ -189,13 +206,15 @@ fun DoctorFeatureCard(
     title: String,
     icon: ImageVector,
     color: Color,
+    tag: String,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .testTag(tag),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(3.dp),
         shape = RoundedCornerShape(14.dp)
