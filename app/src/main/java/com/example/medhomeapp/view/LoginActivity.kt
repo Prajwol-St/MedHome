@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -326,8 +327,9 @@ fun LoginBody() {
                         )
                     },
                     enabled = !isLoading,
-                    modifier = Modifier.
-                    fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("emailField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -372,7 +374,9 @@ fun LoginBody() {
                         }
                     },
                     visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("passwordField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -399,6 +403,7 @@ fun LoginBody() {
                             checked = rememberMe,
                             onCheckedChange = { rememberMe = it },
                             enabled = !isLoading,
+                            modifier = Modifier.testTag("rememberMeCheckbox"),
                             colors = CheckboxDefaults.colors(
                                 checkedColor = MintGreen,
                                 checkmarkColor = Color.White,
@@ -420,10 +425,12 @@ fun LoginBody() {
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
                         ),
-                        modifier = Modifier.clickable(enabled = !isLoading) {
-                            val intent = Intent(context, ForgotPasswordActivity::class.java)
-                            context.startActivity(intent)
-                        }
+                        modifier = Modifier
+                            .testTag("forgotPasswordLink")
+                            .clickable(enabled = !isLoading) {
+                                val intent = Intent(context, ForgotPasswordActivity::class.java)
+                                context.startActivity(intent)
+                            }
                     )
                 }
                 Spacer(modifier = Modifier.height(28.dp))
@@ -459,7 +466,8 @@ fun LoginBody() {
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(52.dp)
+                        .testTag("loginButton"),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TextDark,
@@ -517,7 +525,8 @@ fun LoginBody() {
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(52.dp)
+                        .testTag("googleSignInButton"),
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.5.dp, LightSage),
                     colors = ButtonDefaults.outlinedButtonColors(
@@ -569,10 +578,12 @@ fun LoginBody() {
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
                         ),
-                        modifier = Modifier.clickable(enabled = !isLoading) {
-                            val intent = Intent(context, SignupInitialActivity::class.java)
-                            context.startActivity(intent)
-                        }
+                        modifier = Modifier
+                            .testTag("registerLink")
+                            .clickable(enabled = !isLoading) {
+                                val intent = Intent(context, SignupInitialActivity::class.java)
+                                context.startActivity(intent)
+                            }
                     )
                 }
             }

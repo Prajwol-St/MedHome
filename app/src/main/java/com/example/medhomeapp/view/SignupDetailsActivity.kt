@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -149,6 +150,20 @@ fun SignupDetailsBody(
                 focusManager.clearFocus()
             }
     ) {
+        IconButton(
+            onClick = { (context as? BaseActivity)?.finish() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+                .testTag("backButton")
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_arrow_back_24),
+                contentDescription = stringResource(R.string.cd_back),
+                tint = Color.White
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,7 +219,9 @@ fun SignupDetailsBody(
                     onValueChange = { name = it },
                     placeholder = { Text(stringResource(R.string.hint_full_name), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("nameField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -259,7 +276,9 @@ fun SignupDetailsBody(
                     onValueChange = { contact = it },
                     placeholder = { Text(stringResource(R.string.hint_contact_number), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("contactField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -324,7 +343,7 @@ fun SignupDetailsBody(
                         onDismissRequest = { expandedGender = false },
                         modifier = Modifier.background(Color.White)
                     ) {
-                        genderOptions.forEach { option ->
+                        genderOptions.forEachIndexed { index, option ->
                             DropdownMenuItem(
                                 text = {
                                     Text(
@@ -337,6 +356,13 @@ fun SignupDetailsBody(
                                     gender = option
                                     expandedGender = false
                                 },
+                                modifier = Modifier.testTag(
+                                    when (index) {
+                                        0 -> "genderMale"
+                                        1 -> "genderFemale"
+                                        else -> "genderOther"
+                                    }
+                                ),
                                 colors = MenuDefaults.itemColors(
                                     textColor = TextDark
                                 )
@@ -364,6 +390,7 @@ fun SignupDetailsBody(
                     readOnly = true,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag("dateOfBirthField")
                         .clickable { showDatePicker = true },
                     shape = RoundedCornerShape(12.dp),
                     trailingIcon = {
@@ -501,7 +528,9 @@ fun SignupDetailsBody(
                     onValueChange = { address = it },
                     placeholder = { Text(stringResource(R.string.hint_address), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("addressField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -703,7 +732,8 @@ fun SignupDetailsBody(
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(52.dp)
+                        .testTag("completeProfileButton"),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TextDark,
