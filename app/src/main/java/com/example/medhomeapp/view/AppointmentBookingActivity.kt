@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -158,7 +159,7 @@ fun BookAppointmentScreen(doctorId: String) {
                 ),
                 title = { Text(stringResource(R.string.title_book_appointment)) },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(onClick = { activity?.finish() }, modifier = Modifier.testTag("backButton")) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = stringResource(R.string.cd_back),
@@ -199,7 +200,7 @@ fun BookAppointmentScreen(doctorId: String) {
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(
                             onClick = { showConfirmDialog = true },
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth() .testTag("confirmBookingButton"),
                             colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                             shape = RoundedCornerShape(12.dp),
                             enabled = !isLoading
@@ -365,6 +366,7 @@ fun BookAppointmentScreen(doctorId: String) {
                 value = patientNotes,
                 onValueChange = { if (it.length <= 500) patientNotes = it },
                 modifier = Modifier
+                    .testTag("patientNotesField")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .height(120.dp),
