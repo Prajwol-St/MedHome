@@ -33,10 +33,10 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import com.example.medhomeapp.utils.LanguageManager
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -96,7 +96,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
             TopAppBar(
                 title = { Text(stringResource(R.string.title_my_health_packages), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -122,7 +122,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
                     val intent = Intent(context, CreatePackageActivity::class.java)
                     context.startActivity(intent)
                 },
-                containerColor = SageGreen
+                containerColor = MintGreen
             ) {
                 Icon(Icons.Default.Add, stringResource(R.string.cd_create_package), tint = Color.White)
             }
@@ -137,7 +137,7 @@ fun HealthPackagesManagementScreen(viewModel: HealthPackageViewModel) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else if (packages.isEmpty()) {
                 Column(
@@ -316,7 +316,7 @@ fun DoctorPackageCard(
                         Icons.Default.LocalShipping,
                         contentDescription = null,
                         modifier = Modifier.size(60.dp),
-                        tint = SageGreen.copy(alpha = 0.5f)
+                        tint = MintGreen.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -342,7 +342,7 @@ fun DoctorPackageCard(
                         Text(
                             packageModel.category,
                             fontSize = 12.sp,
-                            color = SageGreen,
+                            color = MintGreen,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -352,7 +352,7 @@ fun DoctorPackageCard(
                             onClick = onEdit,
                             modifier = Modifier.size(36.dp)
                         ) {
-                            Icon(Icons.Default.Edit, stringResource(R.string.cd_edit), tint = SageGreen, modifier = Modifier.size(20.dp))
+                            Icon(Icons.Default.Edit, stringResource(R.string.cd_edit), tint = MintGreen, modifier = Modifier.size(20.dp))
                         }
                         IconButton(
                             onClick = onDelete,
@@ -389,7 +389,7 @@ fun DoctorPackageCard(
                             stringResource(R.string.label_price_npr, packageModel.price),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
                     }
 
@@ -400,7 +400,7 @@ fun DoctorPackageCard(
                             color = when {
                                 daysRemaining <= 0 -> Color(0xFFF44336).copy(alpha = 0.1f)
                                 daysRemaining <= 7 -> Color(0xFFFF9800).copy(alpha = 0.1f)
-                                else -> SageGreen.copy(alpha = 0.1f) // Green - Good
+                                else -> MintGreen.copy(alpha = 0.1f) // Green - Good
                             }
                         ) {
                             Row(
@@ -415,7 +415,7 @@ fun DoctorPackageCard(
                                     tint = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                                 Text(
@@ -429,7 +429,7 @@ fun DoctorPackageCard(
                                     color = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                             }

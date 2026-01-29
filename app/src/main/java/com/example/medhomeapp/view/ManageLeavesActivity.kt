@@ -29,7 +29,6 @@ import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.DoctorLeaveModel
 import com.example.medhomeapp.repository.LeaveManagementRepoImpl
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
 import com.example.medhomeapp.viewmodel.LeaveManagementViewModel
@@ -39,6 +38,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.compose.ui.res.stringResource
 import com.example.medhomeapp.utils.LanguageManager
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 
 class ManageLeavesActivity : BaseActivity() {
@@ -101,7 +101,7 @@ fun ManageLeavesScreen() {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 title = { Text(stringResource(R.string.title_manage_leaves)) },
@@ -119,7 +119,7 @@ fun ManageLeavesScreen() {
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { showAddLeaveDialog = true },
-                containerColor = SageGreen,
+                containerColor = MintGreen,
                 contentColor = Color.White
             ) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_add))
@@ -135,7 +135,7 @@ fun ManageLeavesScreen() {
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = SageGreen)
+                CircularProgressIndicator(color = MintGreen)
             }
         } else if (leaves.isEmpty()) {
             Box(
@@ -270,7 +270,7 @@ fun LeaveCard(
                         else -> Icons.Default.EventBusy
                     },
                     contentDescription = null,
-                    tint = if (isPast) Color.Gray else SageGreen,
+                    tint = if (isPast) Color.Gray else MintGreen,
                     modifier = Modifier.size(24.dp)
                 )
 
@@ -306,7 +306,7 @@ fun LeaveCard(
                     Text(
                         text = "$duration day${if (duration > 1) "s" else ""}",
                         fontSize = 12.sp,
-                        color = if (isPast) Color.LightGray else SageGreen,
+                        color = if (isPast) Color.LightGray else MintGreen,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -431,7 +431,7 @@ fun AddLeaveDialog(
         confirmButton = {
             Button(
                 onClick = { onConfirm(startDate, endDate, reason, selectedLeaveType) },
-                colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                 enabled = DateTimeUtils.compareDates(endDate, startDate) >= 0
             ) {
                 Text(stringResource(R.string.add_leave))
@@ -520,7 +520,7 @@ fun LeaveTypeOption(
         RadioButton(
             selected = selectedValue == value,
             onClick = { onSelect(value) },
-            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = label, fontSize = 14.sp)

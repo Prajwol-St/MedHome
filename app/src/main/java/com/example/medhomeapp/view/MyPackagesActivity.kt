@@ -30,7 +30,6 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import com.example.medhomeapp.utils.LanguageManager
@@ -38,6 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import com.example.medhomeapp.R
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class MyPackagesActivity : BaseActivity() {
 
@@ -97,7 +97,7 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
                     Text(stringResource(R.string.title_my_packages), fontWeight = FontWeight.Bold)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -123,7 +123,7 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else if (bookings.isEmpty()) {
                 Column(
@@ -278,7 +278,7 @@ fun MyPackageCard(
                         Icons.Default.LocalShipping,
                         contentDescription = null,
                         modifier = Modifier.size(60.dp),
-                        tint = SageGreen.copy(alpha = 0.5f)
+                        tint = MintGreen.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -312,7 +312,7 @@ fun MyPackageCard(
                     Surface(
                         shape = RoundedCornerShape(8.dp),
                         color = when (booking.status) {
-                            "active" -> SageGreen.copy(alpha = 0.1f)
+                            "active" -> MintGreen.copy(alpha = 0.1f)
                             "expired" -> Color(0xFFFF9800).copy(alpha = 0.1f)
                             "cancelled" -> Color(0xFFF44336).copy(alpha = 0.1f)
                             else -> Color.Gray.copy(alpha = 0.1f)
@@ -328,7 +328,7 @@ fun MyPackageCard(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = when (booking.status) {
-                                "active" -> SageGreen
+                                "active" -> MintGreen
                                 "expired" -> Color(0xFFFF9800)
                                 "cancelled" -> Color(0xFFF44336)
                                 else -> Color.Gray
@@ -370,7 +370,7 @@ fun MyPackageCard(
                                     tint = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                                 Text(
@@ -384,7 +384,7 @@ fun MyPackageCard(
                                     color = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                             }
@@ -405,7 +405,7 @@ fun MyPackageCard(
                             stringResource(R.string.label_price_npr, booking.packagePrice),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
                     }
 

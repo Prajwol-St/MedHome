@@ -33,8 +33,8 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -105,7 +105,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     fontWeight = FontWeight.Bold
                 ) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -161,7 +161,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(Icons.Default.FilterList, null, tint = SageGreen)
+                        Icon(Icons.Default.FilterList, null, tint = MintGreen)
                         Column {
                             Text(
                                 stringResource(R.string.category),
@@ -176,7 +176,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                             )
                         }
                     }
-                    Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen)
+                    Icon(Icons.Default.ArrowDropDown, null, tint = MintGreen)
                 }
 
                 DropdownMenu(
@@ -192,7 +192,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                             },
                             leadingIcon = {
                                 if (selectedCategory == category) {
-                                    Icon(Icons.Default.Check, null, tint = SageGreen)
+                                    Icon(Icons.Default.Check, null, tint = MintGreen)
                                 }
                             }
                         )
@@ -206,7 +206,7 @@ fun HealthPackagesScreen(viewModel: HealthPackageViewModel) {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = SageGreen)
+                    CircularProgressIndicator(color = MintGreen)
                 }
             } else if (filteredPackages.isEmpty()) {
                 Column(
@@ -318,7 +318,7 @@ fun PatientPackageCard(
                             Icons.Default.LocalShipping,
                             contentDescription = null,
                             modifier = Modifier.size(60.dp),
-                            tint = SageGreen.copy(alpha = 0.5f)
+                            tint = MintGreen.copy(alpha = 0.5f)
                         )
                     }
                 }
@@ -330,7 +330,7 @@ fun PatientPackageCard(
                         shape = RoundedCornerShape(8.dp),
                         color = when {
                             daysRemaining <= 7 -> Color(0xFFFF9800)
-                            else -> SageGreen
+                            else -> MintGreen
                         }
                     ) {
                         Text(
@@ -350,12 +350,12 @@ fun PatientPackageCard(
             ) {
                 Surface(
                     shape = RoundedCornerShape(6.dp),
-                    color = SageGreen.copy(alpha = 0.15f)
+                    color = MintGreen.copy(alpha = 0.15f)
                 ) {
                     Text(
                         packageModel.category,
                         fontSize = 11.sp,
-                        color = SageGreen,
+                        color = MintGreen,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                     )
@@ -392,7 +392,7 @@ fun PatientPackageCard(
                                 Icon(
                                     Icons.Default.CheckCircle,
                                     contentDescription = null,
-                                    tint = SageGreen,
+                                    tint = MintGreen,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
@@ -411,7 +411,7 @@ fun PatientPackageCard(
                                     packageModel.includedServices.size - 3
                                 ),
                                 fontSize = 12.sp,
-                                color = SageGreen,
+                                color = MintGreen,
                                 fontWeight = FontWeight.Medium,
                                 modifier = Modifier.padding(start = 22.dp)
                             )
@@ -453,12 +453,12 @@ fun PatientPackageCard(
                             "NPR ${packageModel.price.toInt()}",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
                         Icon(
                             Icons.Default.ArrowForward,
                             contentDescription = null,
-                            tint = SageGreen,
+                            tint = MintGreen,
                             modifier = Modifier.size(20.dp)
                         )
                     }
