@@ -25,11 +25,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.InventoryModel
 import com.example.medhomeapp.repository.InventoryRepositoryImpl
 import com.example.medhomeapp.ui.theme.SageGreen
@@ -37,7 +39,7 @@ import com.example.medhomeapp.viewmodel.InventoryViewModel
 import java.io.File
 
 @Composable
-fun DoctorScheduleScreen() {
+fun InventoryScreen() {
     val context = LocalContext.current
     val repo = remember { InventoryRepositoryImpl() }
     val inventoryViewModel = remember { InventoryViewModel(repo) }
@@ -92,7 +94,7 @@ fun DoctorScheduleScreen() {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Medicine Inventory",
+                    text = stringResource(R.string.title_medicine_inventory),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -109,20 +111,20 @@ fun DoctorScheduleScreen() {
                         ) {
                             Icon(
                                 Icons.Default.Add,
-                                contentDescription = "No medicines",
+                                contentDescription = stringResource(R.string.cd_no_medicines),
                                 tint = Color.Gray,
                                 modifier = Modifier.size(64.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "No medicines added yet",
+                                text = stringResource(R.string.empty_no_medicines_title),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Color.Gray,
                                 fontWeight = FontWeight.Medium
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "Add your first medicine to get started",
+                                text = stringResource(R.string.empty_no_medicines_subtitle),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = Color.Gray,
                                 textAlign = TextAlign.Center
@@ -182,7 +184,7 @@ fun DoctorScheduleScreen() {
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = "Add Medicine",
+                    contentDescription = stringResource(R.string.cd_add_medicine),
                     tint = Color.White
                 )
             }
@@ -204,11 +206,14 @@ fun DoctorScheduleScreen() {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
                 title = {
-                    Text(text = "Delete Medicine")
+                    Text(text = stringResource(R.string.dialog_delete_medicine_title))
                 },
                 text = {
                     Text(
-                        text = "Are you sure you want to delete ${inventoryToDelete!!.medicineName}? This action cannot be undone."
+                        text = stringResource(
+                            R.string.dialog_delete_medicine_message,
+                            inventoryToDelete!!.medicineName
+                        )
                     )
                 },
                 confirmButton = {
@@ -217,14 +222,14 @@ fun DoctorScheduleScreen() {
                             inventoryViewModel.deleteInventory(inventoryToDelete!!.inventoryID)
                         }
                     ) {
-                        Text("Delete", color = Color.Red)
+                        Text(stringResource(R.string.btn_delete), color = Color.Red)
                     }
                 },
                 dismissButton = {
                     TextButton(
                         onClick = { showDeleteDialog = false }
                     ) {
-                        Text("Cancel", color = SageGreen)
+                        Text(stringResource(R.string.btn_cancel), color = SageGreen)
                     }
                 },
                 containerColor = Color.White
@@ -280,7 +285,7 @@ fun MedicineCarde(
                             ),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("No Image", fontSize = MaterialTheme.typography.bodySmall.fontSize)
+                        Text(stringResource(R.string.label_no_image), fontSize = MaterialTheme.typography.bodySmall.fontSize)
                     }
                 }
 
@@ -306,13 +311,13 @@ fun MedicineCarde(
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = "₹${inventory.price}",
+                            text = stringResource(R.string.label_price_currency, inventory.price),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = SageGreen
                         )
                         Text(
-                            text = "Qty: ${inventory.amount}",
+                            text = stringResource(R.string.label_qty, inventory.amount),
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray
                         )
@@ -333,7 +338,7 @@ fun MedicineCarde(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.MoreVert,
-                        contentDescription = "More options",
+                        contentDescription = stringResource(R.string.cd_more_options),
                         tint = Color.Gray
                     )
                 }
@@ -345,7 +350,7 @@ fun MedicineCarde(
                 ) {
                     DropdownMenuItem(
                         text = {
-                            Text("Edit", color = Color.Black)
+                            Text(stringResource(R.string.menu_edit), color = Color.Black)
                         },
                         onClick = {
                             showDropdown = false
@@ -354,7 +359,7 @@ fun MedicineCarde(
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Edit,
-                                contentDescription = "Edit",
+                                contentDescription = stringResource(R.string.cd_edit),
                                 tint = SageGreen
                             )
                         }
@@ -362,7 +367,7 @@ fun MedicineCarde(
 
                     DropdownMenuItem(
                         text = {
-                            Text("Delete", color = Color.Red)
+                            Text(stringResource(R.string.menu_delete), color = Color.Red)
                         },
                         onClick = {
                             showDropdown = false
@@ -371,7 +376,7 @@ fun MedicineCarde(
                         leadingIcon = {
                             Icon(
                                 Icons.Default.Delete,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(R.string.cd_delete),
                                 tint = Color.Red
                             )
                         }
@@ -439,12 +444,12 @@ fun AddMedicineDialogPop(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (existingInventory != null) "Edit Medicine" else "Add Medicine",
+                        text = if (existingInventory != null) stringResource(R.string.title_edit_medicine) else stringResource(R.string.title_add_medicine),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     IconButton(onClick = onDismiss) {
-                        Icon(Icons.Filled.Close, contentDescription = "Close")
+                        Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cd_close))
                     }
                 }
 
@@ -470,7 +475,7 @@ fun AddMedicineDialogPop(
                         selectedImageUri != null -> {
                             AsyncImage(
                                 model = selectedImageUri,
-                                contentDescription = "Selected Medicine Image",
+                                contentDescription = stringResource(R.string.cd_selected_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
@@ -478,7 +483,7 @@ fun AddMedicineDialogPop(
                         existingInventory?.imageUrl?.isNotEmpty() == true -> {
                             AsyncImage(
                                 model = existingInventory.imageUrl,
-                                contentDescription = "Current Medicine Image",
+                                contentDescription = stringResource(R.string.cd_current_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
@@ -487,13 +492,13 @@ fun AddMedicineDialogPop(
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(
                                     imageVector = Icons.Filled.Add,
-                                    contentDescription = "Upload Image",
+                                    contentDescription = stringResource(R.string.cd_upload_image),
                                     tint = Color.Gray,
                                     modifier = Modifier.size(48.dp)
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = "Upload Medicine Image",
+                                    text = stringResource(R.string.label_upload_medicine_image),
                                     color = Color.Gray,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -507,7 +512,7 @@ fun AddMedicineDialogPop(
                 OutlinedTextField(
                     value = medicineName,
                     onValueChange = { medicineName = it },
-                    label = { Text("Medicine Name") },
+                    label = { Text(stringResource(R.string.label_medicine_name)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -521,7 +526,7 @@ fun AddMedicineDialogPop(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Description") },
+                    label = { Text(stringResource(R.string.label_description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
@@ -537,7 +542,7 @@ fun AddMedicineDialogPop(
                 OutlinedTextField(
                     value = price,
                     onValueChange = { price = it },
-                    label = { Text("Price") },
+                    label = { Text(stringResource(R.string.label_price)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -551,7 +556,7 @@ fun AddMedicineDialogPop(
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
-                    label = { Text("Amount/Quantity") },
+                    label = { Text(stringResource(R.string.label_amount_quantity)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
@@ -611,7 +616,7 @@ fun AddMedicineDialogPop(
                         )
                     } else {
                         Text(
-                            text = if (existingInventory != null) "Update Medicine" else "Save Medicine",
+                            text = if (existingInventory != null) stringResource(R.string.btn_update_medicine) else stringResource(R.string.btn_save_medicine),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             color = Color.White

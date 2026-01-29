@@ -23,7 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.colorspace.WhitePoint
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -138,8 +140,11 @@ fun MainDonationScreen(
     onHistoryClick: () -> Unit,
     onRequestClick: (BloodRequestModel) -> Unit
 ) {
-    val bloodGroups = listOf("All", "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-    var selectedGroup by remember { mutableStateOf("All") }
+    val bloodGroups = listOf(
+        stringResource(R.string.all_blood_groups),
+        "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"
+    )
+    var selectedGroup by remember { mutableStateOf(bloodGroups[0]) }
 
     val bloodRequests by viewModel.bloodRequests.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -150,7 +155,7 @@ fun MainDonationScreen(
     }
 
     LaunchedEffect(selectedGroup) {
-        if (selectedGroup == "All") {
+        if (selectedGroup == bloodGroups[0]) { // "All"
             viewModel.getAllBloodRequests()
         } else {
             viewModel.getBloodRequestsByGroup(selectedGroup)
@@ -166,9 +171,9 @@ fun MainDonationScreen(
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White,
                 ),
-                title = { Text("Blood Donation", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.blood_donation_title), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { activity.finish() }) {
+                    IconButton(onClick = { activity.finish() }, modifier = Modifier.testTag("backButton")) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = null,
@@ -211,6 +216,7 @@ fun MainDonationScreen(
                     )
                 }
                 FloatingActionButton(
+                    modifier = Modifier.testTag("createRequestButton"),
                     onClick = onPostRequestClick,
                     containerColor = MintGreen,
                     shape = CircleShape
@@ -255,7 +261,7 @@ fun MainDonationScreen(
 
             item {
                 Text(
-                    text = "Nearby Blood Requests",
+                    text = stringResource(R.string.nearby_blood_requests),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF2D3436),
@@ -291,7 +297,7 @@ fun MainDonationScreen(
                         )
                     ) {
                         Text(
-                            text = error ?: "An error occurred",
+                            text = error ?: stringResource(R.string.error_occurred),
                             color = Color(0xFFD32F2F),
                             modifier = Modifier.padding(16.dp)
                         )
@@ -308,7 +314,7 @@ fun MainDonationScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No blood requests available",
+                            text = stringResource(R.string.no_blood_requests),
                             color = Color.Gray,
                             fontSize = 16.sp
                         )
@@ -367,14 +373,18 @@ fun BloodRequestCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = request.patientName.ifEmpty { "Anonymous" },
+                        text = request.patientName.ifEmpty { stringResource(R.string.anonymous) },
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF2D3436)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "${request.unitsNeeded} unit needed",
+                        text = if (request.unitsNeeded == "1") {
+                            stringResource(R.string.unit_needed, request.unitsNeeded)
+                        } else {
+                            stringResource(R.string.units_needed, request.unitsNeeded)
+                        },
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -389,7 +399,12 @@ fun BloodRequestCard(
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Text(
-                        text = request.urgency,
+                        text = when (request.urgency) {
+                            "Urgent" -> stringResource(R.string.urgent)
+                            "Within 24 hours" -> stringResource(R.string.within_24_hours)
+                            "Within a week" -> stringResource(R.string.within_a_week)
+                            else -> request.urgency
+                        },
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                         color = when (request.urgency) {
                             "Urgent" -> Color(0xFFD32F2F)
@@ -475,7 +490,7 @@ fun BloodRequestCard(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                 ) {
                     Text(
-                        text = "Contact",
+                        text = stringResource(R.string.contact),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -565,7 +580,7 @@ fun PostBloodRequestScreen(
                 ),
                 title = {
                     Text(
-                        if (isEditMode) "Edit Blood Request" else "Post Blood Request",
+                        stringResource(if (isEditMode) R.string.edit_blood_request else R.string.post_blood_request),
                         fontWeight = FontWeight.Bold
                     )
                 },
@@ -606,11 +621,11 @@ fun PostBloodRequestScreen(
             }
 
             item {
-                Text("Patient Name", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.patient_name), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = patientName,
                     onValueChange = { patientName = it },
-                    placeholder = { Text("Enter patient name or leave anonymous") },
+                    placeholder = { Text(stringResource(R.string.patient_name_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen,
@@ -620,7 +635,7 @@ fun PostBloodRequestScreen(
                 )
             }
             item {
-                Text("Required Blood Group *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.required_blood_group), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 var expanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
                     expanded = expanded,
@@ -630,7 +645,7 @@ fun PostBloodRequestScreen(
                         value = bloodGroup,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text("Select blood group needed") },
+                        placeholder = { Text(stringResource(R.string.select_blood_group)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -658,7 +673,7 @@ fun PostBloodRequestScreen(
             }
 
             item {
-                Text("Units Needed *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.units_needed_label), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = unitsNeeded,
                     onValueChange = { unitsNeeded = it },
@@ -671,11 +686,11 @@ fun PostBloodRequestScreen(
                 )
             }
             item {
-                Text("Hospital *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.hospital), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = hospital,
                     onValueChange = { hospital = it },
-                    placeholder = { Text("e.g. City General Hospital") },
+                    placeholder = { Text(stringResource(R.string.hospital_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen
@@ -684,11 +699,11 @@ fun PostBloodRequestScreen(
                 )
             }
             item {
-                Text("Location *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.location), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = location,
                     onValueChange = { location = it },
-                    placeholder = { Text("Satdobato,Lalitpur") },
+                    placeholder = { Text(stringResource(R.string.location_hint)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen
@@ -697,11 +712,11 @@ fun PostBloodRequestScreen(
                 )
             }
             item {
-                Text("Contact Number *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.contact_number), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = contactNumber,
                     onValueChange = { contactNumber = it },
-                    placeholder = { Text("+977 XXXXX XXXXX") },
+                    placeholder = { Text(stringResource(R.string.contact_number_hint)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
@@ -711,17 +726,22 @@ fun PostBloodRequestScreen(
                 )
             }
             item {
-                Text("Urgency Level *", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.urgency_level), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 var urgencyExpanded by remember { mutableStateOf(false) }
+                val urgencyLevels = listOf(
+                    "Urgent" to stringResource(R.string.urgent),
+                    "Within 24 hours" to stringResource(R.string.within_24_hours),
+                    "Within a week" to stringResource(R.string.within_a_week)
+                )
                 ExposedDropdownMenuBox(
                     expanded = urgencyExpanded,
                     onExpandedChange = { urgencyExpanded = !urgencyExpanded && !isLoading }
                 ) {
                     OutlinedTextField(
-                        value = urgencyLevel,
+                        value = urgencyLevels.find { it.first == urgencyLevel }?.second ?: urgencyLevel,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text("Select urgency") },
+                        placeholder = { Text(stringResource(R.string.select_urgency)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(urgencyExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -735,11 +755,11 @@ fun PostBloodRequestScreen(
                         expanded = urgencyExpanded,
                         onDismissRequest = { urgencyExpanded = false }
                     ) {
-                        listOf("Urgent", "Within 24 hours", "Within a week").forEach { level ->
+                        urgencyLevels.forEach { (key, label) ->
                             DropdownMenuItem(
-                                text = { Text(level) },
+                                text = { Text(label) },
                                 onClick = {
-                                    urgencyLevel = level
+                                    urgencyLevel = key
                                     urgencyExpanded = false
                                 }
                             )
@@ -748,11 +768,11 @@ fun PostBloodRequestScreen(
                 }
             }
             item {
-                Text("Additional Notes", fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                Text(stringResource(R.string.additional_notes), fontWeight = FontWeight.Medium, fontSize = 14.sp)
                 OutlinedTextField(
                     value = additionalNotes,
                     onValueChange = { additionalNotes = it },
-                    placeholder = { Text("Any additional information...") },
+                    placeholder = { Text(stringResource(R.string.additional_notes_hint)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
@@ -793,7 +813,7 @@ fun PostBloodRequestScreen(
                         )
                     } else {
                         Text(
-                            if (isEditMode) "Update Blood Request" else "Post Blood Request",
+                            stringResource(if (isEditMode) R.string.update_blood_request else R.string.post_blood_request),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -812,7 +832,10 @@ fun HistoryScreen(
     onRequestClick: (BloodRequestModel) -> Unit
 ){
     var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("My Requests", "Donor Profile")
+    val tabs = listOf(
+        stringResource(R.string.my_requests),
+        stringResource(R.string.donor_profile)
+    )
 
     Scaffold(
         topBar = {
@@ -823,12 +846,12 @@ fun HistoryScreen(
                         titleContentColor = Color.White,
                         navigationIconContentColor = Color.White
                     ),
-                    title = { Text("History", fontWeight = FontWeight.Bold) },
+                    title = { Text(stringResource(R.string.history), fontWeight = FontWeight.Bold) },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Back",
+                                contentDescription = stringResource(R.string.back),
                                 tint = Color.White
                             )
                         }
@@ -843,6 +866,7 @@ fun HistoryScreen(
                         Tab(
                             selected = selectedTab == index,
                             onClick = { selectedTab = index },
+                            modifier = Modifier.testTag("myRequestsTab"),
                             text = { Text(title, fontWeight = FontWeight.Medium) }
                         )
                     }
@@ -920,13 +944,13 @@ fun MyRequestsTab(
                             modifier = Modifier.size(48.dp)
                         )
                         Text(
-                            text = "No blood requests yet",
+                            text = stringResource(R.string.no_blood_requests_yet),
                             color = Color.Gray,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Your posted blood requests will appear here",
+                            text = stringResource(R.string.posted_requests_appear_here),
                             color = Color.Gray,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
@@ -1000,13 +1024,13 @@ fun DonorProfileTab(
                             modifier = Modifier.size(48.dp)
                         )
                         Text(
-                            text = "Not registered as a donor",
+                            text = stringResource(R.string.not_registered_as_donor),
                             color = Color.Gray,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "Join the donor list to help save lives",
+                            text = stringResource(R.string.join_donor_list),
                             color = Color.Gray,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
@@ -1034,7 +1058,7 @@ fun DonorProfileTab(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Donor Profile",
+                                text = stringResource(R.string.donor_profile),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF2D3436)
@@ -1066,7 +1090,7 @@ fun DonorProfileTab(
                         ) {
                             Column {
                                 Text(
-                                    text = "Availability Status",
+                                    text = stringResource(R.string.availability_status),
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 14.sp,
                                     color = Color.Gray
@@ -1080,7 +1104,7 @@ fun DonorProfileTab(
                                     ) {}
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        text = if (profile.isAvailable) "Available" else "Not Available",
+                                        text = stringResource(if (profile.isAvailable) R.string.available else R.string.not_available),
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = if (profile.isAvailable) Color(0xFF4CAF50) else Color.Gray
@@ -1094,13 +1118,13 @@ fun DonorProfileTab(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Emergency Available",
+                                text = stringResource(R.string.emergency_available),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 14.sp,
                                 color = Color.Gray
                             )
                             Text(
-                                text = if (profile.isEmergencyAvailable) "Yes" else "No",
+                                text = stringResource(if (profile.isEmergencyAvailable) R.string.yes else R.string.no),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF2D3436)
@@ -1113,7 +1137,7 @@ fun DonorProfileTab(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "Location",
+                                    text = stringResource(R.string.location),
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 14.sp,
                                     color = Color.Gray
@@ -1135,7 +1159,7 @@ fun DonorProfileTab(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "Contact Number",
+                                    text = stringResource(R.string.contact_number),
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 14.sp,
                                     color = Color.Gray
@@ -1154,7 +1178,7 @@ fun DonorProfileTab(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Total Donations",
+                                text = stringResource(R.string.total_donations),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 14.sp,
                                 color = Color.Gray
@@ -1170,7 +1194,7 @@ fun DonorProfileTab(
                             Divider()
                             Column {
                                 Text(
-                                    text = "Last Donation",
+                                    text = stringResource(R.string.last_donation),
                                     fontWeight = FontWeight.Medium,
                                     fontSize = 14.sp,
                                     color = Color.Gray
@@ -1203,7 +1227,7 @@ fun DonorProfileTab(
                                                 modifier = Modifier.size(20.dp)
                                             )
                                             Text(
-                                                text = "You can donate again in $daysUntilNext days",
+                                                text = stringResource(R.string.can_donate_again_in, daysUntilNext),
                                                 fontSize = 13.sp,
                                                 color = Color(0xFFF57C00),
                                                 fontWeight = FontWeight.Medium
@@ -1230,7 +1254,7 @@ fun DonorProfileTab(
                                                 modifier = Modifier.size(20.dp)
                                             )
                                             Text(
-                                                text = "You are eligible to donate now!",
+                                                text = stringResource(R.string.eligible_to_donate),
                                                 fontSize = 13.sp,
                                                 color = Color(0xFF388E3C),
                                                 fontWeight = FontWeight.Medium
@@ -1248,7 +1272,7 @@ fun DonorProfileTab(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Registered",
+                                text = stringResource(R.string.registered),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 14.sp,
                                 color = Color.Gray
@@ -1287,7 +1311,7 @@ fun DonorProfileTab(
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "Thank you for being a donor!",
+                            text = stringResource(R.string.thank_you_donor),
                             color = Color.White,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
@@ -1295,7 +1319,7 @@ fun DonorProfileTab(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Your generosity can save lives",
+                            text = stringResource(R.string.generosity_saves_lives),
                             color = Color.White.copy(alpha = 0.9f),
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
@@ -1319,7 +1343,7 @@ fun DonorProfileTab(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "Donations",
+                                        text = stringResource(R.string.donations),
                                         color = Color.White.copy(alpha = 0.8f),
                                         fontSize = 12.sp
                                     )
@@ -1335,7 +1359,7 @@ fun DonorProfileTab(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "Lives Saved",
+                                        text = stringResource(R.string.lives_saved),
                                         color = Color.White.copy(alpha = 0.8f),
                                         fontSize = 12.sp
                                     )
@@ -1361,7 +1385,7 @@ fun DonorProfileTab(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            text = "Donation Guidelines",
+                            text = stringResource(R.string.donation_guidelines),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2D3436)
@@ -1369,17 +1393,17 @@ fun DonorProfileTab(
 
                         DonationGuideline(
                             icon = Icons.Default.DateRange,
-                            text = "Wait 90 days between donations"
+                            text = stringResource(R.string.guideline_wait_90_days)
                         )
 
                         DonationGuideline(
                             icon = Icons.Default.Favorite,
-                            text = "Stay healthy and hydrated"
+                            text = stringResource(R.string.guideline_stay_healthy)
                         )
 
                         DonationGuideline(
                             icon = Icons.Default.Info,
-                            text = "Each donation can save up to 3 lives"
+                            text = stringResource(R.string.guideline_save_lives)
                         )
                     }
                 }
@@ -1420,5 +1444,3 @@ fun DonationGuideline(
         )
     }
 }
-
-

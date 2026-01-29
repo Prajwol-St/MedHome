@@ -40,10 +40,10 @@ import com.example.medhomeapp.repository.CommonRepoImpl
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.ImageUtils
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -151,7 +151,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SageGreen)
+            .background(MintGreen)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -212,22 +212,22 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         modifier = Modifier
                             .size(120.dp)
                             .clip(CircleShape)
-                            .background(SageGreen.copy(alpha = 0.15f))
-                            .border(3.dp, SageGreen.copy(alpha = 0.3f), CircleShape)
+                            .background(MintGreen.copy(alpha = 0.15f))
+                            .border(3.dp, MintGreen.copy(alpha = 0.3f), CircleShape)
                             .clickable { imageUtils.launchImagePicker() },
                         contentAlignment = Alignment.Center
                     ) {
                         if (isUploadingImage) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(40.dp),
-                                color = SageGreen,
+                                color = MintGreen,
                                 strokeWidth = 3.dp
                             )
                         } else if (profilePictureUrl.isNotEmpty()) {
                             AsyncImage(
                                 model = profilePictureUrl,
                                 contentDescription = stringResource(R.string.profile_picture),
-                                        modifier = Modifier
+                                modifier = Modifier
                                     .fillMaxSize()
                                     .clip(CircleShape),
                                 contentScale = ContentScale.Crop
@@ -237,7 +237,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 Icons.Default.Person,
                                 contentDescription = stringResource(R.string.profile),
                                 modifier = Modifier.size(60.dp),
-                                tint = SageGreen
+                                tint = MintGreen
                             )
                         }
                     }
@@ -248,7 +248,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                                 .size(36.dp)
                                 .align(Alignment.BottomEnd)
                                 .clip(CircleShape)
-                                .background(SageGreen)
+                                .background(MintGreen)
                                 .border(3.dp, BackgroundCream, CircleShape)
                                 .clickable { imageUtils.launchImagePicker() },
                             contentAlignment = Alignment.Center
@@ -312,9 +312,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         disabledContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -346,9 +346,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -396,9 +396,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             focusedContainerColor = Color.White,
                             unfocusedContainerColor = Color.White,
                             disabledContainerColor = Color.White,
-                            focusedIndicatorColor = SageGreen,
+                            focusedIndicatorColor = MintGreen,
                             unfocusedIndicatorColor = LightSage,
-                            cursorColor = SageGreen,
+                            cursorColor = MintGreen,
                             focusedTextColor = TextDark,
                             unfocusedTextColor = TextDark
                         )
@@ -461,7 +461,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_calendar_month_24),
                                 contentDescription = stringResource(R.string.select_date),
-                                tint = SageGreen
+                                tint = MintGreen
                             )
                         }
                     },
@@ -469,9 +469,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         disabledContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -518,9 +518,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             focusedContainerColor = Color.White,
                             unfocusedContainerColor = Color.White,
                             disabledContainerColor = Color.White,
-                            focusedIndicatorColor = SageGreen,
+                            focusedIndicatorColor = MintGreen,
                             unfocusedIndicatorColor = LightSage,
-                            cursorColor = SageGreen,
+                            cursorColor = MintGreen,
                             focusedTextColor = TextDark,
                             unfocusedTextColor = TextDark
                         )
@@ -590,9 +590,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -626,9 +626,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -730,7 +730,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text("OK", color = MintGreen, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -745,9 +745,9 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
             DatePicker(
                 state = datePickerState,
                 colors = DatePickerDefaults.colors(
-                    selectedDayContainerColor = SageGreen,
-                    todayDateBorderColor = SageGreen,
-                    todayContentColor = SageGreen
+                    selectedDayContainerColor = MintGreen,
+                    todayDateBorderColor = MintGreen,
+                    todayContentColor = MintGreen
                 )
             )
         }
@@ -830,7 +830,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_camera_alt_24),
                                 contentDescription = "Camera",
-                                tint = SageGreen,
+                                tint = MintGreen,
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(16.dp))
@@ -866,7 +866,7 @@ fun EditProfileScreen(imageUtils: ImageUtils) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_photo_library_24),
                                 contentDescription = "Gallery",
-                                tint = SageGreen,
+                                tint = MintGreen,
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.width(16.dp))

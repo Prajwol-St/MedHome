@@ -1,7 +1,5 @@
 package com.example.medhomeapp.view
 
-
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,13 +12,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.BloodRequestModel
-import com.example.medhomeapp.ui.theme.SageGreen
-import com.example.medhomeapp.ui.theme.SageGreen
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.BloodDonationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,17 +55,17 @@ fun BloodRequestDetailsScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White,
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White
                 ),
-                title = { Text("Request Details", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.request_details), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = onBackClick){
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -75,14 +75,14 @@ fun BloodRequestDetailsScreen(
                         IconButton(onClick = onEditClick) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Edit",
+                                contentDescription = stringResource(R.string.edit),
                                 tint = Color.White
                             )
                         }
                         IconButton(onClick = { showDeleteDialog = true }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(R.string.delete),
                                 tint = Color.White
                             )
                         }
@@ -122,7 +122,7 @@ fun BloodRequestDetailsScreen(
                             IconButton(onClick = { viewModel.clearError() }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Close",
+                                    contentDescription = stringResource(R.string.close),
                                     tint = Color(0xFFD32F2F)
                                 )
                             }
@@ -154,7 +154,7 @@ fun BloodRequestDetailsScreen(
                             IconButton(onClick = { viewModel.clearSuccessMessage() }) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Close",
+                                    contentDescription = stringResource(R.string.close),
                                     tint = Color(0xFF388E3C)
                                 )
                             }
@@ -181,7 +181,7 @@ fun BloodRequestDetailsScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Surface(
-                                color = SageGreen,
+                                color = MintGreen,
                                 shape = CircleShape,
                                 modifier = Modifier.size(80.dp)
                             ) {
@@ -228,7 +228,12 @@ fun BloodRequestDetailsScreen(
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Text(
-                                    text = request.urgency,
+                                    text = when (request.urgency) {
+                                        "Urgent" -> stringResource(R.string.urgent)
+                                        "Within 24 hours" -> stringResource(R.string.within_24_hours)
+                                        "Within a week" -> stringResource(R.string.within_a_week)
+                                        else -> request.urgency
+                                    },
                                     color = when (request.urgency) {
                                         "Urgent" -> Color(0xFFD32F2F)
                                         "Within 24 hours" -> Color(0xFFF57C00)
@@ -244,41 +249,41 @@ fun BloodRequestDetailsScreen(
 
 
                         Text(
-                            text = "Patient Information",
+                            text = stringResource(R.string.patient_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         DetailRow(
-                            label = "Patient Name",
-                            value = request.patientName.ifEmpty { "Anonymous" }
+                            label = stringResource(R.string.patient_name),
+                            value = request.patientName.ifEmpty { stringResource(R.string.anonymous) }
                         )
 
                         DetailRow(
-                            label = "Units Needed",
-                            value = "${request.unitsNeeded} unit(s)"
+                            label = stringResource(R.string.units_needed_label),
+                            value = stringResource(R.string.units_needed_value, request.unitsNeeded)
                         )
 
                         Divider()
 
 
                         Text(
-                            text = "Hospital Information",
+                            text = stringResource(R.string.hospital_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         DetailRowWithIcon(
                             icon = Icons.Default.LocationOn,
-                            label = "Hospital",
+                            label = stringResource(R.string.hospital),
                             value = request.hospital
                         )
 
                         DetailRowWithIcon(
                             icon = Icons.Default.Place,
-                            label = "Location",
+                            label = stringResource(R.string.location),
                             value = request.location
                         )
 
@@ -286,15 +291,15 @@ fun BloodRequestDetailsScreen(
 
 
                         Text(
-                            text = "Contact Information",
+                            text = stringResource(R.string.contact_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         DetailRowWithIcon(
                             icon = Icons.Default.Phone,
-                            label = "Contact Number",
+                            label = stringResource(R.string.contact_number),
                             value = request.contactNumber
                         )
 
@@ -302,10 +307,10 @@ fun BloodRequestDetailsScreen(
 
 
                         Text(
-                            text = "Status Information",
+                            text = stringResource(R.string.status_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
 
                         Row(
@@ -314,7 +319,7 @@ fun BloodRequestDetailsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Status",
+                                text = stringResource(R.string.status),
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 14.sp,
                                 color = Color.Gray
@@ -329,7 +334,12 @@ fun BloodRequestDetailsScreen(
                                 shape = RoundedCornerShape(6.dp)
                             ) {
                                 Text(
-                                    text = request.status.replaceFirstChar { it.uppercase() },
+                                    text = when (request.status) {
+                                        "active" -> stringResource(R.string.status_active)
+                                        "fulfilled" -> stringResource(R.string.status_fulfilled)
+                                        "cancelled" -> stringResource(R.string.status_cancelled)
+                                        else -> request.status.replaceFirstChar { it.uppercase() }
+                                    },
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = when (request.status) {
@@ -345,12 +355,12 @@ fun BloodRequestDetailsScreen(
 
                         DetailRowWithIcon(
                             icon = Icons.Default.DateRange,
-                            label = "Posted",
+                            label = stringResource(R.string.posted),
                             value = getFormattedDate(request.timestamp)
                         )
 
                         DetailRow(
-                            label = "Time Ago",
+                            label = stringResource(R.string.time_ago_label),
                             value = getTimeAgo(request.timestamp)
                         )
 
@@ -361,10 +371,10 @@ fun BloodRequestDetailsScreen(
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Text(
-                                    text = "Additional Notes",
+                                    text = stringResource(R.string.additional_notes_title),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = SageGreen
+                                    color = MintGreen
                                 )
                                 Card(
                                     colors = CardDefaults.cardColors(
@@ -399,7 +409,7 @@ fun BloodRequestDetailsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Text(
-                                text = "Manage Request",
+                                text = stringResource(R.string.manage_request),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF2D3436)
@@ -419,7 +429,7 @@ fun BloodRequestDetailsScreen(
                                         contentDescription = null
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Mark as Fulfilled")
+                                    Text(stringResource(R.string.mark_as_fulfilled))
                                 }
 
                                 OutlinedButton(
@@ -437,7 +447,7 @@ fun BloodRequestDetailsScreen(
                                         contentDescription = null
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Cancel Request")
+                                    Text(stringResource(R.string.cancel_request))
                                 }
                             } else if (request.status == "cancelled") {
                                 Button(
@@ -446,7 +456,7 @@ fun BloodRequestDetailsScreen(
                                     },
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = SageGreen
+                                        containerColor = MintGreen
                                     ),
                                     shape = RoundedCornerShape(8.dp)
                                 ) {
@@ -455,7 +465,7 @@ fun BloodRequestDetailsScreen(
                                         contentDescription = null
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text("Reactivate Request")
+                                    Text(stringResource(R.string.reactivate_request))
                                 }
                             } else if (request.status == "fulfilled") {
                                 Card(
@@ -478,7 +488,7 @@ fun BloodRequestDetailsScreen(
                                             modifier = Modifier.size(24.dp)
                                         )
                                         Text(
-                                            text = "This request has been fulfilled. Thank you for your contribution!",
+                                            text = stringResource(R.string.request_fulfilled_message),
                                             fontSize = 14.sp,
                                             color = Color(0xFF1976D2)
                                         )
@@ -499,7 +509,7 @@ fun BloodRequestDetailsScreen(
                             .fillMaxWidth()
                             .height(56.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SageGreen
+                            containerColor = MintGreen
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -510,7 +520,7 @@ fun BloodRequestDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            "Call ${request.contactNumber}",
+                            stringResource(R.string.call_contact, request.contactNumber),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -534,13 +544,13 @@ fun BloodRequestDetailsScreen(
             },
             title = {
                 Text(
-                    "Delete Blood Request",
+                    stringResource(R.string.delete_blood_request),
                     fontWeight = FontWeight.Bold
                 )
             },
             text = {
                 Text(
-                    "Are you sure you want to delete this blood request? This action cannot be undone.",
+                    stringResource(R.string.delete_blood_request_confirmation),
                     textAlign = TextAlign.Center
                 )
             },
@@ -554,14 +564,14 @@ fun BloodRequestDetailsScreen(
                         containerColor = Color(0xFFD32F2F)
                     )
                 ) {
-                    Text("Delete")
+                    Text(stringResource(R.string.delete))
                 }
             },
             dismissButton = {
                 OutlinedButton(
                     onClick = { showDeleteDialog = false }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -581,13 +591,13 @@ fun BloodRequestDetailsScreen(
             },
             title = {
                 Text(
-                    "Mark as Fulfilled",
+                    stringResource(R.string.mark_fulfilled_title),
                     fontWeight = FontWeight.Bold
                 )
             },
             text = {
                 Text(
-                    "Have you received the required blood donation? This will mark the request as fulfilled.",
+                    stringResource(R.string.fulfill_confirmation),
                     textAlign = TextAlign.Center
                 )
             },
@@ -601,14 +611,14 @@ fun BloodRequestDetailsScreen(
                         containerColor = Color(0xFF4CAF50)
                     )
                 ) {
-                    Text("Yes, Mark as Fulfilled")
+                    Text(stringResource(R.string.yes_mark_fulfilled))
                 }
             },
             dismissButton = {
                 OutlinedButton(
                     onClick = { showStatusDialog = false }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
@@ -659,7 +669,7 @@ fun DetailRowWithIcon(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = SageGreen,
+                tint = MintGreen,
                 modifier = Modifier.size(20.dp)
             )
             Text(

@@ -21,32 +21,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.R
 import com.example.medhomeapp.view.ui.theme.MintGreen
 
 @Composable
-fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
+fun DoctorHomeScreen(
+    doctorName: String,
+    profilePictureUrl: String?
+) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    val backgroundTint = Color(0xFFF1FBF9)
+    val textMain = Color(0xFF2C3E50)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream)
+            .background(backgroundTint)
             .verticalScroll(scrollState)
+            .testTag("doctorHomeScreen")
     ) {
+
         // Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(20.dp)
+                .testTag("doctorWelcomeCard"),
             colors = CardDefaults.cardColors(containerColor = MintGreen),
             elevation = CardDefaults.cardElevation(6.dp),
             shape = RoundedCornerShape(16.dp)
@@ -61,7 +70,8 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                     modifier = Modifier
                         .size(56.dp)
                         .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.25f)),
+                        .background(Color.White.copy(alpha = 0.25f))
+                        .testTag("doctorProfilePictureBox"),
                     contentAlignment = Alignment.Center
                 ) {
                     if (!profilePictureUrl.isNullOrEmpty()) {
@@ -70,17 +80,20 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
                                 .data(profilePictureUrl)
                                 .crossfade(true)
                                 .build(),
-                            contentDescription = "Profile Picture",
+                            contentDescription = stringResource(R.string.profile_picture),
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clip(CircleShape),
+                                .clip(CircleShape)
+                                .testTag("doctorProfileImage"),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Icon(
                             Icons.Default.Person,
-                            contentDescription = "Profile",
-                            modifier = Modifier.size(32.dp),
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .testTag("doctorProfileIcon"),
                             tint = Color.White
                         )
                     }
@@ -90,15 +103,17 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
                 Column {
                     Text(
-                        text = "Welcome Dr.",
+                        text = stringResource(R.string.doctor_welcome),
                         fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.9f)
+                        color = Color.White.copy(alpha = 0.9f),
+                        modifier = Modifier.testTag("doctorWelcomeText")
                     )
                     Text(
                         text = doctorName,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
+                        modifier = Modifier.testTag("doctorNameText")
                     )
                 }
             }
@@ -106,88 +121,76 @@ fun DoctorHomeScreen(doctorName: String, profilePictureUrl: String?) {
 
         // Section Title
         Text(
-            text = "Management",
+            text = stringResource(R.string.doctor_management),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = TextDark,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+            color = textMain,
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .testTag("doctorManagementTitle")
         )
 
-        // Grid Menu - UPDATED with Notifications
+        // Grid Menu
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.height(850.dp)
+            modifier = Modifier
+                .height(300.dp)
+                .testTag("doctorServicesGrid")
         ) {
-            // 1. Notifications - NEW
-            item {
-                DoctorFeatureCard(
-                    title = "Notifications",
-                    icon = Icons.Default.Notifications,
-                    color = Color(0xFFFF9800),
-                    onClick = {
-                        val intent = Intent(context, NotificationHistoryActivity::class.java)
-                        context.startActivity(intent)
-                    }
-                )
-            }
 
-            // 2. Set Availability
             item {
                 DoctorFeatureCard(
-                    title = "Set Availability",
+                    title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF6B8E4E),
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, DoctorAvailabilityActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF4DB6AC),
+                    tag = "setAvailabilityCard"
+                ) {
+                    context.startActivity(
+                        Intent(context, DoctorAvailabilityActivity::class.java)
+                    )
+                }
             }
 
-            // 3. My Appointments
             item {
                 DoctorFeatureCard(
-                    title = "My Appointments",
+                    title = stringResource(R.string.my_appointments),
                     icon = Icons.Default.EventNote,
-                    color = Color(0xFF87A96B),
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, DoctorAppointmentsActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF81D4FA),
+                    tag = "myAppointmentsCard"
+                ) {
+                    context.startActivity(
+                        Intent(context, DoctorAppointmentsActivity::class.java)
+                    )
+                }
             }
 
-            // 4. Manage Leaves
             item {
                 DoctorFeatureCard(
-                    title = "Manage Leaves",
+                    title = stringResource(R.string.manage_leaves),
                     icon = Icons.Default.BeachAccess,
-                    color = Color(0xFF6B8E4E),
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, ManageLeavesActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFFFF8A80),
+                    tag = "manageLeavesCard"
+                ) {
+                    context.startActivity(
+                        Intent(context, ManageLeavesActivity::class.java)
+                    )
+                }
             }
 
-            // 5. Health Packages
             item {
                 DoctorFeatureCard(
-                    title = "Health Packages",
+                    title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF87A96B),
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, HealthPackagesManagementActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF64B5F6),
+                    tag = "healthPackagesCard"
+                ) {
+                    context.startActivity(
+                        Intent(context, HealthPackagesManagementActivity::class.java)
+                    )
+                }
             }
         }
 
@@ -200,13 +203,17 @@ fun DoctorFeatureCard(
     title: String,
     icon: ImageVector,
     color: Color,
+    tag: String,
     onClick: () -> Unit
 ) {
+    val textMain = Color(0xFF2C3E50)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(130.dp)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .testTag(tag),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(3.dp),
         shape = RoundedCornerShape(14.dp)
@@ -236,7 +243,8 @@ fun DoctorFeatureCard(
                 text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = TextDark
+                color = textMain,
+                lineHeight = 16.sp
             )
         }
     }

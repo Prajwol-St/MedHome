@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- ===================== -->
     <!-- Permissions -->
     <!-- ===================== -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- Camera is optional -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -24,26 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MedHomeApp"
         tools:targetApi="31">
-        <activity
-            android:name=".view.PharmacyActivity"
-            android:exported="false"
-            android:label="@string/title_activity_pharmacy"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.NotificationHistoryActivity"
-            android:exported="false"
-            android:label="@string/title_activity_notification_history"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.AddEditMedicineActivity"
-            android:exported="false"
-            android:label="@string/title_activity_add_edit_medicine"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.MedicineReminderActivity"
-            android:exported="false"
-            android:label="@string/title_activity_medicine_reminder"
-            android:theme="@style/Theme.MedHomeApp" /> <!-- ===================== -->
+
+        <!-- ===================== -->
         <!-- Splash / Launcher -->
         <!-- ===================== -->
         <activity
@@ -52,137 +37,83 @@
             android:theme="@style/Theme.MedHomeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ===================== -->
+        </activity>
+
+        <!-- ===================== -->
         <!-- Authentication -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.SignupInitialActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.SignupDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.ForgotPasswordActivity"
-            android:exported="false" /> <!-- ===================== -->
+        <activity android:name=".view.LoginActivity" android:exported="false" />
+        <activity android:name=".view.SignupInitialActivity" android:exported="false" />
+        <activity android:name=".view.SignupDetailsActivity" android:exported="false" />
+        <activity android:name=".view.ForgotPasswordActivity" android:exported="false" />
+
+        <!-- ===================== -->
         <!-- Main / Dashboard -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.DashboardActivity"
-            android:exported="false" /> <!-- ===================== -->
-        <!-- Patient - Appointments -->
+        <activity android:name=".view.MainActivity" android:exported="false" />
+        <activity android:name=".view.DashboardActivity" android:exported="false" />
+
         <!-- ===================== -->
-        <activity
-            android:name=".view.BookConsultationActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.DoctorDetailActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.AppointmentBookingActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.MyAppointmentsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.PastBookingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" /> <!-- ===================== -->
-        <!-- Doctor - Appointments & Availability -->
+        <!-- Pharmacy & Medicine -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.DoctorAppointmentsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.DoctorAvailabilityActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" />
-        <activity
-            android:name=".view.ManageLeavesActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MedHomeApp" /> <!-- ===================== -->
+        <activity android:name=".view.PharmacyActivity" android:exported="false" />
+        <activity android:name=".view.MedicineReminderActivity" android:exported="false" />
+        <activity android:name=".view.AddEditMedicineActivity" android:exported="false" />
+        <activity android:name=".view.NotificationHistoryActivity" android:exported="false" />
+
+        <!-- ===================== -->
+        <!-- Appointments -->
+        <!-- ===================== -->
+        <activity android:name=".view.BookConsultationActivity" android:exported="false" />
+        <activity android:name=".view.DoctorDetailActivity" android:exported="false" />
+        <activity android:name=".view.AppointmentBookingActivity" android:exported="false" />
+        <activity android:name=".view.MyAppointmentsActivity" android:exported="false" />
+        <activity android:name=".view.PastBookingsActivity" android:exported="false" />
+        <activity android:name=".view.DoctorAppointmentsActivity" android:exported="false" />
+        <activity android:name=".view.DoctorAvailabilityActivity" android:exported="false" />
+        <activity android:name=".view.ManageLeavesActivity" android:exported="false" />
+
+        <!-- ===================== -->
         <!-- Health / Features -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.CaloriesCalculatorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.HealthPackagesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.HealthPackageDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.MyPackagesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.PackageBookingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.CreatePackageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.EditPackageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.HealthPackagesManagementActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.HealthRecords"
-            android:exported="false" />
-        <activity
-            android:name=".view.BloodDonationActivity"
-            android:exported="false" /> <!-- ===================== -->
+        <activity android:name=".view.CaloriesCalculatorActivity" android:exported="false" />
+        <activity android:name=".view.HealthPackagesActivity" android:exported="false" />
+        <activity android:name=".view.HealthPackageDetailsActivity" android:exported="false" />
+        <activity android:name=".view.MyPackagesActivity" android:exported="false" />
+        <activity android:name=".view.PackageBookingsActivity" android:exported="false" />
+        <activity android:name=".view.CreatePackageActivity" android:exported="false" />
+        <activity android:name=".view.EditPackageActivity" android:exported="false" />
+        <activity android:name=".view.HealthPackagesManagementActivity" android:exported="false" />
+        <activity android:name=".view.HealthRecords" android:exported="false" />
+        <activity android:name=".view.BloodDonationActivity" android:exported="false" />
+        <activity android:name=".view.ChatbotActivity" android:exported="false" />
+
+        <!-- ===================== -->
         <!-- Profile & Settings -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.ChangePasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.NotificationSettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.LanguageSelectionActivity"
-            android:exported="false" /> <!-- ===================== -->
+        <activity android:name=".view.SettingsActivity" android:exported="false" />
+        <activity android:name=".view.EditProfileActivity" android:exported="false" />
+        <activity android:name=".view.ChangePasswordActivity" android:exported="false" />
+        <activity android:name=".view.NotificationSettingsActivity" android:exported="false" />
+        <activity android:name=".view.LanguageSelectionActivity" android:exported="false" />
+
+        <!-- ===================== -->
         <!-- Help & Legal -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.HelpCenterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.PrivacyPolicyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.TermsOfServiceActivity"
-            android:exported="false" /> <!-- ===================== -->
+        <activity android:name=".view.HelpCenterActivity" android:exported="false" />
+        <activity android:name=".view.PrivacyPolicyActivity" android:exported="false" />
+        <activity android:name=".view.TermsOfServiceActivity" android:exported="false" />
+
+        <!-- ===================== -->
         <!-- QR Code -->
         <!-- ===================== -->
-        <activity
-            android:name=".view.QrActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.QrScannerActivity"
-            android:exported="false" /> <!-- ===================== -->
-        <!-- File Provider (for camera / file sharing) -->
+        <activity android:name=".view.QrActivity" android:exported="false" />
+        <activity android:name=".view.QrScannerActivity" android:exported="false" />
+
+        <!-- ===================== -->
+        <!-- File Provider -->
         <!-- ===================== -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -193,6 +124,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
     </application>
 
 </manifest>

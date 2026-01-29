@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,12 +74,13 @@ fun SearchDoctorsScreen() {
                     containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Find Doctors") },
+                title = { Text(stringResource(R.string.find_doctors)) },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(onClick = { activity?.finish() },
+                        modifier = Modifier.testTag("backButton")) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -86,7 +89,7 @@ fun SearchDoctorsScreen() {
                     IconButton(onClick = { showFilterSheet = true }) {
                         Icon(
                             Icons.Default.FilterList,
-                            contentDescription = "Filter",
+                            contentDescription = stringResource(R.string.filter),
                             tint = Color.White
                         )
                     }
@@ -105,16 +108,17 @@ fun SearchDoctorsScreen() {
                 value = searchQuery,
                 onValueChange = { viewModel.searchDoctors(it) },
                 modifier = Modifier
+                    .testTag("searchField")
                     .fillMaxWidth()
                     .padding(16.dp),
-                placeholder = { Text("Search by name or specialization") },
+                placeholder = { Text(stringResource(R.string.search_by_name_spec)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = "Search")
+                    Icon(Icons.Default.Search, contentDescription = stringResource(R.string.Search))
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
                         IconButton(onClick = { viewModel.searchDoctors("") }) {
-                            Icon(Icons.Default.Clear, contentDescription = "Clear")
+                            Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.clear))
                         }
                     }
                 },
@@ -140,7 +144,7 @@ fun SearchDoctorsScreen() {
                                 selectedSpecialization = ""
                                 viewModel.filterBySpecialization("")
                             },
-                            label = { Text("All") }
+                            label = { Text(stringResource(R.string.all)) }
                         )
                     }
                     items(specializations) { spec ->
@@ -158,7 +162,11 @@ fun SearchDoctorsScreen() {
 
             // Results Count
             Text(
-                text = "${filteredDoctors.size} doctor${if (filteredDoctors.size != 1) "s" else ""} found",
+                text = if (filteredDoctors.size == 1) {
+                    stringResource(R.string.doctors_found, filteredDoctors.size)
+                } else {
+                    stringResource(R.string.doctors_found_plural, filteredDoctors.size)
+                },
                 fontSize = 14.sp,
                 color = Color.Gray,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -189,7 +197,7 @@ fun SearchDoctorsScreen() {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "No doctors found",
+                            text = stringResource(R.string.no_doctors_found),
                             fontSize = 16.sp,
                             color = Color.Gray
                         )
@@ -314,7 +322,7 @@ fun DoctorCard(
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "${doctor.experience} yrs",
+                            text = "${doctor.experience} ${stringResource(R.string.yrs)}",
                             fontSize = 12.sp,
                             color = Color.Gray
                         )
@@ -368,7 +376,7 @@ fun FilterBottomSheet(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             Text(
-                text = "Filter & Sort",
+                text = stringResource(R.string.filter_and_sort),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -376,7 +384,7 @@ fun FilterBottomSheet(
             // Minimum Rating
             Column {
                 Text(
-                    text = "Minimum Rating: ${String.format("%.1f", minRating)} ★",
+                    text = stringResource(R.string.minimum_rating, minRating),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -395,7 +403,7 @@ fun FilterBottomSheet(
             // Fee Range
             Column {
                 Text(
-                    text = "Fee Range: NPR ${minFee.toInt()} - ${maxFee.toInt()}",
+                    text = stringResource(R.string.fee_range, minFee.toInt(), maxFee.toInt()),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -417,16 +425,16 @@ fun FilterBottomSheet(
             // Sort By
             Column {
                 Text(
-                    text = "Sort By",
+                    text = stringResource(R.string.sort_by),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SortOption("Rating (High to Low)", "rating_desc", sortBy) { sortBy = it }
-                    SortOption("Fee (Low to High)", "fee_asc", sortBy) { sortBy = it }
-                    SortOption("Fee (High to Low)", "fee_desc", sortBy) { sortBy = it }
-                    SortOption("Experience", "experience_desc", sortBy) { sortBy = it }
+                    SortOption(stringResource(R.string.rating_high_to_low), "rating_desc", sortBy) { sortBy = it }
+                    SortOption(stringResource(R.string.fee_low_to_high), "fee_asc", sortBy) { sortBy = it }
+                    SortOption(stringResource(R.string.fee_high_to_low), "fee_desc", sortBy) { sortBy = it }
+                    SortOption(stringResource(R.string.experience), "experience_desc", sortBy) { sortBy = it }
                 }
             }
 
@@ -446,7 +454,7 @@ fun FilterBottomSheet(
                     },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Clear")
+                    Text(stringResource(R.string.clear))
                 }
 
                 Button(
@@ -464,7 +472,7 @@ fun FilterBottomSheet(
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = MintGreen)
                 ) {
-                    Text("Apply")
+                    Text(stringResource(R.string.apply))
                 }
             }
         }

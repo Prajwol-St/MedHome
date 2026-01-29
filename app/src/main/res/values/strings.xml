@@ -206,8 +206,7 @@
     <string name="enter_address">Enter your address</string>
     <string name="remove_photo">Remove Photo</string>
     <string name="remove_profile_picture">Remove Profile Picture</string>
-    <string name="remove_profile_picture_confirm">
-    Are you sure you want to remove your profile picture?</string>
+    <string name="remove_profile_picture_confirm">Are you sure you want to remove your profile picture?</string>
     <string name="save_changes">Save Changes</string>
     <string name="name_empty_error">Name cannot be empty</string>
     <string name="profile_update_success">Profile updated successfully!</string>
@@ -227,8 +226,7 @@
     <string name="no_packages_title">No packages yet</string>
     <string name="no_packages_subtitle">Create your first health package</string>
     <string name="delete_package_title">Delete Package?</string>
-    <string name="delete_package_message">
-    Are you sure you want to delete “%1$s”? This action cannot be undone.</string>
+    <string name="delete_package_message">Are you sure you want to delete "%1$s"? This action cannot be undone.</string>
     <string name="package_deleted">Package deleted</string>
 
     <string name="package_image">Package Image</string>
@@ -373,6 +371,1006 @@
     <string name="placeholder_included_services">Blood Test, BP Check, Consultation</string>
     <string name="helper_separate_commas">Separate with commas</string>
 
+    <!-- ===================== -->
+    <!-- Change Password -->
+    <!-- ===================== -->
+    <string name="cd_back">Back</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="security">Security</string>
+    <string name="security_desc">Update your password to keep your account secure</string>
+    <string name="label_current_password">Current Password</string>
+    <string name="label_new_password">New Password</string>
+    <string name="label_confirm_new_password">Confirm New Password</string>
+    <string name="ph_current_password">Enter current password</string>
+    <string name="ph_new_password">At least 6 characters</string>
+    <string name="ph_confirm_password">Re-enter new password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="btn_change_password">Change Password</string>
+    <string name="err_current_password">Please enter your current password</string>
+    <string name="err_new_password">Please enter a new password</string>
+    <string name="err_password_length">Password must be at least 6 characters</string>
+    <string name="err_password_mismatch">Passwords don\'t match</string>
+    <string name="err_same_password">New password must be different from current password</string>
+    <string name="password_requirements">Password Requirements</string>
+    <string name="password_rules">• Minimum 6 characters\n• Use a strong, unique password\n• Don\'t reuse old passwords</string>
+
+    <!-- ===================== -->
+    <!-- Privacy Policy -->
+    <!-- ===================== -->
+    <string name="title_privacy_policy">Privacy Policy</string>
+    <string name="last_updated">Last Updated: January 12, 2026</string>
+    <string name="policy_section_1_title">1. Information We Collect</string>
+    <string name="policy_section_1_content">We collect information you provide directly to us, including:\n\n• Personal information (name, email, phone number, date of birth)\n• Health information (medical records, prescriptions, blood group)\n• Emergency contact details\n• Location data for emergency services\n• Usage data and app interactions</string>
+    <string name="policy_section_2_title">2. How We Use Your Information</string>
+    <string name="policy_section_2_content">We use the collected information to:\n\n• Provide and maintain our healthcare services\n• Process appointments and consultations\n• Store and manage your health records securely\n• Send medication reminders and notifications\n• Improve our app features and user experience\n• Comply with legal obligations</string>
+    <string name="policy_section_3_title">3. Data Security</string>
+    <string name="policy_section_3_content">We take your data security seriously:\n\n• All data is encrypted in transit and at rest\n• We use industry-standard security protocols\n• Regular security audits and updates\n• Secure cloud storage infrastructure (Firebase)\n• Limited access to authorized personnel only</string>
+    <string name="policy_section_4_title">4. Data Sharing</string>
+    <string name="policy_section_4_content">We do not sell your personal information. We may share data with:\n\n• Healthcare providers you have authorized\n• Emergency services when necessary\n• Service providers who assist our operations\n• Legal authorities when required by law</string>
+    <string name="policy_section_5_title">5. Your Rights</string>
+    <string name="policy_section_5_content">You have the right to:\n\n• Access your personal data\n• Correct inaccurate information\n• Request deletion of your data\n• Opt out of marketing communications\n• Download your health records\n• Withdraw consent at any time</string>
+    <string name="policy_section_6_title">6. Data Retention</string>
+    <string name="policy_section_6_content">We retain your data for as long as your account is active or as needed to provide services. Medical records are retained according to healthcare regulations and legal requirements in Nepal.</string>
+    <string name="policy_section_7_title">7. Children Privacy</string>
+    <string name="policy_section_7_content">Our service is not intended for users under 18 years of age. We do not knowingly collect information from children. If you believe we have collected information from a child, please contact us immediately.</string>
+    <string name="policy_section_8_title">8. Third Party Services</string>
+    <string name="policy_section_8_content">We use third party services for:\n\n• Authentication and database (Firebase)\n• Cloud storage and hosting\n• Payment processing\n• Analytics and crash reporting\n\nThese services have their own privacy policies.</string>
+    <string name="policy_section_9_title">9. Contact Us</string>
+    <string name="policy_section_9_content">If you have questions about this Privacy Policy, contact us at:\n\nEmail: medhome0001@gmail.com\nAddress: Kathmandu, Nepal</string>
+    <string name="policy_footer">By using MedHome, you agree to this Privacy Policy. We may update this policy periodically, and changes will be posted in the app.</string>
+
+    <!-- ===================== -->
+    <!-- Terms of Service -->
+    <!-- ===================== -->
+
+    <string name="title_terms_of_service">Terms of Service</string>
+    <string name="terms_last_updated">Last Updated: January 12, 2026</string>
+
+    <string name="tos_section_1_title">1. Acceptance of Terms</string>
+    <string name="tos_section_1_content">
+By accessing and using MedHome, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service.
+</string>
+
+    <string name="tos_section_2_title">2. Service Description</string>
+    <string name="tos_section_2_content">
+MedHome is a healthcare management platform that provides:\n\n
+• Digital health records management\n
+• Doctor consultation booking\n
+• Medication reminders\n
+• Health information access\n
+• Emergency contact features\n\n
+We reserve the right to modify or discontinue services at any time.
+</string>
+
+    <string name="tos_section_3_title">3. User Accounts</string>
+    <string name="tos_section_3_content">
+You are responsible for:\n\n
+• Maintaining the confidentiality of your account\n
+• All activities under your account\n
+• Providing accurate information\n
+• Updating your information when necessary\n
+• Notifying us of unauthorized access\n\n
+You must be at least 18 years old to create an account.
+</string>
+
+    <string name="tos_section_4_title">4. Acceptable Use</string>
+    <string name="tos_section_4_content">
+You agree NOT to:\n\n
+• Use the service for illegal purposes\n
+• Share false or misleading health information\n
+• Interfere with the service operation\n
+• Attempt to access unauthorized areas\n
+• Share your account credentials\n
+• Upload malicious software or code\n
+• Harass or abuse other users or staff
+</string>
+
+    <string name="tos_section_5_title">5. Medical Disclaimer</string>
+    <string name="tos_section_5_content">
+IMPORTANT: MedHome is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers regarding medical conditions.
+</string>
+
+    <string name="tos_section_6_title">6. Health Information</string>
+    <string name="tos_section_6_content">
+You acknowledge that:\n\n
+• You have the right to upload your health data\n
+• Information provided should be accurate\n
+• We store data securely but cannot guarantee complete security\n
+• You can request data deletion at any time\n
+• Emergency services may access your data when necessary
+</string>
+
+    <string name="tos_section_7_title">7. Consultations and Appointments</string>
+    <string name="tos_section_7_content">
+• Consultations depend on doctor availability\n
+• Accurate health information is required\n
+• Cancellation policies may apply\n
+• Payment terms are shown during booking\n
+• We are not responsible for third-party doctor services
+</string>
+
+    <string name="tos_section_8_title">8. Intellectual Property</string>
+    <string name="tos_section_8_content">
+All content and functionality of MedHome are owned by us and protected by applicable intellectual property laws.
+</string>
+
+    <string name="tos_section_9_title">9. Limitation of Liability</string>
+    <string name="tos_section_9_content">
+MedHome is provided as-is. We are not liable for:\n\n
+• Service interruptions\n
+• Data loss\n
+• Actions of third-party providers\n
+• Decisions made using app information\n
+• Technical issues
+</string>
+
+    <string name="tos_section_10_title">10. Termination</string>
+    <string name="tos_section_10_content">
+We may suspend or terminate accounts if:\n\n
+• Terms are violated\n
+• Suspicious activity is detected\n
+• Required by law\n
+• Services are discontinued\n\n
+You may delete your account at any time.
+</string>
+
+    <string name="tos_section_11_title">11. Changes to Terms</string>
+    <string name="tos_section_11_content">
+We may update these terms at any time. Continued use means acceptance of updated terms.
+</string>
+
+    <string name="tos_section_12_title">12. Governing Law</string>
+    <string name="tos_section_12_content">
+These Terms are governed by the laws of Nepal. Disputes will be resolved in Kathmandu, Nepal.
+</string>
+
+    <string name="tos_section_13_title">13. Contact Information</string>
+    <string name="tos_section_13_content">
+For questions regarding these Terms:\n\n
+Email: medhome0001@gmail.com\n
+Address: Kathmandu, Nepal
+</string>
+
+    <string name="tos_footer">
+By using MedHome, you acknowledge that you have read and agreed to these Terms of Service.
+</string>
+
+    <!-- Manage Leaves -->
+    <string name="title_manage_leaves">Manage Leaves</string>
+    <string name="add_leave">Add Leave</string>
+    <string name="no_leaves">No leaves scheduled</string>
+    <string name="no_leaves_hint">Tap the button below to add a leave</string>
+    <string name="active_upcoming_leaves">Active &amp; Upcoming Leaves</string>
+    <string name="past_leaves">Past Leaves</string>
+
+    <!-- Leave dialog -->
+    <string name="leave_type">Leave Type</string>
+    <string name="leave_personal">Personal</string>
+    <string name="leave_medical">Medical</string>
+    <string name="leave_conference">Conference</string>
+    <string name="leave_vacation">Vacation</string>
+    <string name="reason_optional">Reason (Optional)</string>
+    <string name="char_count">%1$d/200</string>
+
+    <!-- Dates -->
+    <string name="start_date_format">Start: %1$s</string>
+    <string name="end_date_format">End: %1$s</string>
+    <string name="select_start_date">Select Start Date</string>
+    <string name="select_end_date">Select End Date</string>
+
+    <!-- Common -->
+    <string name="cd_add">Add</string>
+
+
+
+        <!-- Appointment Booking -->
+        <string name="title_book_appointment">Book Appointment</string>
+        <string name="consultation_fee">Consultation Fee</string>
+
+        <!-- Doctor Card -->
+        <string name="specialization">Specialization</string>
+
+        <!-- Date & Time -->
+        <string name="available_time_slots">Available Time Slots</string>
+        <string name="no_slots_available">No slots available for this date</string>
+
+        <!-- Notes -->
+        <string name="reason_for_visit_optional">Reason for Visit (Optional)</string>
+        <string name="notes_placeholder">Describe your symptoms or reason for consultation</string>
+        <string name="char_count_500">%1$d/500</string>
+
+        <!-- Confirmation Dialog -->
+        <string name="date">Date</string>
+        <string name="time">Time</string>
+        <string name="duration">Duration</string>
+        <string name="minutes">minutes</string>
+        <string name="fee">Fee</string>
+        <string name="notes">Notes</string>
+
+        <!-- Common -->
+        <string name="currency_npr">NPR %1$d</string>
+
+
+    <!-- My Appointments -->
+    <string name="title_my_appointments">My Appointments</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">Upcoming (%1$d)</string>
+    <string name="tab_past">Past (%1$d)</string>
+    <string name="tab_cancelled">Cancelled (%1$d)</string>
+
+    <!-- Empty States -->
+    <string name="empty_upcoming">No upcoming appointments</string>
+    <string name="empty_past">No past appointments</string>
+    <string name="empty_cancelled">No cancelled appointments</string>
+
+    <!-- Cancel Dialog -->
+    <string name="dialog_cancel_title">Cancel Appointment</string>
+    <string name="dialog_cancel_message">Are you sure you want to cancel this appointment?</string>
+    <string name="label_reason">Reason</string>
+    <string name="btn_cancel_appointment">Cancel Appointment</string>
+    <string name="btn_back">Back</string>
+
+    <!-- Appointment Card -->
+    <string name="label_cancellation_reason">Cancellation Reason:</string>
+
+    <string name="notes_char_count">%1$d/500</string>
+
+    <!-- Confirm Booking Dialog -->
+    <string name="confirm_booking_title">Confirm Booking</string>
+    <string name="duration_min">%1$d min</string>
+    <string name="duration_minutes">%1$d minutes</string>
+
+
+    <!-- Doctor Appointments -->
+    <string name="tab_today">Today</string>
+    <string name="tab_upcoming_short">Upcoming</string>
+    <string name="tab_past_short">Past</string>
+
+    <string name="empty_today">No appointments for today</string>
+    <string name="empty_subtitle">Your appointments will appear here</string>
+
+    <string name="manage_appointment">Manage Appointment</string>
+    <string name="appointment_details">Appointment Details</string>
+    <string name="phone">Phone</string>
+    <string name="time_duration_format">%1$s (%2$d min)</string>
+
+    <string name="patient_reason">Patient\'s Reason</string>
+    <string name="doctor_notes">Doctor Notes</string>
+    <string name="notes_count">%1$d/500</string>
+
+    <string name="btn_mark_complete">Mark Complete</string>
+    <string name="btn_mark_no_show">Mark No-Show</string>
+    <string name="btn_close">Close</string>
+
+    <string name="label_cancellation_reason_short">Cancellation Reason</string>
+
+
+    <!-- My Packages -->
+    <string name="title_my_packages">My Packages</string>
+
+    <!-- Empty state -->
+    <string name="empty_packages_title">No packages booked yet</string>
+    <string name="empty_packages_subtitle">Browse packages to get started</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_booking_title">Cancel Booking?</string>
+    <string name="dialog_cancel_booking_message">
+    Are you sure you want to cancel “%1$s”? This action can\'t be undone.
+</string>
+    <string name="btn_cancel_booking">Cancel Booking</string>
+    <string name="btn_keep_booking">Keep Booking</string>
+
+    <!-- Toasts -->
+    <string name="toast_booking_cancelled">Booking cancelled</string>
+
+    <!-- Package Card -->
+    <string name="label_doctor_prefix">Dr. %1$s</string>
+    <string name="label_booked_on">Booked On</string>
+    <string name="label_validity">Validity</string>
+    <string name="label_price_paid">Price Paid</string>
+
+    <!-- Validity text -->
+    <string name="validity_expired">Expired</string>
+    <string name="validity_one_day">1 day left</string>
+    <string name="validity_days">%1$d days</string>
+
+    <!-- Buttons -->
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Accessibility -->
+    <string name="cd_package_image">Package Image</string>
+
+    <!-- My Packages Activity -->
+
+
+    <string name="label_doctor_name">Dr. %1$s</string>
+
+    <string name="status_active">ACTIVE</string>
+    <string name="status_expired">EXPIRED</string>
+    <string name="status_cancelled">CANCELLED</string>
+
+
+    <string name="label_one_day_left">1 day left</string>
+    <string name="label_days_left">%1$d days</string>
+
+
+    <string name="label_price_npr">NPR %1$s</string>
+
+
+    <string name="title_package_details">Package Details</string>
+
+    <string name="error_package_not_found">Package not found</string>
+
+
+
+    <string name="label_doctor">Doctor</string>
+
+    <string name="label_days_remaining">%1$d days left</string>
+
+    <string name="label_description">Description</string>
+
+
+    <string name="label_total_price">Total Price</string>
+    <string name="btn_book_now">Book Now</string>
+
+    <string name="dialog_confirm_booking_title">Confirm Booking</string>
+    <string name="dialog_package_label">Package: %1$s</string>
+    <string name="dialog_price_label">Price: NPR %1$s</string>
+    <string name="dialog_valid_for_days">Valid for: %1$d days</string>
+    <string name="dialog_confirm_booking_message">Proceed with this booking?</string>
+
+    <string name="btn_confirm">Confirm</string>
+
+    <string name="toast_package_booked_success">Package booked successfully!</string>
+
+    <!-- Health Packages Management Activity -->
+    <string name="title_my_health_packages">My Health Packages</string>
+
+    <string name="cd_insights">View Insights</string>
+    <string name="cd_create_package">Create Package</string>
+    <string name="cd_edit">Edit</string>
+    <string name="cd_delete">Delete</string>
+
+    <string name="empty_packages_mgmt_title">No Packages Created</string>
+    <string name="empty_packages_mgmt_subtitle">Create your first health package</string>
+
+    <string name="label_days_left_short">%1$d days</string>
+
+    <string name="dialog_delete_package_title">Delete Package?</string>
+    <string name="dialog_delete_package_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+    <string name="btn_delete">Delete</string>
+
+    <string name="toast_package_deleted">Package deleted successfully</string>
+
+    <!-- My Appointments Activity -->
+
+    <string name="tab_upcoming_with_count">Upcoming (%1$d)</string>
+    <string name="tab_past_with_count">Past (%1$d)</string>
+    <string name="tab_cancelled_with_count">Cancelled (%1$d)</string>
+
+    <string name="empty_upcoming_appointments">No upcoming appointments</string>
+    <string name="empty_past_appointments">No past appointments</string>
+    <string name="empty_cancelled_appointments">No cancelled appointments</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_completed">Completed</string>
+
+    <string name="dialog_cancel_appointment_title">Cancel Appointment?</string>
+    <string name="dialog_cancel_appointment_message">Please provide a reason for cancelling this appointment:</string>
+    <string name="char_count_format">%1$d/200</string>
+
+    <string name="btn_cancel_appointment_confirm">Cancel Appointment</string>
+    <string name="btn_go_back">Go Back</string>
+
+    <!-- Doctor Availability Activity -->
+    <string name="title_set_availability">Set Availability</string>
+
+    <string name="btn_add_time_slots">Add Time Slots</string>
+
+    <string name="empty_time_slots_title">No time slots added</string>
+    <string name="empty_time_slots_subtitle">Tap the button below to add your availability\nand start accepting appointments</string>
+
+    <string name="label_duration_min">%1$d min</string>
+
+    <string name="status_booked">Booked</string>
+    <string name="status_available">Available</string>
+
+    <string name="toast_slot_deleted">Slot deleted</string>
+    <string name="toast_invalid_time_range">Invalid time range. Please check your inputs.</string>
+    <string name="toast_slots_added">%1$d time slots added successfully</string>
+
+    <string name="dialog_add_time_slots_title">Add Time Slots</string>
+    <string name="label_start_time_value">Start: %1$s</string>
+    <string name="label_end_time_value">End: %1$s</string>
+    <string name="label_slot_duration">Slot Duration</string>
+    <string name="btn_add_slots">Add Slots</string>
+
+    <string name="dialog_select_date_title">Select Date</string>
+    <string name="dialog_select_start_time_title">Select Start Time</string>
+    <string name="dialog_select_end_time_title">Select End Time</string>
+
+    <!-- User Info Screen -->
+    <string name="error_user_not_found">User not found</string>
+
+    <string name="label_unnamed_user">Unnamed User</string>
+
+    <string name="section_basic_information">Basic Information</string>
+    <string name="section_sensitive_information">Sensitive Information</string>
+
+    <string name="label_email">Email</string>
+    <string name="label_contact">Contact</string>
+    <string name="label_gender">Gender</string>
+    <string name="label_age">Age</string>
+    <string name="label_address">Address</string>
+    <string name="label_blood_group">Blood Group</string>
+    <string name="label_emergency_contact">Emergency Contact</string>
+
+    <string name="label_not_available">N/A</string>
+
+    <string name="message_sensitive_info_hidden">Sensitive information hidden</string>
+
+    <!-- Signup Details Activity -->
+    <string name="title_complete_profile">Complete Profile</string>
+    <string name="subtitle_fill_details">Fill in your details to continue</string>
+
+    <string name="label_full_name">Full Name</string>
+    <string name="hint_full_name">Enter your full name</string>
+
+    <string name="hint_email">Email address</string>
+
+    <string name="label_contact_number">Contact Number</string>
+    <string name="hint_contact_number">10-digit phone number</string>
+
+    <string name="hint_gender">Male/Female/Other</string>
+
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+
+    <string name="label_date_of_birth">Date of Birth</string>
+    <string name="hint_date_format">DD/MM/YYYY</string>
+    <string name="cd_select_date">Select Date</string>
+
+    <string name="hint_blood_group">A+, B+, O+, etc.</string>
+
+    <string name="hint_emergency_contact">Emergency contact number</string>
+
+    <string name="hint_address">Enter your address</string>
+
+    <string name="hint_password_min">At least 6 characters</string>
+
+    <string name="label_confirm_password">Confirm Password</string>
+    <string name="hint_reenter_password">Re-enter password</string>
+
+    <string name="text_agree_to">I agree to the </string>
+    <string name="text_terms_conditions">Terms &amp; Conditions</string>
+
+    <string name="btn_complete_profile">Complete Profile</string>
+    <string name="btn_create_account">Create Account</string>
+
+    <string name="text_already_have_account">Already have an account? </string>
+
+    <string name="btn_ok">OK</string>
+
+    <string name="btn_login">Login</string>
+
+    <string name="label_password">Password</string>
+
+    <!-- Error Messages -->
+    <string name="error_name_required">Please enter your name</string>
+    <string name="error_contact_required">Please enter contact number</string>
+    <string name="error_contact_10_digits">Contact number must be 10 digits</string>
+    <string name="error_gender_required">Please select gender</string>
+    <string name="error_dob_required">Please select date of birth</string>
+    <string name="error_blood_group_required">Please select blood group</string>
+    <string name="error_emergency_contact_required">Please enter emergency contact</string>
+    <string name="error_address_required">Please enter address</string>
+    <string name="error_password_required">Please enter password</string>
+    <string name="error_password_min_length">Password must be at least 6 characters</string>
+    <string name="error_passwords_no_match">Passwords don\'t match</string>
+    <string name="error_accept_terms">Please accept Terms &amp; Conditions</string>
+
+    <!-- Toast Messages -->
+    <string name="toast_account_created">Account created successfully!</string>
+    <string name="toast_profile_created">Profile created successfully!</string>
+
+    <!-- Past Bookings Activity -->
+    <string name="title_past_bookings">Past Bookings</string>
+
+    <string name="empty_past_bookings_title">No past bookings</string>
+    <string name="empty_past_bookings_subtitle">Your completed appointments will appear here</string>
+
+    <string name="dialog_rate_experience_title">Rate Your Experience</string>
+    <string name="dialog_already_rated_title">Already Rated</string>
+
+    <string name="label_rate_experience">Rate your experience</string>
+    <string name="cd_stars">%1$d stars</string>
+    <string name="label_star_count">%1$d star(s)</string>
+
+    <string name="label_write_review">Write a review (optional)</string>
+    <string name="hint_share_experience">Share your experience...</string>
+    <string name="label_char_count">%1$d/500</string>
+
+    <string name="message_already_rated">You have already rated this appointment.</string>
+
+    <string name="btn_submit_rating">Submit Rating</string>
+
+    <string name="status_no_show">No Show</string>
+
+    <string name="label_fee_npr">NPR %1$d</string>
+
+    <string name="label_doctor_notes_colon">Doctor\'s Notes:</string>
+
+    <string name="btn_rate_doctor">Rate Doctor</string>
+
+
+    <!-- Health Records Activity -->
+    <string name="title_my_records">My Records</string>
+
+    <string name="hint_search_records">Search records...</string>
+    <string name="cd_search">Search</string>
+
+    <string name="empty_no_records">No Records Found</string>
+    <string name="empty_no_matching_records">No matching records</string>
+
+    <string name="title_record_details">Record Details</string>
+
+    <string name="label_title">Title</string>
+    <string name="label_date">Date</string>
+    <string name="label_attached_file">Attached File</string>
+
+    <string name="error_cannot_open_file">Cannot open file</string>
+
+    <string name="title_add_new_record">Add New Record</string>
+    <string name="title_edit_record">Edit Record</string>
+
+    <string name="label_title_required">Title *</string>
+    <string name="label_date_required">Date *</string>
+    <string name="label_description_optional">Description (Optional)</string>
+
+    <string name="btn_change_file">Change File</string>
+    <string name="btn_attach_file">Attach File</string>
+    <string name="hint_tap_to_upload">Tap to upload file</string>
+
+    <string name="error_title_date_required">Title &amp; Date required</string>
+
+    <string name="btn_save_record">Save Record</string>
+    <string name="btn_update_record">Update Record</string>
+
+    <string name="dialog_delete_record_title">Delete Record?</string>
+    <string name="dialog_delete_record_message">Are you sure you want to delete this record?</string>
+
+    <string name="cd_more">More options</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
+
+    <!-- Medicine Inventory Screen -->
+    <string name="title_medicine_inventory">Medicine Inventory</string>
+
+    <string name="cd_no_medicines">No medicines</string>
+    <string name="empty_no_medicines_title">No medicines added yet</string>
+    <string name="empty_no_medicines_subtitle">Add your first medicine to get started</string>
+
+    <string name="cd_add_medicine">Add Medicine</string>
+
+    <string name="dialog_delete_medicine_title">Delete Medicine</string>
+    <string name="dialog_delete_medicine_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+
+    <string name="label_no_image">No Image</string>
+
+    <string name="label_price_currency">₹%1$s</string>
+    <string name="label_qty">Qty: %1$s</string>
+
+    <string name="cd_more_options">More options</string>
+
+    <string name="title_edit_medicine">Edit Medicine</string>
+    <string name="title_add_medicine">Add Medicine</string>
+
+    <string name="cd_close">Close</string>
+    <string name="cd_selected_image">Selected Medicine Image</string>
+    <string name="cd_current_image">Current Medicine Image</string>
+    <string name="cd_upload_image">Upload Image</string>
+
+    <string name="label_upload_medicine_image">Upload Medicine Image</string>
+
+    <string name="label_medicine_name">Medicine Name</string>
+    <string name="label_amount_quantity">Amount/Quantity</string>
+
+    <string name="btn_update_medicine">Update Medicine</string>
+    <string name="btn_save_medicine">Save Medicine</string>
+
+    <!-- Blood Donation Activity -->
+    <string name="blood_donation_title">Blood Donation</string>
+    <string name="history">History</string>
+    <string name="nearby_blood_requests">Nearby Blood Requests</string>
+    <string name="no_blood_requests">No blood requests available</string>
+    <string name="error_occurred">An error occurred</string>
+
+    <!-- Blood Groups -->
+    <string name="all_blood_groups">All</string>
+
+    <!-- Blood Request Card -->
+    <string name="anonymous">Anonymous</string>
+    <string name="unit_needed">%1$s unit needed</string>
+    <string name="units_needed">%1$s units needed</string>
+    <string name="contact">Contact</string>
+
+    <!-- Urgency Levels -->
+    <string name="urgent">Urgent</string>
+    <string name="within_24_hours">Within 24 hours</string>
+    <string name="within_a_week">Within a week</string>
+
+    <!-- Time Ago -->
+    <string name="just_now">Just now</string>
+    <string name="minutes_ago">%1$d min ago</string>
+    <string name="minutes_ago_plural">%1$d mins ago</string>
+    <string name="hours_ago">%1$d hr ago</string>
+    <string name="hours_ago_plural">%1$d hrs ago</string>
+    <string name="days_ago">%1$d day ago</string>
+    <string name="days_ago_plural">%1$d days ago</string>
+    <string name="weeks_ago">%1$d week ago</string>
+    <string name="weeks_ago_plural">%1$d weeks ago</string>
+    <string name="months_ago">%1$d month ago</string>
+    <string name="months_ago_plural">%1$d months ago</string>
+    <string name="years_ago">%1$d year ago</string>
+    <string name="years_ago_plural">%1$d years ago</string>
+
+    <!-- Post Blood Request Screen -->
+    <string name="post_blood_request">Post Blood Request</string>
+    <string name="edit_blood_request">Edit Blood Request</string>
+    <string name="patient_name">Patient Name</string>
+    <string name="patient_name_hint">Enter patient name or leave anonymous</string>
+    <string name="required_blood_group">Required Blood Group *</string>
+    <string name="units_needed_label">Units Needed *</string>
+    <string name="hospital">Hospital *</string>
+    <string name="hospital_hint">e.g. City General Hospital</string>
+    <string name="location">Location *</string>
+    <string name="location_hint">Satdobato, Lalitpur</string>
+    <string name="contact_number_hint">+977 XXXXX XXXXX</string>
+    <string name="urgency_level">Urgency Level *</string>
+    <string name="select_urgency">Select urgency</string>
+    <string name="additional_notes">Additional Notes</string>
+    <string name="additional_notes_hint">Any additional information...</string>
+    <string name="update_blood_request">Update Blood Request</string>
+
+    <!-- History Screen -->
+    <string name="my_requests">My Requests</string>
+    <string name="donor_profile">Donor Profile</string>
+    <string name="no_blood_requests_yet">No blood requests yet</string>
+    <string name="posted_requests_appear_here">Your posted blood requests will appear here</string>
+
+    <!-- Donor Profile -->
+    <string name="not_registered_as_donor">Not registered as a donor</string>
+    <string name="join_donor_list">Join the donor list to help save lives</string>
+    <string name="availability_status">Availability Status</string>
+    <string name="available">Available</string>
+    <string name="not_available">Not Available</string>
+    <string name="emergency_available">Emergency Available</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="total_donations">Total Donations</string>
+    <string name="last_donation">Last Donation</string>
+    <string name="can_donate_again_in">You can donate again in %1$d days</string>
+    <string name="eligible_to_donate">You are eligible to donate now!</string>
+    <string name="registered">Registered</string>
+    <string name="thank_you_donor">Thank you for being a donor!</string>
+    <string name="generosity_saves_lives">Your generosity can save lives</string>
+    <string name="donations">Donations</string>
+    <string name="lives_saved">Lives Saved</string>
+
+    <!-- Donation Guidelines -->
+    <string name="donation_guidelines">Donation Guidelines</string>
+    <string name="guideline_wait_90_days">Wait 90 days between donations</string>
+    <string name="guideline_stay_healthy">Stay healthy and hydrated</string>
+    <string name="guideline_save_lives">Each donation can save up to 3 lives</string>
+
+    <!-- Blood Donation Activity -->
+
+    <!-- Blood Request Details Screen (unique strings only) -->
+    <string name="request_details">Request Details</string>
+    <string name="patient_information">Patient Information</string>
+    <string name="units_needed_value">%1$s unit(s)</string>
+    <string name="hospital_information">Hospital Information</string>
+    <string name="contact_information">Contact Information</string>
+    <string name="status_information">Status Information</string>
+    <string name="time_ago_label">Time Ago</string>
+    <string name="additional_notes_title">Additional Notes</string>
+    <string name="manage_request">Manage Request</string>
+    <string name="mark_as_fulfilled">Mark as Fulfilled</string>
+    <string name="cancel_request">Cancel Request</string>
+    <string name="reactivate_request">Reactivate Request</string>
+    <string name="request_fulfilled_message">This request has been fulfilled. Thank you for your contribution!</string>
+    <string name="call_contact">Call %1$s</string>
+
+    <!-- Delete Blood Request Dialog -->
+    <string name="delete_blood_request">Delete Blood Request</string>
+    <string name="delete_blood_request_confirmation">Are you sure you want to delete this blood request? This action cannot be undone.</string>
+
+    <!-- Fulfill Dialog -->
+    <string name="mark_fulfilled_title">Mark as Fulfilled</string>
+    <string name="fulfill_confirmation">Have you received the required blood donation? This will mark the request as fulfilled.</string>
+    <string name="yes_mark_fulfilled">Yes, Mark as Fulfilled</string>
+
+    <string name="status_fulfilled">Fulfilled</string>
+
+    <string name="posted">Posted</string>
+    <string name="status">Status</string>
+
+    <string name="find_doctors">Find Doctors</string>
+    <string name="search_by_name_spec">Search by name or specialization</string>
+    <string name="filter">Filter</string>
+    <string name="doctors_found">%1$d doctor found</string>
+    <string name="doctors_found_plural">%1$d doctors found</string>
+    <string name="no_doctors_found">No doctors found</string>
+    <string name="yrs">yrs</string>
+    <string name="filter_and_sort">Filter &amp; Sort</string>
+    <string name="minimum_rating">Minimum Rating: %1$.1f ★</string>
+    <string name="fee_range">Fee Range: NPR %1$d - %2$d</string>
+    <string name="sort_by">Sort By</string>
+    <string name="rating_high_to_low">Rating (High to Low)</string>
+    <string name="fee_low_to_high">Fee (Low to High)</string>
+    <string name="fee_high_to_low">Fee (High to Low)</string>
+    <string name="experience">Experience</string>
+    <string name="clear">Clear</string>
+    <string name="apply">Apply</string>
+    <string name="Search">search</string>
+
+    <!-- Add/Edit Medicine Screen -->
+
+    <!-- Add/Edit Medicine Screen -->
+    <string name="edit_medicine">Edit Medicine</string>
+    <string name="add_medicine">Add Medicine</string>
+
+    <!-- Form Fields -->
+    <string name="medicine_name">Medicine Name</string>
+    <string name="medicine_name_hint">e.g., Paracetamol</string>
+    <string name="dosage">Dosage</string>
+    <string name="dosage_hint">e.g., 500mg or 2 tablets</string>
+    <string name="frequency">Frequency</string>
+    <string name="reminder_times">Reminder Times</string>
+    <string name="instructions_optional">Instructions (Optional)</string>
+    <string name="instructions_hint">e.g., Take after meal</string>
+
+    <!-- Frequency Options -->
+    <string name="frequency_daily">Daily</string>
+    <string name="frequency_weekly">Weekly</string>
+    <string name="frequency_as_needed">As Needed</string>
+
+    <!-- Buttons -->
+    <string name="add_reminder_time">Add Reminder Time</string>
+    <string name="update_medicine">Update Medicine</string>
+    <string name="remove">Remove</string>
+
+    <!-- Medicine Reminder Screen -->
+    <string name="medicine_reminders">Medicine Reminders</string>
+    <string name="no_medicine_reminders">No Medicine Reminders</string>
+    <string name="start_adding_medications">Start adding your medications to never miss a dose</string>
+    <string name="add_medicine_desc">Add Medicine</string>
+    <string name="more_times">+%d more</string>
+
+    <!-- Dialog -->
+    <string name="delete_reminder_title">Delete Reminder?</string>
+    <string name="delete_reminder_message">Are you sure you want to delete the reminder for %s?</string>
+
+    <!-- Doctor Detail Screen -->
+    <string name="doctor_profile">Doctor Profile</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="failed_to_load_doctor">Failed to load doctor details</string>
+    <string name="ratings_count">(%d ratings)</string>
+
+    <string name="years">%d Years</string>
+    <string name="patients">Patients</string>
+    <string name="patients_count">%d+</string>
+    <string name="verified">Verified</string>
+
+    <string name="no_information_available">No information available</string>
+    <string name="qualifications">Qualifications</string>
+    <string name="not_specified">Not specified</string>
+    <string name="clinic_information">Clinic Information</string>
+    <string name="clinic_name">Clinic Name</string>
+
+    <string name="npr_amount">NPR %d</string>
+    <string name="languages">Languages</string>
+
+    <!-- My Orders Screen -->
+    <string name="pending">Pending</string>
+    <string name="processing">Processing</string>
+    <string name="completed">Completed</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="please_login_to_view_orders">Please login to view orders</string>
+    <string name="loading_your_orders">Loading your orders...</string>
+    <string name="no_orders_yet">No orders yet</string>
+    <string name="no_filter_orders">No %s orders</string>
+    <string name="orders_appear_here">Your orders will appear here instantly</string>
+    <string name="qty">Qty: %d</string>
+    <string name="order_details">Order Details</string>
+    <string name="product_details">Product Details</string>
+    <string name="medicine">Medicine</string>
+    <string name="price_per_unit">Price per unit</string>
+    <string name="quantity">Quantity</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="delivery_information">Delivery Information</string>
+    <string name="order_time">Order Time</string>
+    <string name="cancel_order_title">Cancel Order?</string>
+    <string name="cancel_order_message">Are you sure you want to cancel this order? This action cannot be undone.</string>
+    <string name="order_id_short">Order #%s</string>
+    <string name="amount">Amount: ₹%s</string>
+    <string name="yes_cancel_order">YES, CANCEL ORDER</string>
+    <string name="no_keep_it">NO, KEEP IT</string>
+
+    <!-- Notification History Screen -->
+    <string name="mark_all_read">Mark all read</string>
+    <string name="no_notifications">No Notifications</string>
+    <string name="all_caught_up">You\'re all caught up!</string>
+    <string name="delete_notification_title">Delete Notification</string>
+    <string name="delete_notification_message">Are you sure you want to delete this notification?</string>
+
+    <string name="pharmacy_title">Pharmacy</string>
+
+    <!-- PharmacyScreen strings -->
+    <string name="search_medicines">Search medicines…</string>
+    <string name="no_medicines_found">No medicines found for \"%1$s\"</string>
+    <string name="no_medicines_available">No medicines available</string>
+    <string name="medicines_found">%1$d medicine%2$s found</string>
+    <string name="stock">Stock: %1$s</string>
+    <string name="place_order">Place Order</string>
+    <string name="decrease">Decrease</string>
+    <string name="increase">Increase</string>
+    <string name="delivery_address">Delivery Address *</string>
+    <string name="enter_full_address">Enter your full address</string>
+    <string name="address_required">Address is required</string>
+    <string name="phone_number">Phone Number *</string>
+    <string name="ten_digit_mobile">10-digit mobile number</string>
+    <string name="valid_phone_required">Valid 10-digit phone number required</string>
+    <string name="place_order_button">PLACE ORDER</string>
+    <string name="placing_order">Placing Order…</string>
+
+    <!-- CaloriesCalculator strings -->
+    <string name="calorie_calculator">Calorie Calculator</string>
+    <string name="powered_by_usda">Powered by USDA Food Database</string>
+    <string name="total_calories_today">Total Calories Today</string>
+    <string name="daily_goal">Daily Goal: %1$d kcal</string>
+    <string name="remaining">Remaining: %1$d kcal</string>
+    <string name="protein">Protein</string>
+    <string name="carbs">Carbs</string>
+    <string name="fat">Fat</string>
+    <string name="set_daily_goal">Set Daily Goal</string>
+    <string name="search_usda_database">Search USDA Food Database</string>
+    <string name="search_food_placeholder">Search food (e.g., apple, rice, chicken)</string>
+    <string name="results_from_usda">Results from USDA FoodData Central</string>
+    <string name="add_food_manually">Add Food Manually</string>
+    <string name="todays_meals">Today\'s Meals</string>
+    <string name="breakfast">🍳 Breakfast</string>
+    <string name="lunch">🍛 Lunch</string>
+    <string name="dinner">🍽️ Dinner</string>
+    <string name="snacks">🍿 Snacks</string>
+    <string name="no_meals_added">No meals added yet. Search and add food above!</string>
+    <string name="view_daily_summary">View Daily Summary</string>
+    <string name="daily_summary_feature">Daily Summary Feature</string>
+    <string name="search_from_foods">Search from 300,000+ foods with complete nutrition data</string>
+    <string name="search_example">e.g., apple, chicken breast, rice</string>
+    <string name="searching_usda">Searching USDA database…</string>
+    <string name="search_for_food">Search for any food item</string>
+    <string name="try_examples">Try: apple, rice, chicken, milk</string>
+    <string name="no_foods_found">No foods found for \'%1$s\'</string>
+    <string name="try_different_search">Try a different search term</string>
+    <string name="found_results">Found %1$d results</string>
+    <string name="add_meal_type">Add %1$s</string>
+    <string name="add">Add</string>
+    <string name="enter_food_details">Enter food details and nutrition information</string>
+    <string name="food_name_required">Food Name *</string>
+    <string name="food_name_example">e.g., Home-cooked Meal</string>
+    <string name="calories_kcal">Calories (kcal) *</string>
+    <string name="calories_example">e.g., 250</string>
+    <string name="macronutrients_optional">Macronutrients (Optional)</string>
+    <string name="protein_g">Protein (g)</string>
+    <string name="protein_example">e.g., 20</string>
+    <string name="carbohydrates_g">Carbohydrates (g)</string>
+    <string name="carbs_example">e.g., 30</string>
+    <string name="fat_g">Fat (g)</string>
+    <string name="fat_example">e.g., 10</string>
+    <string name="serving_amount">Serving Amount</string>
+    <string name="serving_example">e.g., 1.5</string>
+    <string name="serving_note">1.0 = 1 serving, 1.5 = 1.5 servings</string>
+    <string name="meal_type_required">Meal Type *</string>
+    <string name="add_food">Add Food</string>
+    <string name="please_enter_valid_calories">Please enter valid calories</string>
+    <string name="food_name_calories_required">Food name and calories are required</string>
+    <string name="set_calorie_macro_targets">Set your daily calorie and macro targets</string>
+    <string name="daily_calorie_goal">Daily Calorie Goal (kcal) *</string>
+    <string name="calorie_goal_example">e.g., 2000</string>
+    <string name="recommended_calories">Recommended: 1500-2500 kcal/day</string>
+    <string name="macro_goals_optional">Macro Goals (Optional)</string>
+    <string name="protein_goal_g">Protein Goal (g)</string>
+    <string name="protein_goal_example">e.g., 150</string>
+    <string name="carbohydrates_goal_g">Carbohydrates Goal (g)</string>
+    <string name="carbs_goal_example">e.g., 200</string>
+    <string name="fat_goal_g">Fat Goal (g)</string>
+    <string name="fat_goal_example">e.g., 50</string>
+    <string name="save_goal">Save Goal</string>
+    <string name="please_enter_valid_calorie_goal">Please enter a valid calorie goal</string>
+    <string name="food_details">Food Details</string>
+    <string name="food_name">Food Name</string>
+    <string name="serving">Serving</string>
+    <string name="meal_type">Meal Type</string>
+    <string name="nutrition_information">Nutrition Information</string>
+    <string name="calories">Calories</string>
+    <string name="data_from_usda">Data from USDA FoodData Central</string>
+    <string name="delete_food_item">Delete Food Item?</string>
+    <string name="deletes_confirmation">Are you sure you want to delete \'%1$s\'? This action cannot be undone.</string>
+    <string name="view_details">View Details</string>
+    <string name="from_usda_database">From USDA Database</string>
+    <string name="foundation_food">Foundation Food</string>
+    <string name="standard_reference">Standard Reference</string>
+    <string name="branded_food">Branded Food</string>
+
+    <string name="inventory">Inventory</string>
+    <string name="my_orders">My Orders</string>
+
+    <string name="my_appointments">My Appointments</string>
+    <string name="manage_leaves">Manage Leaves</string>
+
+
+
+    <string name="qr_code">QR Code</string>
+    <string name="pharmacy">Pharmacy</string>
+    <string name="donor_community_info">Join our donor community and help save lives. Your information will be visible to those in need.</string>
+    <string name="donor_information">Donor Information</string>
+    <string name="blood_group_required">Blood Group *</string>
+    <string name="availability">Availability</string>
+    <string name="currently_available">Currently Available to Donate</string>
+    <string name="regular_donations_contact">You can be contacted for regular donations</string>
+    <string name="urgent_cases_contact">You can be contacted for urgent cases</string>
+    <string name="donation_requirements">Donation Requirements</string>
+    <string name="requirement_age">Age between 18-65 years</string>
+    <string name="requirement_weight">Weight at least 50 kg (110 lbs)</string>
+    <string name="requirement_health">Good general health condition</string>
+    <string name="requirement_wait">Wait 90 days between donations</string>
+    <string name="requirement_illness">No recent illness or surgery</string>
+    <string name="why_donate_blood">Why Donate Blood?</string>
+    <string name="benefit_save_lives">• Save up to 3 lives with each donation</string>
+    <string name="benefit_health_screening">• Free health screening before donation</string>
+    <string name="benefit_blood_flow">• Helps maintain healthy blood flow</string>
+    <string name="benefit_community">• Join a life-saving community</string>
+    <string name="update_donor_profile">Update Donor Profile</string>
+    <string name="save_join_donor_list">Save &amp; Join Donor List</string>
+    <string name="privacy_notice">By joining, you agree to share your blood group and availability status with those seeking blood donors. Your contact information will only be visible when someone needs your blood type.</string>
+
+    <!-- Notification Settings Screen -->
+    <string name="notification_settings_title">Notification Settings</string>
+
+    <!-- Error -->
+    <string name="error_generic">Something went wrong</string>
+
+    <!-- Notification Types -->
+    <string name="appointment_reminders">Appointment Reminders</string>
+    <string name="appointment_reminders_desc">Get notified 24h and 1h before appointments</string>
+
+    <string name="medicine_reminders_desc">Daily reminders to take your medications</string>
+
+    <string name="booking_confirmations">Booking Confirmations</string>
+    <string name="booking_confirmations_desc">Get notified when appointments are confirmed</string>
+
+    <!-- Sound & Vibration -->
+    <string name="notification_sound_vibration">Notification Sound &amp; Vibration</string>
+
+    <string name="notification_sound">Sound</string>
+    <string name="notification_sound_desc">Play sound for notifications</string>
+
+    <string name="notification_vibration">Vibration</string>
+    <string name="notification_vibration_desc">Vibrate on notifications</string>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -381,6 +1379,7 @@
     <!-- Google Sign-In -->
     <!-- ===================== -->
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
     <string name="title_activity_manage_leaves">ManageLeavesActivity</string>
     <string name="title_activity_doctor_appointments">DoctorAppointmentsActivity</string>
     <string name="title_activity_past_bookings">PastBookingsActivity</string>
@@ -389,5 +1388,7 @@
     <string name="title_activity_add_edit_medicine">AddEditMedicineActivity</string>
     <string name="title_activity_notification_history">NotificationHistoryActivity</string>
     <string name="title_activity_pharmacy">PharmacyActivity</string>
+
+    <string name="title_activity_ai_health_assistant">AiHealthAssistantActivity</string>
 
 </resources>

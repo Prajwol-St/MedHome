@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,12 +104,12 @@ fun AddEditMedicineScreen(medicineId: String?) {
             IconButton(onClick = { (context as BaseActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = Color.White
                 )
             }
             Text(
-                text = if (isEditMode) "Edit Medicine" else "Add Medicine",
+                text = if (isEditMode) stringResource(R.string.edit_medicine) else stringResource(R.string.add_medicine),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -149,8 +150,8 @@ fun AddEditMedicineScreen(medicineId: String?) {
             OutlinedTextField(
                 value = medicineName,
                 onValueChange = { medicineName = it },
-                label = { Text("Medicine Name") },
-                placeholder = { Text("e.g., Paracetamol") },
+                label = { Text(stringResource(R.string.medicine_name)) },
+                placeholder = { Text(stringResource(R.string.medicine_name_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -163,8 +164,8 @@ fun AddEditMedicineScreen(medicineId: String?) {
             OutlinedTextField(
                 value = dosage,
                 onValueChange = { dosage = it },
-                label = { Text("Dosage") },
-                placeholder = { Text("e.g., 500mg or 2 tablets") },
+                label = { Text(stringResource(R.string.dosage)) },
+                placeholder = { Text(stringResource(R.string.dosage_hint)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 colors = OutlinedTextFieldDefaults.colors(
@@ -175,7 +176,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
 
             // Frequency
             Text(
-                text = "Frequency",
+                text = stringResource(R.string.frequency),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = TextDark
@@ -186,17 +187,17 @@ fun AddEditMedicineScreen(medicineId: String?) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 FrequencyChip(
-                    text = "Daily",
+                    text = stringResource(R.string.frequency_daily),
                     selected = frequency == NotificationConstants.FREQUENCY_DAILY,
                     onClick = { frequency = NotificationConstants.FREQUENCY_DAILY }
                 )
                 FrequencyChip(
-                    text = "Weekly",
+                    text = stringResource(R.string.frequency_weekly),
                     selected = frequency == NotificationConstants.FREQUENCY_WEEKLY,
                     onClick = { frequency = NotificationConstants.FREQUENCY_WEEKLY }
                 )
                 FrequencyChip(
-                    text = "As Needed",
+                    text = stringResource(R.string.frequency_as_needed),
                     selected = frequency == NotificationConstants.FREQUENCY_AS_NEEDED,
                     onClick = { frequency = NotificationConstants.FREQUENCY_AS_NEEDED }
                 )
@@ -204,7 +205,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
 
             // Reminder Times
             Text(
-                text = "Reminder Times",
+                text = stringResource(R.string.reminder_times),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = TextDark
@@ -244,7 +245,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
                             ) {
                                 Icon(
                                     Icons.Default.Close,
-                                    contentDescription = "Remove",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = Color(0xFFD32F2F),
                                     modifier = Modifier.size(20.dp)
                                 )
@@ -264,15 +265,15 @@ fun AddEditMedicineScreen(medicineId: String?) {
             ) {
                 Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Reminder Time")
+                Text(stringResource(R.string.add_reminder_time))
             }
 
             // Instructions
             OutlinedTextField(
                 value = instructions,
                 onValueChange = { instructions = it },
-                label = { Text("Instructions (Optional)") },
-                placeholder = { Text("e.g., Take after meal") },
+                label = { Text(stringResource(R.string.instructions_optional)) },
+                placeholder = { Text(stringResource(R.string.instructions_hint)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -339,7 +340,7 @@ fun AddEditMedicineScreen(medicineId: String?) {
                     )
                 } else {
                     Text(
-                        text = if (isEditMode) "Update Medicine" else "Add Medicine",
+                        text = if (isEditMode) stringResource(R.string.update_medicine) else stringResource(R.string.add_medicine),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )

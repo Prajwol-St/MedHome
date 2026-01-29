@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,9 +24,9 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class PrivacyPolicyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,19 +53,19 @@ fun PrivacyPolicyScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
+                .background(MintGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { (context as ComponentActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = Color.White
                 )
             }
             Text(
-                text = "Privacy Policy",
+                text = stringResource(R.string.title_privacy_policy),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -85,7 +86,7 @@ fun PrivacyPolicyScreen() {
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "Last Updated: January 12, 2026",
+                    text = stringResource(R.string.last_updated),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
@@ -96,93 +97,60 @@ fun PrivacyPolicyScreen() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 PolicySection(
-                    title = "1. Information We Collect",
-                    content = "We collect information you provide directly to us, including:\n\n" +
-                            "• Personal information (name, email, phone number, date of birth)\n" +
-                            "• Health information (medical records, prescriptions, blood group)\n" +
-                            "• Emergency contact details\n" +
-                            "• Location data for emergency services\n" +
-                            "• Usage data and app interactions"
+                    title = stringResource(R.string.policy_section_1_title),
+                    content = stringResource(R.string.policy_section_1_content)
                 )
 
                 PolicySection(
-                    title = "2. How We Use Your Information",
-                    content = "We use the collected information to:\n\n" +
-                            "• Provide and maintain our healthcare services\n" +
-                            "• Process appointments and consultations\n" +
-                            "• Store and manage your health records securely\n" +
-                            "• Send medication reminders and notifications\n" +
-                            "• Improve our app features and user experience\n" +
-                            "• Comply with legal obligations"
+                    title = stringResource(R.string.policy_section_2_title),
+                    content = stringResource(R.string.policy_section_2_content)
                 )
 
                 PolicySection(
-                    title = "3. Data Security",
-                    content = "We take your data security seriously:\n\n" +
-                            "• All data is encrypted in transit and at rest\n" +
-                            "• We use industry-standard security protocols\n" +
-                            "• Regular security audits and updates\n" +
-                            "• Secure cloud storage infrastructure (Firebase)\n" +
-                            "• Limited access to authorized personnel only"
+                    title = stringResource(R.string.policy_section_3_title),
+                    content = stringResource(R.string.policy_section_3_content)
                 )
 
                 PolicySection(
-                    title = "4. Data Sharing",
-                    content = "We do not sell your personal information. We may share data with:\n\n" +
-                            "• Healthcare providers you've authorized\n" +
-                            "• Emergency services when necessary\n" +
-                            "• Service providers who assist our operations\n" +
-                            "• Legal authorities when required by law"
+                    title = stringResource(R.string.policy_section_4_title),
+                    content = stringResource(R.string.policy_section_4_content)
                 )
 
                 PolicySection(
-                    title = "5. Your Rights",
-                    content = "You have the right to:\n\n" +
-                            "• Access your personal data\n" +
-                            "• Correct inaccurate information\n" +
-                            "• Request deletion of your data\n" +
-                            "• Opt-out of marketing communications\n" +
-                            "• Download your health records\n" +
-                            "• Withdraw consent at any time"
+                    title = stringResource(R.string.policy_section_5_title),
+                    content = stringResource(R.string.policy_section_5_content)
                 )
 
                 PolicySection(
-                    title = "6. Data Retention",
-                    content = "We retain your data for as long as your account is active or as needed to provide services. Medical records are retained according to healthcare regulations and legal requirements in Nepal."
+                    title = stringResource(R.string.policy_section_6_title),
+                    content = stringResource(R.string.policy_section_6_content)
                 )
 
                 PolicySection(
-                    title = "7. Children's Privacy",
-                    content = "Our service is not intended for users under 18 years of age. We do not knowingly collect information from children. If you believe we have collected information from a child, please contact us immediately."
+                    title = stringResource(R.string.policy_section_7_title),
+                    content = stringResource(R.string.policy_section_7_content)
                 )
 
                 PolicySection(
-                    title = "8. Third-Party Services",
-                    content = "We use third-party services for:\n\n" +
-                            "• Authentication and database (Firebase)\n" +
-                            "• Cloud storage and hosting\n" +
-                            "• Payment processing\n" +
-                            "• Analytics and crash reporting\n\n" +
-                            "These services have their own privacy policies."
+                    title = stringResource(R.string.policy_section_8_title),
+                    content = stringResource(R.string.policy_section_8_content)
                 )
 
                 PolicySection(
-                    title = "9. Contact Us",
-                    content = "If you have questions about this Privacy Policy, contact us at:\n\n" +
-                            "Email: medhome0001@gmail.com\n" +
-                            "Address: Kathmandu, Nepal"
+                    title = stringResource(R.string.policy_section_9_title),
+                    content = stringResource(R.string.policy_section_9_content)
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Divider(
-                    color = SageGreen.copy(alpha = 0.2f),
+                    color = MintGreen.copy(alpha = 0.2f),
                     thickness = 1.dp,
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
 
                 Text(
-                    text = "By using MedHome, you agree to this Privacy Policy. We may update this policy periodically, and changes will be posted in the app.",
+                    text = stringResource(R.string.policy_footer),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
@@ -196,6 +164,7 @@ fun PrivacyPolicyScreen() {
         Spacer(modifier = Modifier.height(80.dp))
     }
 }
+
 
 @Composable
 fun PolicySection(

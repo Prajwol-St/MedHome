@@ -8,29 +8,17 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.io.File
-import java.io.FileOutputStream
 
-class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
+class HealthRecordsRepoImpl(
+    private val context: Context,
+    private val commonRepo: CommonRepo = CommonRepoImpl() // ADDED: Cloudinary repo dependency
+): HealthRecordsRepo {
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
 
     private val userId get() = auth.currentUser?.uid ?: ""
 
-    // FLAT STRUCTURE - points to root health_records
-    private fun collectionRef() =
-        database.getReference("health_records")
-
-    private fun saveFileLocally(fileUri: Uri): String {
-        val inputStream = context.contentResolver.openInputStream(fileUri)
-        val fileName = "${System.currentTimeMillis()}_${fileUri.lastPathSegment}"
-        val file = File(context.filesDir, fileName)
-
-        FileOutputStream(file).use { output ->
-            inputStream?.copyTo(output)
-        }
-        return file.absolutePath
-    }
+    private fun collectionRef() = database.getReference("health_records")
 
     override fun addHealthRecord(
         record: HealthRecordsModel,
@@ -46,33 +34,72 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
             return
         }
 
-        try {
-            val recordId = collectionRef().push().key ?: ""
-            val filePath = fileUri?.let { saveFileLocally(it) } ?: ""
-
-            val finalRecord = record.copy(
-                id = recordId,
-                userId = userId,
-                fileUrl = filePath,
-                fileName = if (filePath.isNotEmpty()) File(filePath).name else "",
-                timestamp = System.currentTimeMillis()
+        val recordId = collectionRef().push().key ?: ""
+        if (fileUri != null) {
+            commonRepo.uploadImage(
+                context = context,
+                imageUri = fileUri,
+                folder = "health_records",
+                callback = { success, message, imageUrl, publicId ->
+                    if (success && imageUrl != null && publicId != null) {
+                        saveRecordToFirebase(
+                            record = record,
+                            recordId = recordId,
+                            fileUrl = imageUrl,
+                            publicId = publicId,
+                            onSuccess = onSuccess,
+                            onError = onError
+                        )
+                    } else {
+                        android.util.Log.e("HealthRecordsRepo", "Upload failed: $message")
+                        onError(Exception(message))
+                    }
+                }
             )
-
-            android.util.Log.d("HealthRecordsRepo", "Saving record: ${finalRecord.title}")
-
-            collectionRef().child(recordId).setValue(finalRecord)
-                .addOnSuccessListener {
-                    android.util.Log.d("HealthRecordsRepo", "Record saved successfully")
-                    onSuccess()
-                }
-                .addOnFailureListener {
-                    android.util.Log.e("HealthRecordsRepo", "Save failed: ${it.message}")
-                    onError(it)
-                }
-        } catch (e: Exception) {
-            android.util.Log.e("HealthRecordsRepo", "Exception: ${e.message}")
-            onError(e)
+        } else {
+            saveRecordToFirebase(
+                record = record,
+                recordId = recordId,
+                fileUrl = "",
+                publicId = "",
+                onSuccess = onSuccess,
+                onError = onError
+            )
         }
+    }
+
+    private fun saveRecordToFirebase(
+        record: HealthRecordsModel,
+        recordId: String,
+        fileUrl: String,
+        publicId: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        val fileName = if (fileUrl.isNotEmpty()) {
+            fileUrl.substringAfterLast("/").substringBefore(".")
+        } else ""
+
+        val finalRecord = record.copy(
+            id = recordId,
+            userId = userId,
+            fileUrl = fileUrl,
+            publicId = publicId,
+            fileName = fileName,
+            timestamp = System.currentTimeMillis()
+        )
+
+        android.util.Log.d("HealthRecordsRepo", "Saving record: ${finalRecord.title}")
+
+        collectionRef().child(recordId).setValue(finalRecord)
+            .addOnSuccessListener {
+                android.util.Log.d("HealthRecordsRepo", "Record saved successfully")
+                onSuccess()
+            }
+            .addOnFailureListener {
+                android.util.Log.e("HealthRecordsRepo", "Save failed: ${it.message}")
+                onError(it)
+            }
     }
 
     override fun getHealthRecords(
@@ -88,7 +115,6 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
             return
         }
 
-        // Query only records belonging to current user
         collectionRef()
             .orderByChild("userId")
             .equalTo(userId)
@@ -131,32 +157,57 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
             return
         }
 
-        try {
-            var updateRecord = record
-
-            if (fileUri != null) {
-                if (record.fileUrl.isNotEmpty()) {
-                    File(record.fileUrl).delete()
+        if (fileUri != null) {
+            if (record.publicId.isNotEmpty()) {
+                commonRepo.deleteImage(record.publicId) { success, message ->
+                    android.util.Log.d("HealthRecordsRepo", "Old image deletion: $success - $message")
                 }
-                val newPath = saveFileLocally(fileUri)
-                updateRecord = record.copy(
-                    fileUrl = newPath,
-                    fileName = File(newPath).name
-                )
             }
 
-            collectionRef().child(record.id)
-                .setValue(updateRecord)
-                .addOnSuccessListener { onSuccess() }
-                .addOnFailureListener { onError(it) }
-        } catch (e: Exception) {
-            onError(e)
+            commonRepo.uploadImage(
+                context = context,
+                imageUri = fileUri,
+                folder = "health_records",
+                callback = { success, message, imageUrl, publicId ->
+                    if (success && imageUrl != null && publicId != null) {
+                        val fileName = imageUrl.substringAfterLast("/").substringBefore(".")
+                        val updatedRecord = record.copy(
+                            fileUrl = imageUrl,
+                            publicId = publicId,
+                            fileName = fileName
+                        )
+                        updateRecordInFirebase(updatedRecord, onSuccess, onError)
+                    } else {
+                        android.util.Log.e("HealthRecordsRepo", "Upload failed: $message")
+                        onError(Exception(message))
+                    }
+                }
+            )
+        } else {
+            updateRecordInFirebase(record, onSuccess, onError)
         }
+    }
+
+    private fun updateRecordInFirebase(
+        record: HealthRecordsModel,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        collectionRef().child(record.id)
+            .setValue(record)
+            .addOnSuccessListener {
+                android.util.Log.d("HealthRecordsRepo", "Record updated successfully")
+                onSuccess()
+            }
+            .addOnFailureListener {
+                android.util.Log.e("HealthRecordsRepo", "Update failed: ${it.message}")
+                onError(it)
+            }
     }
 
     override fun deleteHealthRecord(
         recordId: String,
-        fileUrl: String,
+        publicId: String,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit
     ) {
@@ -165,17 +216,31 @@ class HealthRecordsRepoImpl(private val context: Context): HealthRecordsRepo {
             return
         }
 
-        try {
-            if (fileUrl.isNotEmpty()) {
-                File(fileUrl).delete()
+        if (publicId.isNotEmpty()) {
+            commonRepo.deleteImage(publicId) { success, message ->
+                android.util.Log.d("HealthRecordsRepo", "Image deletion: $success - $message")
+                // Continue with Firebase deletion even if Cloudinary deletion fails
+                deleteRecordFromFirebase(recordId, onSuccess, onError)
             }
-
-            collectionRef().child(recordId)
-                .removeValue()
-                .addOnSuccessListener { onSuccess() }
-                .addOnFailureListener { onError(it) }
-        } catch (e: Exception) {
-            onError(e)
+        } else {
+            deleteRecordFromFirebase(recordId, onSuccess, onError)
         }
+    }
+
+    private fun deleteRecordFromFirebase(
+        recordId: String,
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ) {
+        collectionRef().child(recordId)
+            .removeValue()
+            .addOnSuccessListener {
+                android.util.Log.d("HealthRecordsRepo", "Record deleted successfully")
+                onSuccess()
+            }
+            .addOnFailureListener {
+                android.util.Log.e("HealthRecordsRepo", "Delete failed: ${it.message}")
+                onError(it)
+            }
     }
 }

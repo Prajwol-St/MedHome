@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class HelpCenterActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ fun HelpCenterScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
+                .background(MintGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -205,13 +205,13 @@ fun ContactCard(
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(SageGreen.copy(alpha = 0.15f), RoundedCornerShape(12.dp)),
+                    .background(MintGreen.copy(alpha = 0.15f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     icon,
                     contentDescription = title,
-                    tint = SageGreen,
+                    tint = MintGreen,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -290,7 +290,7 @@ fun FaqItem(
                     contentDescription = stringResource(
                         if (isExpanded) R.string.collapse else R.string.expand
                     ),
-                    tint = SageGreen,
+                    tint = MintGreen,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -298,7 +298,7 @@ fun FaqItem(
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Divider(
-                    color = SageGreen.copy(alpha = 0.2f),
+                    color = MintGreen.copy(alpha = 0.2f),
                     thickness = 1.dp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )

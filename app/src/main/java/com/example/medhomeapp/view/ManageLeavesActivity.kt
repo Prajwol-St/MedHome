@@ -29,7 +29,6 @@ import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.model.DoctorLeaveModel
 import com.example.medhomeapp.repository.LeaveManagementRepoImpl
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.utils.AppConstants
 import com.example.medhomeapp.utils.DateTimeUtils
 import com.example.medhomeapp.viewmodel.LeaveManagementViewModel
@@ -37,18 +36,39 @@ import com.example.medhomeapp.viewmodel.LeaveManagementViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.res.stringResource
+import com.example.medhomeapp.utils.LanguageManager
+import com.example.medhomeapp.view.ui.theme.MintGreen
+
 
 class ManageLeavesActivity : BaseActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val language = LanguageManager.getLanguage(this)
+
         setContent {
-            ManageLeavesScreen()
+
+            key(language) {
+                ManageLeavesScreen()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val currentLanguage = LanguageManager.getLanguage(this)
+        val savedLanguage = intent.getStringExtra("current_language")
+
+        if (savedLanguage != null && savedLanguage != currentLanguage) {
+            recreate()
+        } else if (savedLanguage == null) {
+            intent.putExtra("current_language", currentLanguage)
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,15 +101,15 @@ fun ManageLeavesScreen() {
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Manage Leaves") },
+                title = { Text(stringResource(R.string.title_manage_leaves)) },
                 navigationIcon = {
                     IconButton(onClick = { activity?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            stringResource(R.string.cd_back),
                             tint = Color.White
                         )
                     }
@@ -99,12 +119,12 @@ fun ManageLeavesScreen() {
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = { showAddLeaveDialog = true },
-                containerColor = SageGreen,
+                containerColor = MintGreen,
                 contentColor = Color.White
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.cd_add))
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("Add Leave")
+                Text(stringResource(R.string.add_leave))
             }
         }
     ) { paddingValues ->
@@ -115,7 +135,7 @@ fun ManageLeavesScreen() {
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = SageGreen)
+                CircularProgressIndicator(color = MintGreen)
             }
         } else if (leaves.isEmpty()) {
             Box(
@@ -135,12 +155,13 @@ fun ManageLeavesScreen() {
                         tint = Color.Gray
                     )
                     Text(
-                        text = "No leaves scheduled",
+                        text = stringResource(R.string.no_leaves),
                         fontSize = 16.sp,
                         color = Color.Gray
                     )
+
                     Text(
-                        text = "Tap the button below to add a leave",
+                        text = stringResource(R.string.no_leaves_hint),
                         fontSize = 14.sp,
                         color = Color.LightGray
                     )
@@ -159,7 +180,7 @@ fun ManageLeavesScreen() {
                 if (activeLeaves.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Active & Upcoming Leaves",
+                            text = stringResource(R.string.active_upcoming_leaves),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2C3E50),
@@ -182,7 +203,7 @@ fun ManageLeavesScreen() {
                 if (pastLeaves.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Past Leaves",
+                            text = stringResource(R.string.past_leaves),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF2C3E50),
@@ -249,7 +270,7 @@ fun LeaveCard(
                         else -> Icons.Default.EventBusy
                     },
                     contentDescription = null,
-                    tint = if (isPast) Color.Gray else SageGreen,
+                    tint = if (isPast) Color.Gray else MintGreen,
                     modifier = Modifier.size(24.dp)
                 )
 
@@ -285,7 +306,7 @@ fun LeaveCard(
                     Text(
                         text = "$duration day${if (duration > 1) "s" else ""}",
                         fontSize = 12.sp,
-                        color = if (isPast) Color.LightGray else SageGreen,
+                        color = if (isPast) Color.LightGray else MintGreen,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -295,7 +316,7 @@ fun LeaveCard(
                 IconButton(onClick = onDelete) {
                     Icon(
                         Icons.Default.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(R.string.delete),
                         tint = Color.Red
                     )
                 }
@@ -331,7 +352,7 @@ fun AddLeaveDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Add Leave",
+                text = stringResource(R.string.add_leave),
                 fontWeight = FontWeight.Bold
             )
         },
@@ -349,7 +370,12 @@ fun AddLeaveDialog(
                 ) {
                     Icon(Icons.Default.CalendarMonth, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Start: ${DateTimeUtils.formatDateForDisplay(startDate)}")
+                    Text(
+                        stringResource(
+                            R.string.start_date_format,
+                            DateTimeUtils.formatDateForDisplay(startDate)
+                        )
+                    )
                 }
 
                 // End Date
@@ -359,27 +385,32 @@ fun AddLeaveDialog(
                 ) {
                     Icon(Icons.Default.CalendarMonth, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("End: ${DateTimeUtils.formatDateForDisplay(endDate)}")
+                    Text(
+                        stringResource(
+                            R.string.end_date_format,
+                            DateTimeUtils.formatDateForDisplay(endDate)
+                        )
+                    )
                 }
 
                 // Leave Type
                 Text(
-                    text = "Leave Type",
+                    text = stringResource(R.string.leave_type),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    LeaveTypeOption("Personal", AppConstants.LEAVE_TYPE_PERSONAL, selectedLeaveType) {
+                    LeaveTypeOption(stringResource(R.string.leave_personal), AppConstants.LEAVE_TYPE_PERSONAL, selectedLeaveType) {
                         selectedLeaveType = it
                     }
-                    LeaveTypeOption("Medical", AppConstants.LEAVE_TYPE_MEDICAL, selectedLeaveType) {
+                    LeaveTypeOption(stringResource(R.string.leave_medical), AppConstants.LEAVE_TYPE_MEDICAL, selectedLeaveType) {
                         selectedLeaveType = it
                     }
-                    LeaveTypeOption("Conference", AppConstants.LEAVE_TYPE_CONFERENCE, selectedLeaveType) {
+                    LeaveTypeOption(stringResource(R.string.leave_conference), AppConstants.LEAVE_TYPE_CONFERENCE, selectedLeaveType) {
                         selectedLeaveType = it
                     }
-                    LeaveTypeOption("Vacation", AppConstants.LEAVE_TYPE_VACATION, selectedLeaveType) {
+                    LeaveTypeOption(stringResource(R.string.leave_vacation), AppConstants.LEAVE_TYPE_VACATION, selectedLeaveType) {
                         selectedLeaveType = it
                     }
                 }
@@ -389,24 +420,26 @@ fun AddLeaveDialog(
                     value = reason,
                     onValueChange = { if (it.length <= 200) reason = it },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Reason (Optional)") },
+                    label = { Text(stringResource(R.string.reason_optional)) },
                     maxLines = 3,
-                    supportingText = { Text("${reason.length}/200") }
+                    supportingText = {
+                        Text(stringResource(R.string.char_count, reason.length))
+                    }
                 )
             }
         },
         confirmButton = {
             Button(
                 onClick = { onConfirm(startDate, endDate, reason, selectedLeaveType) },
-                colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                 enabled = DateTimeUtils.compareDates(endDate, startDate) >= 0
             ) {
-                Text("Add Leave")
+                Text(stringResource(R.string.add_leave))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         },
         containerColor = Color.White,
@@ -417,7 +450,7 @@ fun AddLeaveDialog(
     if (showStartDatePicker) {
         AlertDialog(
             onDismissRequest = { showStartDatePicker = false },
-            title = { Text("Select Start Date") },
+            title = { Text(stringResource(R.string.select_start_date)) },
             text = {
                 LazyColumn(modifier = Modifier.height(400.dp)) {
                     items(dates) { (date, displayDate) ->
@@ -446,7 +479,7 @@ fun AddLeaveDialog(
     if (showEndDatePicker) {
         AlertDialog(
             onDismissRequest = { showEndDatePicker = false },
-            title = { Text("Select End Date") },
+            title = { Text(stringResource(R.string.select_end_date)) },
             text = {
                 LazyColumn(modifier = Modifier.height(400.dp)) {
                     items(dates.filter { (date, _) ->
@@ -487,7 +520,7 @@ fun LeaveTypeOption(
         RadioButton(
             selected = selectedValue == value,
             onClick = { onSelect(value) },
-            colors = RadioButtonDefaults.colors(selectedColor = SageGreen)
+            colors = RadioButtonDefaults.colors(selectedColor = MintGreen)
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = label, fontSize = 14.sp)

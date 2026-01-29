@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -88,12 +89,12 @@ fun ChangePasswordScreen() {
                 IconButton(onClick = { (context as ComponentActivity).finish() }) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.cd_back),
                         tint = Color.White
                     )
                 }
                 Text(
-                    text = "Change Password",
+                    text = stringResource(R.string.title_change_password),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -117,7 +118,7 @@ fun ChangePasswordScreen() {
                     .padding(top = 32.dp, bottom = 32.dp)
             ) {
                 Text(
-                    text = "Security",
+                    text = stringResource(R.string.security),
                     style = TextStyle(
                         color = TextDark,
                         fontWeight = FontWeight.Bold,
@@ -128,7 +129,7 @@ fun ChangePasswordScreen() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Update your password to keep your account secure",
+                    text = stringResource(R.string.security_desc),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 13.sp
@@ -137,7 +138,7 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = "Current Password",
+                    text = stringResource(R.string.label_current_password),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -151,7 +152,7 @@ fun ChangePasswordScreen() {
                     onValueChange = { currentPassword = it },
                     placeholder = {
                         Text(
-                            "Enter current password",
+                            text = stringResource(R.string.label_new_password),
                             color = TextGray.copy(alpha = 0.6f),
                             fontSize = 14.sp
                         )
@@ -190,7 +191,7 @@ fun ChangePasswordScreen() {
 
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "New Password",
+                    text = stringResource(R.string.label_new_password),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -204,7 +205,7 @@ fun ChangePasswordScreen() {
                     onValueChange = { newPassword = it },
                     placeholder = {
                         Text(
-                            "At least 6 characters",
+                            text = stringResource(R.string.ph_confirm_password),
                             color = TextGray.copy(alpha = 0.6f),
                             fontSize = 14.sp
                         )
@@ -217,7 +218,11 @@ fun ChangePasswordScreen() {
                                     painterResource(R.drawable.baseline_visibility_off_24)
                                 else
                                     painterResource(R.drawable.baseline_visibility_24),
-                                contentDescription = if (newPasswordVisible) "Hide password" else "Show password",
+                                contentDescription =
+                                    if (currentPasswordVisible)
+                                        stringResource(R.string.hide_password)
+                                    else
+                                        stringResource(R.string.show_password),
                                 tint = TextGray
                             )
                         }
@@ -244,7 +249,7 @@ fun ChangePasswordScreen() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Confirm New Password",
+                    text = stringResource(R.string.label_confirm_new_password),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -258,7 +263,7 @@ fun ChangePasswordScreen() {
                     onValueChange = { confirmPassword = it },
                     placeholder = {
                         Text(
-                            "Re-enter new password",
+                            stringResource(R.string.ph_new_password),
                             color = TextGray.copy(alpha = 0.6f),
                             fontSize = 14.sp
                         )
@@ -271,7 +276,11 @@ fun ChangePasswordScreen() {
                                     painterResource(R.drawable.baseline_visibility_off_24)
                                 else
                                     painterResource(R.drawable.baseline_visibility_24),
-                                contentDescription = if (confirmPasswordVisible) "Hide password" else "Show password",
+                                contentDescription =
+                                    if (currentPasswordVisible)
+                                        stringResource(R.string.hide_password)
+                                    else
+                                        stringResource(R.string.show_password),
                                 tint = TextGray
                             )
                         }
@@ -302,38 +311,43 @@ fun ChangePasswordScreen() {
                             currentPassword.isBlank() -> {
                                 Toast.makeText(
                                     context,
-                                    "Please enter your current password",
+                                    context.getString(R.string.err_current_password),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                             newPassword.isBlank() -> {
                                 Toast.makeText(
                                     context,
-                                    "Please enter a new password",
+                                    context.getString(R.string.err_new_password),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                             newPassword.length < 6 -> {
                                 Toast.makeText(
                                     context,
-                                    "Password must be at least 6 characters",
+                                    context.getString(R.string.err_password_length),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                             newPassword != confirmPassword -> {
                                 Toast.makeText(
                                     context,
-                                    "Passwords don't match",
+                                    context.getString(R.string.err_password_mismatch),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                             currentPassword == newPassword -> {
                                 Toast.makeText(
                                     context,
-                                    "New password must be different from current password",
+                                    context.getString(R.string.err_same_password),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
+
                             else -> {
                                 viewModel.changePassword(currentPassword, newPassword) { success, message ->
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -362,7 +376,7 @@ fun ChangePasswordScreen() {
                         )
                     } else {
                         Text(
-                            "Change Password",
+                            stringResource(R.string.btn_change_password),
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -394,7 +408,7 @@ fun ChangePasswordScreen() {
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(
-                                text = "Password Requirements",
+                                text = stringResource(R.string.password_requirements),
                                 style = TextStyle(
                                     color = TextDark,
                                     fontWeight = FontWeight.SemiBold,
@@ -403,7 +417,7 @@ fun ChangePasswordScreen() {
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "• Minimum 6 characters\n• Use a strong, unique password\n• Don't reuse old passwords",
+                                text = stringResource(R.string.password_rules),
                                 style = TextStyle(
                                     color = TextGray,
                                     fontSize = 12.sp,

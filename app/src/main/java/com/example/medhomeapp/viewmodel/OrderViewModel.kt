@@ -25,7 +25,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
     private val _currentOrder = MutableLiveData<OrderModel?>()
     val currentOrder: LiveData<OrderModel?> get() = _currentOrder
 
-        fun createOrder(order: OrderModel) {
+    fun createOrder(order: OrderModel) {
         _loading.postValue(true)
         repo.createOrder(order) { success, message ->
             _loading.postValue(false)
@@ -38,7 +38,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun uploadOrderProofImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
+    fun uploadOrderProofImage(imageUri: String, callback: (Boolean, String, String?) -> Unit) {
         _loading.postValue(true)
         repo.uploadOrderProofImage(imageUri) { success, message, imageUrl ->
             _loading.postValue(false)
@@ -47,7 +47,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun createOrderWithProof(
+    fun createOrderWithProof(
         order: OrderModel,
         proofImageUri: String?
     ) {
@@ -74,7 +74,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun getAllOrders() {
+    fun getAllOrders() {
         _loading.postValue(true)
         repo.getAllOrders { success, message, orderList ->
             _loading.postValue(false)
@@ -87,7 +87,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun getCurrentUserOrders() {
+    fun getCurrentUserOrders() {
         _loading.postValue(true)
         repo.getOrdersByCurrentUser { success, message, orderList ->
             _loading.postValue(false)
@@ -100,7 +100,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun getOrdersByUserId(userId: String) {
+    fun getOrdersByUserId(userId: String) {
         _loading.postValue(true)
         repo.getOrdersByUserId(userId) { success, message, orderList ->
             _loading.postValue(false)
@@ -113,7 +113,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun getOrderById(orderId: String) {
+    fun getOrderById(orderId: String) {
         _loading.postValue(true)
         repo.getOrderById(orderId) { success, message, order ->
             _loading.postValue(false)
@@ -126,7 +126,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun getOrdersByStatus(status: String) {
+    fun getOrdersByStatus(status: String) {
         _loading.postValue(true)
         repo.getOrdersByStatus(status) { success, message, orderList ->
             _loading.postValue(false)
@@ -139,7 +139,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun updateOrder(orderId: String, updatedOrder: OrderModel) {
+    fun updateOrder(orderId: String, updatedOrder: OrderModel) {
         _loading.postValue(true)
         repo.updateOrder(orderId, updatedOrder) { success, message ->
             _loading.postValue(false)
@@ -152,7 +152,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun updateOrderStatus(orderId: String, status: String) {
+    fun updateOrderStatus(orderId: String, status: String) {
         _loading.postValue(true)
         repo.updateOrderStatus(orderId, status) { success, message ->
             _loading.postValue(false)
@@ -165,7 +165,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun deleteOrder(orderId: String) {
+    fun deleteOrder(orderId: String) {
         _loading.postValue(true)
         repo.deleteOrder(orderId) { success, message ->
             _loading.postValue(false)
@@ -178,7 +178,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun cancelOrder(orderId: String) {
+    fun cancelOrder(orderId: String) {
         _loading.postValue(true)
         repo.cancelOrder(orderId) { success, message ->
             _loading.postValue(false)
@@ -191,7 +191,7 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun searchOrders(query: String) {
+    fun searchOrders(query: String) {
         _loading.postValue(true)
         repo.searchOrders(query) { success, message, orderList ->
             _loading.postValue(false)
@@ -204,37 +204,37 @@ class OrderViewModel(private val repo: OrderRepo) : ViewModel() {
         }
     }
 
-        fun listenToAllOrders() {
+    fun listenToAllOrders() {
         repo.listenToAllOrders { orderList ->
             _allOrders.postValue(orderList)
             Log.d("OrderViewModel", "Real-time orders update: ${orderList.size} items")
         }
     }
 
-        fun listenToUserOrders(userId: String) {
+    fun listenToUserOrders(userId: String) {
         repo.listenToUserOrders(userId) { orderList ->
             _allOrders.postValue(orderList)
             Log.d("OrderViewModel", "Real-time user orders update: ${orderList.size} items")
         }
     }
 
-        fun listenToOrdersByStatus(status: String) {
+    fun listenToOrdersByStatus(status: String) {
         repo.listenToOrdersByStatus(status) { orderList ->
             _allOrders.postValue(orderList)
             Log.d("OrderViewModel", "Real-time orders by status update: ${orderList.size} items")
         }
     }
 
-        fun stopListening() {
+    fun stopListening() {
         repo.stopListening()
         Log.d("OrderViewModel", "Stopped listening to order updates")
     }
 
-        fun clearStatus() {
+    fun clearStatus() {
         _orderStatus.postValue(Pair(false, ""))
     }
 
-        fun clearCurrentOrder() {
+    fun clearCurrentOrder() {
         _currentOrder.postValue(null)
     }
 

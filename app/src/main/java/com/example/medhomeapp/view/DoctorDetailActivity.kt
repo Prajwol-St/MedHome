@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,12 +74,12 @@ fun DoctorDetailScreen(doctorId: String) {
                     containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
-                title = { Text("Doctor Profile") },
+                title = { Text(stringResource(R.string.doctor_profile)) },
                 navigationIcon = {
                     IconButton(onClick = { (context as? BaseActivity)?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -104,7 +105,7 @@ fun DoctorDetailScreen(doctorId: String) {
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
-                            text = "Book Appointment",
+                            text = stringResource(R.string.book_appointment),
                             fontSize = 16.sp,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -140,7 +141,7 @@ fun DoctorDetailScreen(doctorId: String) {
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = errorMessage ?: "Failed to load doctor details",
+                            text = errorMessage ?: stringResource(R.string.failed_to_load_doctor),
                             color = Color.Red
                         )
                     }
@@ -245,7 +246,7 @@ fun DoctorDetailContent(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "(${doctor.totalRatings} ratings)",
+                        text = stringResource(R.string.ratings_count, doctor.totalRatings),
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -260,18 +261,18 @@ fun DoctorDetailContent(
                 ) {
                     StatItem(
                         icon = Icons.Default.Work,
-                        label = "Experience",
-                        value = "${doctor.experience} Years"
+                        label = stringResource(R.string.experience),
+                        value = stringResource(R.string.years, doctor.experience)
                     )
                     StatItem(
                         icon = Icons.Default.People,
-                        label = "Patients",
-                        value = "${doctor.totalRatings}+"
+                        label = stringResource(R.string.patients),
+                        value = stringResource(R.string.patients_count, doctor.totalRatings)
                     )
                     StatItem(
                         icon = Icons.Default.Verified,
-                        label = "Verified",
-                        value = if (doctor.isVerified) "Yes" else "No"
+                        label = stringResource(R.string.verified),
+                        value = if (doctor.isVerified) stringResource(R.string.yes) else stringResource(R.string.no)
                     )
                 }
             }
@@ -279,11 +280,11 @@ fun DoctorDetailContent(
 
         // About Section
         InfoSection(
-            title = "About",
+            title = stringResource(R.string.about),
             icon = Icons.Default.Info
         ) {
             Text(
-                text = doctor.about.ifBlank { "No information available" },
+                text = doctor.about.ifBlank { stringResource(R.string.no_information_available) },
                 fontSize = 14.sp,
                 color = Color(0xFF2C3E50),
                 lineHeight = 20.sp
@@ -292,11 +293,11 @@ fun DoctorDetailContent(
 
         // Qualifications
         InfoSection(
-            title = "Qualifications",
+            title = stringResource(R.string.qualifications),
             icon = Icons.Default.School
         ) {
             Text(
-                text = doctor.qualifications.ifBlank { "Not specified" },
+                text = doctor.qualifications.ifBlank { stringResource(R.string.not_specified) },
                 fontSize = 14.sp,
                 color = Color(0xFF2C3E50)
             )
@@ -304,18 +305,18 @@ fun DoctorDetailContent(
 
         // Clinic Info
         InfoSection(
-            title = "Clinic Information",
+            title = stringResource(R.string.clinic_information),
             icon = Icons.Default.LocationOn
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 DetailRow(
                     icon = Icons.Default.LocalHospital,
-                    label = "Clinic Name",
+                    label = stringResource(R.string.clinic_name),
                     value = doctor.clinicName
                 )
                 DetailRow(
                     icon = Icons.Default.Place,
-                    label = "Address",
+                    label = stringResource(R.string.address),
                     value = doctor.clinicAddress
                 )
             }
@@ -323,11 +324,11 @@ fun DoctorDetailContent(
 
         // Consultation Fee
         InfoSection(
-            title = "Consultation Fee",
+            title = stringResource(R.string.consultation_fee),
             icon = Icons.Default.Payment
         ) {
             Text(
-                text = "NPR ${doctor.consultationFee.toInt()}",
+                text = stringResource(R.string.npr_amount, doctor.consultationFee.toInt()),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MintGreen
@@ -337,7 +338,7 @@ fun DoctorDetailContent(
         // Languages
         if (doctor.languages.isNotBlank()) {
             InfoSection(
-                title = "Languages",
+                title = stringResource(R.string.languages),
                 icon = Icons.Default.Language
             ) {
                 Text(

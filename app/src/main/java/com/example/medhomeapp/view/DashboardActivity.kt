@@ -7,18 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
@@ -30,7 +31,9 @@ import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
+
     private var currentLanguage: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentLanguage = LanguageManager.getLanguage(this)
@@ -39,6 +42,7 @@ class DashboardActivity : BaseActivity() {
             DashboardScaffold()
         }
     }
+
     override fun onResume() {
         super.onResume()
         val savedLanguage = LanguageManager.getLanguage(this)
@@ -48,23 +52,25 @@ class DashboardActivity : BaseActivity() {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-
 fun DashboardScaffold() {
+
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
-    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
-    val userId = sharedPrefs.getString("user_id", null)
+    val sharedPrefs =
+        (context as BaseActivity).getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
 
+    val userId = sharedPrefs.getString("user_id", null)
     val currentUser by viewModel.currentUser
 
     var userType by remember {
         mutableStateOf(
-            sharedPrefs.getString("user_type", "patient")?.lowercase()?.trim()?.takeIf { it.isNotEmpty() } ?: "patient"
+            sharedPrefs.getString("user_type", "patient")
+                ?.lowercase()
+                ?.trim()
+                ?.takeIf { it.isNotEmpty() } ?: "patient"
         )
     }
 
@@ -83,17 +89,10 @@ fun DashboardScaffold() {
     }
 
     var selectedTab by remember { mutableStateOf(0) }
-
-    val roleFromUser = currentUser?.role?.lowercase()?.trim() ?: ""
-    val isDoctor = userType == "doctor" || roleFromUser == "doctor"
-
-    LaunchedEffect(isDoctor) {
-        if (isDoctor && selectedTab == 2) {
-            selectedTab = 0
-        }
-    }
+    val isDoctor = userType == "doctor"
 
     Scaffold(
+        modifier = Modifier.testTag("dashboardScaffold"),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -104,13 +103,14 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> "Notifications"
-                            4 -> "My Orders"
-                            3 -> stringResource(R.string.scan)
-                            else -> stringResource(R.string.settings)
+                            1 -> if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
+                            2 -> stringResource(R.string.scan)
+                            3 -> stringResource(R.string.settings)
+                            else -> stringResource(R.string.my_orders)
                         },
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp
+                        fontSize = 22.sp,
+                        modifier = Modifier.testTag("topBarTitle")
                     )
                 }
             )
@@ -118,91 +118,109 @@ fun DashboardScaffold() {
         bottomBar = {
             NavigationBar(
                 containerColor = Color.White,
-                tonalElevation = 8.dp
+                tonalElevation = 8.dp,
+                modifier = Modifier.testTag("bottomNavigationBar")
             ) {
+
+                // HOME
                 NavigationBarItem(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    icon = { Icon(painterResource(R.drawable.baseline_home_24), stringResource(R.string.home)) },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_home_24),
+                            stringResource(R.string.home)
+                        )
+                    },
                     label = { Text(stringResource(R.string.home), fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    colors = navColors(),
+                    modifier = Modifier.testTag("homeTab")
                 )
+
+                // INVENTORY / NOTIFICATIONS
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(Icons.Default.Notifications, "Notifications") },
-                    label = { Text("Notifications", fontSize = 11.sp) },
+                    icon = {
+                        Icon(
+                            if (isDoctor) Icons.Default.Inventory else Icons.Default.Notifications,
+                            if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
+                        )
+                    },
+                    label = {
+                        Text(
+                            if (isDoctor) stringResource(R.string.inventory)
+                            else stringResource(R.string.notifications),
+                            fontSize = 11.sp
+                        )
+                    },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = SageGreen,
                         selectedTextColor = SageGreen,
                         indicatorColor = LightSage.copy(alpha = 0.3f),
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
+                    ),
+                    modifier = Modifier.testTag(
+                        if (isDoctor) "inventoryTab" else "notificationsTab"
                     )
                 )
+
+                // SCAN
                 NavigationBarItem(
-                    selected = selectedTab == 4,
-                    onClick = { selectedTab = 4 },
-                    icon = { Icon(painterResource(R.drawable.baseline_shopping_cart_24), "My Orders") },
-                    label = { Text(text="MyOrders", fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_qr_code_scanner_24),
+                            stringResource(R.string.scan),
+                            modifier = Modifier.size(28.dp),
+                            tint = if (selectedTab == 2) MintGreen else TextGray
+                        )
+                    },
+                    label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
+                    colors = navColors(),
+                    modifier = Modifier.testTag("scanTab")
                 )
 
-                if (!isDoctor) {
-                    NavigationBarItem(
-                        selected = selectedTab == 2,
-                        onClick = { selectedTab = 2 },
-                        icon = {
-                            Icon(
-                                painterResource(R.drawable.baseline_qr_code_scanner_24),
-                                stringResource(R.string.scan),
-                                modifier = Modifier.size(28.dp),
-                                tint = if (selectedTab == 2) MintGreen else TextGray
-                            )
-                        },
-                        label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MintGreen,
-                            selectedTextColor = MintGreen,
-                            indicatorColor = LightSage.copy(alpha = 0.3f),
-                            unselectedIconColor = TextGray,
-                            unselectedTextColor = TextGray
-                        )
-                    )
-                }
-
+                // SETTINGS
                 NavigationBarItem(
                     selected = selectedTab == 3,
                     onClick = { selectedTab = 3 },
-                    icon = { Icon(painterResource(R.drawable.baseline_settings_24), stringResource(R.string.settings)) },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_settings_24),
+                            stringResource(R.string.settings)
+                        )
+                    },
                     label = { Text(stringResource(R.string.settings), fontSize = 11.sp) },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MintGreen,
-                        selectedTextColor = MintGreen,
-                        indicatorColor = LightSage.copy(alpha = 0.3f),
-                        unselectedIconColor = TextGray,
-                        unselectedTextColor = TextGray
-                    )
+                    colors = navColors(),
+                    modifier = Modifier.testTag("settingsTab")
+                )
+
+                // ORDERS (FIXED MERGE CONFLICT)
+                NavigationBarItem(
+                    selected = selectedTab == 4,
+                    onClick = { selectedTab = 4 },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.baseline_shopping_cart_24),
+                            stringResource(R.string.my_orders)
+                        )
+                    },
+                    label = { Text(stringResource(R.string.my_orders), fontSize = 11.sp) },
+                    colors = navColors(),
+                    modifier = Modifier.testTag("ordersTab")
                 )
             }
         }
     ) { padding ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .testTag("contentBox")
         ) {
             when (selectedTab) {
                 0 -> {
@@ -218,42 +236,23 @@ fun DashboardScaffold() {
                         )
                     }
                 }
+
                 1 -> {
-                    if (isDoctor) {
-                        DoctorScheduleScreen()
-                    } else {
-                        NotificationHistoryScreenContent()
-                    }
+                    if (isDoctor) InventoryScreen()
+                    else NotificationHistoryScreenContent()
                 }
+
                 2 -> {
-                    if (!isDoctor) {
-                        LaunchedEffect(Unit) {
-                            val intent = Intent(context, QrScannerActivity::class.java)
-                            context.startActivity(intent)
-                            selectedTab = 0
-                        }
-                        HomeScreen(
-                            userName = currentUser?.name ?: "User",
-                            profilePictureUrl = currentUser?.profilePicture
-                        )
-                    }
-                }
-                3 -> {
                     LaunchedEffect(Unit) {
-                        val intent = Intent(context, SettingsActivity::class.java)
-                        context.startActivity(intent)
+                        context.startActivity(Intent(context, QrScannerActivity::class.java))
                         selectedTab = 0
                     }
-                    if (isDoctor) {
-                        DoctorHomeScreen(
-                            doctorName = currentUser?.name ?: "Doctor",
-                            profilePictureUrl = currentUser?.profilePicture
-                        )
-                    } else {
-                        HomeScreen(
-                            userName = currentUser?.name ?: "User",
-                            profilePictureUrl = currentUser?.profilePicture
-                        )
+                }
+
+                3 -> {
+                    LaunchedEffect(Unit) {
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
+                        selectedTab = 0
                     }
                 }
 
@@ -264,3 +263,12 @@ fun DashboardScaffold() {
         }
     }
 }
+
+@Composable
+fun navColors() = NavigationBarItemDefaults.colors(
+    selectedIconColor = MintGreen,
+    selectedTextColor = MintGreen,
+    indicatorColor = LightSage.copy(alpha = 0.3f),
+    unselectedIconColor = TextGray,
+    unselectedTextColor = TextGray
+)

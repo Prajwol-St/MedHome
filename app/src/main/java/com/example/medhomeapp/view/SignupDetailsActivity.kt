@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +39,7 @@ import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.AuthState
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.viewmodel.UserViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -51,9 +53,26 @@ class SignupDetailsActivity : BaseActivity() {
         val emailFromIntent = intent.getStringExtra("email") ?: ""
         val googleUid = intent.getStringExtra("googleUid")
         val googleName = intent.getStringExtra("googleName")
+        val language = LanguageManager.getLanguage(this)
 
         setContent {
-            SignupDetailsBody(emailFromIntent, googleUid, googleName)
+            key(language) {
+                SignupDetailsBody(emailFromIntent, googleUid, googleName)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val emailFromIntent = intent.getStringExtra("email") ?: ""
+        val googleUid = intent.getStringExtra("googleUid")
+        val googleName = intent.getStringExtra("googleName")
+        val language = LanguageManager.getLanguage(this)
+
+        setContent {
+            key(language) {
+                SignupDetailsBody(emailFromIntent, googleUid, googleName)
+            }
         }
     }
 }
@@ -95,7 +114,7 @@ fun SignupDetailsBody(
     LaunchedEffect(authState) {
         when (val state = authState) {
             is AuthState.Success -> {
-                Toast.makeText(context, "Account created successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.toast_account_created), Toast.LENGTH_SHORT).show()
 
                 val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
                 sharedPrefs.edit().putString("user_id", state.userId)
@@ -131,6 +150,20 @@ fun SignupDetailsBody(
                 focusManager.clearFocus()
             }
     ) {
+        IconButton(
+            onClick = { (context as? BaseActivity)?.finish() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+                .testTag("backButton")
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.baseline_arrow_back_24),
+                contentDescription = stringResource(R.string.cd_back),
+                tint = Color.White
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -138,7 +171,7 @@ fun SignupDetailsBody(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Complete Profile",
+                text = stringResource(R.string.title_complete_profile),
                 style = TextStyle(
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
@@ -147,7 +180,7 @@ fun SignupDetailsBody(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Fill in your details to continue",
+                text = stringResource(R.string.subtitle_fill_details),
                 style = TextStyle(
                     color = Color.White.copy(alpha = 0.9f),
                     fontSize = 13.sp
@@ -172,7 +205,7 @@ fun SignupDetailsBody(
                     .padding(top = 32.dp, bottom = 32.dp)
             ) {
                 Text(
-                    text = "Full Name",
+                    text = stringResource(R.string.label_full_name),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -184,9 +217,11 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    placeholder = { Text("Enter your full name", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_full_name), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("nameField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -202,7 +237,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Email",
+                    text = stringResource(R.string.label_email),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -214,7 +249,7 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = email,
                     onValueChange = { },
-                    placeholder = { Text("Email address", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_email), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = false,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -227,7 +262,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Contact Number",
+                    text = stringResource(R.string.label_contact_number),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -239,9 +274,11 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = contact,
                     onValueChange = { contact = it },
-                    placeholder = { Text("10-digit phone number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_contact_number), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("contactField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -256,7 +293,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Gender",
+                    text = stringResource(R.string.label_gender),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -266,7 +303,11 @@ fun SignupDetailsBody(
                 )
 
                 var expandedGender by remember { mutableStateOf(false) }
-                val genderOptions = listOf("Male", "Female", "Other")
+                val genderOptions = listOf(
+                    stringResource(R.string.gender_male),
+                    stringResource(R.string.gender_female),
+                    stringResource(R.string.gender_other)
+                )
 
                 ExposedDropdownMenuBox(
                     expanded = expandedGender,
@@ -277,7 +318,7 @@ fun SignupDetailsBody(
                         value = gender,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text("Male/Female/Other", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.hint_gender), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                         enabled = !isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -302,7 +343,7 @@ fun SignupDetailsBody(
                         onDismissRequest = { expandedGender = false },
                         modifier = Modifier.background(Color.White)
                     ) {
-                        genderOptions.forEach { option ->
+                        genderOptions.forEachIndexed { index, option ->
                             DropdownMenuItem(
                                 text = {
                                     Text(
@@ -315,6 +356,13 @@ fun SignupDetailsBody(
                                     gender = option
                                     expandedGender = false
                                 },
+                                modifier = Modifier.testTag(
+                                    when (index) {
+                                        0 -> "genderMale"
+                                        1 -> "genderFemale"
+                                        else -> "genderOther"
+                                    }
+                                ),
                                 colors = MenuDefaults.itemColors(
                                     textColor = TextDark
                                 )
@@ -325,7 +373,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Date of Birth",
+                    text = stringResource(R.string.label_date_of_birth),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -337,18 +385,19 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = dateOfBirth,
                     onValueChange = { },
-                    placeholder = { Text("DD/MM/YYYY", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_date_format), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     readOnly = true,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .testTag("dateOfBirthField")
                         .clickable { showDatePicker = true },
                     shape = RoundedCornerShape(12.dp),
                     trailingIcon = {
                         IconButton(onClick = { showDatePicker = true }) {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_calendar_month_24),
-                                contentDescription = "Select Date",
+                                contentDescription = stringResource(R.string.cd_select_date),
                                 tint = SageGreen
                             )
                         }
@@ -367,7 +416,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Blood Group",
+                    text = stringResource(R.string.label_blood_group),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -388,7 +437,7 @@ fun SignupDetailsBody(
                         value = bloodGroup,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text("A+, B+, O+, etc.", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.hint_blood_group), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                         enabled = !isLoading,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -436,7 +485,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Emergency Contact",
+                    text = stringResource(R.string.label_emergency_contact),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -448,7 +497,7 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = emergencyContact,
                     onValueChange = { emergencyContact = it },
-                    placeholder = { Text("Emergency contact number", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_emergency_contact), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -465,7 +514,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Address",
+                    text = stringResource(R.string.label_address),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -477,9 +526,11 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
-                    placeholder = { Text("Enter your address", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_address), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("addressField"),
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -494,7 +545,7 @@ fun SignupDetailsBody(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Password",
+                    text = stringResource(R.string.label_password),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -506,7 +557,7 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    placeholder = { Text("At least 6 characters", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_password_min), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -537,7 +588,7 @@ fun SignupDetailsBody(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Confirm Password",
+                    text = stringResource(R.string.label_confirm_password),
                     style = TextStyle(
                         color = TextDark,
                         fontSize = 13.sp,
@@ -549,7 +600,7 @@ fun SignupDetailsBody(
                 OutlinedTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
-                    placeholder = { Text("Re-enter password", color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
+                    placeholder = { Text(stringResource(R.string.hint_reenter_password), color = TextGray.copy(alpha = 0.6f), fontSize = 14.sp) },
                     enabled = !isLoading,
                     trailingIcon = {
                         IconButton(onClick = { confirmPasswordVisibility = !confirmPasswordVisibility }) {
@@ -593,14 +644,14 @@ fun SignupDetailsBody(
                         )
                     )
                     Text(
-                        text = "I agree to the ",
+                        text = stringResource(R.string.text_agree_to),
                         style = TextStyle(
                             color = TextDark,
                             fontSize = 13.sp
                         )
                     )
                     Text(
-                        text = "Terms & Conditions",
+                        text = stringResource(R.string.text_terms_conditions),
                         style = TextStyle(
                             color = SageGreen,
                             fontSize = 13.sp,
@@ -617,18 +668,18 @@ fun SignupDetailsBody(
                 Button(
                     onClick = {
                         when {
-                            name.isBlank() -> Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show()
-                            contact.isBlank() -> Toast.makeText(context, "Please enter contact number", Toast.LENGTH_SHORT).show()
-                            contact.length != 10 -> Toast.makeText(context, "Contact number must be 10 digits", Toast.LENGTH_SHORT).show()
-                            gender.isBlank() -> Toast.makeText(context, "Please select gender", Toast.LENGTH_SHORT).show()
-                            dateOfBirth.isBlank() -> Toast.makeText(context, "Please select date of birth", Toast.LENGTH_SHORT).show()
-                            bloodGroup.isBlank() -> Toast.makeText(context, "Please select blood group", Toast.LENGTH_SHORT).show()
-                            emergencyContact.isBlank() -> Toast.makeText(context, "Please enter emergency contact", Toast.LENGTH_SHORT).show()
-                            address.isBlank() -> Toast.makeText(context, "Please enter address", Toast.LENGTH_SHORT).show()
-                            password.isBlank() -> Toast.makeText(context, "Please enter password", Toast.LENGTH_SHORT).show()
-                            password.length < 6 -> Toast.makeText(context, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
-                            password != confirmPassword -> Toast.makeText(context, "Passwords don't match", Toast.LENGTH_SHORT).show()
-                            !termsAccepted -> Toast.makeText(context, "Please accept Terms & Conditions", Toast.LENGTH_SHORT).show()
+                            name.isBlank() -> Toast.makeText(context, context.getString(R.string.error_name_required), Toast.LENGTH_SHORT).show()
+                            contact.isBlank() -> Toast.makeText(context, context.getString(R.string.error_contact_required), Toast.LENGTH_SHORT).show()
+                            contact.length != 10 -> Toast.makeText(context, context.getString(R.string.error_contact_10_digits), Toast.LENGTH_SHORT).show()
+                            gender.isBlank() -> Toast.makeText(context, context.getString(R.string.error_gender_required), Toast.LENGTH_SHORT).show()
+                            dateOfBirth.isBlank() -> Toast.makeText(context, context.getString(R.string.error_dob_required), Toast.LENGTH_SHORT).show()
+                            bloodGroup.isBlank() -> Toast.makeText(context, context.getString(R.string.error_blood_group_required), Toast.LENGTH_SHORT).show()
+                            emergencyContact.isBlank() -> Toast.makeText(context, context.getString(R.string.error_emergency_contact_required), Toast.LENGTH_SHORT).show()
+                            address.isBlank() -> Toast.makeText(context, context.getString(R.string.error_address_required), Toast.LENGTH_SHORT).show()
+                            password.isBlank() -> Toast.makeText(context, context.getString(R.string.error_password_required), Toast.LENGTH_SHORT).show()
+                            password.length < 6 -> Toast.makeText(context, context.getString(R.string.error_password_min_length), Toast.LENGTH_SHORT).show()
+                            password != confirmPassword -> Toast.makeText(context, context.getString(R.string.error_passwords_no_match), Toast.LENGTH_SHORT).show()
+                            !termsAccepted -> Toast.makeText(context, context.getString(R.string.error_accept_terms), Toast.LENGTH_SHORT).show()
                             else -> {
                                 val userModel = UserModel(
                                     name = name,
@@ -653,7 +704,7 @@ fun SignupDetailsBody(
                                             val currentUser = FirebaseAuth.getInstance().currentUser
                                             currentUser?.updatePassword(password)
 
-                                            Toast.makeText(context, "Profile created successfully!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, context.getString(R.string.toast_profile_created), Toast.LENGTH_SHORT).show()
 
                                             val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
                                             sharedPrefs.edit()
@@ -681,7 +732,8 @@ fun SignupDetailsBody(
                     enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(52.dp)
+                        .testTag("completeProfileButton"),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TextDark,
@@ -696,7 +748,7 @@ fun SignupDetailsBody(
                         )
                     } else {
                         Text(
-                            text = if (isGoogleSignup) "Complete Profile" else "Create Account",
+                            text = if (isGoogleSignup) stringResource(R.string.btn_complete_profile) else stringResource(R.string.btn_create_account),
                             style = TextStyle(
                                 color = Color.White,
                                 fontSize = 16.sp,
@@ -714,14 +766,14 @@ fun SignupDetailsBody(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Already have an account? ",
+                        text = stringResource(R.string.text_already_have_account),
                         style = TextStyle(
                             color = TextGray,
                             fontSize = 14.sp
                         )
                     )
                     Text(
-                        text = "Login",
+                        text = stringResource(R.string.btn_login),
                         style = TextStyle(
                             color = SageGreen,
                             fontSize = 14.sp,
@@ -757,12 +809,12 @@ fun SignupDetailsBody(
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.btn_ok), color = SageGreen, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancel", color = TextGray)
+                    Text(stringResource(R.string.btn_cancel), color = TextGray)
                 }
             },
             colors = DatePickerDefaults.colors(

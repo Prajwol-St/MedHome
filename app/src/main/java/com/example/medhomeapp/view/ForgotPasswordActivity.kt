@@ -30,10 +30,10 @@ import com.example.medhomeapp.R
 import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
 import com.example.medhomeapp.utils.AuthState
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class ForgotPasswordActivity : BaseActivity() {
@@ -75,7 +75,7 @@ fun ForgotPasswordScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SageGreen)
+            .background(MintGreen)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
@@ -130,14 +130,14 @@ fun ForgotPasswordScreen() {
                 Box(
                     modifier = Modifier
                         .size(80.dp)
-                        .background(SageGreen.copy(alpha = 0.15f), RoundedCornerShape(40.dp)),
+                        .background(MintGreen.copy(alpha = 0.15f), RoundedCornerShape(40.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.Email,
                         contentDescription = null,
                         modifier = Modifier.size(40.dp),
-                        tint = SageGreen
+                        tint = MintGreen
                     )
                 }
 
@@ -192,9 +192,9 @@ fun ForgotPasswordScreen() {
                         focusedContainerColor = Color.White,
                         unfocusedContainerColor = Color.White,
                         disabledContainerColor = Color.White,
-                        focusedIndicatorColor = SageGreen,
+                        focusedIndicatorColor = MintGreen,
                         unfocusedIndicatorColor = LightSage,
-                        cursorColor = SageGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark
                     )
@@ -255,7 +255,7 @@ fun ForgotPasswordScreen() {
                     Text(
                         text = stringResource(R.string.back_to_login),
                         style = TextStyle(
-                            color = SageGreen,
+                            color = MintGreen,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -265,7 +265,7 @@ fun ForgotPasswordScreen() {
                 Spacer(modifier = Modifier.weight(1f))
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = SageGreen.copy(alpha = 0.1f)),
+                    colors = CardDefaults.cardColors(containerColor = MintGreen.copy(alpha = 0.1f)),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(
@@ -275,7 +275,7 @@ fun ForgotPasswordScreen() {
                         Icon(
                             painter = painterResource(R.drawable.baseline_info_24),
                             contentDescription = null,
-                            tint = SageGreen,
+                            tint = MintGreen,
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(12.dp))

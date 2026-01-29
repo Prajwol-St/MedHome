@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,12 +30,14 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
+import com.example.medhomeapp.utils.LanguageManager
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.example.medhomeapp.R
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class MyPackagesActivity : BaseActivity() {
 
@@ -47,13 +50,23 @@ class MyPackagesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val language = LanguageManager.getLanguage(this)
         setContent {
-            MyPackagesScreen(viewModel)
+            key(language) {
+                MyPackagesScreen(viewModel)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        val language = LanguageManager.getLanguage(this)
+        setContent {
+            key(language) {
+                MyPackagesScreen(viewModel)
+            }
+        }
+
         val sharedPrefs = getSharedPreferences("MedHomePrefs", Context.MODE_PRIVATE)
         val patientId = sharedPrefs.getString("user_id", "") ?: ""
         viewModel.getBookingsByPatient(patientId)
@@ -80,16 +93,22 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Packages", fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(stringResource(R.string.title_my_packages), fontWeight = FontWeight.Bold)
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
                     IconButton(onClick = {
                         (context as? MyPackagesActivity)?.finish()
                     }) {
-                        Icon(Icons.Default.ArrowBack, "Back", tint = Color.White)
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.cd_back),
+                            tint = Color.White
+                        )
                     }
                 }
             )
@@ -104,7 +123,7 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else if (bookings.isEmpty()) {
                 Column(
@@ -122,13 +141,14 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        "No packages booked yet",
+                        stringResource(R.string.empty_packages_title),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextDark
                     )
+
                     Text(
-                        "Browse packages to get started",
+                        stringResource(R.string.empty_packages_subtitle),
                         fontSize = 14.sp,
                         color = Color.Gray
                     )
@@ -156,9 +176,14 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
         if (showCancelDialog && bookingToCancel != null) {
             AlertDialog(
                 onDismissRequest = { showCancelDialog = false },
-                title = { Text("Cancel Booking?") },
+                title = { Text(stringResource(R.string.dialog_cancel_booking_title)) },
                 text = {
-                    Text("Are you sure you want to cancel '${bookingToCancel?.packageName}'? This action cannot be undone.")
+                    Text(
+                        stringResource(
+                            R.string.dialog_cancel_booking_message,
+                            bookingToCancel?.packageName ?: ""
+                        )
+                    )
                 },
                 confirmButton = {
                     TextButton(
@@ -166,7 +191,11 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
                             bookingToCancel?.let { booking ->
                                 viewModel.cancelBooking(booking.id) { success, message ->
                                     if (success) {
-                                        Toast.makeText(context, "Booking cancelled", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            context.getString(R.string.toast_booking_cancelled),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         viewModel.getBookingsByPatient(patientId)
                                     } else {
                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -177,7 +206,7 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
                             bookingToCancel = null
                         }
                     ) {
-                        Text("Cancel Booking", color = Color.Red, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.btn_cancel_booking), color = Color.Red, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
@@ -185,7 +214,7 @@ fun MyPackagesScreen(viewModel: HealthPackageViewModel) {
                         showCancelDialog = false
                         bookingToCancel = null
                     }) {
-                        Text("Keep Booking")
+                        Text(stringResource(R.string.btn_keep_booking))
                     }
                 }
             )
@@ -229,7 +258,7 @@ fun MyPackageCard(
                         .data(booking.packageImageUrl)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Package Image",
+                    contentDescription = stringResource(R.string.cd_package_image),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
@@ -249,7 +278,7 @@ fun MyPackageCard(
                         Icons.Default.LocalShipping,
                         contentDescription = null,
                         modifier = Modifier.size(60.dp),
-                        tint = SageGreen.copy(alpha = 0.5f)
+                        tint = MintGreen.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -273,7 +302,7 @@ fun MyPackageCard(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            "Dr. ${booking.doctorName}",
+                            stringResource(R.string.label_doctor_name, booking.doctorName),
                             fontSize = 14.sp,
                             color = Color.Gray
                         )
@@ -283,18 +312,23 @@ fun MyPackageCard(
                     Surface(
                         shape = RoundedCornerShape(8.dp),
                         color = when (booking.status) {
-                            "active" -> SageGreen.copy(alpha = 0.1f)
+                            "active" -> MintGreen.copy(alpha = 0.1f)
                             "expired" -> Color(0xFFFF9800).copy(alpha = 0.1f)
                             "cancelled" -> Color(0xFFF44336).copy(alpha = 0.1f)
                             else -> Color.Gray.copy(alpha = 0.1f)
                         }
                     ) {
                         Text(
-                            booking.status.uppercase(),
+                            when (booking.status) {
+                                "active" -> stringResource(R.string.status_active)
+                                "expired" -> stringResource(R.string.status_expired)
+                                "cancelled" -> stringResource(R.string.status_cancelled)
+                                else -> booking.status.uppercase()
+                            },
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             color = when (booking.status) {
-                                "active" -> SageGreen
+                                "active" -> MintGreen
                                 "expired" -> Color(0xFFFF9800)
                                 "cancelled" -> Color(0xFFF44336)
                                 else -> Color.Gray
@@ -313,7 +347,7 @@ fun MyPackageCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Column {
-                        Text("Booked On", fontSize = 12.sp, color = Color.Gray)
+                        Text(stringResource(R.string.label_booked_on), fontSize = 12.sp, color = Color.Gray)
                         Text(
                             booking.bookedAt,
                             fontSize = 14.sp,
@@ -324,7 +358,7 @@ fun MyPackageCard(
 
                     if (daysRemaining != null) {
                         Column(horizontalAlignment = Alignment.End) {
-                            Text("Validity", fontSize = 12.sp, color = Color.Gray)
+                            Text(stringResource(R.string.label_validity), fontSize = 12.sp, color = Color.Gray)
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -336,21 +370,21 @@ fun MyPackageCard(
                                     tint = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                                 Text(
                                     when {
-                                        daysRemaining <= 0 -> "Expired"
-                                        daysRemaining == 1 -> "1 day left"
-                                        else -> "$daysRemaining days"
+                                        daysRemaining <= 0 -> stringResource(R.string.status_expired)
+                                        daysRemaining == 1 -> stringResource(R.string.label_one_day_left)
+                                        else -> stringResource(R.string.label_days_left, daysRemaining)
                                     },
                                     fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = when {
                                         daysRemaining <= 0 -> Color(0xFFF44336)
                                         daysRemaining <= 7 -> Color(0xFFFF9800)
-                                        else -> SageGreen
+                                        else -> MintGreen
                                     }
                                 )
                             }
@@ -366,12 +400,12 @@ fun MyPackageCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
-                        Text("Price Paid", fontSize = 12.sp, color = Color.Gray)
+                        Text(stringResource(R.string.label_price_paid), fontSize = 12.sp, color = Color.Gray)
                         Text(
-                            "NPR ${booking.packagePrice}",
+                            stringResource(R.string.label_price_npr, booking.packagePrice),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
                     }
 
@@ -390,7 +424,7 @@ fun MyPackageCard(
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
-                            Text("Cancel", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(stringResource(R.string.btn_cancel), fontSize = 14.sp, fontWeight = FontWeight.Medium)
                         }
                     }
                 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,9 +24,9 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class TermsOfServiceActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,19 +54,19 @@ fun TermsOfServiceScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
+                .background(MintGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = { (context as ComponentActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.cd_back),
                     tint = Color.White
                 )
             }
             Text(
-                text = "Terms of Service",
+                text = stringResource(R.string.title_terms_of_service),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -86,7 +87,7 @@ fun TermsOfServiceScreen() {
                 modifier = Modifier.padding(20.dp)
             ) {
                 Text(
-                    text = "Last Updated: January 12, 2026",
+                    text = stringResource(R.string.terms_last_updated),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,
@@ -97,120 +98,81 @@ fun TermsOfServiceScreen() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 TermsSection(
-                    title = "1. Acceptance of Terms",
-                    content = "By accessing and using MedHome, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our service."
+                    title = stringResource(R.string.tos_section_1_title),
+                    content = stringResource(R.string.tos_section_1_content)
                 )
 
                 TermsSection(
-                    title = "2. Service Description",
-                    content = "MedHome is a healthcare management platform that provides:\n\n" +
-                            "• Digital health records management\n" +
-                            "• Doctor consultation booking\n" +
-                            "• Medication reminders\n" +
-                            "• Health information access\n" +
-                            "• Emergency contact features\n\n" +
-                            "We reserve the right to modify or discontinue services at any time."
+                    title = stringResource(R.string.tos_section_2_title),
+                    content = stringResource(R.string.tos_section_2_content)
                 )
 
                 TermsSection(
-                    title = "3. User Accounts",
-                    content = "You are responsible for:\n\n" +
-                            "• Maintaining the confidentiality of your account\n" +
-                            "• All activities under your account\n" +
-                            "• Providing accurate information\n" +
-                            "• Updating your information when necessary\n" +
-                            "• Notifying us of unauthorized access\n\n" +
-                            "You must be at least 18 years old to create an account."
+                    title = stringResource(R.string.tos_section_3_title),
+                    content = stringResource(R.string.tos_section_3_content)
                 )
 
                 TermsSection(
-                    title = "4. Acceptable Use",
-                    content = "You agree NOT to:\n\n" +
-                            "• Use the service for illegal purposes\n" +
-                            "• Share false or misleading health information\n" +
-                            "• Interfere with the service's operation\n" +
-                            "• Attempt to access unauthorized areas\n" +
-                            "• Share your account credentials\n" +
-                            "• Upload malicious software or code\n" +
-                            "• Harass or abuse other users or staff"
+                    title = stringResource(R.string.tos_section_4_title),
+                    content = stringResource(R.string.tos_section_4_content)
                 )
 
                 TermsSection(
-                    title = "5. Medical Disclaimer",
-                    content = "IMPORTANT: MedHome is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers with questions regarding medical conditions. Do not disregard professional medical advice based on information from this app."
+                    title = stringResource(R.string.tos_section_5_title),
+                    content = stringResource(R.string.tos_section_5_content)
                 )
 
                 TermsSection(
-                    title = "6. Health Information",
-                    content = "You acknowledge that:\n\n" +
-                            "• You have the right to upload your health data\n" +
-                            "• Information provided should be accurate\n" +
-                            "• We store data securely but cannot guarantee 100% security\n" +
-                            "• You can request data deletion at any time\n" +
-                            "• Emergency services may access your data when necessary"
+                    title = stringResource(R.string.tos_section_6_title),
+                    content = stringResource(R.string.tos_section_6_content)
                 )
 
                 TermsSection(
-                    title = "7. Consultations and Appointments",
-                    content = "• Consultations are subject to doctor availability\n" +
-                            "• You must provide accurate health information\n" +
-                            "• Cancellation policies may apply\n" +
-                            "• Payment terms are specified at booking\n" +
-                            "• We are not responsible for third-party doctor services"
+                    title = stringResource(R.string.tos_section_7_title),
+                    content = stringResource(R.string.tos_section_7_content)
                 )
 
                 TermsSection(
-                    title = "8. Intellectual Property",
-                    content = "All content, features, and functionality of MedHome are owned by us and protected by international copyright, trademark, and other intellectual property laws. You may not reproduce, distribute, or create derivative works without permission."
+                    title = stringResource(R.string.tos_section_8_title),
+                    content = stringResource(R.string.tos_section_8_content)
                 )
 
                 TermsSection(
-                    title = "9. Limitation of Liability",
-                    content = "MedHome is provided \"as is\" without warranties of any kind. We are not liable for:\n\n" +
-                            "• Service interruptions or errors\n" +
-                            "• Data loss or security breaches\n" +
-                            "• Actions of third-party healthcare providers\n" +
-                            "• Decisions made based on app information\n" +
-                            "• Technical issues or device compatibility"
+                    title = stringResource(R.string.tos_section_9_title),
+                    content = stringResource(R.string.tos_section_9_content)
                 )
 
                 TermsSection(
-                    title = "10. Termination",
-                    content = "We may suspend or terminate your account if:\n\n" +
-                            "• You violate these terms\n" +
-                            "• Your account shows suspicious activity\n" +
-                            "• Required by law\n" +
-                            "• Service is discontinued\n\n" +
-                            "You may delete your account at any time through Settings."
+                    title = stringResource(R.string.tos_section_10_title),
+                    content = stringResource(R.string.tos_section_10_content)
                 )
 
                 TermsSection(
-                    title = "11. Changes to Terms",
-                    content = "We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of new terms. We will notify you of significant changes."
+                    title = stringResource(R.string.tos_section_11_title),
+                    content = stringResource(R.string.tos_section_11_content)
                 )
 
                 TermsSection(
-                    title = "12. Governing Law",
-                    content = "These Terms are governed by the laws of Nepal. Any disputes will be resolved in the courts of Kathmandu, Nepal."
+                    title = stringResource(R.string.tos_section_12_title),
+                    content = stringResource(R.string.tos_section_12_content)
                 )
 
                 TermsSection(
-                    title = "13. Contact Information",
-                    content = "For questions about these Terms:\n\n" +
-                            "Email: medhome0001@gmail.com\n" +
-                            "Address: Kathmandu, Nepal"
+                    title = stringResource(R.string.tos_section_13_title),
+                    content = stringResource(R.string.tos_section_13_content)
                 )
+
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Divider(
-                    color = SageGreen.copy(alpha = 0.2f),
+                    color = MintGreen.copy(alpha = 0.2f),
                     thickness = 1.dp,
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
 
                 Text(
-                    text = "By using MedHome, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.",
+                    text = stringResource(R.string.tos_footer),
                     style = TextStyle(
                         color = TextGray,
                         fontSize = 12.sp,

@@ -6,7 +6,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.UserModel
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,7 +17,6 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun UserInfoScreen(uid: String, viewerRole: String) {
-
 
     var user by remember { mutableStateOf<UserModel?>(null) }
     var loading by remember { mutableStateOf(true) }
@@ -48,7 +49,7 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(" User not found", style = MaterialTheme.typography.bodyLarge)
+            Text(stringResource(R.string.error_user_not_found), style = MaterialTheme.typography.bodyLarge)
         }
         return
     }
@@ -63,7 +64,6 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
             .padding(16.dp)
     ) {
 
-
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -75,7 +75,7 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = u.name.ifEmpty { "Unnamed User" },
+                    text = u.name.ifEmpty { stringResource(R.string.label_unnamed_user) },
                     style = MaterialTheme.typography.headlineSmall
                 )
 
@@ -92,11 +92,11 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        InfoCard(title = "Basic Information") {
-            InfoRow("Email", u.email)
-            InfoRow("Contact", u.contact)
-            InfoRow("Gender", u.gender)
-            InfoRow("Age", u.dateOfBirth.toString())
+        InfoCard(title = stringResource(R.string.section_basic_information)) {
+            InfoRow(stringResource(R.string.label_email), u.email)
+            InfoRow(stringResource(R.string.label_contact), u.contact)
+            InfoRow(stringResource(R.string.label_gender), u.gender)
+            InfoRow(stringResource(R.string.label_age), u.dateOfBirth.toString())
         }
 
         if (u.role == "admin" || u.role == "staff") {
@@ -104,17 +104,17 @@ fun UserInfoScreen(uid: String, viewerRole: String) {
             Spacer(modifier = Modifier.height(16.dp))
 
             InfoCard(
-                title = "Sensitive Information",
+                title = stringResource(R.string.section_sensitive_information),
                 containerColor = MaterialTheme.colorScheme.errorContainer
             ) {
-                InfoRow("Address", u.address)
-                InfoRow("Blood Group", u.bloodGroup)
-                InfoRow("Emergency Contact", u.emergencyContact)
+                InfoRow(stringResource(R.string.label_address), u.address)
+                InfoRow(stringResource(R.string.label_blood_group), u.bloodGroup)
+                InfoRow(stringResource(R.string.label_emergency_contact), u.emergencyContact)
             }
         } else {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = " Sensitive information hidden",
+                text = stringResource(R.string.message_sensitive_info_hidden),
                 color = MaterialTheme.colorScheme.error
             )
         }
@@ -152,7 +152,7 @@ fun InfoRow(label: String, value: String) {
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = value.ifEmpty { "N/A" },
+            text = value.ifEmpty { stringResource(R.string.label_not_available) },
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(10.dp))

@@ -337,8 +337,996 @@
     <string name="placeholder_short_description">संक्षिप्त विवरण</string>
     <string name="placeholder_full_description">विस्तृत विवरण</string>
 
+    <!-- ===================== -->
+    <!-- पासवर्ड परिवर्तन -->
+    <!-- ===================== -->
+    <string name="cd_back">पछाडि</string>
+    <string name="title_change_password">पासवर्ड परिवर्तन</string>
+    <string name="security">सुरक्षा</string>
+    <string name="security_desc">आफ्नो खाता सुरक्षित राख्न पासवर्ड अपडेट गर्नुहोस्</string>
+    <string name="label_current_password">हालको पासवर्ड</string>
+    <string name="label_new_password">नयाँ पासवर्ड</string>
+    <string name="label_confirm_new_password">नयाँ पासवर्ड पुष्टि गर्नुहोस्</string>
+    <string name="ph_current_password">हालको पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="ph_new_password">कम्तिमा ६ अक्षर</string>
+    <string name="ph_confirm_password">नयाँ पासवर्ड पुनः प्रविष्ट गर्नुहोस्</string>
+    <string name="show_password">पासवर्ड देखाउनुहोस्</string>
+    <string name="hide_password">पासवर्ड लुकाउनुहोस्</string>
+    <string name="btn_change_password">पासवर्ड परिवर्तन गर्नुहोस्</string>
+    <string name="err_current_password">कृपया हालको पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="err_new_password">कृपया नयाँ पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="err_password_length">पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ</string>
+    <string name="err_password_mismatch">पासवर्ड मिलेन</string>
+    <string name="err_same_password">नयाँ पासवर्ड पुरानो भन्दा फरक हुनुपर्छ</string>
+    <string name="password_requirements">पासवर्ड आवश्यकताहरू</string>
+    <string name="password_rules">• कम्तिमा ६ अक्षर\n• बलियो र फरक पासवर्ड प्रयोग गर्नुहोस्\n• पुरानो पासवर्ड पुनः प्रयोग नगर्नुहोस्</string>
+
+    <!-- ===================== -->
+    <!--गोपनीयता नीति -->
+    <!-- ===================== -->
+    <string name="title_privacy_policy">गोपनीयता नीति</string>
+    <string name="last_updated">अन्तिम अपडेट: जनवरी १२, २०२६</string>
+    <string name="policy_section_1_title">१. हामीले सङ्कलन गर्ने जानकारी</string>
+    <string name="policy_section_1_content">हामीले तपाईंले हामीलाई प्रत्यक्ष रूपमा उपलब्ध गराउनु भएको जानकारी सङ्कलन गर्छौं:\n\n• व्यक्तिगत जानकारी (नाम, इमेल, फोन नम्बर, जन्म मिति)\n• स्वास्थ्य सम्बन्धी जानकारी (मेडिकल रिपोर्ट, प्रिस्क्रिप्सन, रक्त समूह)\n• आपतकालीन सम्पर्क विवरण\n• आपतकालीन सेवाका लागि स्थान सम्बन्धी जानकारी\n• एप प्रयोग सम्बन्धी विवरण</string>
+    <string name="policy_section_2_title">२. तपाईंको जानकारी कसरी प्रयोग गरिन्छ</string>
+    <string name="policy_section_2_content">सङ्कलित जानकारी हामीले निम्न उद्देश्यका लागि प्रयोग गर्छौं:\n\n• स्वास्थ्य सेवा उपलब्ध गराउन र सञ्चालन गर्न\n• अपोइन्टमेन्ट र परामर्श प्रक्रिया गर्न\n• तपाईंका स्वास्थ्य विवरण सुरक्षित रूपमा भण्डारण गर्न\n• औषधि सम्झना र सूचना पठाउन\n• एपको सुविधा र प्रयोगकर्ता अनुभव सुधार गर्न\n• कानुनी दायित्व पूरा गर्न</string>
+    <string name="policy_section_3_title">३. डेटा सुरक्षा</string>
+    <string name="policy_section_3_content">हामी तपाईंको डेटा सुरक्षालाई अत्यन्त गम्भीर रूपमा लिन्छौं:\n\n• सबै डेटा ट्रान्जिट र स्टोरेजमा इन्क्रिप्ट गरिएको हुन्छ\n• उद्योग स्तरको सुरक्षा प्रोटोकल प्रयोग गरिन्छ\n• नियमित सुरक्षा परीक्षण र अपडेट गरिन्छ\n• सुरक्षित क्लाउड स्टोरेज (Firebase)\n• मात्र अधिकृत कर्मचारीलाई पहुँच</string>
+    <string name="policy_section_4_title">४. डेटा साझेदारी</string>
+    <string name="policy_section_4_content">हामी तपाईंको व्यक्तिगत जानकारी बिक्री गर्दैनौं। आवश्यक परेमा निम्नसँग साझा गर्न सक्छौं:\n\n• तपाईंले अनुमति दिनुभएको स्वास्थ्य सेवा प्रदायक\n• आपतकालीन सेवा\n• हाम्रो सेवा सञ्चालनमा सहयोग गर्ने सेवा प्रदायक\n• कानुनअनुसार आवश्यक परेमा सरकारी निकाय</string>
+    <string name="policy_section_5_title">५. तपाईंका अधिकारहरू</string>
+    <string name="policy_section_5_content">तपाईंलाई निम्न अधिकारहरू छन्:\n\n• आफ्नो व्यक्तिगत डेटा हेर्ने\n• गलत जानकारी सच्याउने\n• डेटा मेटाउन अनुरोध गर्ने\n• प्रचारात्मक सन्देशबाट बाहिरिने\n• आफ्नो स्वास्थ्य विवरण डाउनलोड गर्ने\n• कुनै पनि समयमा सहमति फिर्ता लिने</string>
+    <string name="policy_section_6_title">६. डेटा संरक्षण अवधि</string>
+    <string name="policy_section_6_content">तपाईंको खाता सक्रिय रहेसम्म वा सेवा प्रदान गर्न आवश्यक भएसम्म हामी डेटा सुरक्षित राख्छौं। मेडिकल विवरणहरू नेपालका स्वास्थ्य सम्बन्धी कानुनअनुसार सुरक्षित राखिन्छ।</string>
+    <string name="policy_section_7_title">७. बालबालिकाको गोपनीयता</string>
+    <string name="policy_section_7_content">यो सेवा १८ वर्षभन्दा कम उमेरका प्रयोगकर्ताका लागि लक्षित गरिएको छैन। हामी जानाजानी बालबालिकाबाट जानकारी सङ्कलन गर्दैनौं। यदि यस्तो भएको शंका लागेमा कृपया तुरुन्त सम्पर्क गर्नुहोस्।</string>
+    <string name="policy_section_8_title">८. तेस्रो पक्ष सेवा</string>
+    <string name="policy_section_8_content">हामी निम्न तेस्रो पक्ष सेवाहरू प्रयोग गर्छौं:\n\n• प्रमाणीकरण र डेटाबेस (Firebase)\n• क्लाउड स्टोरेज र होस्टिङ\n• भुक्तानी प्रक्रिया\n• एनालिटिक्स र क्र्यास रिपोर्टिङ\n\nयी सेवाहरूको आफ्नै गोपनीयता नीति हुन्छ।</string>
+    <string name="policy_section_9_title">९. हामीलाई सम्पर्क गर्नुहोस्</string>
+    <string name="policy_section_9_content">यदि यस गोपनीयता नीतिसम्बन्धी कुनै प्रश्न छन् भने हामीलाई सम्पर्क गर्नुहोस्:\n\nइमेल: medhome0001@gmail.com\nठेगाना: काठमाडौं, नेपाल</string>
+    <string name="policy_footer">MedHome प्रयोग गरेर तपाईं यस गोपनीयता नीतिमा सहमत हुनुहुन्छ। हामी समय समयमा यो नीति अपडेट गर्न सक्छौं र परिवर्तनहरू एपमा प्रकाशित गरिनेछ।</string>
+
+    <!-- ===================== -->
+    <!-- Terms of Service (Nepali) -->
+    <!-- ===================== -->
+
+    <string name="title_terms_of_service">सेवाका सर्तहरू</string>
+    <string name="terms_last_updated">अन्तिम अद्यावधिक: जनवरी १२, २०२६</string>
+
+    <string name="tos_section_1_title">१. सर्तहरूको स्वीकृति</string>
+    <string name="tos_section_1_content">
+MedHome प्रयोग गर्दा तपाईं यी सेवाका सर्तहरूमा सहमत हुनुहुन्छ। यदि तपाईं सहमत हुनुहुन्न भने, कृपया सेवा प्रयोग नगर्नुहोस्।
+</string>
+
+    <string name="tos_section_2_title">२. सेवाको विवरण</string>
+    <string name="tos_section_2_content">
+MedHome ले निम्न सेवाहरू प्रदान गर्दछ:\n\n
+• डिजिटल स्वास्थ्य अभिलेख व्यवस्थापन\n
+• डाक्टर परामर्श बुकिङ\n
+• औषधि सम्झाउने सेवा\n
+• स्वास्थ्य जानकारी पहुँच\n
+• आपतकालीन सम्पर्क सुविधा\n\n
+हामी सेवा परिवर्तन वा बन्द गर्ने अधिकार राख्दछौं।
+</string>
+
+    <string name="tos_section_3_title">३. प्रयोगकर्ता खाता</string>
+    <string name="tos_section_3_content">
+तपाईं निम्न कुरामा जिम्मेवार हुनुहुन्छ:\n\n
+• आफ्नो खाताको गोपनीयता\n
+• खातामार्फत भएका सबै गतिविधि\n
+• सही जानकारी प्रदान गर्नु\n
+• आवश्यक परे जानकारी अद्यावधिक गर्नु\n
+• अनधिकृत पहुँचको जानकारी दिनु\n\n
+खाता बनाउन १८ वर्ष पूरा भएको हुनुपर्छ।
+</string>
+
+    <string name="tos_section_4_title">४. स्वीकार्य प्रयोग</string>
+    <string name="tos_section_4_content">
+तपाईं निम्न कार्य नगर्ने सहमति जनाउनुहुन्छ:\n\n
+• गैरकानुनी कार्यमा सेवा प्रयोग\n
+• गलत स्वास्थ्य जानकारी साझा गर्नु\n
+• सेवाको सञ्चालनमा अवरोध\n
+• अनधिकृत पहुँच प्रयास\n
+• खाता विवरण साझा गर्नु\n
+• हानिकारक सफ्टवेयर अपलोड\n
+• अन्य प्रयोगकर्ता वा कर्मचारीलाई दुर्व्यवहार
+</string>
+
+    <string name="tos_section_5_title">५. चिकित्सकीय अस्वीकरण</string>
+    <string name="tos_section_5_content">
+महत्वपूर्ण: MedHome चिकित्सकीय सल्लाहको विकल्प होइन। कुनै पनि स्वास्थ्य समस्याका लागि योग्य चिकित्सकसँग सल्लाह लिनुहोस्।
+</string>
+
+    <string name="tos_section_6_title">६. स्वास्थ्य जानकारी</string>
+    <string name="tos_section_6_content">
+तपाईं निम्न कुरामा सहमत हुनुहुन्छ:\n\n
+• स्वास्थ्य डेटा अपलोड गर्ने अधिकार\n
+• सही जानकारी प्रदान गर्नु\n
+• पूर्ण सुरक्षा सुनिश्चित गर्न नसकिने\n
+• डेटा मेटाउन अनुरोध गर्न सकिने\n
+• आपतकालीन अवस्थामा डेटा पहुँच
+</string>
+
+    <string name="tos_section_7_title">७. परामर्श र अपोइन्टमेन्ट</string>
+    <string name="tos_section_7_content">
+• डाक्टरको उपलब्धतामा निर्भर\n
+• सही स्वास्थ्य जानकारी आवश्यक\n
+• रद्द गर्ने नीति लागू हुन सक्छ\n
+• भुक्तानी सर्त बुकिङ समयमा देखाइन्छ\n
+• तेस्रो पक्ष सेवाको जिम्मेवारी हामी लिँदैनौं
+</string>
+
+    <string name="tos_section_8_title">८. बौद्धिक सम्पत्ति</string>
+    <string name="tos_section_8_content">
+MedHome को सम्पूर्ण सामग्री र सुविधाहरू हाम्रो स्वामित्वमा छन् र कानुनद्वारा सुरक्षित छन्।
+</string>
+
+    <string name="tos_section_9_title">९. दायित्व सीमितता</string>
+    <string name="tos_section_9_content">
+MedHome जस्ताको तस्तै प्रदान गरिएको सेवा हो। हामी निम्नका लागि जिम्मेवार हुँदैनौं:\n\n
+• सेवा अवरोध\n
+• डेटा क्षति\n
+• तेस्रो पक्षको कार्य\n
+• एपमा आधारित निर्णय\n
+• प्राविधिक समस्या
+</string>
+
+    <string name="tos_section_10_title">१०. सेवा समाप्ति</string>
+    <string name="tos_section_10_content">
+हामी निम्न अवस्थामा खाता निलम्बन वा बन्द गर्न सक्छौं:\n\n
+• सर्त उल्लंघन\n
+• शंकास्पद गतिविधि\n
+• कानुनी आवश्यकता\n
+• सेवा बन्द\n\n
+तपाईं जुनसुकै बेला खाता मेटाउन सक्नुहुन्छ।
+</string>
+
+    <string name="tos_section_11_title">११. सर्त परिवर्तन</string>
+    <string name="tos_section_11_content">
+हामी सर्तहरू परिवर्तन गर्न सक्छौं। सेवा निरन्तर प्रयोग गर्नु नयाँ सर्तको स्वीकृति हो।
+</string>
+
+    <string name="tos_section_12_title">१२. लागू हुने कानुन</string>
+    <string name="tos_section_12_content">
+यी सर्तहरू नेपालको कानुन अनुसार लागू हुन्छन्। विवाद काठमाडौँमा समाधान गरिनेछ।
+</string>
+
+    <string name="tos_section_13_title">१३. सम्पर्क जानकारी</string>
+    <string name="tos_section_13_content">
+यी सर्तसम्बन्धी प्रश्नका लागि:\n\n
+इमेल: medhome0001@gmail.com\n
+ठेगाना: काठमाडौँ, नेपाल
+</string>
+
+    <string name="tos_footer">
+MedHome प्रयोग गरेर तपाईंले यी सेवाका सर्तहरू पढेको र स्वीकार गरेको पुष्टि गर्नुहुन्छ।
+</string>
+
+    <!-- Manage Leaves -->
+    <string name="title_manage_leaves">बिदा व्यवस्थापन</string>
+    <string name="add_leave">बिदा थप्नुहोस्</string>
+    <string name="no_leaves">कुनै बिदा तालिकाबद्ध गरिएको छैन</string>
+    <string name="no_leaves_hint">बिदा थप्न तलको बटन थिच्नुहोस्</string>
+    <string name="active_upcoming_leaves">सक्रिय र आउँदै गरेका बिदाहरू</string>
+    <string name="past_leaves">अघिल्ला बिदाहरू</string>
+
+    <!-- Leave dialog -->
+    <string name="leave_type">बिदाको प्रकार</string>
+    <string name="leave_personal">व्यक्तिगत</string>
+    <string name="leave_medical">स्वास्थ्य</string>
+    <string name="leave_conference">सम्मेलन</string>
+    <string name="leave_vacation">विदा</string>
+    <string name="reason_optional">कारण (वैकल्पिक)</string>
+    <string name="char_count">%1$d/200</string>
+
+    <!-- Dates -->
+    <string name="start_date_format">सुरु: %1$s</string>
+    <string name="end_date_format">अन्त्य: %1$s</string>
+    <string name="select_start_date">सुरु मिति छान्नुहोस्</string>
+    <string name="select_end_date">अन्त्य मिति छान्नुहोस्</string>
+
+    <!-- Common -->
+    <string name="cd_add">थप्नुहोस्</string>
+
+        <!-- Appointment Booking -->
+        <string name="title_book_appointment">अपोइन्टमेन्ट बुक गर्नुहोस्</string>
+        <string name="consultation_fee">परामर्श शुल्क</string>
 
 
+        <!-- Doctor Card -->
+
+        <string name="specialization">विशेषज्ञता</string>
+
+        <!-- Date & Time -->
+
+        <string name="available_time_slots">उपलब्ध समय स्लॉटहरू</string>
+        <string name="no_slots_available">यो मितिका लागि कुनै समय उपलब्ध छैन</string>
+
+        <!-- Notes -->
+        <string name="reason_for_visit_optional">भेटको कारण (वैकल्पिक)</string>
+        <string name="notes_placeholder">लक्षण वा परामर्शको कारण लेख्नुहोस्</string>
+        <string name="char_count_500">%1$d/500</string>
+
+        <!-- Confirmation Dialog -->
+        <string name="date">मिति</string>
+        <string name="time">समय</string>
+        <string name="duration">अवधि</string>
+        <string name="minutes">मिनेट</string>
+        <string name="fee">शुल्क</string>
+        <string name="notes">टिप्पणी</string>
+
+        <!-- Common -->
+
+        <string name="currency_npr">नेरु %1$d</string>
+
+    <!-- My Appointments -->
+    <string name="title_my_appointments">मेरो अपोइन्टमेन्टहरू</string>
+
+    <!-- Tabs -->
+    <string name="tab_upcoming">आउँदै गरेका (%1$d)</string>
+    <string name="tab_past">भइसकेका (%1$d)</string>
+    <string name="tab_cancelled">रद्द गरिएका (%1$d)</string>
+
+    <!-- Empty States -->
+    <string name="empty_upcoming">कुनै आउँदै गरेको अपोइन्टमेन्ट छैन</string>
+    <string name="empty_past">कुनै पुरानो अपोइन्टमेन्ट छैन</string>
+    <string name="empty_cancelled">कुनै रद्द गरिएको अपोइन्टमेन्ट छैन</string>
+
+    <!-- Cancel Dialog -->
+    <string name="dialog_cancel_title">अपोइन्टमेन्ट रद्द गर्नुहोस्</string>
+    <string name="dialog_cancel_message">
+    के तपाईं यो अपोइन्टमेन्ट रद्द गर्न चाहनुहुन्छ?
+</string>
+    <string name="label_reason">कारण</string>
+    <string name="btn_cancel_appointment">अपोइन्टमेन्ट रद्द गर्नुहोस्</string>
+    <string name="btn_back">पछाडि</string>
+
+    <!-- Appointment Card -->
+    <string name="label_cancellation_reason">रद्द गर्ने कारण:</string>
+    <string name="notes_char_count">%1$d/500</string>
+
+    <!-- Confirm Booking Dialog -->
+    <string name="confirm_booking_title">बुकिङ पुष्टि गर्नुहोस्</string>
+
+    <string name="duration_min">%1$d मिनेट</string>
+    <string name="duration_minutes">%1$d मिनेट</string>
+
+    <!-- Doctor Appointments -->
+    <string name="tab_today">आज</string>
+    <string name="tab_upcoming_short">आउँदै</string>
+    <string name="tab_past_short">भइसकेका</string>
+
+    <string name="empty_today">आजको लागि कुनै अपोइन्टमेन्ट छैन</string>
+    <string name="empty_subtitle">तपाईंको अपोइन्टमेन्टहरू यहाँ देखिनेछ</string>
+
+    <string name="manage_appointment">अपोइन्टमेन्ट व्यवस्थापन गर्नुहोस्</string>
+    <string name="appointment_details">अपोइन्टमेन्ट विवरण</string>
+    <string name="phone">फोन</string>
+    <string name="time_duration_format">%1$s (%2$d मिनेट)</string>
+
+    <string name="patient_reason">बिरामीको कारण</string>
+    <string name="doctor_notes">डाक्टर टिप्पणीहरू</string>
+    <string name="notes_count">%1$d/500</string>
+
+    <string name="btn_mark_complete">पूर्ण भएको चिन्ह लगाउनुहोस्</string>
+    <string name="btn_mark_no_show">उपस्थित नभएको चिन्ह लगाउनुहोस्</string>
+    <string name="btn_close">बन्द गर्नुहोस्</string>
+
+    <string name="label_cancellation_reason_short">रद्द गर्ने कारण</string>
+
+    <!-- My Packages -->
+    <string name="title_my_packages">मेरो प्याकेजहरू</string>
+
+    <!-- Empty state -->
+    <string name="empty_packages_title">अहिलेसम्म कुनै प्याकेज बुक गरिएको छैन</string>
+    <string name="empty_packages_subtitle">सुरु गर्न प्याकेजहरू हेर्नुहोस्</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_booking_title">बुकिङ रद्द गर्नुहुन्छ?</string>
+    <string name="dialog_cancel_booking_message">
+    के तपाईं “%1$s” प्याकेज रद्द गर्न चाहनुहुन्छ? यो प्रक्रिया फिर्ता गर्न मिल्दैन।
+</string>
+    <string name="btn_cancel_booking">बुकिङ रद्द गर्नुहोस्</string>
+    <string name="btn_keep_booking">बुकिङ राख्नुहोस्</string>
+
+    <!-- Toasts -->
+    <string name="toast_booking_cancelled">बुकिङ रद्द गरियो</string>
+
+    <!-- Package Card -->
+    <string name="label_doctor_prefix">डा. %1$s</string>
+    <string name="label_booked_on">बुक गरिएको मिति</string>
+    <string name="label_validity">मान्य अवधि</string>
+    <string name="label_price_paid">तिरेको मूल्य</string>
+
+    <!-- Validity text -->
+    <string name="validity_expired">म्याद सकियो</string>
+    <string name="validity_one_day">१ दिन बाँकी</string>
+    <string name="validity_days">%1$d दिन</string>
+
+    <!-- Buttons -->
+    <string name="btn_cancel">रद्द गर्नुहोस्</string>
+
+    <!-- Accessibility -->
+    <string name="cd_package_image">प्याकेज तस्बिर</string>
+
+    <!-- My Packages Activity -->
+
+    <string name="label_doctor_name">डा. %1$s</string>
+
+    <string name="status_active">सक्रिय</string>
+    <string name="status_expired">म्याद सकिएको</string>
+    <string name="status_cancelled">रद्द गरिएको</string>
+
+    <string name="label_one_day_left">१ दिन बाँकी</string>
+    <string name="label_days_left">%1$d दिन</string>
+
+    <string name="label_price_npr">रु. %1$s</string>
+
+    <!-- Health Package Details Activity -->
+    <string name="title_package_details">प्याकेज विवरण</string>
+
+    <string name="error_package_not_found">प्याकेज फेला परेन</string>
+
+
+
+    <string name="label_doctor">डाक्टर</string>
+
+    <string name="label_days_remaining">%1$d दिन बाँकी</string>
+
+    <string name="label_description">विवरण</string>
+
+
+    <string name="label_total_price">कुल मूल्य</string>
+    <string name="btn_book_now">अहिले बुक गर्नुहोस्</string>
+
+    <string name="dialog_confirm_booking_title">बुकिङ पुष्टि गर्नुहोस्</string>
+    <string name="dialog_package_label">प्याकेज: %1$s</string>
+    <string name="dialog_price_label">मूल्य: रु. %1$s</string>
+    <string name="dialog_valid_for_days">वैधता: %1$d दिन</string>
+    <string name="dialog_confirm_booking_message">यो बुकिङ जारी राख्ने?</string>
+
+    <string name="btn_confirm">पुष्टि गर्नुहोस्</string>
+
+    <string name="toast_package_booked_success">प्याकेज सफलतापूर्वक बुक गरियो!</string>
+
+    <!-- Health Packages Management Activity -->
+    <string name="title_my_health_packages">मेरा स्वास्थ्य प्याकेजहरू</string>
+
+    <string name="cd_insights">अन्तर्दृष्टि हेर्नुहोस्</string>
+    <string name="cd_create_package">प्याकेज सिर्जना गर्नुहोस्</string>
+    <string name="cd_edit">सम्पादन गर्नुहोस्</string>
+    <string name="cd_delete">मेटाउनुहोस्</string>
+
+    <string name="empty_packages_mgmt_title">कुनै प्याकेज सिर्जना गरिएको छैन</string>
+    <string name="empty_packages_mgmt_subtitle">आफ्नो पहिलो स्वास्थ्य प्याकेज सिर्जना गर्नुहोस्</string>
+
+    <string name="label_days_left_short">%1$d दिन</string>
+
+    <string name="dialog_delete_package_title">प्याकेज मेटाउने?</string>
+    <string name="dialog_delete_package_message">के तपाईं %1$s मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="btn_delete">मेटाउनुहोस्</string>
+
+    <string name="toast_package_deleted">प्याकेज सफलतापूर्वक मेटाइयो</string>
+
+    <!-- My Appointments Activity -->
+
+
+    <string name="tab_upcoming_with_count">Upcoming (%1$d)</string>
+    <string name="tab_past_with_count">Past (%1$d)</string>
+    <string name="tab_cancelled_with_count">Cancelled (%1$d)</string>
+
+    <string name="empty_upcoming_appointments">No upcoming appointments</string>
+    <string name="empty_past_appointments">No past appointments</string>
+    <string name="empty_cancelled_appointments">No cancelled appointments</string>
+
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_completed">Completed</string>
+
+    <string name="dialog_cancel_appointment_title">Cancel Appointment?</string>
+    <string name="dialog_cancel_appointment_message">Please provide a reason for cancelling this appointment:</string>
+    <string name="char_count_format">%1$d/200</string>
+
+    <string name="btn_cancel_appointment_confirm">Cancel Appointment</string>
+    <string name="btn_go_back">Go Back</string>
+
+    <!-- Doctor Availability Activity -->
+    <string name="title_set_availability">उपलब्धता सेट गर्नुहोस्</string>
+    <string name="btn_add_time_slots">समय स्लटहरू थप्नुहोस्</string>
+
+    <string name="empty_time_slots_title">कुनै समय स्लट थपिएको छैन</string>
+    <string name="empty_time_slots_subtitle">आफ्नो उपलब्धता थप्न तलको बटनमा ट्याप गर्नुहोस्\nर अपोइन्टमेन्टहरू स्वीकार गर्न सुरु गर्नुहोस्</string>
+
+    <string name="label_duration_min">%1$d मिनेट</string>
+
+    <string name="status_booked">बुक गरिएको</string>
+    <string name="status_available">उपलब्ध</string>
+
+    <string name="toast_slot_deleted">स्लट मेटाइयो</string>
+    <string name="toast_invalid_time_range">अमान्य समय दायरा। कृपया आफ्नो इनपुटहरू जाँच गर्नुहोस्।</string>
+    <string name="toast_slots_added">%1$d समय स्लटहरू सफलतापूर्वक थपियो</string>
+
+    <string name="dialog_add_time_slots_title">समय स्लटहरू थप्नुहोस्</string>
+    <string name="label_start_time_value">सुरु: %1$s</string>
+    <string name="label_end_time_value">अन्त्य: %1$s</string>
+    <string name="label_slot_duration">स्लट अवधि</string>
+    <string name="btn_add_slots">स्लटहरू थप्नुहोस्</string>
+
+    <string name="dialog_select_date_title">मिति चयन गर्नुहोस्</string>
+    <string name="dialog_select_start_time_title">सुरु समय चयन गर्नुहोस्</string>
+    <string name="dialog_select_end_time_title">अन्त्य समय चयन गर्नुहोस्</string>
+
+    <!-- User Info Screen -->
+    <string name="error_user_not_found">प्रयोगकर्ता फेला परेन</string>
+
+    <string name="label_unnamed_user">नामविहीन प्रयोगकर्ता</string>
+
+    <string name="section_basic_information">आधारभूत जानकारी</string>
+    <string name="section_sensitive_information">संवेदनशील जानकारी</string>
+
+    <string name="label_email">इमेल</string>
+    <string name="label_contact">सम्पर्क</string>
+    <string name="label_gender">लिङ्ग</string>
+    <string name="label_age">उमेर</string>
+    <string name="label_address">ठेगाना</string>
+    <string name="label_blood_group">रक्त समूह</string>
+    <string name="label_emergency_contact">आपतकालीन सम्पर्क</string>
+
+    <string name="label_not_available">उपलब्ध छैन</string>
+
+    <string name="message_sensitive_info_hidden">संवेदनशील जानकारी लुकाइएको छ</string>
+
+    <!-- Signup Details Activity -->
+    <string name="title_complete_profile">प्रोफाइल पूरा गर्नुहोस्</string>
+    <string name="subtitle_fill_details">जारी राख्न आफ्नो विवरण भर्नुहोस्</string>
+
+    <string name="label_full_name">पूरा नाम</string>
+    <string name="hint_full_name">आफ्नो पूरा नाम प्रविष्ट गर्नुहोस्</string>
+
+    <string name="hint_email">इमेल ठेगाना</string>
+
+    <string name="label_contact_number">सम्पर्क नम्बर</string>
+    <string name="hint_contact_number">१० अंकको फोन नम्बर</string>
+
+    <string name="hint_gender">पुरुष/महिला/अन्य</string>
+
+    <string name="gender_male">पुरुष</string>
+    <string name="gender_female">महिला</string>
+    <string name="gender_other">अन्य</string>
+
+    <string name="label_date_of_birth">जन्म मिति</string>
+    <string name="hint_date_format">दिन/महिना/वर्ष</string>
+    <string name="cd_select_date">मिति चयन गर्नुहोस्</string>
+
+    <string name="hint_blood_group">A+, B+, O+, आदि</string>
+
+    <string name="hint_emergency_contact">आपतकालीन सम्पर्क नम्बर</string>
+
+    <string name="hint_address">आफ्नो ठेगाना प्रविष्ट गर्नुहोस्</string>
+
+    <string name="hint_password_min">कम्तिमा ६ अक्षर</string>
+
+    <string name="label_confirm_password">पासवर्ड पुष्टि गर्नुहोस्</string>
+    <string name="hint_reenter_password">पासवर्ड पुन: प्रविष्ट गर्नुहोस्</string>
+
+    <string name="text_agree_to">म सहमत छु </string>
+    <string name="text_terms_conditions">नियम र सर्तहरू</string>
+
+    <string name="btn_complete_profile">प्रोफाइल पूरा गर्नुहोस्</string>
+    <string name="btn_create_account">खाता सिर्जना गर्नुहोस्</string>
+
+    <string name="text_already_have_account">पहिले नै खाता छ? </string>
+
+    <string name="btn_ok">ठीक छ</string>
+
+    <string name="btn_login">लगइन गर्नुहोस्</string>
+    <string name="label_password">पासवर्ड</string>
+
+    <!-- Error Messages -->
+    <string name="error_name_required">कृपया आफ्नो नाम प्रविष्ट गर्नुहोस्</string>
+    <string name="error_contact_required">कृपया सम्पर्क नम्बर प्रविष्ट गर्नुहोस्</string>
+    <string name="error_contact_10_digits">सम्पर्क नम्बर १० अंकको हुनुपर्छ</string>
+    <string name="error_gender_required">कृपया लिङ्ग चयन गर्नुहोस्</string>
+    <string name="error_dob_required">कृपया जन्म मिति चयन गर्नुहोस्</string>
+    <string name="error_blood_group_required">कृपया रक्त समूह चयन गर्नुहोस्</string>
+    <string name="error_emergency_contact_required">कृपया आपतकालीन सम्पर्क प्रविष्ट गर्नुहोस्</string>
+    <string name="error_address_required">कृपया ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="error_password_required">कृपया पासवर्ड प्रविष्ट गर्नुहोस्</string>
+    <string name="error_password_min_length">पासवर्ड कम्तिमा ६ अक्षरको हुनुपर्छ</string>
+    <string name="error_passwords_no_match">पासवर्डहरू मेल खाँदैनन्</string>
+    <string name="error_accept_terms">कृपया नियम र सर्तहरू स्वीकार गर्नुहोस्</string>
+
+    <!-- Toast Messages -->
+    <string name="toast_account_created">खाता सफलतापूर्वक सिर्जना गरियो!</string>
+    <string name="toast_profile_created">प्रोफाइल सफलतापूर्वक सिर्जना गरियो!</string>
+
+
+    <!-- Past Bookings Activity -->
+    <string name="title_past_bookings">विगतका बुकिङहरू</string>
+
+    <string name="empty_past_bookings_title">कुनै विगतका बुकिङ छैन</string>
+    <string name="empty_past_bookings_subtitle">तपाईंको पूरा भएका अपोइन्टमेन्टहरू यहाँ देखिनेछ</string>
+
+    <string name="dialog_rate_experience_title">आफ्नो अनुभव मूल्याङ्कन गर्नुहोस्</string>
+    <string name="dialog_already_rated_title">पहिले नै मूल्याङ्कन गरिएको</string>
+
+    <string name="label_rate_experience">आफ्नो अनुभव मूल्याङ्कन गर्नुहोस्</string>
+    <string name="cd_stars">%1$d तारा</string>
+    <string name="label_star_count">%1$d तारा</string>
+
+    <string name="label_write_review">समीक्षा लेख्नुहोस् (वैकल्पिक)</string>
+    <string name="hint_share_experience">आफ्नो अनुभव साझा गर्नुहोस्...</string>
+    <string name="label_char_count">%1$d/500</string>
+
+    <string name="message_already_rated">तपाईंले यो अपोइन्टमेन्टको मूल्याङ्कन पहिले नै गर्नुभएको छ।</string>
+
+    <string name="btn_submit_rating">मूल्याङ्कन पेश गर्नुहोस्</string>
+
+    <string name="status_no_show">उपस्थित भएन</string>
+
+    <string name="label_fee_npr">रु. %1$d</string>
+
+    <string name="label_doctor_notes_colon">डाक्टरको टिप्पणी:</string>
+
+    <string name="btn_rate_doctor">डाक्टरलाई मूल्याङ्कन गर्नुहोस्</string>
+
+    <!-- Health Records Activity -->
+    <string name="title_my_records">मेरा रेकर्डहरू</string>
+
+    <string name="hint_search_records">रेकर्डहरू खोज्नुहोस्...</string>
+    <string name="cd_search">खोज्नुहोस्</string>
+
+    <string name="empty_no_records">कुनै रेकर्ड फेला परेन</string>
+    <string name="empty_no_matching_records">मिल्ने रेकर्ड छैन</string>
+
+    <string name="title_record_details">रेकर्ड विवरण</string>
+
+    <string name="label_title">शीर्षक</string>
+    <string name="label_date">मिति</string>
+    <string name="label_attached_file">संलग्न फाइल</string>
+
+    <string name="error_cannot_open_file">फाइल खोल्न सकिएन</string>
+
+    <string name="title_add_new_record">नयाँ रेकर्ड थप्नुहोस्</string>
+    <string name="title_edit_record">रेकर्ड सम्पादन गर्नुहोस्</string>
+
+    <string name="label_title_required">शीर्षक *</string>
+    <string name="label_date_required">मिति *</string>
+    <string name="label_description_optional">विवरण (वैकल्पिक)</string>
+
+    <string name="btn_change_file">फाइल परिवर्तन गर्नुहोस्</string>
+    <string name="btn_attach_file">फाइल संलग्न गर्नुहोस्</string>
+    <string name="hint_tap_to_upload">फाइल अपलोड गर्न ट्याप गर्नुहोस्</string>
+
+    <string name="error_title_date_required">शीर्षक र मिति आवश्यक छ</string>
+
+    <string name="btn_save_record">रेकर्ड सुरक्षित गर्नुहोस्</string>
+    <string name="btn_update_record">रेकर्ड अद्यावधिक गर्नुहोस्</string>
+
+    <string name="dialog_delete_record_title">रेकर्ड मेटाउने?</string>
+    <string name="dialog_delete_record_message">के तपाईं यो रेकर्ड मेटाउन निश्चित हुनुहुन्छ?</string>
+
+    <string name="cd_more">थप विकल्पहरू</string>
+    <string name="menu_edit">सम्पादन गर्नुहोस्</string>
+    <string name="menu_delete">मेटाउनुहोस्</string>
+
+    <!-- Medicine Inventory Screen -->
+    <string name="title_medicine_inventory">औषधि सूची</string>
+
+    <string name="cd_no_medicines">कुनै औषधि छैन</string>
+    <string name="empty_no_medicines_title">अझैसम्म कुनै औषधि थपिएको छैन</string>
+    <string name="empty_no_medicines_subtitle">सुरु गर्न आफ्नो पहिलो औषधि थप्नुहोस्</string>
+
+    <string name="cd_add_medicine">औषधि थप्नुहोस्</string>
+
+    <string name="dialog_delete_medicine_title">औषधि मेटाउने</string>
+    <string name="dialog_delete_medicine_message">के तपाईं %1$s मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+
+    <string name="label_no_image">तस्बिर छैन</string>
+
+    <string name="label_price_currency">₹%1$s</string>
+    <string name="label_qty">मात्रा: %1$s</string>
+
+    <string name="cd_more_options">थप विकल्पहरू</string>
+
+    <string name="title_edit_medicine">औषधि सम्पादन गर्नुहोस्</string>
+    <string name="title_add_medicine">औषधि थप्नुहोस्</string>
+
+    <string name="cd_close">बन्द गर्नुहोस्</string>
+    <string name="cd_selected_image">चयन गरिएको औषधि तस्बिर</string>
+    <string name="cd_current_image">हालको औषधि तस्बिर</string>
+    <string name="cd_upload_image">तस्बिर अपलोड गर्नुहोस्</string>
+
+    <string name="label_upload_medicine_image">औषधि तस्बिर अपलोड गर्नुहोस्</string>
+
+    <string name="label_medicine_name">औषधिको नाम</string>
+    <string name="label_amount_quantity">मात्रा/परिमाण</string>
+
+    <string name="btn_update_medicine">औषधि अद्यावधिक गर्नुहोस्</string>
+    <string name="btn_save_medicine">औषधि सुरक्षित गर्नुहोस्</string>
+
+    <!-- Blood Donation Activity -->
+
+    <string name="guideline_wait_90_days">दानहरू बीच ९० दिन पर्खनुहोस्</string>
+    <string name="guideline_stay_healthy">स्वस्थ र हाइड्रेटेड रहनुहोस्</string>
+    <string name="guideline_save_lives">प्रत्येक दानले ३ जीवनसम्म बचाउन सक्छ</string>
+
+    <!-- Blood Donation Activity -->
+    <string name="blood_donation_title">रगत दान</string>
+    <string name="history">इतिहास</string>
+    <string name="nearby_blood_requests">नजिकैका रगत अनुरोधहरू</string>
+    <string name="no_blood_requests">कुनै रगत अनुरोध उपलब्ध छैन</string>
+    <string name="error_occurred">त्रुटि भयो</string>
+
+    <!-- Blood Groups -->
+    <string name="all_blood_groups">सबै</string>
+
+    <!-- Blood Request Card -->
+    <string name="anonymous">गुमनाम</string>
+    <string name="unit_needed">%1$s युनिट चाहिन्छ</string>
+    <string name="units_needed">%1$s युनिटहरू चाहिन्छ</string>
+    <string name="contact">सम्पर्क</string>
+
+    <!-- Urgency Levels -->
+    <string name="urgent">अत्यावश्यक</string>
+    <string name="within_24_hours">२४ घण्टा भित्र</string>
+    <string name="within_a_week">एक हप्ता भित्र</string>
+
+    <!-- Time Ago -->
+    <string name="just_now">भर्खरै</string>
+    <string name="minutes_ago">%1$d मिनेट अगाडि</string>
+    <string name="minutes_ago_plural">%1$d मिनेट अगाडि</string>
+    <string name="hours_ago">%1$d घण्टा अगाडि</string>
+    <string name="hours_ago_plural">%1$d घण्टा अगाडि</string>
+    <string name="days_ago">%1$d दिन अगाडि</string>
+    <string name="days_ago_plural">%1$d दिन अगाडि</string>
+    <string name="weeks_ago">%1$d हप्ता अगाडि</string>
+    <string name="weeks_ago_plural">%1$d हप्ता अगाडि</string>
+    <string name="months_ago">%1$d महिना अगाडि</string>
+    <string name="months_ago_plural">%1$d महिना अगाडि</string>
+    <string name="years_ago">%1$d वर्ष अगाडि</string>
+    <string name="years_ago_plural">%1$d वर्ष अगाडि</string>
+
+    <!-- Post Blood Request Screen -->
+    <string name="post_blood_request">रगत अनुरोध पोस्ट गर्नुहोस्</string>
+    <string name="edit_blood_request">रगत अनुरोध सम्पादन गर्नुहोस्</string>
+    <string name="patient_name">बिरामीको नाम</string>
+    <string name="patient_name_hint">बिरामीको नाम प्रविष्ट गर्नुहोस् वा गुमनाम छाड्नुहोस्</string>
+    <string name="required_blood_group">आवश्यक रगत समूह *</string>
+    <string name="units_needed_label">आवश्यक युनिटहरू *</string>
+    <string name="hospital">अस्पताल *</string>
+    <string name="hospital_hint">जस्तै सिटी जनरल अस्पताल</string>
+    <string name="location">स्थान *</string>
+    <string name="location_hint">सातदोबाटो, ललितपुर</string>
+    <string name="contact_number_hint">+९७७ XXXXX XXXXX</string>
+    <string name="urgency_level">अत्यावश्यकता स्तर *</string>
+    <string name="select_urgency">अत्यावश्यकता चयन गर्नुहोस्</string>
+    <string name="additional_notes">थप टिप्पणीहरू</string>
+    <string name="additional_notes_hint">कुनै थप जानकारी...</string>
+    <string name="update_blood_request">रगत अनुरोध अपडेट गर्नुहोस्</string>
+
+    <!-- History Screen -->
+    <string name="my_requests">मेरा अनुरोधहरू</string>
+    <string name="donor_profile">दाताको प्रोफाइल</string>
+    <string name="no_blood_requests_yet">अहिलेसम्म कुनै रगत अनुरोध छैन</string>
+    <string name="posted_requests_appear_here">तपाईंले पोस्ट गर्नुभएका रगत अनुरोधहरू यहाँ देखा पर्नेछ</string>
+
+    <!-- Donor Profile -->
+    <string name="not_registered_as_donor">दाताको रूपमा दर्ता गरिएको छैन</string>
+    <string name="join_donor_list">जीवन बचाउन मद्दत गर्न दाता सूचीमा सामेल हुनुहोस्</string>
+    <string name="availability_status">उपलब्धता स्थिति</string>
+    <string name="available">उपलब्ध</string>
+    <string name="not_available">उपलब्ध छैन</string>
+    <string name="emergency_available">आपतकालीन उपलब्ध</string>
+    <string name="yes">हो</string>
+    <string name="no">होइन</string>
+    <string name="total_donations">कुल दानहरू</string>
+    <string name="last_donation">अन्तिम दान</string>
+    <string name="can_donate_again_in">तपाईं %1$d दिनमा फेरि दान गर्न सक्नुहुन्छ</string>
+    <string name="eligible_to_donate">तपाईं अहिले दान गर्न योग्य हुनुहुन्छ!</string>
+    <string name="registered">दर्ता गरिएको</string>
+    <string name="thank_you_donor">दाता हुनुभएकोमा धन्यवाद!</string>
+    <string name="generosity_saves_lives">तपाईंको उदारताले जीवन बचाउन सक्छ</string>
+    <string name="donations">दानहरू</string>
+    <string name="lives_saved">जीवन बचाइएको</string>
+
+    <!-- Donation Guidelines -->
+    <string name="donation_guidelines">दान दिशानिर्देशहरू</string>
+
+    <!-- Blood Request Details Screen (unique strings only) -->
+    <string name="request_details">अनुरोध विवरण</string>
+    <string name="patient_information">बिरामी जानकारी</string>
+    <string name="units_needed_value">%1$s युनिट(हरू)</string>
+    <string name="hospital_information">अस्पताल जानकारी</string>
+    <string name="contact_information">सम्पर्क जानकारी</string>
+    <string name="status_information">स्थिति जानकारी</string>
+    <string name="time_ago_label">समय अगाडि</string>
+    <string name="additional_notes_title">थप टिप्पणीहरू</string>
+    <string name="manage_request">अनुरोध व्यवस्थापन</string>
+    <string name="mark_as_fulfilled">पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+    <string name="cancel_request">अनुरोध रद्द गर्नुहोस्</string>
+    <string name="reactivate_request">अनुरोध पुन: सक्रिय गर्नुहोस्</string>
+    <string name="request_fulfilled_message">यो अनुरोध पूरा भएको छ। तपाईंको योगदानको लागि धन्यवाद!</string>
+    <string name="call_contact">%1$s लाई कल गर्नुहोस्</string>
+
+    <!-- Delete Blood Request Dialog -->
+    <string name="delete_blood_request">रगत अनुरोध मेटाउनुहोस्</string>
+    <string name="delete_blood_request_confirmation">के तपाईं यो रगत अनुरोध मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+
+    <!-- Fulfill Dialog -->
+    <string name="mark_fulfilled_title">पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+    <string name="fulfill_confirmation">के तपाईंले आवश्यक रगत दान प्राप्त गर्नुभयो? यसले अनुरोधलाई पूरा भएको रूपमा चिन्ह लगाउनेछ।</string>
+    <string name="yes_mark_fulfilled">हो, पूरा भएको रूपमा चिन्ह लगाउनुहोस्</string>
+
+    <string name="status_fulfilled">पूरा भयो</string>
+    <string name="posted">पोस्ट गरिएको</string>
+    <string name="status">स्थिति</string>
+
+    <!-- Book Consultation / Search Doctors -->
+    <string name="find_doctors">डाक्टर खोज्नुहोस्</string>
+    <string name="search_by_name_spec">नाम वा विशेषज्ञता द्वारा खोज्नुहोस्</string>
+    <string name="filter">फिल्टर</string>
+    <string name="doctors_found">%1$d डाक्टर भेटियो</string>
+    <string name="doctors_found_plural">%1$d डाक्टरहरू भेटिए</string>
+    <string name="no_doctors_found">कुनै डाक्टर भेटिएन</string>
+    <string name="yrs">वर्ष</string>
+    <string name="filter_and_sort">फिल्टर र क्रमबद्ध</string>
+    <string name="minimum_rating">न्यूनतम मूल्याङ्कन: %1$.1f ★</string>
+    <string name="fee_range">शुल्क दायरा: NPR %1$d - %2$d</string>
+    <string name="sort_by">क्रमबद्ध गर्नुहोस्</string>
+    <string name="rating_high_to_low">मूल्याङ्कन (उच्च देखि कम)</string>
+    <string name="fee_low_to_high">शुल्क (कम देखि उच्च)</string>
+    <string name="fee_high_to_low">शुल्क (उच्च देखि कम)</string>
+    <string name="experience">अनुभव</string>
+    <string name="clear">खाली गर्नुहोस्</string>
+    <string name="apply">लागू गर्नुहोस्</string>
+    <string name="Search">खोज</string>
+
+    <!-- Add/Edit Medicine Screen -->
+    <string name="edit_medicine">औषधि सम्पादन गर्नुहोस्</string>
+    <string name="add_medicine">औषधि थप्नुहोस्</string>
+
+    <!-- Form Fields -->
+    <string name="medicine_name">औषधिको नाम</string>
+    <string name="medicine_name_hint">उदाहरण: प्यारासिटामोल</string>
+    <string name="dosage">खुराक</string>
+    <string name="dosage_hint">उदाहरण: ५००मिग्रा वा २ चक्की</string>
+    <string name="frequency">आवृत्ति</string>
+    <string name="reminder_times">सम्झना समय</string>
+    <string name="instructions_optional">निर्देशन (ऐच्छिक)</string>
+    <string name="instructions_hint">उदाहरण: खाना खाएपछि लिनुहोस्</string>
+
+    <!-- Frequency Options -->
+    <string name="frequency_daily">दैनिक</string>
+    <string name="frequency_weekly">साप्ताहिक</string>
+    <string name="frequency_as_needed">आवश्यकता अनुसार</string>
+
+    <!-- Buttons -->
+    <string name="add_reminder_time">सम्झना समय थप्नुहोस्</string>
+    <string name="update_medicine">औषधि अपडेट गर्नुहोस्</string>
+    <string name="remove">हटाउनुहोस्</string>
+
+    <!-- Form Fields -->
+
+    <!-- Frequency Options -->
+
+
+    <!-- Medicine Reminder Screen -->
+    <string name="medicine_reminders">औषधि सम्झनाहरू</string>
+    <string name="no_medicine_reminders">औषधि सम्झनाहरू छैनन्</string>
+    <string name="start_adding_medications">खुराक नछुटाउन आफ्नो औषधिहरू थप्न सुरु गर्नुहोस्</string>
+    <string name="add_medicine_desc">औषधि थप्नुहोस्</string>
+    <string name="more_times">+%d थप</string>
+
+    <!-- Dialog -->
+    <string name="delete_reminder_title">सम्झना मेटाउने?</string>
+    <string name="delete_reminder_message">के तपाईं %s को लागि सम्झना मेट्न निश्चित हुनुहुन्छ?</string>
+
+    <!-- Doctor Detail Screen -->
+    <string name="doctor_profile">डाक्टर प्रोफाइल</string>
+    <string name="book_appointment">अपोइन्टमेन्ट बुक गर्नुहोस्</string>
+    <string name="failed_to_load_doctor">डाक्टर विवरण लोड गर्न असफल</string>
+    <string name="ratings_count">(%d मूल्याङ्कनहरू)</string>
+
+    <string name="years">%d वर्ष</string>
+    <string name="patients">बिरामीहरू</string>
+    <string name="patients_count">%d+</string>
+    <string name="verified">प्रमाणित</string>
+
+    <string name="no_information_available">कुनै जानकारी उपलब्ध छैन</string>
+    <string name="qualifications">योग्यताहरू</string>
+    <string name="not_specified">उल्लेख गरिएको छैन</string>
+    <string name="clinic_information">क्लिनिक जानकारी</string>
+    <string name="clinic_name">क्लिनिकको नाम</string>
+
+    <string name="npr_amount">NPR %d</string>
+    <string name="languages">भाषाहरू</string>
+
+    <!-- My Orders Screen -->
+    <string name="pending">पेन्डिङ</string>
+    <string name="processing">प्रशोधन</string>
+    <string name="completed">पूरा भयो</string>
+    <string name="cancelled">रद्द गरियो</string>
+    <string name="please_login_to_view_orders">अर्डर हेर्न लगइन गर्नुहोस्</string>
+    <string name="loading_your_orders">तपाईंका अर्डरहरू लोड गर्दै...</string>
+    <string name="no_orders_yet">अझै कुनै अर्डर छैन</string>
+    <string name="no_filter_orders">%s अर्डरहरू छैनन्</string>
+    <string name="orders_appear_here">तपाईंका अर्डरहरू यहाँ तुरुन्तै देखा पर्नेछन्</string>
+    <string name="qty">मात्रा: %d</string>
+    <string name="order_details">अर्डर विवरण</string>
+    <string name="product_details">उत्पादन विवरण</string>
+    <string name="medicine">औषधि</string>
+    <string name="price_per_unit">प्रति इकाई मूल्य</string>
+    <string name="quantity">मात्रा</string>
+    <string name="total_amount">कुल रकम</string>
+    <string name="delivery_information">डेलिभरी जानकारी</string>
+    <string name="order_time">अर्डर समय</string>
+    <string name="cancel_order_title">अर्डर रद्द गर्ने?</string>
+    <string name="cancel_order_message">के तपाईं यो अर्डर रद्द गर्न निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="order_id_short">अर्डर #%s</string>
+    <string name="amount">रकम: ₹%s</string>
+    <string name="yes_cancel_order">हो, अर्डर रद्द गर्नुहोस्</string>
+    <string name="no_keep_it">होइन, राख्नुहोस्</string>
+
+    <!-- Notification History Screen -->
+    <string name="mark_all_read">सबै पढिएको चिन्ह लगाउनुहोस्</string>
+    <string name="no_notifications">कुनै सूचना छैन</string>
+    <string name="all_caught_up">तपाईं सबै अद्यावधिक हुनुहुन्छ!</string>
+    <string name="delete_notification_title">सूचना मेटाउनुहोस्</string>
+    <string name="delete_notification_message">के तपाईं यो सूचना मेट्न निश्चित हुनुहुन्छ?</string>
+
+    <string name="pharmacy_title">औषधि पसल</string>
+
+
+    <!-- PharmacyScreen strings -->
+    <string name="search_medicines">औषधि खोज्नुहोस्…</string>
+    <string name="no_medicines_found">\"%1$s\" को लागि कुनै औषधि फेला परेन</string>
+    <string name="no_medicines_available">कुनै औषधि उपलब्ध छैन</string>
+    <string name="medicines_found">%1$d औषधि%2$s फेला पर्यो</string>
+    <string name="stock">स्टक: %1$s</string>
+    <string name="place_order">अर्डर गर्नुहोस्</string>
+    <string name="decrease">घटाउनुहोस्</string>
+    <string name="increase">बढाउनुहोस्</string>
+    <string name="delivery_address">डेलिभरी ठेगाना *</string>
+    <string name="enter_full_address">तपाईंको पूरा ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="address_required">ठेगाना आवश्यक छ</string>
+    <string name="phone_number">फोन नम्बर *</string>
+    <string name="ten_digit_mobile">१० अंकको मोबाइल नम्बर</string>
+    <string name="valid_phone_required">मान्य १० अंकको फोन नम्बर आवश्यक छ</string>
+    <string name="place_order_button">अर्डर गर्नुहोस्</string>
+    <string name="placing_order">अर्डर गर्दै…</string>
+
+    <!-- CaloriesCalculator strings -->
+    <string name="calorie_calculator">क्यालोरी क्याल्कुलेटर</string>
+    <string name="powered_by_usda">USDA खाद्य डाटाबेस द्वारा संचालित</string>
+    <string name="total_calories_today">आज कुल क्यालोरी</string>
+    <string name="daily_goal">दैनिक लक्ष्य: %1$d kcal</string>
+    <string name="remaining">बाँकी: %1$d kcal</string>
+    <string name="protein">प्रोटीन</string>
+    <string name="carbs">कार्बोहाइड्रेट</string>
+    <string name="fat">बोसो</string>
+    <string name="set_daily_goal">दैनिक लक्ष्य सेट गर्नुहोस्</string>
+    <string name="search_usda_database">USDA खाद्य डाटाबेस खोज्नुहोस्</string>
+    <string name="search_food_placeholder">खाना खोज्नुहोस् (जस्तै: स्याउ, भात, कुखुरा)</string>
+    <string name="results_from_usda">USDA FoodData Central बाट परिणामहरू</string>
+    <string name="add_food_manually">म्यानुअल रूपमा खाना थप्नुहोस्</string>
+    <string name="todays_meals">आजका खाना</string>
+    <string name="breakfast">🍳 बिहानको खाना</string>
+    <string name="lunch">🍛 दिउँसोको खाना</string>
+    <string name="dinner">🍽️ बेलुकाको खाना</string>
+    <string name="snacks">🍿 खाजा</string>
+    <string name="no_meals_added">अझै कुनै खाना थपिएको छैन। माथि खोजेर खाना थप्नुहोस्!</string>
+    <string name="view_daily_summary">दैनिक सारांश हेर्नुहोस्</string>
+    <string name="daily_summary_feature">दैनिक सारांश सुविधा</string>
+    <string name="search_from_foods">पूर्ण पोषण डेटा सहित 300,000+ खानाहरूबाट खोज्नुहोस्</string>
+    <string name="search_example">जस्तै: स्याउ, कुखुराको छाती, भात</string>
+    <string name="searching_usda">USDA डाटाबेस खोज्दै…</string>
+    <string name="search_for_food">कुनै पनि खाना वस्तु खोज्नुहोस्</string>
+    <string name="try_examples">प्रयास गर्नुहोस्: स्याउ, भात, कुखुरा, दूध</string>
+    <string name="no_foods_found">\'%1$s\' को लागि कुनै खाना फेला परेन</string>
+    <string name="try_different_search">फरक खोज शब्द प्रयास गर्नुहोस्</string>
+    <string name="found_results">%1$d परिणामहरू फेला पर्यो</string>
+    <string name="add_meal_type">%1$s थप्नुहोस्</string>
+    <string name="add">थप्नुहोस्</string>
+    <string name="enter_food_details">खाना विवरण र पोषण जानकारी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_required">खानाको नाम *</string>
+    <string name="food_name_example">जस्तै: घरमा पकाएको खाना</string>
+    <string name="calories_kcal">क्यालोरी (kcal) *</string>
+    <string name="calories_example">जस्तै: 250</string>
+    <string name="macronutrients_optional">म्याक्रोन्यूट्रिएन्ट्स (ऐच्छिक)</string>
+    <string name="protein_g">प्रोटीन (g)</string>
+    <string name="protein_example">जस्तै: 20</string>
+    <string name="carbohydrates_g">कार्बोहाइड्रेट (g)</string>
+    <string name="carbs_example">जस्तै: 30</string>
+    <string name="fat_g">बोसो (g)</string>
+    <string name="fat_example">जस्तै: 10</string>
+    <string name="serving_amount">सर्भिङ मात्रा</string>
+    <string name="serving_example">जस्तै: 1.5</string>
+    <string name="serving_note">1.0 = 1 सर्भिङ, 1.5 = 1.5 सर्भिङ</string>
+    <string name="meal_type_required">खानाको प्रकार *</string>
+    <string name="add_food">खाना थप्नुहोस्</string>
+    <string name="please_enter_valid_calories">कृपया मान्य क्यालोरी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_calories_required">खानाको नाम र क्यालोरी आवश्यक छ</string>
+    <string name="set_calorie_macro_targets">तपाईंको दैनिक क्यालोरी र म्याक्रो लक्ष्यहरू सेट गर्नुहोस्</string>
+    <string name="daily_calorie_goal">दैनिक क्यालोरी लक्ष्य (kcal) *</string>
+    <string name="calorie_goal_example">जस्तै: 2000</string>
+    <string name="recommended_calories">सिफारिस गरिएको: 1500-2500 kcal/दिन</string>
+    <string name="macro_goals_optional">म्याक्रो लक्ष्यहरू (ऐच्छिक)</string>
+    <string name="protein_goal_g">प्रोटीन लक्ष्य (g)</string>
+    <string name="protein_goal_example">जस्तै: 150</string>
+    <string name="carbohydrates_goal_g">कार्बोहाइड्रेट लक्ष्य (g)</string>
+    <string name="carbs_goal_example">जस्तै: 200</string>
+    <string name="fat_goal_g">बोसो लक्ष्य (g)</string>
+    <string name="fat_goal_example">जस्तै: 50</string>
+    <string name="save_goal">लक्ष्य सुरक्षित गर्नुहोस्</string>
+    <string name="please_enter_valid_calorie_goal">कृपया मान्य क्यालोरी लक्ष्य प्रविष्ट गर्नुहोस्</string>
+    <string name="food_details">खाना विवरण</string>
+    <string name="food_name">खानाको नाम</string>
+    <string name="serving">सर्भिङ</string>
+    <string name="meal_type">खानाको प्रकार</string>
+    <string name="nutrition_information">पोषण जानकारी</string>
+    <string name="calories">क्यालोरी</string>
+    <string name="data_from_usda">USDA FoodData Central बाट डाटा</string>
+    <string name="delete_food_item">खाना मेटाउने?</string>
+    <string name="deletes_confirmation">के तपाईं \'%1$s\' मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="view_details">विवरण हेर्नुहोस्</string>
+    <string name="from_usda_database">USDA डाटाबेसबाट</string>
+    <string name="foundation_food">आधार खाना</string>
+    <string name="standard_reference">मानक सन्दर्भ</string>
+    <string name="branded_food">ब्रान्डेड खाना</string>
+
+    <string name="inventory">सूची</string>
+    <string name="my_orders">मेरा अर्डरहरू</string>
+
+    <string name="my_appointments">मेरा अपोइन्टमेन्टहरू</string>
+    <string name="manage_leaves">बिदा व्यवस्थापन</string>
+
+    <string name="qr_code">क्यूआर कोड</string>
+    <string name="pharmacy">औषधि पसल</string>
+    <string name="donor_community_info">हाम्रो दाता समुदायमा सामेल हुनुहोस् र जीवन बचाउन मद्दत गर्नुहोस्। तपाईंको जानकारी आवश्यकता पर्नेहरूलाई देखिनेछ।</string>
+    <string name="donor_information">दाता जानकारी</string>
+    <string name="blood_group_required">रक्त समूह *</string>
+    <string name="availability">उपलब्धता</string>
+    <string name="currently_available">हाल दान गर्न उपलब्ध</string>
+    <string name="regular_donations_contact">तपाईंलाई नियमित दानको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="urgent_cases_contact">तपाईंलाई तत्काल मामिलाहरूको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="donation_requirements">दान आवश्यकताहरू</string>
+    <string name="requirement_age">उमेर १८-६५ वर्ष बीच</string>
+    <string name="requirement_weight">कम्तिमा ५० किलो तौल</string>
+    <string name="requirement_health">राम्रो सामान्य स्वास्थ्य अवस्था</string>
+    <string name="requirement_wait">दानहरू बीच ९० दिन प्रतीक्षा गर्नुहोस्</string>
+    <string name="requirement_illness">हालैको कुनै रोग वा शल्यक्रिया छैन</string>
+    <string name="why_donate_blood">रक्तदान किन गर्ने?</string>
+    <string name="benefit_save_lives">• प्रत्येक दानले ३ जनासम्म जीवन बचाउन सक्छ</string>
+    <string name="benefit_health_screening">• दान अघि निःशुल्क स्वास्थ्य जाँच</string>
+    <string name="benefit_blood_flow">• स्वस्थ रक्त प्रवाह कायम राख्न मद्दत गर्छ</string>
+    <string name="benefit_community">• जीवन बचाउने समुदायमा सामेल हुनुहोस्</string>
+    <string name="update_donor_profile">दाता प्रोफाइल अपडेट गर्नुहोस्</string>
+    <string name="save_join_donor_list">सुरक्षित गर्नुहोस् र दाता सूचीमा सामेल हुनुहोस्</string>
+    <string name="privacy_notice">सामेल भएर, तपाईं आफ्नो रक्त समूह र उपलब्धता स्थिति रक्त दाताहरू खोज्नेहरूसँग साझा गर्न सहमत हुनुहुन्छ। तपाईंको सम्पर्क जानकारी तपाईंको रक्त प्रकार आवश्यक पर्दा मात्र देखिनेछ।</string>
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
 
+    <!-- Notification Settings Screen -->
+    <string name="notification_settings_title">सूचना सेटिङ</string>
+
+    <!-- Error -->
+    <string name="error_generic">केही समस्या आयो</string>
+
+    <!-- Notification Types -->
+    <string name="appointment_reminders">अपोइन्टमेन्ट रिमाइन्डर</string>
+    <string name="appointment_reminders_desc">अपोइन्टमेन्टभन्दा २४ घण्टा र १ घण्टा अघि सूचना पाउनुहोस्</string>
+
+    <string name="medicine_reminders_desc">औषधि खान दैनिक सूचना पाउनुहोस्</string>
+
+    <string name="booking_confirmations">बुकिङ पुष्टि</string>
+    <string name="booking_confirmations_desc">अपोइन्टमेन्ट पुष्टि हुँदा सूचना पाउनुहोस्</string>
+
+    <!-- Sound & Vibration -->
+    <string name="notification_sound_vibration">सूचना ध्वनि र कम्पन</string>
+
+    <string name="notification_sound">ध्वनि</string>
+    <string name="notification_sound_desc">सूचनाका लागि ध्वनि बजाउनुहोस्</string>
+
+    <string name="notification_vibration">कम्पन</string>
+    <string name="notification_vibration_desc">सूचना आउँदा कम्पन दिनुहोस्</string>
 </resources>
