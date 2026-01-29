@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -75,7 +76,8 @@ fun SearchDoctorsScreen() {
                 ),
                 title = { Text(stringResource(R.string.find_doctors)) },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(onClick = { activity?.finish() },
+                        modifier = Modifier.testTag("backButton")) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = stringResource(R.string.back),
@@ -106,6 +108,7 @@ fun SearchDoctorsScreen() {
                 value = searchQuery,
                 onValueChange = { viewModel.searchDoctors(it) },
                 modifier = Modifier
+                    .testTag("searchField")
                     .fillMaxWidth()
                     .padding(16.dp),
                 placeholder = { Text(stringResource(R.string.search_by_name_spec)) },

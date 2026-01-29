@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -106,7 +107,10 @@ fun MyAppointmentsScreen() {
                     Text(stringResource(R.string.title_my_appointments))
                 },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(
+                        onClick = { activity?.finish() },
+                        modifier = Modifier.testTag("backButton")
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = stringResource(R.string.cd_back),
@@ -134,21 +138,24 @@ fun MyAppointmentsScreen() {
                     onClick = { selectedTab = 0 },
                     text = {
                         Text(stringResource(R.string.tab_upcoming_with_count, upcomingAppointments.size))
-                    }
+                    },
+                    modifier = Modifier.testTag("upcomingTab")
                 )
                 Tab(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     text = {
                         Text(stringResource(R.string.tab_past_with_count, pastAppointments.size))
-                    }
+                    },
+                    modifier = Modifier.testTag("completedTab")
                 )
                 Tab(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
                     text = {
                         Text(stringResource(R.string.tab_cancelled_with_count, cancelledAppointments.size))
-                    }
+                    },
+                    modifier = Modifier.testTag("cancelledTab")
                 )
             }
 
