@@ -30,9 +30,9 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.utils.ImageUtils
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -201,7 +201,7 @@ fun EditPackageScreen(
             TopAppBar(
                 title = { Text("Edit Package", fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -227,7 +227,7 @@ fun EditPackageScreen(
             if (isLoadingPackage) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else {
                 Column(
@@ -257,7 +257,7 @@ fun EditPackageScreen(
                             when {
                                 isUploadingImage -> {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                        CircularProgressIndicator(color = SageGreen)
+                                        CircularProgressIndicator(color = MintGreen)
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text("Uploading image...", color = Color.Gray, fontSize = 14.sp)
                                     }
@@ -301,7 +301,7 @@ fun EditPackageScreen(
                                             Icons.Default.AddPhotoAlternate,
                                             contentDescription = null,
                                             modifier = Modifier.size(48.dp),
-                                            tint = SageGreen
+                                            tint = MintGreen
                                         )
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text("Tap to upload package image", color = Color.Gray, fontSize = 14.sp)
@@ -322,9 +322,9 @@ fun EditPackageScreen(
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
-                            cursorColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
+                            cursorColor = MintGreen,
                             unfocusedBorderColor = LightSage
                         )
                     )
@@ -340,11 +340,11 @@ fun EditPackageScreen(
                             onValueChange = {},
                             readOnly = true,
                             label = { Text("Category") },
-                            trailingIcon = { Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen) },
+                            trailingIcon = { Icon(Icons.Default.ArrowDropDown, null, tint = MintGreen) },
                             modifier = Modifier.fillMaxWidth().menuAnchor(),
                             colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = SageGreen,
-                                focusedLabelColor = SageGreen,
+                                focusedBorderColor = MintGreen,
+                                focusedLabelColor = MintGreen,
                                 unfocusedBorderColor = LightSage
                             )
                         )
@@ -373,8 +373,8 @@ fun EditPackageScreen(
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 2,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
                             unfocusedBorderColor = LightSage
                         )
                     )
@@ -388,8 +388,8 @@ fun EditPackageScreen(
                         modifier = Modifier.fillMaxWidth().height(120.dp),
                         maxLines = 5,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
                             unfocusedBorderColor = LightSage
                         )
                     )
@@ -402,10 +402,10 @@ fun EditPackageScreen(
                         label = { Text("Price (NPR)") },
                         modifier = Modifier.fillMaxWidth(),
                         prefix = { Text("NPR ") },
-                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) },
+                        leadingIcon = { Icon(Icons.Default.Payment, null, tint = MintGreen) },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
                             unfocusedBorderColor = LightSage
                         )
                     )
@@ -453,8 +453,8 @@ fun EditPackageScreen(
                         modifier = Modifier.fillMaxWidth().height(100.dp),
                         maxLines = 4,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
                             unfocusedBorderColor = LightSage
                         )
                     )
@@ -483,8 +483,8 @@ fun EditPackageScreen(
                                 checked = isActive,
                                 onCheckedChange = { isActive = it },
                                 colors = SwitchDefaults.colors(
-                                    checkedThumbColor = SageGreen,
-                                    checkedTrackColor = SageGreen.copy(alpha = 0.5f),
+                                    checkedThumbColor = MintGreen,
+                                    checkedTrackColor = MintGreen.copy(alpha = 0.5f),
                                     uncheckedThumbColor = Color.Gray,
                                     uncheckedTrackColor = Color.LightGray,
                                     uncheckedBorderColor = Color.Gray
@@ -532,7 +532,7 @@ fun EditPackageScreen(
                             }
                         },
                         modifier = Modifier.fillMaxWidth().height(56.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                        colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                         enabled = !isLoading && !isUploadingImage && existingPackage != null
                     ) {
                         if (isLoading) {
@@ -553,7 +553,7 @@ fun EditPackageScreen(
                 onDismissRequest = { showStartDatePicker = false },
                 confirmButton = {
                     TextButton(onClick = { startDate = startDateState.selectedDateMillis; showStartDatePicker = false }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = MintGreen)
                     }
                 },
                 dismissButton = { TextButton(onClick = { showStartDatePicker = false }) { Text("Cancel") } }
@@ -567,7 +567,7 @@ fun EditPackageScreen(
                 onDismissRequest = { showEndDatePicker = false },
                 confirmButton = {
                     TextButton(onClick = { endDate = endDateState.selectedDateMillis; showEndDatePicker = false }) {
-                        Text("OK", color = SageGreen)
+                        Text("OK", color = MintGreen)
                     }
                 },
                 dismissButton = { TextButton(onClick = { showEndDatePicker = false }) { Text("Cancel") } }

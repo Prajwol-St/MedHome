@@ -26,8 +26,8 @@ import com.example.medhomeapp.model.PackageBookingModel
 import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -100,7 +100,7 @@ fun PackageBookingsScreen(packageId: String?) {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -122,7 +122,7 @@ fun PackageBookingsScreen(packageId: String?) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else {
                 Column(modifier = Modifier.fillMaxSize()) {
@@ -140,7 +140,7 @@ fun PackageBookingsScreen(packageId: String?) {
                                 title = "Total",
                                 value = totalBookings.toString(),
                                 icon = Icons.Default.ShoppingCart,
-                                color = SageGreen,
+                                color = MintGreen,
                                 isSelected = selectedFilter == null,
                                 onClick = { selectedFilter = null },
                                 modifier = Modifier.weight(1f)
@@ -200,7 +200,7 @@ fun PackageBookingsScreen(packageId: String?) {
                                     Icon(
                                         Icons.Default.Payment,
                                         contentDescription = null,
-                                        tint = SageGreen,
+                                        tint = MintGreen,
                                         modifier = Modifier.size(32.dp)
                                     )
                                     Column {
@@ -214,7 +214,7 @@ fun PackageBookingsScreen(packageId: String?) {
                                             "NPR $totalRevenue",
                                             fontSize = 24.sp,
                                             fontWeight = FontWeight.Bold,
-                                            color = SageGreen
+                                            color = MintGreen
                                         )
                                     }
                                 }
@@ -227,7 +227,7 @@ fun PackageBookingsScreen(packageId: String?) {
                             modifier = Modifier
                                 .padding(horizontal = 16.dp, vertical = 8.dp),
                             shape = RoundedCornerShape(20.dp),
-                            color = SageGreen.copy(alpha = 0.15f)
+                            color = MintGreen.copy(alpha = 0.15f)
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -237,13 +237,13 @@ fun PackageBookingsScreen(packageId: String?) {
                                 Text(
                                     "Showing: ${selectedFilter?.replaceFirstChar { it.uppercase() }} bookings",
                                     fontSize = 14.sp,
-                                    color = SageGreen,
+                                    color = MintGreen,
                                     fontWeight = FontWeight.Medium
                                 )
                                 Icon(
                                     Icons.Default.Close,
                                     contentDescription = "Clear filter",
-                                    tint = SageGreen,
+                                    tint = MintGreen,
                                     modifier = Modifier
                                         .size(18.dp)
                                         .clickable { selectedFilter = null }
@@ -459,7 +459,7 @@ fun BookingCard(
                 "NPR ${booking.packagePrice.toInt()}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = SageGreen
+                color = MintGreen
             )
 
             Spacer(Modifier.height(12.dp))
@@ -580,7 +580,7 @@ fun BookingCard(
 @Composable
 fun StatusBadge(status: String) {
     val (bgColor, textColor) = when (status) {
-        "active" -> SageGreen.copy(alpha = 0.15f) to SageGreen
+        "active" -> MintGreen.copy(alpha = 0.15f) to MintGreen
         "expired" -> Color(0xFFFF9800).copy(alpha = 0.15f) to Color(0xFFFF9800)
         "cancelled" -> Color(0xFFF44336).copy(alpha = 0.15f) to Color(0xFFF44336)
         else -> Color.Gray.copy(alpha = 0.15f) to Color.Gray

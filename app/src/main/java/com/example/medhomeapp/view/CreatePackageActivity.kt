@@ -31,9 +31,9 @@ import com.example.medhomeapp.repository.HealthPackageRepoImpl
 import com.example.medhomeapp.repository.PackageBookingRepoImpl
 import com.example.medhomeapp.ui.theme.BackgroundCream
 import com.example.medhomeapp.ui.theme.LightSage
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.utils.ImageUtils
+import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.HealthPackageViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -161,7 +161,7 @@ fun CreatePackageScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.title_create_package), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -207,7 +207,7 @@ fun CreatePackageScreen(
                         when {
                             isUploadingImage -> {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    CircularProgressIndicator(color = SageGreen)
+                                    CircularProgressIndicator(color = MintGreen)
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(stringResource(R.string.uploading_image), color = Color.Gray, fontSize = 14.sp)
                                 }
@@ -251,7 +251,7 @@ fun CreatePackageScreen(
                                         Icons.Default.AddPhotoAlternate,
                                         contentDescription = null,
                                         modifier = Modifier.size(48.dp),
-                                        tint = SageGreen
+                                        tint = MintGreen
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
                                     Text(stringResource(R.string.tap_upload_image), color = Color.Gray, fontSize = 14.sp)
@@ -273,9 +273,9 @@ fun CreatePackageScreen(
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen,
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark,
                         unfocusedBorderColor = LightSage
@@ -295,15 +295,15 @@ fun CreatePackageScreen(
                         readOnly = true,
                         label = { Text("Category") },
                         trailingIcon = {
-                            Icon(Icons.Default.ArrowDropDown, null, tint = SageGreen)
+                            Icon(Icons.Default.ArrowDropDown, null, tint = MintGreen)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor(),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SageGreen,
-                            focusedLabelColor = SageGreen,
-                            cursorColor = SageGreen,
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
+                            cursorColor = MintGreen,
                             focusedTextColor = TextDark,
                             unfocusedTextColor = TextDark,
                             unfocusedBorderColor = LightSage
@@ -338,9 +338,9 @@ fun CreatePackageScreen(
                     maxLines = 2,
                     supportingText = { Text("${shortDescription.length}/100", fontSize = 12.sp) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen,
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark,
                         unfocusedBorderColor = LightSage
@@ -360,9 +360,9 @@ fun CreatePackageScreen(
                         .height(120.dp),
                     maxLines = 5,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen,
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark,
                         unfocusedBorderColor = LightSage
@@ -380,11 +380,11 @@ fun CreatePackageScreen(
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     prefix = { Text("NPR ") },
-                    leadingIcon = { Icon(Icons.Default.Payment, null, tint = SageGreen) },
+                    leadingIcon = { Icon(Icons.Default.Payment, null, tint = MintGreen) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen,
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark,
                         unfocusedBorderColor = LightSage
@@ -427,7 +427,7 @@ fun CreatePackageScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text("Start Date", fontSize = 12.sp, color = Color.Gray)
-                                Icon(Icons.Default.CalendarToday, null, tint = SageGreen, modifier = Modifier.size(16.dp))
+                                Icon(Icons.Default.CalendarToday, null, tint = MintGreen, modifier = Modifier.size(16.dp))
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
@@ -457,7 +457,7 @@ fun CreatePackageScreen(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text("End Date", fontSize = 12.sp, color = Color.Gray)
-                                Icon(Icons.Default.Event, null, tint = SageGreen, modifier = Modifier.size(16.dp))
+                                Icon(Icons.Default.Event, null, tint = MintGreen, modifier = Modifier.size(16.dp))
                             }
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
@@ -483,9 +483,9 @@ fun CreatePackageScreen(
                     maxLines = 4,
                     supportingText = { Text(stringResource(R.string.helper_separate_commas), fontSize = 12.sp) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = SageGreen,
-                        focusedLabelColor = SageGreen,
-                        cursorColor = SageGreen,
+                        focusedBorderColor = MintGreen,
+                        focusedLabelColor = MintGreen,
+                        cursorColor = MintGreen,
                         focusedTextColor = TextDark,
                         unfocusedTextColor = TextDark,
                         unfocusedBorderColor = LightSage
@@ -527,8 +527,8 @@ fun CreatePackageScreen(
                             checked = isActive,
                             onCheckedChange = { isActive = it },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = SageGreen,
-                                checkedTrackColor = SageGreen.copy(alpha = 0.5f)
+                                checkedThumbColor = MintGreen,
+                                checkedTrackColor = MintGreen.copy(alpha = 0.5f)
                             )
                         )
                     }
@@ -626,7 +626,7 @@ fun CreatePackageScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                    colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                     enabled = !isLoading && !isUploadingImage,
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -656,7 +656,7 @@ fun CreatePackageScreen(
                         startDate = startDateState.selectedDateMillis
                         showStartDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
+                        Text("OK", color = MintGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
@@ -668,9 +668,9 @@ fun CreatePackageScreen(
                 DatePicker(
                     state = startDateState,
                     colors = DatePickerDefaults.colors(
-                        selectedDayContainerColor = SageGreen,
-                        todayContentColor = SageGreen,
-                        todayDateBorderColor = SageGreen
+                        selectedDayContainerColor = MintGreen,
+                        todayContentColor = MintGreen,
+                        todayDateBorderColor = MintGreen
                     )
                 )
             }
@@ -684,7 +684,7 @@ fun CreatePackageScreen(
                         endDate = endDateState.selectedDateMillis
                         showEndDatePicker = false
                     }) {
-                        Text("OK", color = SageGreen, fontWeight = FontWeight.Bold)
+                        Text("OK", color = MintGreen, fontWeight = FontWeight.Bold)
                     }
                 },
                 dismissButton = {
@@ -696,9 +696,9 @@ fun CreatePackageScreen(
                 DatePicker(
                     state = endDateState,
                     colors = DatePickerDefaults.colors(
-                        selectedDayContainerColor = SageGreen,
-                        todayContentColor = SageGreen,
-                        todayDateBorderColor = SageGreen
+                        selectedDayContainerColor = MintGreen,
+                        todayContentColor = MintGreen,
+                        todayDateBorderColor = MintGreen
                     )
                 )
             }

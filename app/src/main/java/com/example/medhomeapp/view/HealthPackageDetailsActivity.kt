@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import com.example.medhomeapp.R
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class HealthPackageDetailsActivity : BaseActivity() {
 
@@ -115,7 +116,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
             TopAppBar(
                 title = { Text(stringResource(R.string.title_package_details), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SageGreen,
+                    containerColor = MintGreen,
                     titleContentColor = Color.White
                 ),
                 navigationIcon = {
@@ -141,7 +142,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
-                    color = SageGreen
+                    color = MintGreen
                 )
             } else if (packageModel == null) {
                 Column(
@@ -196,7 +197,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                     Icons.Default.LocalShipping,
                                     contentDescription = null,
                                     modifier = Modifier.size(80.dp),
-                                    tint = SageGreen.copy(alpha = 0.5f)
+                                    tint = MintGreen.copy(alpha = 0.5f)
                                 )
                             }
                         }
@@ -233,7 +234,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                         packageModel!!.category,
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Medium,
-                                        color = SageGreen,
+                                        color = MintGreen,
                                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                                     )
                                 }
@@ -335,7 +336,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                         Icon(
                                             Icons.Default.CheckCircle,
                                             contentDescription = null,
-                                            tint = SageGreen,
+                                            tint = MintGreen,
                                             modifier = Modifier.size(20.dp)
                                         )
                                         Spacer(modifier = Modifier.width(8.dp))
@@ -373,13 +374,13 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                                     stringResource(R.string.label_price_npr, packageModel!!.price),
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = SageGreen
+                                    color = MintGreen
                                 )
                             }
 
                             Button(
                                 onClick = { showBookingDialog = true },
-                                colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                                colors = ButtonDefaults.buttonColors(containerColor = MintGreen),
                                 shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier.height(56.dp)
                             ) {
@@ -484,7 +485,7 @@ fun HealthPackageDetailsScreen(viewModel: HealthPackageViewModel, packageId: Str
                         Text(
                             stringResource(R.string.btn_confirm),
                             fontWeight = FontWeight.Bold,
-                            color = SageGreen
+                            color = MintGreen
                         )
                     }
                 },
@@ -504,7 +505,7 @@ fun InfoColumn(icon: androidx.compose.ui.graphics.vector.ImageVector, label: Str
         Icon(
             icon,
             contentDescription = null,
-            tint = SageGreen,
+            tint = MintGreen,
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.height(4.dp))

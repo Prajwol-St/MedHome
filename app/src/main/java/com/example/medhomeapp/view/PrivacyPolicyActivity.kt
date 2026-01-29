@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.sp
 import com.example.medhomeapp.BaseActivity
 import com.example.medhomeapp.R
 import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.view.ui.theme.MintGreen
 
 class PrivacyPolicyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ fun PrivacyPolicyScreen() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(SageGreen)
+                .background(MintGreen)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -144,7 +144,7 @@ fun PrivacyPolicyScreen() {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Divider(
-                    color = SageGreen.copy(alpha = 0.2f),
+                    color = MintGreen.copy(alpha = 0.2f),
                     thickness = 1.dp,
                     modifier = Modifier.padding(vertical = 12.dp)
                 )
