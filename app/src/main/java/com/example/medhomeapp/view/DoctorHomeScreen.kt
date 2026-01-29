@@ -29,8 +29,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.medhomeapp.R
-import com.example.medhomeapp.ui.theme.BackgroundCream
-import com.example.medhomeapp.ui.theme.TextDark
 import com.example.medhomeapp.view.ui.theme.MintGreen
 
 @Composable
@@ -41,15 +39,19 @@ fun DoctorHomeScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
+    // Using exact colors from your patient HomeScreen
+    val backgroundTint = Color(0xFFF1FBF9)
+    val textMain = Color(0xFF2C3E50)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundCream)
+            .background(backgroundTint) // Fixed background to match patient screen
             .verticalScroll(scrollState)
             .testTag("doctorHomeScreen")
     ) {
 
-        // Header Card (without QR Scanner)
+        // Header Card - Styled exactly like Welcome Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,80 +65,86 @@ fun DoctorHomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(CircleShape)
-                        .background(Color.White.copy(alpha = 0.25f))
-                        .testTag("doctorProfilePictureBox"),
-                    contentAlignment = Alignment.Center
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f)
                 ) {
-                    if (!profilePictureUrl.isNullOrEmpty()) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(context)
-                                .data(profilePictureUrl)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = "Profile Picture",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(CircleShape)
-                                .testTag("doctorProfileImage"),
-                            contentScale = ContentScale.Crop
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(CircleShape)
+                            .background(Color.White.copy(alpha = 0.25f))
+                            .testTag("doctorProfilePictureBox"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (!profilePictureUrl.isNullOrEmpty()) {
+                            AsyncImage(
+                                model = ImageRequest.Builder(context)
+                                    .data(profilePictureUrl)
+                                    .crossfade(true)
+                                    .build(),
+                                contentDescription = "Profile Picture",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(CircleShape)
+                                    .testTag("doctorProfileImage"),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Profile",
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .testTag("doctorProfileIcon"),
+                                tint = Color.White
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(14.dp))
+
+                    Column {
+                        Text(
+                            text = stringResource(R.string.doctor_welcome),
+                            fontSize = 13.sp,
+                            color = Color.White.copy(alpha = 0.9f),
+                            modifier = Modifier.testTag("doctorWelcomeText")
                         )
-                    } else {
-                        Icon(
-                            Icons.Default.Person,
-                            contentDescription = "Profile",
-                            modifier = Modifier
-                                .size(32.dp)
-                                .testTag("doctorProfileIcon"),
-                            tint = Color.White
+                        Text(
+                            text = doctorName,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            modifier = Modifier.testTag("doctorNameText")
                         )
                     }
-                }
-
-                Spacer(modifier = Modifier.width(14.dp))
-
-                Column {
-                    Text(
-                        text = stringResource(R.string.doctor_welcome),
-                        fontSize = 13.sp,
-                        color = Color.White.copy(alpha = 0.9f),
-                        modifier = Modifier.testTag("doctorWelcomeText")
-                    )
-                    Text(
-                        text = doctorName,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier = Modifier.testTag("doctorNameText")
-                    )
                 }
             }
         }
 
-        // Section Title
+        // Section Title - Matching "Services" style
         Text(
             text = stringResource(R.string.doctor_management),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = TextDark,
+            color = textMain,
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp)
                 .testTag("doctorManagementTitle")
         )
 
-        // Grid Menu (4 items only)
+        // Grid Menu
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             modifier = Modifier
-                .height(600.dp)
+                .height(300.dp) // Adjusted height for 4 items (2 rows)
                 .testTag("doctorServicesGrid")
         ) {
 
@@ -144,56 +152,44 @@ fun DoctorHomeScreen(
                 DoctorFeatureCard(
                     title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF6B8E4E),
-                    tag = "setAvailabilityCard",
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, DoctorAvailabilityActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF4DB6AC), // Matching patient record color
+                    tag = "setAvailabilityCard"
+                ) {
+                    context.startActivity(Intent(context, DoctorAvailabilityActivity::class.java))
+                }
             }
 
             item {
                 DoctorFeatureCard(
                     title = "My Appointments",
                     icon = Icons.Default.EventNote,
-                    color = Color(0xFF87A96B),
-                    tag = "myAppointmentsCard",
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, DoctorAppointmentsActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF81D4FA), // Matching consultation color
+                    tag = "myAppointmentsCard"
+                ) {
+                    context.startActivity(Intent(context, DoctorAppointmentsActivity::class.java))
+                }
             }
 
             item {
                 DoctorFeatureCard(
                     title = "Manage Leaves",
                     icon = Icons.Default.BeachAccess,
-                    color = Color(0xFF6B8E4E),
-                    tag = "manageLeavesCard",
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, ManageLeavesActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFFFF8A80), // Matching blood donation/red color
+                    tag = "manageLeavesCard"
+                ) {
+                    context.startActivity(Intent(context, ManageLeavesActivity::class.java))
+                }
             }
 
             item {
                 DoctorFeatureCard(
                     title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF87A96B),
-                    tag = "healthPackagesCard",
-                    onClick = {
-                        context.startActivity(
-                            Intent(context, HealthPackagesManagementActivity::class.java)
-                        )
-                    }
-                )
+                    color = Color(0xFF64B5F6), // Matching packages color
+                    tag = "healthPackagesCard"
+                ) {
+                    context.startActivity(Intent(context, HealthPackagesManagementActivity::class.java))
+                }
             }
         }
 
@@ -209,6 +205,8 @@ fun DoctorFeatureCard(
     tag: String,
     onClick: () -> Unit
 ) {
+    val textMain = Color(0xFF2C3E50)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -244,7 +242,8 @@ fun DoctorFeatureCard(
                 text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = TextDark
+                color = textMain,
+                lineHeight = 16.sp
             )
         }
     }

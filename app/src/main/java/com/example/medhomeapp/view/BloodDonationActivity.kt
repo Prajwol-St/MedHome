@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.colorspace.WhitePoint
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -172,7 +173,7 @@ fun MainDonationScreen(
                 ),
                 title = { Text(stringResource(R.string.blood_donation_title), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = { activity.finish() }) {
+                    IconButton(onClick = { activity.finish() }, modifier = Modifier.testTag("backButton")) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = null,
@@ -215,6 +216,7 @@ fun MainDonationScreen(
                     )
                 }
                 FloatingActionButton(
+                    modifier = Modifier.testTag("createRequestButton"),
                     onClick = onPostRequestClick,
                     containerColor = MintGreen,
                     shape = CircleShape
@@ -864,6 +866,7 @@ fun HistoryScreen(
                         Tab(
                             selected = selectedTab == index,
                             onClick = { selectedTab = index },
+                            modifier = Modifier.testTag("myRequestsTab"),
                             text = { Text(title, fontWeight = FontWeight.Medium) }
                         )
                     }

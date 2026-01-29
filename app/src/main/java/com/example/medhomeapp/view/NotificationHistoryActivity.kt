@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -78,7 +79,10 @@ fun NotificationHistoryScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { (context as BaseActivity).finish() }) {
+                IconButton(
+                    onClick = { (context as BaseActivity).finish() },
+                    modifier = Modifier.testTag("backButton")
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.baseline_arrow_back_24),
                         contentDescription = "Back",
@@ -110,7 +114,8 @@ fun NotificationHistoryScreen() {
                 TextButton(
                     onClick = {
                         userId?.let { viewModel.markAllAsRead(it) }
-                    }
+                    },
+                    modifier = Modifier.testTag("clearAllButton")
                 ) {
                     Text(
                         text = "Mark all read",
@@ -221,7 +226,8 @@ fun NotificationHistoryScreenContent() {
                 TextButton(
                     onClick = {
                         userId?.let { viewModel.markAllAsRead(it) }
-                    }
+                    },
+                    modifier = Modifier.testTag("clearAllButton")
                 ) {
                     Text(
                         text = "Mark all read",

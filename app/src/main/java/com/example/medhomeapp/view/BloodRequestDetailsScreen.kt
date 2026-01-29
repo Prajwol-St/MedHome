@@ -62,7 +62,7 @@ fun BloodRequestDetailsScreen(
                 ),
                 title = { Text(stringResource(R.string.request_details), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = onBackClick){
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = stringResource(R.string.back),
