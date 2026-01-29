@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +42,8 @@ fun NotificationSettingsScreen() {
     val scrollState = rememberScrollState()
 
     // Get userId from SharedPreferences
-    val sharedPrefs = (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val sharedPrefs =
+        (context as BaseActivity).getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
     val userId = sharedPrefs.getString("user_id", null)
 
     // Initialize ViewModel
@@ -72,12 +74,12 @@ fun NotificationSettingsScreen() {
             IconButton(onClick = { (context as ComponentActivity).finish() }) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back",
+                    contentDescription = stringResource(R.string.back),
                     tint = Color(0xFF648DDB)
                 )
             }
             Text(
-                text = "Notification Settings",
+                text = stringResource(R.string.notification_settings_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF648DDB)
@@ -97,7 +99,7 @@ fun NotificationSettingsScreen() {
             }
         } else {
             Text(
-                text = "Manage Notifications",
+                text = stringResource(R.string.manage_notifications),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color(0xFF648DDB),
@@ -125,8 +127,8 @@ fun NotificationSettingsScreen() {
 
             preferences?.let { prefs ->
                 NotificationToggleItem(
-                    title = "Appointment Reminders",
-                    description = "Get notified 24h and 1h before appointments",
+                    title = stringResource(R.string.appointment_reminders),
+                    description = stringResource(R.string.appointment_reminders_desc),
                     checked = prefs.appointmentRemindersEnabled,
                     onCheckedChange = { enabled ->
                         userId?.let { viewModel.toggleAppointmentReminders(it, enabled) }
@@ -134,8 +136,8 @@ fun NotificationSettingsScreen() {
                 )
 
                 NotificationToggleItem(
-                    title = "Medicine Reminders",
-                    description = "Daily reminders to take your medications",
+                    title = stringResource(R.string.medicine_reminders),
+                    description = stringResource(R.string.medicine_reminders_desc),
                     checked = prefs.medicineRemindersEnabled,
                     onCheckedChange = { enabled ->
                         userId?.let { viewModel.toggleMedicineReminders(it, enabled) }
@@ -143,8 +145,8 @@ fun NotificationSettingsScreen() {
                 )
 
                 NotificationToggleItem(
-                    title = "Booking Confirmations",
-                    description = "Get notified when appointments are confirmed",
+                    title = stringResource(R.string.booking_confirmations),
+                    description = stringResource(R.string.booking_confirmations_desc),
                     checked = prefs.bookingConfirmationsEnabled,
                     onCheckedChange = { enabled ->
                         userId?.let { viewModel.toggleBookingConfirmations(it, enabled) }
@@ -154,7 +156,7 @@ fun NotificationSettingsScreen() {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Notification Sound & Vibration",
+                    text = stringResource(R.string.notification_sound_vibration),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color(0xFF648DDB),
@@ -164,8 +166,8 @@ fun NotificationSettingsScreen() {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 NotificationToggleItem(
-                    title = "Sound",
-                    description = "Play sound for notifications",
+                    title = stringResource(R.string.notification_sound),
+                    description = stringResource(R.string.notification_sound_desc),
                     checked = prefs.reminderSound,
                     onCheckedChange = { enabled ->
                         userId?.let { viewModel.toggleReminderSound(it, enabled) }
@@ -173,8 +175,8 @@ fun NotificationSettingsScreen() {
                 )
 
                 NotificationToggleItem(
-                    title = "Vibration",
-                    description = "Vibrate on notifications",
+                    title = stringResource(R.string.notification_vibration),
+                    description = stringResource(R.string.notification_vibration_desc),
                     checked = prefs.vibration,
                     onCheckedChange = { enabled ->
                         userId?.let { viewModel.toggleVibration(it, enabled) }

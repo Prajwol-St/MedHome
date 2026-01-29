@@ -1339,6 +1339,29 @@ By using MedHome, you acknowledge that you have read and agreed to these Terms o
     <string name="save_join_donor_list">Save &amp; Join Donor List</string>
     <string name="privacy_notice">By joining, you agree to share your blood group and availability status with those seeking blood donors. Your contact information will only be visible when someone needs your blood type.</string>
 
+    <!-- Notification Settings Screen -->
+    <string name="notification_settings_title">Notification Settings</string>
+
+    <!-- Error -->
+    <string name="error_generic">Something went wrong</string>
+
+    <!-- Notification Types -->
+    <string name="appointment_reminders">Appointment Reminders</string>
+    <string name="appointment_reminders_desc">Get notified 24h and 1h before appointments</string>
+
+    <string name="medicine_reminders_desc">Daily reminders to take your medications</string>
+
+    <string name="booking_confirmations">Booking Confirmations</string>
+    <string name="booking_confirmations_desc">Get notified when appointments are confirmed</string>
+
+    <!-- Sound & Vibration -->
+    <string name="notification_sound_vibration">Notification Sound &amp; Vibration</string>
+
+    <string name="notification_sound">Sound</string>
+    <string name="notification_sound_desc">Play sound for notifications</string>
+
+    <string name="notification_vibration">Vibration</string>
+    <string name="notification_vibration_desc">Vibrate on notifications</string>
 
 
 

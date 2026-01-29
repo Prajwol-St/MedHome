@@ -1305,4 +1305,28 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="save_join_donor_list">सुरक्षित गर्नुहोस् र दाता सूचीमा सामेल हुनुहोस्</string>
     <string name="privacy_notice">सामेल भएर, तपाईं आफ्नो रक्त समूह र उपलब्धता स्थिति रक्त दाताहरू खोज्नेहरूसँग साझा गर्न सहमत हुनुहुन्छ। तपाईंको सम्पर्क जानकारी तपाईंको रक्त प्रकार आवश्यक पर्दा मात्र देखिनेछ।</string>
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
+
+    <!-- Notification Settings Screen -->
+    <string name="notification_settings_title">सूचना सेटिङ</string>
+
+    <!-- Error -->
+    <string name="error_generic">केही समस्या आयो</string>
+
+    <!-- Notification Types -->
+    <string name="appointment_reminders">अपोइन्टमेन्ट रिमाइन्डर</string>
+    <string name="appointment_reminders_desc">अपोइन्टमेन्टभन्दा २४ घण्टा र १ घण्टा अघि सूचना पाउनुहोस्</string>
+
+    <string name="medicine_reminders_desc">औषधि खान दैनिक सूचना पाउनुहोस्</string>
+
+    <string name="booking_confirmations">बुकिङ पुष्टि</string>
+    <string name="booking_confirmations_desc">अपोइन्टमेन्ट पुष्टि हुँदा सूचना पाउनुहोस्</string>
+
+    <!-- Sound & Vibration -->
+    <string name="notification_sound_vibration">सूचना ध्वनि र कम्पन</string>
+
+    <string name="notification_sound">ध्वनि</string>
+    <string name="notification_sound_desc">सूचनाका लागि ध्वनि बजाउनुहोस्</string>
+
+    <string name="notification_vibration">कम्पन</string>
+    <string name="notification_vibration_desc">सूचना आउँदा कम्पन दिनुहोस्</string>
 </resources>
