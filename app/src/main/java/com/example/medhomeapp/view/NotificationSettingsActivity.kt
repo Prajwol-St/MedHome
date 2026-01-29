@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,15 +48,18 @@ class NotificationSettingsActivity : BaseActivity() {
 @Composable
 fun NotificationSettingsScreen() {
     val context = LocalContext.current
-    val activity = context as BaseActivity
+    val activity = context as? BaseActivity
     val scrollState = rememberScrollState()
 
+    // Using your app's design tokens
     val backgroundTint = Color(0xFFF1FBF9)
     val textMain = Color(0xFF2C3E50)
 
-    val sharedPrefs = activity.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-    val userId = sharedPrefs.getString("user_id", null)
+    // Get userId from SharedPreferences
+    val sharedPrefs = activity?.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = sharedPrefs?.getString("user_id", null)
 
+    // Initialize ViewModel
     val viewModel = remember { NotificationSettingsViewModel(NotificationRepositoryImpl()) }
 
     LaunchedEffect(userId) {
@@ -74,13 +78,17 @@ fun NotificationSettingsScreen() {
                     titleContentColor = Color.White
                 ),
                 title = {
-                    Text("Notifications", fontWeight = FontWeight.Bold)
+                    Text(
+                        stringResource(R.string.notification_settings_title),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { activity.finish() }) {
+                    IconButton(onClick = { activity?.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
@@ -98,100 +106,99 @@ fun NotificationSettingsScreen() {
             if (isLoading) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
-                    color = MintGreen
+                    color = MintGreen,
+                    trackColor = MintGreen.copy(alpha = 0.1f)
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            // Section 1: Alert Preferences
             Text(
-                text = "Alert Preferences",
+                text = stringResource(R.string.manage_notifications),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = textMain,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
 
-            errorMessage?.let {
+            errorMessage?.let { error ->
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
+                    modifier = Modifier.fillMaxWidth().padding(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
                 ) {
-                    Text(
-                        text = it,
-                        color = Color(0xFFD32F2F),
-                        modifier = Modifier.padding(12.dp)
-                    )
+                    Text(error, color = Color(0xFFD32F2F), fontSize = 13.sp, modifier = Modifier.padding(12.dp))
                 }
             }
 
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(2.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column {
                     preferences?.let { prefs ->
                         NotificationToggleItem(
-                            title = "Appointment Reminders",
-                            description = "24h and 1h alerts before visits",
+                            title = stringResource(R.string.appointment_reminders),
+                            description = stringResource(R.string.appointment_reminders_desc),
                             icon = Icons.Default.CalendarMonth,
-                            checked = prefs.appointmentRemindersEnabled
-                        ) { viewModel.toggleAppointmentReminders(userId!!, it) }
-
+                            checked = prefs.appointmentRemindersEnabled,
+                            onCheckedChange = { userId?.let { id -> viewModel.toggleAppointmentReminders(id, it) } }
+                        )
                         NotificationToggleItem(
-                            title = "Medicine Reminders",
-                            description = "Daily schedule alerts",
+                            title = stringResource(R.string.medicine_reminders),
+                            description = stringResource(R.string.medicine_reminders_desc),
                             icon = Icons.Default.Medication,
-                            checked = prefs.medicineRemindersEnabled
-                        ) { viewModel.toggleMedicineReminders(userId!!, it) }
-
+                            checked = prefs.medicineRemindersEnabled,
+                            onCheckedChange = { userId?.let { id -> viewModel.toggleMedicineReminders(id, it) } }
+                        )
                         NotificationToggleItem(
-                            title = "Booking Updates",
-                            description = "Confirmation and status alerts",
+                            title = stringResource(R.string.booking_confirmations),
+                            description = stringResource(R.string.booking_confirmations_desc),
                             icon = Icons.Default.NotificationsActive,
                             checked = prefs.bookingConfirmationsEnabled,
+                            onCheckedChange = { userId?.let { id -> viewModel.toggleBookingConfirmations(id, it) } },
                             isLast = true
-                        ) { viewModel.toggleBookingConfirmations(userId!!, it) }
+                        )
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            // Section 2: Sound & Vibration
             Text(
-                text = "Sound & Feedback",
+                text = stringResource(R.string.notification_sound_vibration),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = textMain,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
 
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(2.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column {
                     preferences?.let { prefs ->
                         NotificationToggleItem(
-                            title = "Alert Sound",
-                            description = "Play tones for notifications",
+                            title = stringResource(R.string.notification_sound),
+                            description = stringResource(R.string.notification_sound_desc),
                             icon = Icons.Default.VolumeUp,
-                            checked = prefs.reminderSound
-                        ) { viewModel.toggleReminderSound(userId!!, it) }
-
+                            checked = prefs.reminderSound,
+                            onCheckedChange = { userId?.let { id -> viewModel.toggleReminderSound(id, it) } }
+                        )
                         NotificationToggleItem(
-                            title = "Vibration",
-                            description = "Haptic feedback for alerts",
+                            title = stringResource(R.string.notification_vibration),
+                            description = stringResource(R.string.notification_vibration_desc),
                             icon = Icons.Default.Vibration,
                             checked = prefs.vibration,
+                            onCheckedChange = { userId?.let { id -> viewModel.toggleVibration(id, it) } },
                             isLast = true
-                        ) { viewModel.toggleVibration(userId!!, it) }
+                        )
                     }
                 }
             }
@@ -207,16 +214,15 @@ fun NotificationToggleItem(
     description: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     checked: Boolean,
-    isLast: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    isLast: Boolean = false
 ) {
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Icon box styled like your FeatureCards
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -224,27 +230,33 @@ fun NotificationToggleItem(
                     .background(MintGreen.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, null, tint = MintGreen)
+                Icon(icon, contentDescription = null, tint = MintGreen, modifier = Modifier.size(22.dp))
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(title, fontWeight = FontWeight.SemiBold)
-                Text(description, fontSize = 12.sp, color = Color.Gray)
+                Text(title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = Color(0xFF2C3E50))
+                Text(description, fontSize = 12.sp, color = Color.Gray, lineHeight = 16.sp)
             }
 
             Switch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                colors = SwitchDefaults.colors(checkedTrackColor = MintGreen)
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = Color.White,
+                    checkedTrackColor = MintGreen,
+                    uncheckedThumbColor = Color.White,
+                    uncheckedTrackColor = Color.LightGray,
+                    uncheckedBorderColor = Color.Transparent
+                )
             )
         }
-
         if (!isLast) {
             HorizontalDivider(
                 modifier = Modifier.padding(start = 72.dp, end = 16.dp),
-                thickness = 0.5.dp
+                thickness = 0.5.dp,
+                color = Color(0xFFEEEEEE)
             )
         }
     }
