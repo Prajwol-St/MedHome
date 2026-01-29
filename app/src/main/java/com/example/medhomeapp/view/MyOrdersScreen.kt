@@ -23,11 +23,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.OrderModel
 import com.example.medhomeapp.repository.OrderRepoImpl
 import com.example.medhomeapp.viewmodel.OrderViewModel
@@ -82,7 +84,7 @@ fun MyOrdersScreen() {
         if (currentUserId != null) {
             orderViewModel.listenToUserOrders(currentUserId)
         } else {
-            Toast.makeText(context, "Please login to view orders", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.please_login_to_view_orders), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -127,7 +129,14 @@ fun MyOrdersScreen() {
                         }
 
                         FilterChipEnhanced(
-                            label = filter,
+                            label = when(filter) {
+                                "All" -> stringResource(R.string.all)
+                                "Pending" -> stringResource(R.string.pending)
+                                "Processing" -> stringResource(R.string.processing)
+                                "Completed" -> stringResource(R.string.completed)
+                                "Cancelled" -> stringResource(R.string.cancelled)
+                                else -> filter
+                            },
                             count = count,
                             selected = selectedFilter == filter,
                             onClick = { selectedFilter = filter }
@@ -263,6 +272,7 @@ fun FilterChipEnhanced(
 
 @Composable
 fun LoadingState() {
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -277,7 +287,7 @@ fun LoadingState() {
                 modifier = Modifier.size(48.dp)
             )
             Text(
-                text = "Loading your orders...",
+                text = stringResource(R.string.loading_your_orders),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
@@ -287,6 +297,7 @@ fun LoadingState() {
 
 @Composable
 fun EmptyState(selectedFilter: String) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -311,13 +322,13 @@ fun EmptyState(selectedFilter: String) {
                 }
             }
             Text(
-                text = if (selectedFilter == "All") "No orders yet" else "No $selectedFilter orders",
+                text = if (selectedFilter == "All") stringResource(R.string.no_orders_yet) else stringResource(R.string.no_filter_orders, selectedFilter),
                 style = MaterialTheme.typography.titleLarge,
                 color = Color(0xFF2D3436),
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Your orders will appear here instantly",
+                text = stringResource(R.string.orders_appear_here),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
@@ -331,6 +342,7 @@ fun OrderCardEnhanced(
     onViewDetails: () -> Unit,
     onCancelOrder: () -> Unit
 ) {
+    val context = LocalContext.current
     var isPressed by remember { mutableStateOf(false) }
 
     Card(
@@ -449,7 +461,7 @@ fun OrderCardEnhanced(
                             tint = Color.Gray
                         )
                         Text(
-                            text = "Qty: ${order.quantity}",
+                            text = stringResource(R.string.qty, order.quantity),
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray
                         )
@@ -540,7 +552,7 @@ fun OrderCardEnhanced(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Cancel", fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                        Text(stringResource(R.string.cancel), fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
                     }
                 }
             }
@@ -608,6 +620,7 @@ fun OrderDetailsDialogEnhanced(
     order: OrderModel,
     onDismiss: () -> Unit
 ) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -632,7 +645,7 @@ fun OrderDetailsDialogEnhanced(
                     }
                     Column {
                         Text(
-                            text = "Order Details",
+                            text = stringResource(R.string.order_details),
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold
                         )
@@ -656,7 +669,7 @@ fun OrderDetailsDialogEnhanced(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Status:", fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
+                        Text(stringResource(R.string.status), fontWeight = FontWeight.SemiBold, fontSize = 15.sp)
                         OrderStatusBadgeEnhanced(status = order.orderStatus)
                     }
                 }
@@ -686,16 +699,16 @@ fun OrderDetailsDialogEnhanced(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Text(
-                                "Product Details",
+                                stringResource(R.string.product_details),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
                             )
-                            DetailRowEnhanced("Medicine", order.medicineName)
-                            DetailRowEnhanced("Price per unit", "₹${order.price}")
-                            DetailRowEnhanced("Quantity", "${order.quantity}")
+                            DetailRowEnhanced(stringResource(R.string.medicine), order.medicineName)
+                            DetailRowEnhanced(stringResource(R.string.price_per_unit), "₹${order.price}")
+                            DetailRowEnhanced(stringResource(R.string.quantity), "${order.quantity}")
                             Divider(color = Color.Gray.copy(alpha = 0.3f))
                             DetailRowEnhanced(
-                                "Total Amount",
+                                stringResource(R.string.total_amount),
                                 "₹${"%.2f".format(order.totalAmount)}",
                                 highlight = true
                             )
@@ -713,13 +726,13 @@ fun OrderDetailsDialogEnhanced(
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             Text(
-                                "Delivery Information",
+                                stringResource(R.string.delivery_information),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
                             )
-                            DetailRowEnhanced("Address", order.deliveryAddress)
-                            DetailRowEnhanced("Phone", order.phoneNumber)
-                            DetailRowEnhanced("Order Time", order.getFormattedTime())
+                            DetailRowEnhanced(stringResource(R.string.address), order.deliveryAddress)
+                            DetailRowEnhanced(stringResource(R.string.phone), order.phoneNumber)
+                            DetailRowEnhanced(stringResource(R.string.order_time), order.getFormattedTime())
                         }
                     }
                 }
@@ -732,7 +745,7 @@ fun OrderDetailsDialogEnhanced(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("CLOSE", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.close), fontWeight = FontWeight.Bold)
             }
         }
     )
@@ -769,6 +782,7 @@ fun CancelOrderDialogEnhanced(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
@@ -789,7 +803,7 @@ fun CancelOrderDialogEnhanced(
         },
         title = {
             Text(
-                text = "Cancel Order?",
+                text = stringResource(R.string.cancel_order_title),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF2D3436)
@@ -798,7 +812,7 @@ fun CancelOrderDialogEnhanced(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(
-                    text = "Are you sure you want to cancel this order? This action cannot be undone.",
+                    text = stringResource(R.string.cancel_order_message),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color(0xFF636E72)
                 )
@@ -829,12 +843,12 @@ fun CancelOrderDialogEnhanced(
                             )
                         }
                         Text(
-                            text = "Order #${order.orderID.take(8).uppercase()}",
+                            text = stringResource(R.string.order_id_short, order.orderID.take(8).uppercase()),
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.Gray
                         )
                         Text(
-                            text = "Amount: ₹${"%.2f".format(order.totalAmount)}",
+                            text = stringResource(R.string.amount, "%.2f".format(order.totalAmount)),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = Color(0xFF4A6741)
@@ -858,7 +872,7 @@ fun CancelOrderDialogEnhanced(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("YES, CANCEL ORDER", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.yes_cancel_order), fontWeight = FontWeight.Bold)
             }
         },
         dismissButton = {
@@ -872,7 +886,7 @@ fun CancelOrderDialogEnhanced(
                 )
             ) {
                 Text(
-                    "NO, KEEP IT",
+                    stringResource(R.string.no_keep_it),
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF4A6741)
                 )

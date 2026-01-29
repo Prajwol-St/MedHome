@@ -2,7 +2,6 @@ package com.example.medhomeapp.view
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -11,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Medication
 import androidx.compose.material.icons.filled.NotificationsActive
@@ -49,18 +47,15 @@ class NotificationSettingsActivity : BaseActivity() {
 @Composable
 fun NotificationSettingsScreen() {
     val context = LocalContext.current
-    val activity = context as? BaseActivity
+    val activity = context as BaseActivity
     val scrollState = rememberScrollState()
 
-    // Match your Home Screen theme colors
     val backgroundTint = Color(0xFFF1FBF9)
     val textMain = Color(0xFF2C3E50)
 
-    // Get userId from SharedPreferences
-    val sharedPrefs = activity?.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
-    val userId = sharedPrefs?.getString("user_id", null)
+    val sharedPrefs = activity.getSharedPreferences("MedHomePrefs", MODE_PRIVATE)
+    val userId = sharedPrefs.getString("user_id", null)
 
-    // Initialize ViewModel
     val viewModel = remember { NotificationSettingsViewModel(NotificationRepositoryImpl()) }
 
     LaunchedEffect(userId) {
@@ -79,14 +74,10 @@ fun NotificationSettingsScreen() {
                     titleContentColor = Color.White
                 ),
                 title = {
-                    Text(
-                        "Notifications",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    )
+                    Text("Notifications", fontWeight = FontWeight.Bold)
                 },
                 navigationIcon = {
-                    IconButton(onClick = { activity?.finish() }) {
+                    IconButton(onClick = { activity.finish() }) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = "Back",
@@ -107,23 +98,21 @@ fun NotificationSettingsScreen() {
             if (isLoading) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
-                    color = MintGreen,
-                    trackColor = MintGreen.copy(alpha = 0.1f)
+                    color = MintGreen
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Section Header
             Text(
                 text = "Alert Preferences",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = textMain,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
 
-            errorMessage?.let { error ->
+            errorMessage?.let {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,21 +120,17 @@ fun NotificationSettingsScreen() {
                     colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE))
                 ) {
                     Text(
-                        text = error,
+                        text = it,
                         color = Color(0xFFD32F2F),
-                        fontSize = 13.sp,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
             }
 
-            // Settings Group
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(2.dp),
+                    .padding(20.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column {
@@ -154,32 +139,23 @@ fun NotificationSettingsScreen() {
                             title = "Appointment Reminders",
                             description = "24h and 1h alerts before visits",
                             icon = Icons.Default.CalendarMonth,
-                            checked = prefs.appointmentRemindersEnabled,
-                            onCheckedChange = { enabled ->
-                                userId?.let { viewModel.toggleAppointmentReminders(it, enabled) }
-                            }
-                        )
+                            checked = prefs.appointmentRemindersEnabled
+                        ) { viewModel.toggleAppointmentReminders(userId!!, it) }
 
                         NotificationToggleItem(
                             title = "Medicine Reminders",
                             description = "Daily schedule alerts",
                             icon = Icons.Default.Medication,
-                            checked = prefs.medicineRemindersEnabled,
-                            onCheckedChange = { enabled ->
-                                userId?.let { viewModel.toggleMedicineReminders(it, enabled) }
-                            }
-                        )
+                            checked = prefs.medicineRemindersEnabled
+                        ) { viewModel.toggleMedicineReminders(userId!!, it) }
 
                         NotificationToggleItem(
                             title = "Booking Updates",
                             description = "Confirmation and status alerts",
                             icon = Icons.Default.NotificationsActive,
                             checked = prefs.bookingConfirmationsEnabled,
-                            onCheckedChange = { enabled ->
-                                userId?.let { viewModel.toggleBookingConfirmations(it, enabled) }
-                            },
                             isLast = true
-                        )
+                        ) { viewModel.toggleBookingConfirmations(userId!!, it) }
                     }
                 }
             }
@@ -191,15 +167,13 @@ fun NotificationSettingsScreen() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = textMain,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(2.dp),
+                    .padding(20.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column {
@@ -208,22 +182,16 @@ fun NotificationSettingsScreen() {
                             title = "Alert Sound",
                             description = "Play tones for notifications",
                             icon = Icons.Default.VolumeUp,
-                            checked = prefs.reminderSound,
-                            onCheckedChange = { enabled ->
-                                userId?.let { viewModel.toggleReminderSound(it, enabled) }
-                            }
-                        )
+                            checked = prefs.reminderSound
+                        ) { viewModel.toggleReminderSound(userId!!, it) }
 
                         NotificationToggleItem(
                             title = "Vibration",
                             description = "Haptic feedback for alerts",
                             icon = Icons.Default.Vibration,
                             checked = prefs.vibration,
-                            onCheckedChange = { enabled ->
-                                userId?.let { viewModel.toggleVibration(it, enabled) }
-                            },
                             isLast = true
-                        )
+                        ) { viewModel.toggleVibration(userId!!, it) }
                     }
                 }
             }
@@ -239,8 +207,8 @@ fun NotificationToggleItem(
     description: String,
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    isLast: Boolean = false
+    isLast: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Column {
         Row(
@@ -256,48 +224,27 @@ fun NotificationToggleItem(
                     .background(MintGreen.copy(alpha = 0.1f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = MintGreen,
-                    modifier = Modifier.size(22.dp)
-                )
+                Icon(icon, null, tint = MintGreen)
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF2C3E50)
-                )
-                Text(
-                    text = description,
-                    fontSize = 12.sp,
-                    color = Color.Gray
-                )
+                Text(title, fontWeight = FontWeight.SemiBold)
+                Text(description, fontSize = 12.sp, color = Color.Gray)
             }
 
             Switch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = MintGreen,
-                    uncheckedThumbColor = Color.White,
-                    uncheckedTrackColor = Color.LightGray,
-                    uncheckedBorderColor = Color.Transparent
-                )
+                colors = SwitchDefaults.colors(checkedTrackColor = MintGreen)
             )
         }
 
         if (!isLast) {
             HorizontalDivider(
                 modifier = Modifier.padding(start = 72.dp, end = 16.dp),
-                thickness = 0.5.dp,
-                color = Color(0xFFEEEEEE)
+                thickness = 0.5.dp
             )
         }
     }

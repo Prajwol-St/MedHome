@@ -39,19 +39,18 @@ fun DoctorHomeScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    // Using exact colors from your patient HomeScreen
     val backgroundTint = Color(0xFFF1FBF9)
     val textMain = Color(0xFF2C3E50)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundTint) // Fixed background to match patient screen
+            .background(backgroundTint)
             .verticalScroll(scrollState)
             .testTag("doctorHomeScreen")
     ) {
 
-        // Header Card - Styled exactly like Welcome Card
+        // Header Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,68 +64,62 @@ fun DoctorHomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.weight(1f)
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(CircleShape)
+                        .background(Color.White.copy(alpha = 0.25f))
+                        .testTag("doctorProfilePictureBox"),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(CircleShape)
-                            .background(Color.White.copy(alpha = 0.25f))
-                            .testTag("doctorProfilePictureBox"),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (!profilePictureUrl.isNullOrEmpty()) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(context)
-                                    .data(profilePictureUrl)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "Profile Picture",
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(CircleShape)
-                                    .testTag("doctorProfileImage"),
-                                contentScale = ContentScale.Crop
-                            )
-                        } else {
-                            Icon(
-                                Icons.Default.Person,
-                                contentDescription = "Profile",
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .testTag("doctorProfileIcon"),
-                                tint = Color.White
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.width(14.dp))
-
-                    Column {
-                        Text(
-                            text = stringResource(R.string.doctor_welcome),
-                            fontSize = 13.sp,
-                            color = Color.White.copy(alpha = 0.9f),
-                            modifier = Modifier.testTag("doctorWelcomeText")
+                    if (!profilePictureUrl.isNullOrEmpty()) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(context)
+                                .data(profilePictureUrl)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = stringResource(R.string.profile_picture),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
+                                .testTag("doctorProfileImage"),
+                            contentScale = ContentScale.Crop
                         )
-                        Text(
-                            text = doctorName,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White,
-                            modifier = Modifier.testTag("doctorNameText")
+                    } else {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = stringResource(R.string.profile),
+                            modifier = Modifier
+                                .size(32.dp)
+                                .testTag("doctorProfileIcon"),
+                            tint = Color.White
                         )
                     }
+                }
+
+                Spacer(modifier = Modifier.width(14.dp))
+
+                Column {
+                    Text(
+                        text = stringResource(R.string.doctor_welcome),
+                        fontSize = 13.sp,
+                        color = Color.White.copy(alpha = 0.9f),
+                        modifier = Modifier.testTag("doctorWelcomeText")
+                    )
+                    Text(
+                        text = doctorName,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        modifier = Modifier.testTag("doctorNameText")
+                    )
                 }
             }
         }
 
-        // Section Title - Matching "Services" style
+        // Section Title
         Text(
             text = stringResource(R.string.doctor_management),
             fontSize = 18.sp,
@@ -144,7 +137,7 @@ fun DoctorHomeScreen(
             horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
             modifier = Modifier
-                .height(300.dp) // Adjusted height for 4 items (2 rows)
+                .height(300.dp)
                 .testTag("doctorServicesGrid")
         ) {
 
@@ -152,32 +145,38 @@ fun DoctorHomeScreen(
                 DoctorFeatureCard(
                     title = stringResource(R.string.doctor_set_availability),
                     icon = Icons.Default.CalendarMonth,
-                    color = Color(0xFF4DB6AC), // Matching patient record color
+                    color = Color(0xFF4DB6AC),
                     tag = "setAvailabilityCard"
                 ) {
-                    context.startActivity(Intent(context, DoctorAvailabilityActivity::class.java))
+                    context.startActivity(
+                        Intent(context, DoctorAvailabilityActivity::class.java)
+                    )
                 }
             }
 
             item {
                 DoctorFeatureCard(
-                    title = "My Appointments",
+                    title = stringResource(R.string.my_appointments),
                     icon = Icons.Default.EventNote,
-                    color = Color(0xFF81D4FA), // Matching consultation color
+                    color = Color(0xFF81D4FA),
                     tag = "myAppointmentsCard"
                 ) {
-                    context.startActivity(Intent(context, DoctorAppointmentsActivity::class.java))
+                    context.startActivity(
+                        Intent(context, DoctorAppointmentsActivity::class.java)
+                    )
                 }
             }
 
             item {
                 DoctorFeatureCard(
-                    title = "Manage Leaves",
+                    title = stringResource(R.string.manage_leaves),
                     icon = Icons.Default.BeachAccess,
-                    color = Color(0xFFFF8A80), // Matching blood donation/red color
+                    color = Color(0xFFFF8A80),
                     tag = "manageLeavesCard"
                 ) {
-                    context.startActivity(Intent(context, ManageLeavesActivity::class.java))
+                    context.startActivity(
+                        Intent(context, ManageLeavesActivity::class.java)
+                    )
                 }
             }
 
@@ -185,10 +184,12 @@ fun DoctorHomeScreen(
                 DoctorFeatureCard(
                     title = stringResource(R.string.doctor_health_packages),
                     icon = Icons.Default.LocalShipping,
-                    color = Color(0xFF64B5F6), // Matching packages color
+                    color = Color(0xFF64B5F6),
                     tag = "healthPackagesCard"
                 ) {
-                    context.startActivity(Intent(context, HealthPackagesManagementActivity::class.java))
+                    context.startActivity(
+                        Intent(context, HealthPackagesManagementActivity::class.java)
+                    )
                 }
             }
         }

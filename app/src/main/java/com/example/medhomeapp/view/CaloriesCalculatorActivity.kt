@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -64,7 +65,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
     var foodToDelete by remember { mutableStateOf<FoodItemModel?>(null) }
     var selectedFood by remember { mutableStateOf<FoodItemModel?>(null) }
     var selectedMealType by remember { mutableStateOf("other") }
-    var selectedTab by remember { mutableStateOf(0) } 
+    var selectedTab by remember { mutableStateOf(0) }
 
 
     val searchSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -136,9 +137,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 ),
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Calorie Calculator", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.calorie_calculator), fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Text(
-                            "Powered by USDA Food Database",
+                            stringResource(R.string.powered_by_usda),
                             fontSize = 10.sp,
                             color = Color.White.copy(alpha = 0.8f)
                         )
@@ -170,7 +171,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        "Total Calories Today",
+                        stringResource(R.string.total_calories_today),
                         color = Color.White,
                         fontSize = 14.sp
                     )
@@ -214,13 +215,13 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            "Daily Goal: ${calorieGoal?.targetCalories?.toInt() ?: 2000} kcal",
+                            stringResource(R.string.daily_goal, calorieGoal?.targetCalories?.toInt() ?: 2000),
                             color = Color.White,
                             fontSize = 14.sp
                         )
 
                         Text(
-                            "Remaining: ${dailySummary?.remainingCalories?.toInt() ?: 0} kcal",
+                            stringResource(R.string.remaining, dailySummary?.remainingCalories?.toInt() ?: 0),
                             color = Color.White,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
@@ -237,17 +238,17 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             MacroItem(
-                                label = "Protein",
+                                label = stringResource(R.string.protein),
                                 value = "${dailySummary?.totalProtein?.toInt() ?: 0}g",
                                 color = Color.White
                             )
                             MacroItem(
-                                label = "Carbs",
+                                label = stringResource(R.string.carbs),
                                 value = "${dailySummary?.totalCarbs?.toInt() ?: 0}g",
                                 color = Color.White
                             )
                             MacroItem(
-                                label = "Fat",
+                                label = stringResource(R.string.fat),
                                 value = "${dailySummary?.totalFat?.toInt() ?: 0}g",
                                 color = Color.White
                             )
@@ -278,7 +279,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("Set Daily Goal", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.set_daily_goal), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -294,7 +295,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        "Search USDA Food Database",
+                        stringResource(R.string.search_usda_database),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = MintGreen
@@ -302,7 +303,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                     Spacer(Modifier.height(12.dp))
 
-                    
+
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
@@ -311,7 +312,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             .clickable {
                                 showSearchBottomSheet = true
                             },
-                        placeholder = { Text("Search food (e.g., apple, rice, chicken)") },
+                        placeholder = { Text(stringResource(R.string.search_food_placeholder)) },
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.baseline_search_24),
@@ -332,7 +333,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     Spacer(Modifier.height(8.dp))
 
                     Text(
-                        "Results from USDA FoodData Central",
+                        stringResource(R.string.results_from_usda),
                         fontSize = 11.sp,
                         color = Color.Gray
                     )
@@ -363,7 +364,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text("Add Food Manually", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.add_food_manually), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -379,7 +380,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        "Today's Meals",
+                        stringResource(R.string.todays_meals),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MintGreen
@@ -387,7 +388,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                     Spacer(Modifier.height(12.dp))
 
-                    
+
                     ScrollableTabRow(
                         selectedTabIndex = selectedTab,
                         containerColor = Color.Transparent,
@@ -407,7 +408,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             onClick = { selectedTab = 0 },
                             text = {
                                 Text(
-                                    "All",
+                                    stringResource(R.string.all),
                                     fontWeight = if (selectedTab == 0) FontWeight.Bold else FontWeight.Normal
                                 )
                             }
@@ -418,7 +419,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             text = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        "🍳 Breakfast",
+                                        stringResource(R.string.breakfast),
                                         fontWeight = if (selectedTab == 1) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -430,7 +431,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             text = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        "🍛 Lunch",
+                                        stringResource(R.string.lunch),
                                         fontWeight = if (selectedTab == 2) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -442,7 +443,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             text = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        "🍽️ Dinner",
+                                        stringResource(R.string.dinner),
                                         fontWeight = if (selectedTab == 3) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -454,7 +455,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             text = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(
-                                        "🍿 Snacks",
+                                        stringResource(R.string.snacks),
                                         fontWeight = if (selectedTab == 4) FontWeight.Bold else FontWeight.Normal
                                     )
                                 }
@@ -492,7 +493,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    "No meals added yet. Search and add food above!",
+                                    stringResource(R.string.no_meals_added),
                                     color = Color.Gray,
                                     fontSize = 14.sp
                                 )
@@ -525,7 +526,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
             Button(
                 onClick = {
-                    Toast.makeText(context, "Daily Summary Feature", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.daily_summary_feature), Toast.LENGTH_SHORT).show()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -535,10 +536,10 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 ),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("View Daily Summary", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.view_daily_summary), fontWeight = FontWeight.Bold)
             }
 
-            Spacer(Modifier.height(80.dp)) 
+            Spacer(Modifier.height(80.dp))
 
         }
     }
@@ -558,7 +559,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Search USDA Food Database",
+                    text = stringResource(R.string.search_usda_database),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MintGreen
@@ -567,14 +568,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Search from 300,000+ foods with complete nutrition data",
+                    text = stringResource(R.string.search_from_foods),
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
 
                 Spacer(Modifier.height(16.dp))
 
-                
+
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = {
@@ -586,7 +587,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("e.g., apple, chicken breast, rice") },
+                    placeholder = { Text(stringResource(R.string.search_example)) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.baseline_search_24),
@@ -602,7 +603,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             }) {
                                 Icon(
                                     painter = painterResource(R.drawable.baseline_close_24),
-                                    contentDescription = "Clear",
+                                    contentDescription = stringResource(R.string.clear),
                                     tint = Color.Gray
                                 )
                             }
@@ -630,7 +631,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                 CircularProgressIndicator(color = MintGreen)
                                 Spacer(Modifier.height(16.dp))
                                 Text(
-                                    "Searching USDA database...",
+                                    stringResource(R.string.searching_usda),
                                     fontSize = 14.sp,
                                     color = Color.Gray
                                 )
@@ -654,14 +655,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                 )
                                 Spacer(Modifier.height(16.dp))
                                 Text(
-                                    "Search for any food item",
+                                    stringResource(R.string.search_for_food),
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = Color.Gray
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    "Try: apple, rice, chicken, milk",
+                                    stringResource(R.string.try_examples),
                                     fontSize = 13.sp,
                                     color = Color.LightGray
                                 )
@@ -685,13 +686,13 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                 )
                                 Spacer(Modifier.height(16.dp))
                                 Text(
-                                    "No foods found for '$searchQuery'",
+                                    stringResource(R.string.no_foods_found, searchQuery),
                                     fontSize = 14.sp,
                                     color = Color.Gray
                                 )
                                 Spacer(Modifier.height(8.dp))
                                 Text(
-                                    "Try a different search term",
+                                    stringResource(R.string.try_different_search),
                                     fontSize = 12.sp,
                                     color = Color.LightGray
                                 )
@@ -701,7 +702,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                     else -> {
                         Text(
-                            "Found ${searchResults.size} results",
+                            stringResource(R.string.found_results, searchResults.size),
                             fontSize = 13.sp,
                             color = Color.Gray,
                             fontWeight = FontWeight.Medium
@@ -717,11 +718,11 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                     searchResult = searchResults[index],
                                     onClick = { result ->
                                         val mealTypes = arrayOf(
-                                            "Other",
-                                            "🍳 Breakfast",
-                                            "🍛 Lunch",
-                                            "🍽️ Dinner",
-                                            "🍿 Snack"
+                                            context.getString(R.string.other),
+                                            context.getString(R.string.breakfast),
+                                            context.getString(R.string.lunch),
+                                            context.getString(R.string.dinner),
+                                            context.getString(R.string.snacks)
                                         )
 
                                         val mealTypeValues = arrayOf(
@@ -733,12 +734,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                         )
                                         var selectedIndex = 0
 
-                                        android.app.AlertDialog.Builder(context)  
-                                            .setTitle("Add ${result.description}")
+                                        android.app.AlertDialog.Builder(context)
+                                            .setTitle(context.getString(R.string.add_meal_type, result.description))
                                             .setSingleChoiceItems(mealTypes, 0) { _, which ->
                                                 selectedIndex = which
                                             }
-                                            .setPositiveButton("Add") { dialog, _ ->
+                                            .setPositiveButton(context.getString(R.string.add)) { dialog, _ ->
                                                 viewModel.addFoodFromSearch(
                                                     searchResult = result,
                                                     servingAmount = 1.0,
@@ -749,7 +750,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                                                 viewModel.clearSearchResults()
                                                 dialog.dismiss()
                                             }
-                                            .setNegativeButton("Cancel") { dialog, _ ->
+                                            .setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
                                                 dialog.dismiss()
                                             }
                                             .show()
@@ -785,7 +786,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = "Add Food Manually",
+                    text = stringResource(R.string.add_food_manually),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MintGreen
@@ -794,19 +795,19 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Enter food details and nutrition information",
+                    text = stringResource(R.string.enter_food_details),
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
 
                 Spacer(Modifier.height(20.dp))
 
-                
+
                 OutlinedTextField(
                     value = manualFoodName,
                     onValueChange = { manualFoodName = it },
-                    label = { Text("Food Name *") },
-                    placeholder = { Text("e.g., Home-cooked Meal") },
+                    label = { Text(stringResource(R.string.food_name_required)) },
+                    placeholder = { Text(stringResource(R.string.food_name_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen,
@@ -819,12 +820,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                
+
                 OutlinedTextField(
                     value = manualCalories,
                     onValueChange = { manualCalories = it },
-                    label = { Text("Calories (kcal) *") },
-                    placeholder = { Text("e.g., 250") },
+                    label = { Text(stringResource(R.string.calories_kcal)) },
+                    placeholder = { Text(stringResource(R.string.calories_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen,
@@ -839,7 +840,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Macronutrients (Optional)",
+                    text = stringResource(R.string.macronutrients_optional),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -847,12 +848,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                
+
                 OutlinedTextField(
                     value = manualProtein,
                     onValueChange = { manualProtein = it },
-                    label = { Text("Protein (g)") },
-                    placeholder = { Text("e.g., 20") },
+                    label = { Text(stringResource(R.string.protein_g)) },
+                    placeholder = { Text(stringResource(R.string.protein_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF4CAF50),
@@ -875,12 +876,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                
+
                 OutlinedTextField(
                     value = manualCarbs,
                     onValueChange = { manualCarbs = it },
-                    label = { Text("Carbohydrates (g)") },
-                    placeholder = { Text("e.g., 30") },
+                    label = { Text(stringResource(R.string.carbohydrates_g)) },
+                    placeholder = { Text(stringResource(R.string.carbs_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF2196F3),
@@ -903,12 +904,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                
+
                 OutlinedTextField(
                     value = manualFat,
                     onValueChange = { manualFat = it },
-                    label = { Text("Fat (g)") },
-                    placeholder = { Text("e.g., 10") },
+                    label = { Text(stringResource(R.string.fat_g)) },
+                    placeholder = { Text(stringResource(R.string.fat_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFFFF9800),
@@ -931,12 +932,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                
+
                 OutlinedTextField(
                     value = servingAmount,
                     onValueChange = { servingAmount = it },
-                    label = { Text("Serving Amount") },
-                    placeholder = { Text("e.g., 1.5") },
+                    label = { Text(stringResource(R.string.serving_amount)) },
+                    placeholder = { Text(stringResource(R.string.serving_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen,
@@ -947,15 +948,15 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     singleLine = true,
                     supportingText = {
-                        Text("1.0 = 1 serving, 1.5 = 1.5 servings", fontSize = 11.sp)
+                        Text(stringResource(R.string.serving_note), fontSize = 11.sp)
                     }
                 )
 
                 Spacer(Modifier.height(16.dp))
 
-                
+
                 Text(
-                    text = "Meal Type *",
+                    text = stringResource(R.string.meal_type_required),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -968,13 +969,13 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     MealTypeChip(
-                        label = "🍳 Breakfast",
+                        label = stringResource(R.string.breakfast),
                         isSelected = selectedMealType == "breakfast",
                         onClick = { selectedMealType = "breakfast" },
                         modifier = Modifier.weight(1f)
                     )
                     MealTypeChip(
-                        label = "🍛 Lunch",
+                        label = stringResource(R.string.lunch),
                         isSelected = selectedMealType == "lunch",
                         onClick = { selectedMealType = "lunch" },
                         modifier = Modifier.weight(1f)
@@ -988,13 +989,13 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     MealTypeChip(
-                        label = "🍽️ Dinner",
+                        label = stringResource(R.string.dinner),
                         isSelected = selectedMealType == "dinner",
                         onClick = { selectedMealType = "dinner" },
                         modifier = Modifier.weight(1f)
                     )
                     MealTypeChip(
-                        label = "🍿 Snack",
+                        label = stringResource(R.string.snacks),
                         isSelected = selectedMealType == "snack",
                         onClick = { selectedMealType = "snack" },
                         modifier = Modifier.weight(1f)
@@ -1004,7 +1005,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(8.dp))
 
                 MealTypeChip(
-                    label = "Other",
+                    label = stringResource(R.string.other),
                     isSelected = selectedMealType == "other",
                     onClick = { selectedMealType = "other" },
                     modifier = Modifier.fillMaxWidth()
@@ -1012,7 +1013,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(24.dp))
 
-                
+
                 Button(
                     onClick = {
                         if (manualFoodName.isNotEmpty() && manualCalories.isNotEmpty()) {
@@ -1037,14 +1038,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             } else {
                                 Toast.makeText(
                                     context,
-                                    "Please enter valid calories",
+                                    context.getString(R.string.please_enter_valid_calories),
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         } else {
                             Toast.makeText(
                                 context,
-                                "Food name and calories are required",
+                                context.getString(R.string.food_name_calories_required),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -1062,7 +1063,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "Add Food",
+                        stringResource(R.string.add_food),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -1091,7 +1092,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = "Set Daily Goal",
+                    text = stringResource(R.string.set_daily_goal),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MintGreen
@@ -1100,19 +1101,19 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Set your daily calorie and macro targets",
+                    text = stringResource(R.string.set_calorie_macro_targets),
                     fontSize = 12.sp,
                     color = Color.Gray
                 )
 
                 Spacer(Modifier.height(20.dp))
 
-                
+
                 OutlinedTextField(
                     value = goalCalories,
                     onValueChange = { goalCalories = it },
-                    label = { Text("Daily Calorie Goal (kcal) *") },
-                    placeholder = { Text("e.g., 2000") },
+                    label = { Text(stringResource(R.string.daily_calorie_goal)) },
+                    placeholder = { Text(stringResource(R.string.calorie_goal_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MintGreen,
@@ -1123,14 +1124,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     supportingText = {
-                        Text("Recommended: 1500-2500 kcal/day", fontSize = 11.sp)
+                        Text(stringResource(R.string.recommended_calories), fontSize = 11.sp)
                     }
                 )
 
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Macro Goals (Optional)",
+                    text = stringResource(R.string.macro_goals_optional),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -1142,8 +1143,8 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 OutlinedTextField(
                     value = goalProtein,
                     onValueChange = { goalProtein = it },
-                    label = { Text("Protein Goal (g)") },
-                    placeholder = { Text("e.g., 150") },
+                    label = { Text(stringResource(R.string.protein_goal_g)) },
+                    placeholder = { Text(stringResource(R.string.protein_goal_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF4CAF50),
@@ -1175,8 +1176,8 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 OutlinedTextField(
                     value = goalCarbs,
                     onValueChange = { goalCarbs = it },
-                    label = { Text("Carbohydrates Goal (g)") },
-                    placeholder = { Text("e.g., 200") },
+                    label = { Text(stringResource(R.string.carbohydrates_goal_g)) },
+                    placeholder = { Text(stringResource(R.string.carbs_goal_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFF2196F3),
@@ -1204,12 +1205,12 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(12.dp))
 
-                
+
                 OutlinedTextField(
                     value = goalFat,
                     onValueChange = { goalFat = it },
-                    label = { Text("Fat Goal (g)") },
-                    placeholder = { Text("e.g., 50") },
+                    label = { Text(stringResource(R.string.fat_goal_g)) },
+                    placeholder = { Text(stringResource(R.string.fat_goal_example)) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = Color(0xFFFF9800),
@@ -1256,7 +1257,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         } else {
                             Toast.makeText(
                                 context,
-                                "Please enter a valid calorie goal",
+                                context.getString(R.string.please_enter_valid_calorie_goal),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -1274,7 +1275,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     )
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "Save Goal",
+                        stringResource(R.string.save_goal),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -1304,7 +1305,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Food Details",
+                        text = stringResource(R.string.food_details),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -1320,7 +1321,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_delete_24),
-                            contentDescription = "Delete",
+                            contentDescription = stringResource(R.string.delete),
                             tint = Color.Red
                         )
                     }
@@ -1329,7 +1330,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(20.dp))
 
                 Text(
-                    text = "Food Name",
+                    text = stringResource(R.string.food_name),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -1344,7 +1345,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Serving",
+                    text = stringResource(R.string.serving),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -1358,7 +1359,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Meal Type",
+                    text = stringResource(R.string.meal_type),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray
@@ -1380,11 +1381,11 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 ) {
                     Text(
                         text = when (selectedFood?.mealType) {
-                            "breakfast" -> "🍳 Breakfast"
-                            "lunch" -> "🍛 Lunch"
-                            "dinner" -> "🍽️ Dinner"
-                            "snack" -> "🍿 Snack"
-                            else -> "Other"
+                            "breakfast" -> stringResource(R.string.breakfast)
+                            "lunch" -> stringResource(R.string.lunch)
+                            "dinner" -> stringResource(R.string.dinner)
+                            "snack" -> stringResource(R.string.snacks)
+                            else -> stringResource(R.string.other)
                         },
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
@@ -1402,7 +1403,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            text = "Nutrition Information",
+                            text = stringResource(R.string.nutrition_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = MintGreen
@@ -1410,9 +1411,9 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                         Spacer(Modifier.height(16.dp))
 
-                        
+
                         NutritionRow(
-                            label = "Calories",
+                            label = stringResource(R.string.calories),
                             value = "${selectedFood?.getTotalCalories()?.toInt()} kcal",
                             color = MintGreen
                         )
@@ -1421,30 +1422,30 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         Divider(color = Color.LightGray.copy(alpha = 0.5f))
                         Spacer(Modifier.height(12.dp))
 
-                        
+
                         if ((selectedFood?.protein ?: 0.0) > 0) {
                             NutritionRow(
-                                label = "Protein",
+                                label = stringResource(R.string.protein),
                                 value = "${selectedFood?.getTotalProtein()?.toInt()}g",
                                 color = Color(0xFF4CAF50)
                             )
                             Spacer(Modifier.height(8.dp))
                         }
 
-                        
+
                         if ((selectedFood?.carbs ?: 0.0) > 0) {
                             NutritionRow(
-                                label = "Carbohydrates",
+                                label = stringResource(R.string.carbs),
                                 value = "${selectedFood?.getTotalCarbs()?.toInt()}g",
                                 color = Color(0xFF2196F3)
                             )
                             Spacer(Modifier.height(8.dp))
                         }
 
-                        
+
                         if ((selectedFood?.fat ?: 0.0) > 0) {
                             NutritionRow(
-                                label = "Fat",
+                                label = stringResource(R.string.fat),
                                 value = "${selectedFood?.getTotalFat()?.toInt()}g",
                                 color = Color(0xFFFF9800)
                             )
@@ -1454,7 +1455,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
 
                 Spacer(Modifier.height(16.dp))
 
-                
+
                 if (selectedFood?.isFromApi() == true) {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -1473,7 +1474,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
-                                text = "Data from USDA FoodData Central",
+                                text = stringResource(R.string.data_from_usda),
                                 fontSize = 12.sp,
                                 color = Color(0xFF1565C0),
                                 fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
@@ -1503,14 +1504,14 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
             },
             title = {
                 Text(
-                    "Delete Food Item?",
+                    stringResource(R.string.delete_food_item),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             },
             text = {
                 Text(
-                    "Are you sure you want to delete '${foodToDelete?.name}'? This action cannot be undone.",
+                    stringResource(R.string.delete_confirmation, foodToDelete?.name ?: ""),
                     fontSize = 14.sp
                 )
             },
@@ -1525,7 +1526,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text("Delete", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.delete), color = Color.White, fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
@@ -1535,7 +1536,7 @@ fun CaloriesCalculatorBody(viewModel: CalorieViewModel) {
                         foodToDelete = null
                     }
                 ) {
-                    Text("Cancel", color = Color.Gray)
+                    Text(stringResource(R.string.cancel), color = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(16.dp)
@@ -1585,7 +1586,7 @@ fun FoodItemCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = foodItem.name,
@@ -1601,7 +1602,7 @@ fun FoodItemCard(
                     )
                 }
 
-                
+
                 Box(
                     modifier = Modifier
                         .background(MintGreen, RoundedCornerShape(8.dp))
@@ -1615,7 +1616,7 @@ fun FoodItemCard(
                     )
                 }
 
-                
+
                 Box {
                     IconButton(onClick = { showMenu = true }) {
                         Icon(
@@ -1629,14 +1630,14 @@ fun FoodItemCard(
                         onDismissRequest = { showMenu = false }
                     ) {
                         DropdownMenuItem(
-                            text = { Text("View Details") },
+                            text = { Text(stringResource(R.string.view_details)) },
                             onClick = {
                                 showMenu = false
                                 onCardClick(foodItem)
                             }
                         )
                         DropdownMenuItem(
-                            text = { Text("Delete", color = Color.Red) },
+                            text = { Text(stringResource(R.string.delete), color = Color.Red) },
                             onClick = {
                                 showMenu = false
                                 onDeleteClick(foodItem)
@@ -1680,7 +1681,7 @@ fun FoodItemCard(
                 }
             }
 
-            
+
             Spacer(Modifier.height(8.dp))
             Row(
                 modifier = Modifier
@@ -1696,24 +1697,25 @@ fun FoodItemCard(
                     )
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
+                val context = LocalContext.current
                 Text(
                     text = when (foodItem.mealType) {
-                        "breakfast" -> "🍳 Breakfast"
-                        "lunch" -> "🍛 Lunch"
-                        "dinner" -> "🍽️ Dinner"
-                        "snack" -> "🍿 Snack"
-                        else -> "Other"
+                        "breakfast" -> context.getString(R.string.breakfast)
+                        "lunch" -> context.getString(R.string.lunch)
+                        "dinner" -> context.getString(R.string.dinner)
+                        "snack" -> context.getString(R.string.snacks)
+                        else -> context.getString(R.string.other)
                     },
                     fontSize = 11.sp,
                     color = Color.Gray
                 )
             }
 
-            
+
             if (foodItem.isFromApi()) {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "From USDA Database",
+                    text = stringResource(R.string.from_usda_database),
                     fontSize = 10.sp,
                     color = Color.Gray,
                     fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
@@ -1776,7 +1778,7 @@ fun SearchResultCard(
 
                 Spacer(Modifier.height(6.dp))
 
-                
+
                 if (searchResult.isBrandedFood()) {
                     Text(
                         text = searchResult.brandOwner,
@@ -1787,7 +1789,7 @@ fun SearchResultCard(
                     Spacer(Modifier.height(4.dp))
                 }
 
-                
+
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
@@ -1823,12 +1825,12 @@ fun SearchResultCard(
 
                 Spacer(Modifier.height(6.dp))
 
-                
+                val context = LocalContext.current
                 Text(
                     text = when (searchResult.dataType) {
-                        "Foundation" -> "Foundation Food"
-                        "SR Legacy" -> "Standard Reference"
-                        "Branded" -> "Branded Food"
+                        "Foundation" -> context.getString(R.string.foundation_food)
+                        "SR Legacy" -> context.getString(R.string.standard_reference)
+                        "Branded" -> context.getString(R.string.branded_food)
                         else -> searchResult.dataType
                     },
                     fontSize = 10.sp,
@@ -1841,7 +1843,7 @@ fun SearchResultCard(
 
             Icon(
                 painter = painterResource(R.drawable.baseline_add_24),
-                contentDescription = "Add",
+                contentDescription = stringResource(R.string.add),
                 tint = MintGreen,
                 modifier = Modifier.size(28.dp)
             )

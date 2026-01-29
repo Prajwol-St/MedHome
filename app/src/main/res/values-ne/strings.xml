@@ -1082,41 +1082,251 @@ MedHome प्रयोग गरेर तपाईंले यी सेव�
     <string name="apply">लागू गर्नुहोस्</string>
     <string name="Search">खोज</string>
 
+    <!-- Add/Edit Medicine Screen -->
+    <string name="edit_medicine">औषधि सम्पादन गर्नुहोस्</string>
+    <string name="add_medicine">औषधि थप्नुहोस्</string>
+
+    <!-- Form Fields -->
+    <string name="medicine_name">औषधिको नाम</string>
+    <string name="medicine_name_hint">उदाहरण: प्यारासिटामोल</string>
+    <string name="dosage">खुराक</string>
+    <string name="dosage_hint">उदाहरण: ५००मिग्रा वा २ चक्की</string>
+    <string name="frequency">आवृत्ति</string>
+    <string name="reminder_times">सम्झना समय</string>
+    <string name="instructions_optional">निर्देशन (ऐच्छिक)</string>
+    <string name="instructions_hint">उदाहरण: खाना खाएपछि लिनुहोस्</string>
+
+    <!-- Frequency Options -->
+    <string name="frequency_daily">दैनिक</string>
+    <string name="frequency_weekly">साप्ताहिक</string>
+    <string name="frequency_as_needed">आवश्यकता अनुसार</string>
+
+    <!-- Buttons -->
+    <string name="add_reminder_time">सम्झना समय थप्नुहोस्</string>
+    <string name="update_medicine">औषधि अपडेट गर्नुहोस्</string>
+    <string name="remove">हटाउनुहोस्</string>
+
+    <!-- Form Fields -->
+
+    <!-- Frequency Options -->
 
 
+    <!-- Medicine Reminder Screen -->
+    <string name="medicine_reminders">औषधि सम्झनाहरू</string>
+    <string name="no_medicine_reminders">औषधि सम्झनाहरू छैनन्</string>
+    <string name="start_adding_medications">खुराक नछुटाउन आफ्नो औषधिहरू थप्न सुरु गर्नुहोस्</string>
+    <string name="add_medicine_desc">औषधि थप्नुहोस्</string>
+    <string name="more_times">+%d थप</string>
+
+    <!-- Dialog -->
+    <string name="delete_reminder_title">सम्झना मेटाउने?</string>
+    <string name="delete_reminder_message">के तपाईं %s को लागि सम्झना मेट्न निश्चित हुनुहुन्छ?</string>
+
+    <!-- Doctor Detail Screen -->
+    <string name="doctor_profile">डाक्टर प्रोफाइल</string>
+    <string name="book_appointment">अपोइन्टमेन्ट बुक गर्नुहोस्</string>
+    <string name="failed_to_load_doctor">डाक्टर विवरण लोड गर्न असफल</string>
+    <string name="ratings_count">(%d मूल्याङ्कनहरू)</string>
+
+    <string name="years">%d वर्ष</string>
+    <string name="patients">बिरामीहरू</string>
+    <string name="patients_count">%d+</string>
+    <string name="verified">प्रमाणित</string>
+
+    <string name="no_information_available">कुनै जानकारी उपलब्ध छैन</string>
+    <string name="qualifications">योग्यताहरू</string>
+    <string name="not_specified">उल्लेख गरिएको छैन</string>
+    <string name="clinic_information">क्लिनिक जानकारी</string>
+    <string name="clinic_name">क्लिनिकको नाम</string>
+
+    <string name="npr_amount">NPR %d</string>
+    <string name="languages">भाषाहरू</string>
+
+    <!-- My Orders Screen -->
+    <string name="pending">पेन्डिङ</string>
+    <string name="processing">प्रशोधन</string>
+    <string name="completed">पूरा भयो</string>
+    <string name="cancelled">रद्द गरियो</string>
+    <string name="please_login_to_view_orders">अर्डर हेर्न लगइन गर्नुहोस्</string>
+    <string name="loading_your_orders">तपाईंका अर्डरहरू लोड गर्दै...</string>
+    <string name="no_orders_yet">अझै कुनै अर्डर छैन</string>
+    <string name="no_filter_orders">%s अर्डरहरू छैनन्</string>
+    <string name="orders_appear_here">तपाईंका अर्डरहरू यहाँ तुरुन्तै देखा पर्नेछन्</string>
+    <string name="qty">मात्रा: %d</string>
+    <string name="order_details">अर्डर विवरण</string>
+    <string name="product_details">उत्पादन विवरण</string>
+    <string name="medicine">औषधि</string>
+    <string name="price_per_unit">प्रति इकाई मूल्य</string>
+    <string name="quantity">मात्रा</string>
+    <string name="total_amount">कुल रकम</string>
+    <string name="delivery_information">डेलिभरी जानकारी</string>
+    <string name="order_time">अर्डर समय</string>
+    <string name="cancel_order_title">अर्डर रद्द गर्ने?</string>
+    <string name="cancel_order_message">के तपाईं यो अर्डर रद्द गर्न निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="order_id_short">अर्डर #%s</string>
+    <string name="amount">रकम: ₹%s</string>
+    <string name="yes_cancel_order">हो, अर्डर रद्द गर्नुहोस्</string>
+    <string name="no_keep_it">होइन, राख्नुहोस्</string>
+
+    <!-- Notification History Screen -->
+    <string name="mark_all_read">सबै पढिएको चिन्ह लगाउनुहोस्</string>
+    <string name="no_notifications">कुनै सूचना छैन</string>
+    <string name="all_caught_up">तपाईं सबै अद्यावधिक हुनुहुन्छ!</string>
+    <string name="delete_notification_title">सूचना मेटाउनुहोस्</string>
+    <string name="delete_notification_message">के तपाईं यो सूचना मेट्न निश्चित हुनुहुन्छ?</string>
+
+    <string name="pharmacy_title">औषधि पसल</string>
 
 
+    <!-- PharmacyScreen strings -->
+    <string name="search_medicines">औषधि खोज्नुहोस्…</string>
+    <string name="no_medicines_found">\"%1$s\" को लागि कुनै औषधि फेला परेन</string>
+    <string name="no_medicines_available">कुनै औषधि उपलब्ध छैन</string>
+    <string name="medicines_found">%1$d औषधि%2$s फेला पर्यो</string>
+    <string name="stock">स्टक: %1$s</string>
+    <string name="place_order">अर्डर गर्नुहोस्</string>
+    <string name="decrease">घटाउनुहोस्</string>
+    <string name="increase">बढाउनुहोस्</string>
+    <string name="delivery_address">डेलिभरी ठेगाना *</string>
+    <string name="enter_full_address">तपाईंको पूरा ठेगाना प्रविष्ट गर्नुहोस्</string>
+    <string name="address_required">ठेगाना आवश्यक छ</string>
+    <string name="phone_number">फोन नम्बर *</string>
+    <string name="ten_digit_mobile">१० अंकको मोबाइल नम्बर</string>
+    <string name="valid_phone_required">मान्य १० अंकको फोन नम्बर आवश्यक छ</string>
+    <string name="place_order_button">अर्डर गर्नुहोस्</string>
+    <string name="placing_order">अर्डर गर्दै…</string>
 
+    <!-- CaloriesCalculator strings -->
+    <string name="calorie_calculator">क्यालोरी क्याल्कुलेटर</string>
+    <string name="powered_by_usda">USDA खाद्य डाटाबेस द्वारा संचालित</string>
+    <string name="total_calories_today">आज कुल क्यालोरी</string>
+    <string name="daily_goal">दैनिक लक्ष्य: %1$d kcal</string>
+    <string name="remaining">बाँकी: %1$d kcal</string>
+    <string name="protein">प्रोटीन</string>
+    <string name="carbs">कार्बोहाइड्रेट</string>
+    <string name="fat">बोसो</string>
+    <string name="set_daily_goal">दैनिक लक्ष्य सेट गर्नुहोस्</string>
+    <string name="search_usda_database">USDA खाद्य डाटाबेस खोज्नुहोस्</string>
+    <string name="search_food_placeholder">खाना खोज्नुहोस् (जस्तै: स्याउ, भात, कुखुरा)</string>
+    <string name="results_from_usda">USDA FoodData Central बाट परिणामहरू</string>
+    <string name="add_food_manually">म्यानुअल रूपमा खाना थप्नुहोस्</string>
+    <string name="todays_meals">आजका खाना</string>
+    <string name="breakfast">🍳 बिहानको खाना</string>
+    <string name="lunch">🍛 दिउँसोको खाना</string>
+    <string name="dinner">🍽️ बेलुकाको खाना</string>
+    <string name="snacks">🍿 खाजा</string>
+    <string name="no_meals_added">अझै कुनै खाना थपिएको छैन। माथि खोजेर खाना थप्नुहोस्!</string>
+    <string name="view_daily_summary">दैनिक सारांश हेर्नुहोस्</string>
+    <string name="daily_summary_feature">दैनिक सारांश सुविधा</string>
+    <string name="search_from_foods">पूर्ण पोषण डेटा सहित 300,000+ खानाहरूबाट खोज्नुहोस्</string>
+    <string name="search_example">जस्तै: स्याउ, कुखुराको छाती, भात</string>
+    <string name="searching_usda">USDA डाटाबेस खोज्दै…</string>
+    <string name="search_for_food">कुनै पनि खाना वस्तु खोज्नुहोस्</string>
+    <string name="try_examples">प्रयास गर्नुहोस्: स्याउ, भात, कुखुरा, दूध</string>
+    <string name="no_foods_found">\'%1$s\' को लागि कुनै खाना फेला परेन</string>
+    <string name="try_different_search">फरक खोज शब्द प्रयास गर्नुहोस्</string>
+    <string name="found_results">%1$d परिणामहरू फेला पर्यो</string>
+    <string name="add_meal_type">%1$s थप्नुहोस्</string>
+    <string name="add">थप्नुहोस्</string>
+    <string name="enter_food_details">खाना विवरण र पोषण जानकारी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_required">खानाको नाम *</string>
+    <string name="food_name_example">जस्तै: घरमा पकाएको खाना</string>
+    <string name="calories_kcal">क्यालोरी (kcal) *</string>
+    <string name="calories_example">जस्तै: 250</string>
+    <string name="macronutrients_optional">म्याक्रोन्यूट्रिएन्ट्स (ऐच्छिक)</string>
+    <string name="protein_g">प्रोटीन (g)</string>
+    <string name="protein_example">जस्तै: 20</string>
+    <string name="carbohydrates_g">कार्बोहाइड्रेट (g)</string>
+    <string name="carbs_example">जस्तै: 30</string>
+    <string name="fat_g">बोसो (g)</string>
+    <string name="fat_example">जस्तै: 10</string>
+    <string name="serving_amount">सर्भिङ मात्रा</string>
+    <string name="serving_example">जस्तै: 1.5</string>
+    <string name="serving_note">1.0 = 1 सर्भिङ, 1.5 = 1.5 सर्भिङ</string>
+    <string name="meal_type_required">खानाको प्रकार *</string>
+    <string name="add_food">खाना थप्नुहोस्</string>
+    <string name="please_enter_valid_calories">कृपया मान्य क्यालोरी प्रविष्ट गर्नुहोस्</string>
+    <string name="food_name_calories_required">खानाको नाम र क्यालोरी आवश्यक छ</string>
+    <string name="set_calorie_macro_targets">तपाईंको दैनिक क्यालोरी र म्याक्रो लक्ष्यहरू सेट गर्नुहोस्</string>
+    <string name="daily_calorie_goal">दैनिक क्यालोरी लक्ष्य (kcal) *</string>
+    <string name="calorie_goal_example">जस्तै: 2000</string>
+    <string name="recommended_calories">सिफारिस गरिएको: 1500-2500 kcal/दिन</string>
+    <string name="macro_goals_optional">म्याक्रो लक्ष्यहरू (ऐच्छिक)</string>
+    <string name="protein_goal_g">प्रोटीन लक्ष्य (g)</string>
+    <string name="protein_goal_example">जस्तै: 150</string>
+    <string name="carbohydrates_goal_g">कार्बोहाइड्रेट लक्ष्य (g)</string>
+    <string name="carbs_goal_example">जस्तै: 200</string>
+    <string name="fat_goal_g">बोसो लक्ष्य (g)</string>
+    <string name="fat_goal_example">जस्तै: 50</string>
+    <string name="save_goal">लक्ष्य सुरक्षित गर्नुहोस्</string>
+    <string name="please_enter_valid_calorie_goal">कृपया मान्य क्यालोरी लक्ष्य प्रविष्ट गर्नुहोस्</string>
+    <string name="food_details">खाना विवरण</string>
+    <string name="food_name">खानाको नाम</string>
+    <string name="serving">सर्भिङ</string>
+    <string name="meal_type">खानाको प्रकार</string>
+    <string name="nutrition_information">पोषण जानकारी</string>
+    <string name="calories">क्यालोरी</string>
+    <string name="data_from_usda">USDA FoodData Central बाट डाटा</string>
+    <string name="delete_food_item">खाना मेटाउने?</string>
+    <string name="deletes_confirmation">के तपाईं \'%1$s\' मेटाउन निश्चित हुनुहुन्छ? यो कार्य पूर्ववत गर्न सकिँदैन।</string>
+    <string name="view_details">विवरण हेर्नुहोस्</string>
+    <string name="from_usda_database">USDA डाटाबेसबाट</string>
+    <string name="foundation_food">आधार खाना</string>
+    <string name="standard_reference">मानक सन्दर्भ</string>
+    <string name="branded_food">ब्रान्डेड खाना</string>
 
+    <string name="inventory">सूची</string>
+    <string name="my_orders">मेरा अर्डरहरू</string>
 
+    <string name="my_appointments">मेरा अपोइन्टमेन्टहरू</string>
+    <string name="manage_leaves">बिदा व्यवस्थापन</string>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="qr_code">क्यूआर कोड</string>
+    <string name="pharmacy">औषधि पसल</string>
+    <string name="donor_community_info">हाम्रो दाता समुदायमा सामेल हुनुहोस् र जीवन बचाउन मद्दत गर्नुहोस्। तपाईंको जानकारी आवश्यकता पर्नेहरूलाई देखिनेछ।</string>
+    <string name="donor_information">दाता जानकारी</string>
+    <string name="blood_group_required">रक्त समूह *</string>
+    <string name="availability">उपलब्धता</string>
+    <string name="currently_available">हाल दान गर्न उपलब्ध</string>
+    <string name="regular_donations_contact">तपाईंलाई नियमित दानको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="urgent_cases_contact">तपाईंलाई तत्काल मामिलाहरूको लागि सम्पर्क गर्न सकिन्छ</string>
+    <string name="donation_requirements">दान आवश्यकताहरू</string>
+    <string name="requirement_age">उमेर १८-६५ वर्ष बीच</string>
+    <string name="requirement_weight">कम्तिमा ५० किलो तौल</string>
+    <string name="requirement_health">राम्रो सामान्य स्वास्थ्य अवस्था</string>
+    <string name="requirement_wait">दानहरू बीच ९० दिन प्रतीक्षा गर्नुहोस्</string>
+    <string name="requirement_illness">हालैको कुनै रोग वा शल्यक्रिया छैन</string>
+    <string name="why_donate_blood">रक्तदान किन गर्ने?</string>
+    <string name="benefit_save_lives">• प्रत्येक दानले ३ जनासम्म जीवन बचाउन सक्छ</string>
+    <string name="benefit_health_screening">• दान अघि निःशुल्क स्वास्थ्य जाँच</string>
+    <string name="benefit_blood_flow">• स्वस्थ रक्त प्रवाह कायम राख्न मद्दत गर्छ</string>
+    <string name="benefit_community">• जीवन बचाउने समुदायमा सामेल हुनुहोस्</string>
+    <string name="update_donor_profile">दाता प्रोफाइल अपडेट गर्नुहोस्</string>
+    <string name="save_join_donor_list">सुरक्षित गर्नुहोस् र दाता सूचीमा सामेल हुनुहोस्</string>
+    <string name="privacy_notice">सामेल भएर, तपाईं आफ्नो रक्त समूह र उपलब्धता स्थिति रक्त दाताहरू खोज्नेहरूसँग साझा गर्न सहमत हुनुहुन्छ। तपाईंको सम्पर्क जानकारी तपाईंको रक्त प्रकार आवश्यक पर्दा मात्र देखिनेछ।</string>
     <string name="default_web_client_id" translatable="false">104380579026-kmkitin2tl120r94b3pmj387icednvss.apps.googleusercontent.com</string>
 
+    <!-- Notification Settings Screen -->
+    <string name="notification_settings_title">सूचना सेटिङ</string>
+
+    <!-- Error -->
+    <string name="error_generic">केही समस्या आयो</string>
+
+    <!-- Notification Types -->
+    <string name="appointment_reminders">अपोइन्टमेन्ट रिमाइन्डर</string>
+    <string name="appointment_reminders_desc">अपोइन्टमेन्टभन्दा २४ घण्टा र १ घण्टा अघि सूचना पाउनुहोस्</string>
+
+    <string name="medicine_reminders_desc">औषधि खान दैनिक सूचना पाउनुहोस्</string>
+
+    <string name="booking_confirmations">बुकिङ पुष्टि</string>
+    <string name="booking_confirmations_desc">अपोइन्टमेन्ट पुष्टि हुँदा सूचना पाउनुहोस्</string>
+
+    <!-- Sound & Vibration -->
+    <string name="notification_sound_vibration">सूचना ध्वनि र कम्पन</string>
+
+    <string name="notification_sound">ध्वनि</string>
+    <string name="notification_sound_desc">सूचनाका लागि ध्वनि बजाउनुहोस्</string>
+
+    <string name="notification_vibration">कम्पन</string>
+    <string name="notification_vibration_desc">सूचना आउँदा कम्पन दिनुहोस्</string>
 </resources>

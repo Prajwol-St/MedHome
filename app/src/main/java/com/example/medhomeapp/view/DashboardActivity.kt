@@ -26,16 +26,28 @@ import com.example.medhomeapp.repository.UserRepoImpl
 import com.example.medhomeapp.ui.theme.LightSage
 import com.example.medhomeapp.ui.theme.SageGreen
 import com.example.medhomeapp.ui.theme.TextGray
+import com.example.medhomeapp.utils.LanguageManager
 import com.example.medhomeapp.view.ui.theme.MintGreen
 import com.example.medhomeapp.viewmodel.UserViewModel
 
 class DashboardActivity : BaseActivity() {
 
+    private var currentLanguage: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        currentLanguage = LanguageManager.getLanguage(this)
         enableEdgeToEdge()
         setContent {
             DashboardScaffold()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val savedLanguage = LanguageManager.getLanguage(this)
+        if (savedLanguage != currentLanguage) {
+            recreate()
         }
     }
 }
@@ -43,6 +55,7 @@ class DashboardActivity : BaseActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScaffold() {
+
     val context = LocalContext.current
     val viewModel = remember { UserViewModel(UserRepoImpl()) }
 
@@ -76,7 +89,6 @@ fun DashboardScaffold() {
     }
 
     var selectedTab by remember { mutableStateOf(0) }
-
     val isDoctor = userType == "doctor"
 
     Scaffold(
@@ -91,10 +103,10 @@ fun DashboardScaffold() {
                     Text(
                         when (selectedTab) {
                             0 -> stringResource(R.string.app_name)
-                            1 -> if (isDoctor) "Inventory" else "Notifications"
+                            1 -> if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
                             2 -> stringResource(R.string.scan)
                             3 -> stringResource(R.string.settings)
-                            else -> "My Orders"
+                            else -> stringResource(R.string.my_orders)
                         },
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp,
@@ -125,19 +137,20 @@ fun DashboardScaffold() {
                     modifier = Modifier.testTag("homeTab")
                 )
 
-                // INVENTORY (DOCTOR) / NOTIFICATIONS (PATIENT)
+                // INVENTORY / NOTIFICATIONS
                 NavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
                     icon = {
                         Icon(
                             if (isDoctor) Icons.Default.Inventory else Icons.Default.Notifications,
-                            if (isDoctor) "Inventory" else "Notifications"
+                            if (isDoctor) stringResource(R.string.inventory) else stringResource(R.string.notifications)
                         )
                     },
                     label = {
                         Text(
-                            if (isDoctor) "Inventory" else "Notifications",
+                            if (isDoctor) stringResource(R.string.inventory)
+                            else stringResource(R.string.notifications),
                             fontSize = 11.sp
                         )
                     },
@@ -148,10 +161,12 @@ fun DashboardScaffold() {
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
                     ),
-                    modifier = Modifier.testTag(if (isDoctor) "inventoryTab" else "notificationsTab")
+                    modifier = Modifier.testTag(
+                        if (isDoctor) "inventoryTab" else "notificationsTab"
+                    )
                 )
 
-                // SCAN (BOTH PATIENT AND DOCTOR)
+                // SCAN
                 NavigationBarItem(
                     selected = selectedTab == 2,
                     onClick = { selectedTab = 2 },
@@ -183,17 +198,17 @@ fun DashboardScaffold() {
                     modifier = Modifier.testTag("settingsTab")
                 )
 
-                // ORDERS
+                // ORDERS (FIXED MERGE CONFLICT)
                 NavigationBarItem(
                     selected = selectedTab == 4,
                     onClick = { selectedTab = 4 },
                     icon = {
                         Icon(
                             painterResource(R.drawable.baseline_shopping_cart_24),
-                            "My Orders"
+                            stringResource(R.string.my_orders)
                         )
                     },
-                    label = { Text("My Orders", fontSize = 11.sp) },
+                    label = { Text(stringResource(R.string.my_orders), fontSize = 11.sp) },
                     colors = navColors(),
                     modifier = Modifier.testTag("ordersTab")
                 )
@@ -223,27 +238,20 @@ fun DashboardScaffold() {
                 }
 
                 1 -> {
-                    if (isDoctor) {
-                        InventoryScreen()
-                    } else {
-                        NotificationHistoryScreenContent()
-                    }
+                    if (isDoctor) InventoryScreen()
+                    else NotificationHistoryScreenContent()
                 }
 
                 2 -> {
                     LaunchedEffect(Unit) {
-                        context.startActivity(
-                            Intent(context, QrScannerActivity::class.java)
-                        )
+                        context.startActivity(Intent(context, QrScannerActivity::class.java))
                         selectedTab = 0
                     }
                 }
 
                 3 -> {
                     LaunchedEffect(Unit) {
-                        context.startActivity(
-                            Intent(context, SettingsActivity::class.java)
-                        )
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
                         selectedTab = 0
                     }
                 }

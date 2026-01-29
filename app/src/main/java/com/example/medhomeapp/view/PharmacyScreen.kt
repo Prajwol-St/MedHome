@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.medhomeapp.R
 import com.example.medhomeapp.model.InventoryModel
 import com.example.medhomeapp.model.OrderModel
 import com.example.medhomeapp.repository.InventoryRepositoryImpl
@@ -93,7 +95,7 @@ fun PharmacyScreen(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                    placeholder = { Text("Search medicines...") },
+                    placeholder = { Text(stringResource(R.string.search_medicines)) },
                     leadingIcon = { Icon(Icons.Default.Search, null, tint = Color.Gray) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -113,7 +115,7 @@ fun PharmacyScreen(
                 if (filteredList.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Text(
-                            text = if (searchQuery.isNotEmpty()) "No medicines found for \"$searchQuery\"" else "No medicines available",
+                            text = if (searchQuery.isNotEmpty()) stringResource(R.string.no_medicines_found, searchQuery) else stringResource(R.string.no_medicines_available),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.Gray,
                             fontWeight = FontWeight.Medium
@@ -121,7 +123,7 @@ fun PharmacyScreen(
                     }
                 } else {
                     Text(
-                        text = "${filteredList.size} medicine${if (filteredList.size != 1) "s" else ""} found",
+                        text = stringResource(R.string.medicines_found, filteredList.size, if (filteredList.size != 1) "s" else ""),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray,
                         modifier = Modifier.padding(bottom = 8.dp)
@@ -198,7 +200,7 @@ fun MedicineCardReadOnly(
                 ) {
                     Icon(
                         Icons.Default.Medication,
-                        contentDescription = "Medicine",
+                        contentDescription = stringResource(R.string.medicine),
                         tint = Color.Gray,
                         modifier = Modifier.size(32.dp)
                     )
@@ -230,7 +232,7 @@ fun MedicineCardReadOnly(
                         color = Color(0xFF4A6741)
                     )
                     Text(
-                        text = "Stock: ${inventory.amount}",
+                        text = stringResource(R.string.stock, inventory.amount),
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray
                     )
@@ -265,7 +267,7 @@ fun BuyMedicineDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                text = "Place Order",
+                text = stringResource(R.string.place_order),
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold
             )
@@ -315,7 +317,7 @@ fun BuyMedicineDialog(
                 item {
                     // Quantity Selector
                     Text(
-                        text = "Quantity",
+                        text = stringResource(R.string.quantity),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -332,7 +334,7 @@ fun BuyMedicineDialog(
                         ) {
                             Icon(
                                 Icons.Default.Remove,
-                                contentDescription = "Decrease",
+                                contentDescription = stringResource(R.string.decrease),
                                 tint = Color.White
                             )
                         }
@@ -355,7 +357,7 @@ fun BuyMedicineDialog(
                         ) {
                             Icon(
                                 Icons.Default.Add,
-                                contentDescription = "Increase",
+                                contentDescription = stringResource(R.string.increase),
                                 tint = Color.White
                             )
                         }
@@ -370,13 +372,13 @@ fun BuyMedicineDialog(
                             deliveryAddress = it
                             addressError = false
                         },
-                        label = { Text("Delivery Address *") },
-                        placeholder = { Text("Enter your full address") },
+                        label = { Text(stringResource(R.string.delivery_address)) },
+                        placeholder = { Text(stringResource(R.string.enter_full_address)) },
                         modifier = Modifier.fillMaxWidth(),
                         isError = addressError,
                         supportingText = {
                             if (addressError) {
-                                Text("Address is required", color = MaterialTheme.colorScheme.error)
+                                Text(stringResource(R.string.address_required), color = MaterialTheme.colorScheme.error)
                             }
                         },
                         leadingIcon = {
@@ -398,13 +400,13 @@ fun BuyMedicineDialog(
                                 phoneError = false
                             }
                         },
-                        label = { Text("Phone Number *") },
-                        placeholder = { Text("10-digit mobile number") },
+                        label = { Text(stringResource(R.string.phone_number)) },
+                        placeholder = { Text(stringResource(R.string.ten_digit_mobile)) },
                         modifier = Modifier.fillMaxWidth(),
                         isError = phoneError,
                         supportingText = {
                             if (phoneError) {
-                                Text("Valid 10-digit phone number required", color = MaterialTheme.colorScheme.error)
+                                Text(stringResource(R.string.valid_phone_required), color = MaterialTheme.colorScheme.error)
                             }
                         },
                         leadingIcon = {
@@ -431,7 +433,7 @@ fun BuyMedicineDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Total Amount:",
+                                text = stringResource(R.string.total_amount),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -491,7 +493,7 @@ fun BuyMedicineDialog(
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
-                    text = if (isLoading) "Placing Order..." else "PLACE ORDER",
+                    text = if (isLoading) stringResource(R.string.placing_order) else stringResource(R.string.place_order_button),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -501,7 +503,7 @@ fun BuyMedicineDialog(
                 onClick = onDismiss,
                 enabled = !isLoading
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.cancel))
             }
         }
     )
