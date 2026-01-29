@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -171,6 +172,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
     }
 
     Scaffold(
+        modifier = Modifier.testTag("healthRecordsScaffold"),
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -191,14 +193,22 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 unfocusedBorderColor = Color.White.copy(alpha = 0.5f)
                             ),
                             singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("searchField")
                         )
                     } else {
-                        Text(stringResource(R.string.title_my_records))
+                        Text(
+                            stringResource(R.string.title_my_records),
+                            modifier = Modifier.testTag("titleText")
+                        )
                     }
                 },
                 navigationIcon = {
-                    IconButton(onClick = { activity.finish() }) {
+                    IconButton(
+                        onClick = { activity.finish() },
+                        modifier = Modifier.testTag("backButton")
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_ios_new_24),
                             contentDescription = stringResource(R.string.cd_back),
@@ -207,10 +217,13 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        isSearching = !isSearching
-                        if (!isSearching) searchQuery = ""
-                    }) {
+                    IconButton(
+                        onClick = {
+                            isSearching = !isSearching
+                            if (!isSearching) searchQuery = ""
+                        },
+                        modifier = Modifier.testTag("searchButton")
+                    ) {
                         Icon(
                             painter = painterResource(
                                 if (isSearching) R.drawable.baseline_close_24
@@ -235,7 +248,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     showBottomSheet = true
                 },
                 containerColor = MintGreen,
-                shape = CircleShape
+                shape = CircleShape,
+                modifier = Modifier.testTag("addRecordButton")
             ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_add_24),
@@ -247,19 +261,44 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             if (isLoading) {
-                Box(Modifier.fillMaxSize(), Alignment.Center) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .testTag("loadingBox"),
+                    Alignment.Center
+                ) {
                     CircularProgressIndicator(color = MintGreen)
                 }
             } else if (filteredRecords.isEmpty()) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        if (searchQuery.isEmpty()) stringResource(R.string.empty_no_records) else stringResource(R.string.empty_no_matching_records),
-                        color = Color.Gray
-                    )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("emptyStateBox"),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_description_24),
+                            contentDescription = null,
+                            modifier = Modifier.size(80.dp),
+                            tint = Color.Gray.copy(alpha = 0.5f)
+                        )
+                        Spacer(Modifier.height(16.dp))
+                        Text(
+                            stringResource(R.string.empty_no_records),
+                            fontSize = 16.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.testTag("emptyStateMessage")
+                        )
+                    }
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("recordsList"),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(filteredRecords.size) { index ->
                         HealthRecordCard(
@@ -268,13 +307,12 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 selectedRecord = it
                                 showDetailSheet = true
                             },
-                            onEditClick = {
-                                editingRecord = it
-                                recordTitle = it.title
-                                recordDescription = it.description
-                                selectedDate = it.date
-                                selectedFileName = it.fileName.takeIf { n -> n.isNotEmpty() }
-                                selectedFileUri = null
+                            onEditClick = { record ->
+                                editingRecord = record
+                                recordTitle = record.title
+                                recordDescription = record.description
+                                selectedDate = record.date
+                                selectedFileName = record.fileName
                                 showBottomSheet = true
                             },
                             onDeleteClick = {
@@ -282,7 +320,6 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 showDeleteDialog = true
                             }
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
@@ -291,153 +328,88 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         if (showDetailSheet && selectedRecord != null) {
             ModalBottomSheet(
                 onDismissRequest = { showDetailSheet = false },
-                sheetState = detailSheetState
+                sheetState = detailSheetState,
+                modifier = Modifier.testTag("detailBottomSheet")
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .verticalScroll(rememberScrollState())
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(R.string.title_record_details),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Row {
-                            IconButton(onClick = {
-                                selectedRecord?.let { record ->
-                                    editingRecord = record
-                                    recordTitle = record.title
-                                    recordDescription = record.description
-                                    selectedDate = record.date
-                                    selectedFileName = record.fileName.takeIf { it.isNotEmpty() }
-                                    selectedFileUri = null
-                                    showDetailSheet = false
-                                    showBottomSheet = true
-                                }
-                            }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.baseline_edit_24),
-                                    contentDescription = stringResource(R.string.cd_edit),
-                                    tint = MintGreen
-                                )
-                            }
-                            IconButton(onClick = {
-                                selectedRecord?.let { record ->
-                                    recordToDelete = record
-                                    showDetailSheet = false
-                                    showDeleteDialog = true
-                                }
-                            }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.baseline_delete_24),
-                                    contentDescription = stringResource(R.string.cd_delete),
-                                    tint = Color.Red
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(Modifier.height(20.dp))
-
                     Text(
-                        text = stringResource(R.string.label_title),
-                        fontSize = 14.sp,
+                        selectedRecord!!.title,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Gray
+                        modifier = Modifier.testTag("detailTitle")
                     )
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(8.dp))
                     Text(
-                        text = selectedRecord?.title ?: "",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-
-                    Spacer(Modifier.height(16.dp))
-
-                    Text(
-                        text = stringResource(R.string.label_date),
+                        selectedRecord!!.date,
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Gray
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(
-                        text = selectedRecord?.date ?: "",
-                        fontSize = 16.sp
+                        color = Color.Gray,
+                        modifier = Modifier.testTag("detailDate")
                     )
 
-                    Spacer(Modifier.height(16.dp))
-
-                    if (selectedRecord?.description?.isNotEmpty() == true) {
+                    if (selectedRecord!!.description.isNotEmpty()) {
+                        Spacer(Modifier.height(16.dp))
                         Text(
-                            text = stringResource(R.string.label_description),
+                            stringResource(R.string.label_description),
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Gray
+                            fontWeight = FontWeight.SemiBold
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            text = selectedRecord?.description ?: "",
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp
+                            selectedRecord!!.description,
+                            fontSize = 14.sp,
+                            modifier = Modifier.testTag("detailDescription")
                         )
-                        Spacer(Modifier.height(16.dp))
                     }
 
-                    if (selectedRecord?.fileName?.isNotEmpty() == true &&
-                        selectedRecord?.fileUrl?.isNotEmpty() == true
-                    ) {
+                    if (selectedRecord!!.fileName.isNotEmpty()) {
+                        Spacer(Modifier.height(16.dp))
                         Text(
-                            text = stringResource(R.string.label_attached_file),
+                            stringResource(R.string.label_attached_file),
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Gray
+                            fontWeight = FontWeight.SemiBold
                         )
                         Spacer(Modifier.height(8.dp))
 
-                        Card(
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .background(Color(0xFFF1FBF9), RoundedCornerShape(8.dp))
+                                .padding(12.dp)
                                 .clickable {
-                                    selectedRecord?.fileUrl?.let { url ->
-                                        try {
-                                            // CHANGED: Open Cloudinary URL in browser
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                            context.startActivity(intent)
-                                        } catch (e: Exception) {
-                                            Toast.makeText(context, context.getString(R.string.error_cannot_open_file), Toast.LENGTH_SHORT).show()
-                                        }
+                                    if (selectedRecord!!.fileUrl.isNotEmpty()) {
+                                        val intent =
+                                            Intent(Intent.ACTION_VIEW, Uri.parse(selectedRecord!!.fileUrl))
+                                        context.startActivity(intent)
                                     }
-                                },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFFF1FBF9))
+                                }
+                                .testTag("attachmentRow"),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier.padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.outline_attach_file_24),
-                                    contentDescription = null,
-                                    tint = MintGreen
-                                )
-                                Spacer(Modifier.width(8.dp))
-                                Text(
-                                    text = selectedRecord?.fileName ?: "",
-                                    fontSize = 14.sp,
-                                    color = Color.DarkGray
-                                )
-                            }
+                            Icon(
+                                painter = painterResource(R.drawable.outline_attach_file_24),
+                                contentDescription = null,
+                                tint = MintGreen
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(selectedRecord!!.fileName, fontSize = 14.sp)
                         }
                     }
 
                     Spacer(Modifier.height(24.dp))
+
+                    Button(
+                        onClick = { showDetailSheet = false },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("closeDetailButton"),
+                        colors = ButtonDefaults.buttonColors(MintGreen)
+                    ) {
+                        Text(stringResource(R.string.btn_close), color = Color.White)
+                    }
                 }
             }
         }
@@ -445,17 +417,21 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         if (showBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showBottomSheet = false },
-                sheetState = sheetState
+                sheetState = sheetState,
+                modifier = Modifier.testTag("addEditBottomSheet")
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = if (editingRecord == null) stringResource(R.string.title_add_new_record) else stringResource(R.string.title_edit_record),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                        if (editingRecord == null) stringResource(R.string.title_add_new_record)
+                        else stringResource(R.string.title_edit_record),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("sheetTitle")
                     )
 
                     Spacer(Modifier.height(20.dp))
@@ -463,9 +439,15 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     OutlinedTextField(
                         value = recordTitle,
                         onValueChange = { recordTitle = it },
-                        label = { Text(stringResource(R.string.label_title_required)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        label = { Text(stringResource(R.string.label_title)) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("titleField"),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
+                            cursorColor = MintGreen
+                        )
                     )
 
                     Spacer(Modifier.height(16.dp))
@@ -473,15 +455,26 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                     OutlinedTextField(
                         value = selectedDate,
                         onValueChange = {},
-                        label = { Text(stringResource(R.string.label_date_required)) },
+                        label = { Text(stringResource(R.string.label_date)) },
+                        readOnly = true,
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { datepicker.show() },
+                                modifier = Modifier.testTag("datePickerButton")
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_calendar_month_24),
+                                    contentDescription = null
+                                )
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { datepicker.show() },
-                        enabled = false,
+                            .clickable { datepicker.show() }
+                            .testTag("dateField"),
                         colors = OutlinedTextFieldDefaults.colors(
-                            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                            disabledBorderColor = MaterialTheme.colorScheme.outline,
-                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen
                         )
                     )
 
@@ -493,15 +486,23 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                         label = { Text(stringResource(R.string.label_description_optional)) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp),
-                        maxLines = 5
+                            .height(120.dp)
+                            .testTag("descriptionField"),
+                        maxLines = 5,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MintGreen,
+                            focusedLabelColor = MintGreen,
+                            cursorColor = MintGreen
+                        )
                     )
 
                     Spacer(Modifier.height(16.dp))
 
                     OutlinedButton(
                         onClick = { filePickerLauncher.launch("*/*") },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("attachFileButton"),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MintGreen
                         ),
@@ -521,7 +522,8 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color(0xFFF1FBF9), RoundedCornerShape(8.dp))
-                                .padding(16.dp),
+                                .padding(16.dp)
+                                .testTag("selectedFileBox"),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(selectedFileName ?: stringResource(R.string.hint_tap_to_upload), color = Color.Gray)
@@ -541,7 +543,7 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                     description = recordDescription,
                                     fileName = selectedFileName ?: editingRecord?.fileName ?: "",
                                     fileUrl = editingRecord?.fileUrl ?: "",
-                                    publicId = editingRecord?.publicId ?: "" // ADDED: Include publicId
+                                    publicId = editingRecord?.publicId ?: ""
                                 )
 
                                 if (editingRecord == null)
@@ -558,7 +560,9 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
                                 ).show()
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("saveRecordButton"),
                         colors = ButtonDefaults.buttonColors(MintGreen)
                     ) {
                         Text(
@@ -574,28 +578,46 @@ fun HealthRecordsBody(viewModel: HealthRecordsViewModel) {
         if (showDeleteDialog && recordToDelete != null) {
             AlertDialog(
                 onDismissRequest = { showDeleteDialog = false },
-                title = { Text(stringResource(R.string.dialog_delete_record_title), fontSize = 18.sp, fontWeight = FontWeight.Bold) },
-                text = { Text(stringResource(R.string.dialog_delete_record_message)) },
+                title = {
+                    Text(
+                        stringResource(R.string.dialog_delete_record_title),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("deleteDialogTitle")
+                    )
+                },
+                text = {
+                    Text(
+                        stringResource(R.string.dialog_delete_record_message),
+                        modifier = Modifier.testTag("deleteDialogMessage")
+                    )
+                },
                 confirmButton = {
-                    TextButton(onClick = {
-                        recordToDelete?.let {
-                            // CHANGED: Pass publicId instead of fileUrl
-                            viewModel.deleteHealthRecord(it.id, it.publicId)
-                        }
-                        showDeleteDialog = false
-                        recordToDelete = null
-                    }) {
+                    TextButton(
+                        onClick = {
+                            recordToDelete?.let {
+                                viewModel.deleteHealthRecord(it.id, it.publicId)
+                            }
+                            showDeleteDialog = false
+                            recordToDelete = null
+                        },
+                        modifier = Modifier.testTag("confirmDeleteButton")
+                    ) {
                         Text(stringResource(R.string.btn_delete), color = Color.Red)
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = {
-                        showDeleteDialog = false
-                        recordToDelete = null
-                    }) {
+                    TextButton(
+                        onClick = {
+                            showDeleteDialog = false
+                            recordToDelete = null
+                        },
+                        modifier = Modifier.testTag("cancelDeleteButton")
+                    ) {
                         Text(stringResource(R.string.btn_cancel))
                     }
-                }
+                },
+                modifier = Modifier.testTag("deleteDialog")
             )
         }
     }
@@ -613,7 +635,8 @@ fun HealthRecordCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCardClick(record) },
+            .clickable { onCardClick(record) }
+            .testTag("healthRecordCard_${record.id}"),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
@@ -623,9 +646,17 @@ fun HealthRecordCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(record.title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    record.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.testTag("recordTitle_${record.id}")
+                )
                 Box {
-                    IconButton(onClick = { showMenu = true }) {
+                    IconButton(
+                        onClick = { showMenu = true },
+                        modifier = Modifier.testTag("recordMenu_${record.id}")
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_more_vert_24),
                             contentDescription = stringResource(R.string.cd_more)
@@ -633,34 +664,43 @@ fun HealthRecordCard(
                     }
                     DropdownMenu(
                         expanded = showMenu,
-                        onDismissRequest = { showMenu = false }
+                        onDismissRequest = { showMenu = false },
+                        modifier = Modifier.testTag("recordDropdownMenu_${record.id}")
                     ) {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.menu_edit)) },
                             onClick = {
                                 showMenu = false
                                 onEditClick(record)
-                            }
+                            },
+                            modifier = Modifier.testTag("editMenuItem_${record.id}")
                         )
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.menu_delete), color = Color.Red) },
                             onClick = {
                                 showMenu = false
                                 onDeleteClick(record)
-                            }
+                            },
+                            modifier = Modifier.testTag("deleteMenuItem_${record.id}")
                         )
                     }
                 }
             }
             Spacer(Modifier.height(6.dp))
-            Text(record.date, fontSize = 12.sp, color = Color.Gray)
+            Text(
+                record.date,
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier.testTag("recordDate_${record.id}")
+            )
             if (record.description.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
                 Text(
                     record.description,
                     fontSize = 14.sp,
                     maxLines = 2,
-                    color = Color.DarkGray
+                    color = Color.DarkGray,
+                    modifier = Modifier.testTag("recordDescription_${record.id}")
                 )
             }
             if (record.fileName.isNotEmpty()) {
@@ -668,7 +708,8 @@ fun HealthRecordCard(
                 Row(
                     modifier = Modifier
                         .background(Color(0xFFF1FBF9), RoundedCornerShape(8.dp))
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .testTag("recordAttachment_${record.id}"),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
