@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -79,6 +80,7 @@ fun DashboardScaffold() {
     val isDoctor = userType == "doctor"
 
     Scaffold(
+        modifier = Modifier.testTag("dashboardScaffold"),
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -95,7 +97,8 @@ fun DashboardScaffold() {
                             else -> "My Orders"
                         },
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp
+                        fontSize = 22.sp,
+                        modifier = Modifier.testTag("topBarTitle")
                     )
                 }
             )
@@ -103,7 +106,8 @@ fun DashboardScaffold() {
         bottomBar = {
             NavigationBar(
                 containerColor = Color.White,
-                tonalElevation = 8.dp
+                tonalElevation = 8.dp,
+                modifier = Modifier.testTag("bottomNavigationBar")
             ) {
 
                 // HOME
@@ -117,7 +121,8 @@ fun DashboardScaffold() {
                         )
                     },
                     label = { Text(stringResource(R.string.home), fontSize = 11.sp) },
-                    colors = navColors()
+                    colors = navColors(),
+                    modifier = Modifier.testTag("homeTab")
                 )
 
                 // INVENTORY (DOCTOR) / NOTIFICATIONS (PATIENT)
@@ -142,7 +147,8 @@ fun DashboardScaffold() {
                         indicatorColor = LightSage.copy(alpha = 0.3f),
                         unselectedIconColor = TextGray,
                         unselectedTextColor = TextGray
-                    )
+                    ),
+                    modifier = Modifier.testTag(if (isDoctor) "inventoryTab" else "notificationsTab")
                 )
 
                 // SCAN (BOTH PATIENT AND DOCTOR)
@@ -158,7 +164,8 @@ fun DashboardScaffold() {
                         )
                     },
                     label = { Text(stringResource(R.string.scan), fontSize = 11.sp) },
-                    colors = navColors()
+                    colors = navColors(),
+                    modifier = Modifier.testTag("scanTab")
                 )
 
                 // SETTINGS
@@ -172,7 +179,8 @@ fun DashboardScaffold() {
                         )
                     },
                     label = { Text(stringResource(R.string.settings), fontSize = 11.sp) },
-                    colors = navColors()
+                    colors = navColors(),
+                    modifier = Modifier.testTag("settingsTab")
                 )
 
                 // ORDERS
@@ -186,7 +194,8 @@ fun DashboardScaffold() {
                         )
                     },
                     label = { Text("My Orders", fontSize = 11.sp) },
-                    colors = navColors()
+                    colors = navColors(),
+                    modifier = Modifier.testTag("ordersTab")
                 )
             }
         }
@@ -196,6 +205,7 @@ fun DashboardScaffold() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .testTag("contentBox")
         ) {
             when (selectedTab) {
                 0 -> {
